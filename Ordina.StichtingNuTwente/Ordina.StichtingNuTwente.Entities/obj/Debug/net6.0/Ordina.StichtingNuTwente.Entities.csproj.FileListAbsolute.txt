@@ -1,0 +1,12 @@
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\bin\Debug\net6.0\Ordina.StichtingNuTwente.Entities.deps.json
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\bin\Debug\net6.0\Ordina.StichtingNuTwente.Entities.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\bin\Debug\net6.0\ref\Ordina.StichtingNuTwente.Entities.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\bin\Debug\net6.0\Ordina.StichtingNuTwente.Entities.pdb
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.csproj.AssemblyReference.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.AssemblyInfoInputs.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.AssemblyInfo.cs
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.csproj.CoreCompileInputs.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\ref\Ordina.StichtingNuTwente.Entities.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Entities\obj\Debug\net6.0\Ordina.StichtingNuTwente.Entities.pdb

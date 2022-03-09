@@ -1,0 +1,15 @@
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\Ordina.StichtingNuTwente.Business.deps.json
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\Ordina.StichtingNuTwente.Business.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\ref\Ordina.StichtingNuTwente.Business.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\Ordina.StichtingNuTwente.Business.pdb
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\Ordina.StichtingNuTwente.Entities.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\bin\Debug\net6.0\Ordina.StichtingNuTwente.Entities.pdb
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.csproj.AssemblyReference.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.AssemblyInfoInputs.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.AssemblyInfo.cs
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.csproj.CoreCompileInputs.cache
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.csproj.CopyComplete
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\ref\Ordina.StichtingNuTwente.Business.dll
+C:\Repos\Stichting-NUTwente\Ordina.StichtingNuTwente\Ordina.StichtingNuTwente.Business\obj\Debug\net6.0\Ordina.StichtingNuTwente.Business.pdb
