@@ -1,4 +1,4 @@
-## MVP - functioneel
+## MVP - functioneel (in volgorde van ontwikkeling)
 
 1. Aanmelden vluchteling
 2. Aanmelden gastgezin
