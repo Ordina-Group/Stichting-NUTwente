@@ -1,7 +1,11 @@
+using Ordina.StichtingNuTwente.Business;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 
 var app = builder.Build();
 
