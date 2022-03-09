@@ -26,12 +26,12 @@
 mono_crash.*
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
+/Ordina.StichtingNuTwente/[Dd]ebug/
+/Ordina.StichtingNuTwente/[Dd]ebugPublic/
+/Ordina.StichtingNuTwente/[Rr]elease/
+/Ordina.StichtingNuTwente/[Rr]eleases/
+/Ordina.StichtingNuTwente/x64/
+/Ordina.StichtingNuTwente/x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
