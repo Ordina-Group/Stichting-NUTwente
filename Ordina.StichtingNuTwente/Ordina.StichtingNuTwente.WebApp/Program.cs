@@ -1,4 +1,9 @@
 using Ordina.StichtingNuTwente.Business;
+using Ordina.StichtingNuTwente.Business.DataLayer;
+
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IFormBusiness, FormBusiness>();
+
+builder.Services.AddDatabaseContext(config);
 
 var app = builder.Build();
 
