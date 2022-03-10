@@ -1,5 +1,6 @@
 using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.Business.DataLayer;
+using Ordina.StichtingNuTwente.Business.Interfaces;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)

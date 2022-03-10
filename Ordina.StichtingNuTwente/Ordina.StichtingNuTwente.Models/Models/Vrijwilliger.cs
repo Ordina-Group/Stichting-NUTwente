@@ -1,4 +1,4 @@
-﻿namespace Ordina.StichtingNuTwente.Models
+﻿namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class Vrijwilliger: BaseEntity
     {

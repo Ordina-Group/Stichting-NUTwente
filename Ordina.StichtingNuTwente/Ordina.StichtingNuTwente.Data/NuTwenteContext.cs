@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ordina.StichtingNuTwente.Models;
+using Ordina.StichtingNuTwente.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +16,11 @@ namespace Ordina.StichtingNuTwente.Data
         }
 
         public DbSet<Vrijwilliger> Vrijwilligers { get; set; }
+
         public DbSet<Gastgezin> Gastgezinnen { get; set; }
+
+        public DbSet<Antwoord> Antwoorden { get; set; }
+
+        public DbSet<Reactie> Reacties { get; set; }
     }
 }

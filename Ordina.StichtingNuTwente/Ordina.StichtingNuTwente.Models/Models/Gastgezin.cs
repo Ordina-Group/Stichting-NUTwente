@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ordina.StichtingNuTwente.Models
+namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class Gastgezin: BaseEntity
     {

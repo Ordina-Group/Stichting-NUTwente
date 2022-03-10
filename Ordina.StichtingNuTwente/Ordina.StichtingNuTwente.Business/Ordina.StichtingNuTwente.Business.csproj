@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Data\Ordina.StichtingNuTwente.Data.csproj" />
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Entities\Ordina.StichtingNuTwente.Entities.csproj" />
+    <ProjectReference Include="..\Ordina.StichtingNuTwente.Models\Ordina.StichtingNuTwente.Models.csproj" />
   </ItemGroup>
 
 </Project>

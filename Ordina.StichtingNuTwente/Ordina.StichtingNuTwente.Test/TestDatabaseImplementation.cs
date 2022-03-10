@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ordina.StichtingNuTwente.Data;
-using Ordina.StichtingNuTwente.Models;
+using Ordina.StichtingNuTwente.Models.Models;
 using System;
 using System.Linq;
 

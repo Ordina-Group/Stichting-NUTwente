@@ -4,6 +4,8 @@ using Ordina.StichtingNuTwente.WebApp.Models;
 using System.Diagnostics;
 using Ordina.StichtingNuTwente.Entities;
 using System.Text.Json;
+using Ordina.StichtingNuTwente.Models.ViewModels;
+using Ordina.StichtingNuTwente.Business.Interfaces;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {

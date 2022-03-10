@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ordina.StichtingNuTwente.Models
+namespace Ordina.StichtingNuTwente.Models.Models
 {
     // Dit is een bitwise enum: https://www.alanzucconi.com/2015/07/26/enum-flags-and-bitwise-operators/
     [Flags] public enum VrijwilligerType
