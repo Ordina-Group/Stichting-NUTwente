@@ -186,6 +186,85 @@
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
+        },
+        {
+          "Id": "6",
+          "Number": "19",
+          "Text": "Heeft u bezwaar tegen huisdieren in uw gastgezin? <br> Чи можете ви співіснувати з домашніми тваринами у приймаючій родині?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "7",
+          "Number": "20",
+          "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn? <br> Чи є у вас алергія, яка може бути важливою для розміщення?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "4",
+      "Number": "4",
+      "Title": "Overig <br> Інший",
+      "Header": "",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "1",
+          "Text": "Heeft u nog andere vragen op opmerkingen? Die kunt u hier kwijt. <br> У вас є інші запитання чи коментарі? Ви можете втратити його тут,",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "5",
+      "Number": "5",
+      "Title": "Heeft u medische/pshycholoogische hulp nodig?",
+      "Header": "Here we ask several questions about your health/mental health situation to be able to help you as soon as possible. <br> Це секція запитань про ваш стан фізичного/психічного здоров'я. Ми хочемо вам допомогти якомога швидше",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "22",
+          "Text": "Welke chronische medische aandoeningen hebt u? <br> Які хронічні захворювання ви маєте?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "2",
+          "Number": "23",
+          "Text": "Hebt u vitale medicijnen nodig? Zo ja, hebt u deze medicijnen op voorraad? <br> Чи використовуєте ви життєво-необхідні ліки? якщо так - то які і чи є у вас запас?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "3",
+          "Number": "24",
+          "Text": "Heeft u op dit moment gezondheidsklachten? <br> Чи є у вас скарги на здоров'я на даний момент?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "4",
+          "Number": "25",
+          "Text": "Officieel vastgestelde diagnoses in relatie tot geestelijke gezondheid <br> Чи є у вас офіційно діагностовані стани психічного здоров'я? Якщо так - опишіть включно з історією звороби.",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
         }
       ]
     }
