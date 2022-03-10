@@ -1,4 +1,4 @@
-## MVP - functioneel
+## MVP - functioneel (in volgorde van ontwikkeling)
 
 1. Aanmelden vluchteling
 2. Aanmelden gastgezin
@@ -9,6 +9,7 @@
 - Planbord in issues
 - Security gedekt
 - Formulieren achter een identity
+- Meertaligheid (NL-EN-UA)
 
 ## Design plaatjes
 <img width="644" alt="schema-mvp" src="https://user-images.githubusercontent.com/59823097/157442968-bf6edc60-3e5e-43ae-b9f0-0bac1709c013.png">
@@ -18,8 +19,14 @@
 **Inschrijven host families na afloop van de informatiesessie**  
 https://forms.office.com/Pages/ResponsePage.aspx?id=oUYycvXDxUOs3EOttASsTa3z4k3HshhEsLFasoKenapURUVHWEk1VUhKOFdXUkNHVjJYWTNTQkQxVS4u
 
+**Intake vrijwilliger**  
+TBD
+
 **Intake Gastgezin Oekraïne**  
 https://forms.office.com/Pages/ResponsePage.aspx?id=abFUomsK-UevTBaXBEIcLv3oz9MraJFDmrG0mi7R83dUOUc1QzBLVzVaSlhVRTE0VDdJUDlXQVZZSi4u
 
 **Intake Vluchteling Oekraïne**  
 https://forms.office.com/Pages/ResponsePage.aspx?id=abFUomsK-UevTBaXBEIcLv3oz9MraJFDmrG0mi7R83dURDVOQVZENjVGSDhUQVE4MVpPV1FEWVRONC4u
+
+**Plaatsing formulier**  
+TBD
