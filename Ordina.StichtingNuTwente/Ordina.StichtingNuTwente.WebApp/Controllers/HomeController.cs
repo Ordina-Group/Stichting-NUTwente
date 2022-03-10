@@ -17,7 +17,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
         }
 
+        [HttpGet]
         public IActionResult Index()
+        {
+            Form questionForm = _formBusiness.createFormFromJson(1);
+            return View(questionForm);
+        }
+
+        [HttpPost]
+        public IActionResult Save(AnswersViewModel form) 
         {
             Form questionForm = _formBusiness.createFormFromJson(1);
             return View(questionForm);
