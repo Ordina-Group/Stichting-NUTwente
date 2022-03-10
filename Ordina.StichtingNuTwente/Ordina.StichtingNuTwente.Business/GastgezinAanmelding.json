@@ -1,0 +1,105 @@
+{
+  "Id": "1",
+  "Title": "Aanmelden OPVANG in Twente",
+  "Header": "De enquête duurt ongeveer 4 minuten om te voltooien. De oorlog in Oekraïne kwam onverwacht en Nederland en de regio Twente zijn niet voorbereid op grootschalige hulp. Veel mensen willen de vluchtelingen helpen, maar weten niet hoe. Organisaties en bedrijven zetten ook acties op, maar moeten dan vaak zelf het wiel uitvinden. Noaberschap Ukraine-Twente springt in deze bres en coördineert de verschillende groepen en zorgt voor host-families in Twente.",
+  "Sections": [
+    {
+      "Id": "1",
+      "Number": "1",
+      "Title": "",
+      "Header": "",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "1",
+          "Text": "Dankjewel namens Noaberschap Ukraine Twente, bent u een:",
+          "Description": "",
+          "InputType": "radio",
+          "InputOptions": [ "Particulier", "Bedrijf/organisatie", "Officiële insantie" ],
+          "Required": "true"
+        },
+        {
+          "Id": "2",
+          "Number": "2",
+          "Text": "Uw naam",
+          "Description": "Voornaam en achternaam",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "3",
+          "Number": "3",
+          "Text": "Woonadres",
+          "Description": "Adres, postcode, woonplaats",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "4",
+          "Number": "4",
+          "Text": "Mobielnummer",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "5",
+          "Number": "5",
+          "Text": "Email",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "6",
+          "Number": "6",
+          "Text": "Voorkeur, opvang voor:",
+          "Description": "",
+          "InputType": "radio",
+          "InputOptions": [ "Families (Volwassene+kind)", "Alleenstaande", "Jongeren (Studenten)", "Groepen", "(5 personen of meer)" ],
+          "Required": "true"
+        },
+        {
+          "Id": "7",
+          "Number": "7",
+          "Text": "Hoelang kunt u opvangen?",
+          "Description": "",
+          "InputType": "radio",
+          "InputOptions": [ "1 Maand", "3 Maanden", "Zolang als nodig!" ],
+          "Required": "true"
+        },
+        {
+          "Id": "8",
+          "Number": "8",
+          "Text": "Hoeveel mensen kunt u maximaal opvangen?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "9",
+          "Number": "9",
+          "Text": "Heeft u overige/onze hulp nodig bij het realiseren van onderdak?",
+          "Description": "",
+          "InputType": "radio",
+          "InputOptions": [ "Ja", "Alleen de basis behoefte ( Slaapzak, kleding, voedsel )", "Nee, alles kan ikzelf organiseren" ],
+          "Required": "true"
+        },
+        {
+          "Id": "10",
+          "Number": "10",
+          "Text": "Heeft u nog vragen aan Noaberschap Ukraine Twente?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    }
+  ]
+}

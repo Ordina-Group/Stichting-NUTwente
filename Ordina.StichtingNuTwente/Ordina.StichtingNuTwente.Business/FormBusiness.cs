@@ -7,10 +7,9 @@ namespace Ordina.StichtingNuTwente.Business
     {
         public Form createFormFromJson(int formId)
         {
-            string fileName = "forms.json";
+            string fileName = "GastgezinAanmelding.json";
             string jsonString = File.ReadAllText(fileName);
-            var root = JObject.Parse(jsonString);
-            Form form = root[formId-1].ToObject<Form>();
+            Form form = JObject.Parse(jsonString).ToObject<Form>();
             return form;
         }
     }
