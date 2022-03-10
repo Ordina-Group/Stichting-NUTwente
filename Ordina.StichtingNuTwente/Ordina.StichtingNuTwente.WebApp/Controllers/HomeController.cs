@@ -35,23 +35,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        /*[Route("VluchtelingIntake")]
-        [HttpGet]
-        public IActionResult Index()
-        {
-            string file = "VluchtelingIntake.json";
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
-        }
-
-        [HttpPost]
-        public IActionResult Save(AnswersViewModel form) 
-        {
-            string file = "GastgezinIntake.json";
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
-        }*/
-
         public IActionResult Privacy()
         {
             return View();
