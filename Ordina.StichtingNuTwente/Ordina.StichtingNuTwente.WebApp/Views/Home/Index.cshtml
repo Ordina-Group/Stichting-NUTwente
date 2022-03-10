@@ -1,0 +1,52 @@
+﻿@using Ordina.StichtingNuTwente.Entities
+@model Ordina.StichtingNuTwente.Entities.Form
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<header>
+    <div class="text-center">
+        <h1 class="Title">@Html.DisplayFor(model => model.Title)</h1>
+        <p>@Html.DisplayFor(model => model.Header)</p>
+    </div>
+</header>
+
+<body>
+    <div>
+
+         @using (Html.BeginForm("Save","Home",FormMethod.Post))
+         {
+            @Html.AntiForgeryToken()
+            @foreach (Section s in Model.Sections)
+            {
+                <div class="row" id="Section">
+                    <div class="text-center" style="">
+                        <h3>@s.Title</h3>
+                        <p>@s.Header</p>
+
+
+                        @foreach (Question q in s.Questions)
+                        {
+                            <div class="text-center" id="Question">
+                                <div class="card-title">
+                                    <p>@q.Number. @q.Text</p>
+                                    <input type="hidden" name="answer.Id" value="@q.Id"/>
+                                    <input type="text" id="txt" class="form-control"  name="answer.value" size = "100" />
+                                    <br> <br>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            <input type="submit"/>
+        }
+        <br />
+        <br />
+    </div>
+
+    
+
+</body>
+
+
