@@ -2,9 +2,9 @@
 {
     public class Answers
     {
-        public int Id { get; set; }
+        public int Nummer { get; set; }
 
-        public string value { get; set; }
+        public string Antwoord { get; set; }
 
     }
 
@@ -14,6 +14,9 @@
         {
             answer = new List<Answers>();
         }
-        IList<Answers> answer { get; set; }
+        public List<Answers> answer { get; set; }
+
+        public string id { get; set; }
+
     }
 }

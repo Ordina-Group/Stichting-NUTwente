@@ -1,5 +1,6 @@
 ﻿@using Ordina.StichtingNuTwente.Entities
 @model Ordina.StichtingNuTwente.Entities.Form
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -14,8 +15,10 @@
 <body>
     <div>
 
-         @using (Html.BeginForm("Save","Home",FormMethod.Post))
-         {
+        @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
+        {
+            int teller = 0;
+             
             @Html.AntiForgeryToken()
             @foreach (Section s in Model.Sections)
             {
@@ -23,30 +26,74 @@
                     <div class="text-center" style="">
                         <h3>@s.Title</h3>
                         <p>@s.Header</p>
-
+                       
 
                         @foreach (Question q in s.Questions)
                         {
+
                             <div class="text-center" id="Question">
                                 <div class="card-title">
                                     <p>@q.Number. @q.Text</p>
-                                    <input type="hidden" name="answer.Id" value="@q.Id"/>
-                                    <input type="text" id="txt" class="form-control"  name="answer.value" size = "100" />
+                                    <input type="hidden" id="Nummer"  name="Nummer" value="@q.Number"/>
+                                    <input type="text" id="Antwoord" class="form-control"  name="Antwoord" size = "100" />
                                     <br> <br>
                                 </div>
                             </div>
+                            
+                                teller++;
+                            
                         }
                     </div>
                 </div>
             }
-            <input type="submit"/>
+            <input id="btnsubmit" type="submit"/>
         }
         <br />
         <br />
     </div>
+    <script>   
+    $(document).ready(function () {   
 
-    
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    console.log()
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
 
+        $("#btnsubmit").click(function (e) {   
+            e.preventDefault();
+
+            const form = $(e.target);
+            const json = $("#questionsForm").serializeObject();
+            var jsonStr = '{"answer":[]}';
+            var obj = JSON.parse(jsonStr);
+            for (let i = 0; i < json.Nummer.length; i++) 
+            {
+                obj['answer'].push({"Id":json.Nummer[i],"Antwoord":json.Antwoord[i]});
+            }
+            $.ajax({   
+                url: "/Home/Save",   
+                type: "POST",   
+                dataType: 'json',   
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                data: {"answers":JSON.stringify(obj)   }
+            });   
+        });   
+    });   
+</script>  
+ 
 </body>
 
 
