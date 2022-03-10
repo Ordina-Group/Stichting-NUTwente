@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="GastgezinIntake.json" />
+    <Content Remove="VluchtelingIntake.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="GastgezinIntake.json" />
+    <None Include="VluchtelingIntake.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Business\Ordina.StichtingNuTwente.Business.csproj" />
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Entities\Ordina.StichtingNuTwente.Entities.csproj" />
   </ItemGroup>

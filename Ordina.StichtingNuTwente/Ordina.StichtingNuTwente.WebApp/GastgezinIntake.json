@@ -1,6 +1,6 @@
 {
   "Id": "1",
-  "Title": "Intake Gastgezin Oekraïne",
+  "Title": "Intake Gastgezin OekraÃ¯ne",
   "Header": "Bedankt voor uw aanmelding als gastgezin. NuTwente gebruikt de gegevens op dit formulier uitsluitend om uw aanmelding te verwerken en zo goed mogelijk een passende plaatsing te organiseren. Door de plotseling ontstane situatie is echter nog veel onzeker en we vragen daarvoor uw begrip.",
   "Sections": [
     {
@@ -217,7 +217,7 @@
           "Id": "5",
           "Number": "21",
           "Text": "Is er voldoende privacy voor uw gast(en)?",
-          "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
+          "Description": "Er is tenminste Ã©Ã©n woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -226,7 +226,7 @@
           "Id": "6",
           "Number": "22",
           "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
-          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
+          "Description": "(tenminste 0,36 m3, ofwel Ã©Ã©n grote staande kast per persoon)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -346,7 +346,7 @@
         {
           "Id": "18",
           "Number": "34",
-          "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn?",
+          "Text": "Heeft u allergieÃ«n die voor plaatsing van belang kunnen zijn?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -401,7 +401,7 @@
           "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
           "Description": "",
           "InputType": "stars",
-          "InputOptions": "5",
+          "InputOptions": [ "5" ],
           "Required": "false"
         },
         {
@@ -436,7 +436,7 @@
           "Text": "Is de verlichting en electra in de natte ruimte(s) spatwaterdicht?",
           "Description": "",
           "InputType": "stars",
-          "InputOptions": "5",
+          "InputOptions": [ "5" ],
           "Required": "false"
         },
         {

@@ -1,7 +1,7 @@
 {
   "Id": "1",
   "Title": "Aanmelden OPVANG in Twente",
-  "Header": "De enquête duurt ongeveer 4 minuten om te voltooien. De oorlog in Oekraïne kwam onverwacht en Nederland en de regio Twente zijn niet voorbereid op grootschalige hulp. Veel mensen willen de vluchtelingen helpen, maar weten niet hoe. Organisaties en bedrijven zetten ook acties op, maar moeten dan vaak zelf het wiel uitvinden. Noaberschap Ukraine-Twente springt in deze bres en coördineert de verschillende groepen en zorgt voor host-families in Twente.",
+  "Header": "De enquÃªte duurt ongeveer 4 minuten om te voltooien. De oorlog in OekraÃ¯ne kwam onverwacht en Nederland en de regio Twente zijn niet voorbereid op grootschalige hulp. Veel mensen willen de vluchtelingen helpen, maar weten niet hoe. Organisaties en bedrijven zetten ook acties op, maar moeten dan vaak zelf het wiel uitvinden. Noaberschap Ukraine-Twente springt in deze bres en coÃ¶rdineert de verschillende groepen en zorgt voor host-families in Twente.",
   "Sections": [
     {
       "Id": "1",
@@ -15,7 +15,7 @@
           "Text": "Dankjewel namens Noaberschap Ukraine Twente, bent u een:",
           "Description": "",
           "InputType": "radio",
-          "InputOptions": [ "Particulier", "Bedrijf/organisatie", "Officiële insantie" ],
+          "InputOptions": [ "Particulier", "Bedrijf/organisatie", "OfficiÃ«le insantie" ],
           "Required": "true"
         },
         {
