@@ -17,10 +17,29 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
         }
 
+        [Route("GastgezinAanmelding")]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            string file = "GastgezinAanmelding.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }
+
+        [Route("GastgezinIntake")]
         [HttpGet]
         public IActionResult Index()
         {
             string file = "GastgezinIntake.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }
+
+        /*[Route("VluchtelingIntake")]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            string file = "VluchtelingIntake.json";
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
@@ -31,7 +50,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             string file = "GastgezinIntake.json";
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
-        }
+        }*/
 
         public IActionResult Privacy()
         {
