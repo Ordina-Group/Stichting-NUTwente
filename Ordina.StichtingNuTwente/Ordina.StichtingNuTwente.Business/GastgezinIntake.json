@@ -198,8 +198,8 @@
         {
           "Id": "3",
           "Number": "19",
-          "Text": "Welke talen spreekt u?",
-          "Description": "",
+          "Text": "Voor hoeveel volwassen personen heeft u een slaapplaats?",
+          "Description": "(matras tenminste 80x200 cm)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -207,8 +207,8 @@
         {
           "Id": "4",
           "Number": "20",
-          "Text": "",
-          "Description": "",
+          "Text": "Is er voldoende ruimte in de slaapkamers?",
+          "Description": "(tenminste 3,5 m2 per persoon)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -216,8 +216,8 @@
         {
           "Id": "5",
           "Number": "21",
-          "Text": "",
-          "Description": "",
+          "Text": "Is er voldoende privacy voor uw gast(en)?",
+          "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -225,8 +225,8 @@
         {
           "Id": "6",
           "Number": "22",
-          "Text": "",
-          "Description": "",
+          "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
+          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -234,7 +234,7 @@
         {
           "Id": "7",
           "Number": "23",
-          "Text": "",
+          "Text": "Staat er een stoel op de slaapkamer?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -243,16 +243,29 @@
         {
           "Id": "8",
           "Number": "24",
-          "Text": "",
+          "Text": "Kan/Kunnen uw gast(en) gebruik maken van",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "toilet",
+            "wastafel",
+            "douche/bad",
+            "wasmachine",
+            "wasdroger",
+            "koelkast",
+            "keuken",
+            "televisie",
+            "computer",
+            "woonkamer",
+            "tuin/balkon",
+            "Andere"
+          ],
           "Required": "false"
         },
         {
           "Id": "9",
           "Number": "25",
-          "Text": "",
+          "Text": "Mogen uw gasten zelfstandig koken?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -261,7 +274,7 @@
         {
           "Id": "10",
           "Number": "26",
-          "Text": "",
+          "Text": "Hoeveel koelkastruimte is beschikbaar voor uw gast(en)? Is dat gedeelde koelkastruimte of een aparte koelkast?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -270,7 +283,7 @@
         {
           "Id": "11",
           "Number": "27",
-          "Text": "",
+          "Text": "Is er daglicht in de slaapruimte?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -279,7 +292,7 @@
         {
           "Id": "12",
           "Number": "28",
-          "Text": "",
+          "Text": "Mogen uw gast(en) binnenshuis roken? buitenshuis?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -288,7 +301,7 @@
         {
           "Id": "13",
           "Number": "29",
-          "Text": "",
+          "Text": "Hoe staat u tegenover eventueel alcohol- of drugsgebruik van uw gast(en)?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -297,7 +310,7 @@
         {
           "Id": "14",
           "Number": "30",
-          "Text": "",
+          "Text": "Welke spullen heeft u op korte termijn nog nodig?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -306,7 +319,7 @@
         {
           "Id": "15",
           "Number": "31",
-          "Text": "",
+          "Text": "Welke spullen heeft u op de langere termijn nodig?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -315,7 +328,7 @@
         {
           "Id": "16",
           "Number": "32",
-          "Text": "",
+          "Text": "Heeft u huisdieren? Welke?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -324,7 +337,7 @@
         {
           "Id": "17",
           "Number": "33",
-          "Text": "",
+          "Text": "Heeft u bezwaar tegen huisdieren van uw gast(en)?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -333,7 +346,138 @@
         {
           "Id": "18",
           "Number": "34",
-          "Text": "",
+          "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "5",
+      "Number": "5",
+      "Title": "Kinderen",
+      "Header": "Alleen invullen als u ook bereid bent kinderen op te vangen.",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "35",
+          "Text": "Welke basisscholen zijn bij u in de buurt?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "2",
+          "Number": "36",
+          "Text": "Wonen er andere kinderen bij u in de buurt? (veel/weinig)",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "3",
+          "Number": "37",
+          "Text": "Welke faciliteiten voor kinderen zijn er in uw buurt?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "6",
+      "Number": "6",
+      "Title": "Uw voorbereiding",
+      "Header": "Tijdens de intake bespreekt een van onze medewerkers met u welke impact een plaatsing heeft op uw persoonlijke leven. Zaken die u hierover wilt vastleggen kunt u in deze rubriek kwijt.",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "38",
+          "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
+          "Description": "",
+          "InputType": "stars",
+          "InputOptions": "5",
+          "Required": "false"
+        },
+        {
+          "Id": "2",
+          "Number": "39",
+          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "3",
+          "Number": "40",
+          "Text": "Zijn er beperkingen waarmee NuTwente rekening dient te houden bij plaatsing?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "7",
+      "Number": "7",
+      "Title": "Toetsing SNF-criteria",
+      "Header": "Om vast te kunnen stellen in welke mate de plaatsingslocatie voldoet aan de SNF-criteria stellen we nog een aantal vragen.",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "41",
+          "Text": "Is de verlichting en electra in de natte ruimte(s) spatwaterdicht?",
+          "Description": "",
+          "InputType": "stars",
+          "InputOptions": "5",
+          "Required": "false"
+        },
+        {
+          "Id": "2",
+          "Number": "42",
+          "Text": "Is er daglicht in de verblijfsruimte(s)?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "3",
+          "Number": "43",
+          "Text": "Is er daglicht in de slaapruimte(s)?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "4",
+          "Number": "44",
+          "Text": "In welke ruimtes zijn werkende rookmelders en/of CO2 melders?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "8",
+      "Number": "8",
+      "Title": "Opmerkingen",
+      "Header": "",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "45",
+          "Text": "Heeft u nog andere vragen op opmerkingen? Die kunt u hier kwijt",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
