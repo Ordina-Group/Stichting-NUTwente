@@ -2,7 +2,41 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<header>
+    <div class="text-center">
+        <h1 class="Title">Intake gezin</h1>
+        <p>Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier</p>
+    </div>
+</header>
+
+<body>
+    <!-- Dit in for loop stoppen-->
+    <div>
+
+        <!-- dit veranderen naar een foreach-->
+        @for (var i = 0; i < 2; i++)
+        {
+            <div class="row" id="Section">
+                <div class="text-center" style="">
+                    <h3>Section titel (personalia bijv.)</h3>
+
+
+                    <!-- loop voor Question-->
+                    @for (var a = 0; a < 5; a++)
+                    {
+                        <div class="text-center" id="Question">
+                            <div class="card-title">
+                                <h5> Question</h5>
+                                <p> Text</p>
+                                <input type="text" id="txtFirstName" name="FirstName" />
+                                <br> <br>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</body>
+
+
