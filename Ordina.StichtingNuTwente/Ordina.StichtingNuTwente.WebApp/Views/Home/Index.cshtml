@@ -1,33 +1,32 @@
-﻿@{
+﻿@using Ordina.StichtingNuTwente.Entities
+@model Ordina.StichtingNuTwente.Entities.Form
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <header>
     <div class="text-center">
-        <h1 class="Title">Intake gezin</h1>
-        <p>Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier Uitleg hier</p>
+        <h1 class="Title">@Html.DisplayFor(model => model.Title)</h1>
+        <p>@Html.DisplayFor(model => model.Header)</p>
     </div>
 </header>
 
 <body>
-    <!-- Dit in for loop stoppen-->
     <div>
 
-        <!-- dit veranderen naar een foreach-->
-        @for (var i = 0; i < 2; i++)
+        @foreach (Section s in Model.Sections)
         {
             <div class="row" id="Section">
                 <div class="text-center" style="">
-                    <h3>Section titel (personalia bijv.)</h3>
+                    <h3>@s.Title</h3>
+                    <p>@s.Header</p>
 
 
-                    <!-- loop voor Question-->
-                    @for (var a = 0; a < 5; a++)
+                    @foreach (Question q in s.Questions)
                     {
                         <div class="text-center" id="Question">
                             <div class="card-title">
-                                <h5> Question</h5>
-                                <p> Text</p>
+                                <p>@q.Number. @q.Text</p>
                                 <input type="text" id="txtFirstName" name="FirstName" />
                                 <br> <br>
                             </div>

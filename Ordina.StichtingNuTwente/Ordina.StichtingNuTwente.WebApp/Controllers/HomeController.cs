@@ -2,6 +2,7 @@
 using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.WebApp.Models;
 using System.Diagnostics;
+using Ordina.StichtingNuTwente.Entities;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -18,7 +19,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            Form questionForm = _formBusiness.createFormFromJson(1);
+            return View(questionForm);
         }
 
         public IActionResult Privacy()
