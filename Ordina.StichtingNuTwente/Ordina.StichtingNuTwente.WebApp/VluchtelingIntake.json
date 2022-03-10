@@ -1,0 +1,272 @@
+{
+  "Id": "3",
+  "Title": "Intake Vluchteling Oekraïne",
+  "Header": "Welkom in Twente. Wij hopen u zo goed mogelijk te kunnen plaatsen in een gastgezin. Door de plotselinge oorlog moeten ook wij veel improviseren. Wij vragen om uw begrip als niet alles even soepel loopt. <br> Ласкаво просимо до Твенте. Сподіваємося, що зможемо розмістити вас якомога краще в приймаючій родині. Через раптову війну нам також доводиться багато імпровізувати. Просимо ставитися з розумінням до деяких організаційних негараздів, наша огранізація зараз дуже швидко розбудовується.",
+  "Sections": [
+    {
+      "Id": "1",
+      "Number": "1",
+      "Title": "Personalia vluchteling <br> Особисті дані біженця",
+      "Header": "Wij vragen uw persoonsinformatie zodat wij weten wie geplaatst is en zodat wij contact met u kunnen opnemen. Vul alstublieft voor elk gezinslid een apart formulier in. <br> Ми просимо надати вашу особисту інформацію, щоб ми могли зв’язатися з вами.",
+      "Questions": [
+        {
+          "Id": "1",
+          "Number": "1",
+          "Text": "Naam <br> Ім'я",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "2",
+          "Number": "2",
+          "Text": "Woonplaats in Ukraine <br> Місто проживання в Україні",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "3",
+          "Number": "3",
+          "Text": "Geboorteplaats <br> Місце народження",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "4",
+          "Number": "4",
+          "Text": "Geboortedatum (dd-mm-jjjj) <br> Дата народження (дд-мм-рррр)",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "5",
+          "Number": "5",
+          "Text": "Nationaliteit <br> Національність",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "6",
+          "Number": "6",
+          "Text": "Reisdocument <br> Проїзний документ (Паспорт чи інше, наведіть)",
+          "Description": "indien voorhanden. Graag soort document en documentnummer vermelden. <br> якщо доступно. Вкажіть тип документа та номер документа.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "7",
+          "Number": "7",
+          "Text": "Telefoonnummer <br> телефонний номер",
+          "Description": "NuTwente gebruikt dit telefoonnummer om contact met u op te kunnen nemen. Alleen als de situatie dat vereist geven wij dit nummer door aan andere hulpverlenende instanties, zodat zij met u contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit nummer niet. <br> NuTwente буде використовувати цей номер телефону, щоб зв’язатися з вами. Ми передамо цей номер іншим службам екстреної допомоги, лише якщо цього вимагає ситуація, щоб вони могли зв’язатися з вами. Ми не використовуємо цей номер для інших цілей.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "8",
+          "Number": "8",
+          "Text": "e-mail <br> адреса електронної пошти",
+          "Description": "NuTwente gebruikt dit e-mail adres om u te informeren of contact met u op te nemen als er geen haast bij is. Als de situatie dat vereist geven wij dit e-mail adres door aan andere hulpverlenende instanties, zodat zij contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit e-mail adres niet. <br> NuTwente використовує цю адресу електронної пошти, щоб повідомити вам або зв’язатися з вами, якщо немає поспіху. Якщо ситуація вимагає, ми передамо цю адресу електронної пошти іншим службам екстреної допомоги, щоб вони могли зв’язатися з вами. Ми не використовуємо цю адресу електронної пошти для інших цілей.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "9",
+          "Number": "9",
+          "Text": "Intake is uitgevoerd door <br> введений працівником",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        }
+      ]
+    },
+    {
+      "Id": "2",
+      "Number": "2",
+      "Title": "Gezin <br> Сім'я",
+      "Header": "Wij  vragen naar uw gezinssituatie omdat wij proberen uw gezin op één plek te kunnen plaatsen. Deze sectie hoeft u maar voor één gezinslid in te vullen. Voor alle andere gezinsleden hoeft u dit formulier verder niet in te vullen. <br> Ми запитуємо про вашу сімейну ситуацію, тому що намагаємося помістити вашу сім’ю в одне місце. Вам потрібно заповнити цей розділ лише для одного члена сім’ї. Вам не потрібно заповнювати цю форму для всіх інших членів сім’ї.",
+      "Questions": [
+        {
+          "Id": "10",
+          "Number": "10",
+          "Text": "Hoe is uw gezin samengesteld? <br> Як складається ваша родина?",
+          "Description": "Noem van volwassenen in de groep de voornaam, achternaam en geslacht (m/v). Noem van de kinderen ook de leeftijd. Gebruik dezelfde namen die ook op het intakeformulier van elke persoon gebruikt worden. <br> Назвіть ім’я, прізвище та стать (м/ж) дорослих у групі. Вкажіть вік дітей. Використовуйте ті самі імена, що й на бланку прийому кожної особи.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "11",
+          "Number": "11",
+          "Text": "Welke hobbies of vrijetijdsbesteding doen u en uw gezinsleden? <br> Якими хобі чи видами дозвілля займаєтесь ви та члени вашої родини?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "12",
+          "Number": "12",
+          "Text": "Welke talen spreekt u? <br> Якими мовами ви володієте?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "13",
+          "Number": "13",
+          "Text": "Is er een belemmering in het gezin waar uw gastgezin rekening mee moet houden? <br> Чи є в сім'ї перешкоди (наприклад алергії, непереносимість диму табаку, медичні протипоказання) , про які ваша приймаюча сім'я повинна знати?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "3",
+      "Number": "3",
+      "Title": "Praktische zaken <br> Практичні питання",
+      "Header": "Wij vragen naar de faciliteiten die u nodig heeft. NuTwente kan daar bij plaatsing rekening mee houden. Bij elk antwoord kunt u desgewenst opmerkingen toevoegen. Wij kunnen helaas niet garanderen dat dat in alle gevallen lukt. <br> В цьому розділі ми питаємо про те, що вам потрібно. NuTwente може врахувати це під час встановлення. Ви можете додати коментарі до кожної відповіді, якщо хочете. На жаль, ми не можемо гарантувати, що це спрацює у всіх випадках.",
+      "Questions": [
+        {
+          "Id": "14",
+          "Number": "14",
+          "Text": "Rookt u  of een van uw gezinsleden binnenshuis? <br> Ви чи хтось із членів вашої родини палить в приміщенні?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "15",
+          "Number": "15",
+          "Text": "Rookt u  of een van uw gezinsleden buitenshuis? <br> Ви чи хтось із членів вашої родини палить поза домом?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "16",
+          "Number": "16",
+          "Text": "Welke spullen heeft u op korte termijn nog nodig? <br> Які предмети вам потрібні в короткостроковій перспективі (наприклад - одяг, гігієна, їжа, електроніка)?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "17",
+          "Number": "17",
+          "Text": "Welke spullen heeft u op de langere termijn nodig? <br> Які предмети вам потрібні в довгостроковій перспективі? (наприклад - велосипед ,компьютер або з попереднього списку)",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "18",
+          "Number": "18",
+          "Text": "Heeft u huisdieren? Welke? <br> У вас є домашні тварини? Які?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "19",
+          "Number": "19",
+          "Text": "Heeft u bezwaar tegen huisdieren in uw gastgezin? <br> Чи можете ви співіснувати з домашніми тваринами у приймаючій родині?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "20",
+          "Number": "20",
+          "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn? <br> Чи є у вас алергія, яка може бути важливою для розміщення?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "4",
+      "Number": "4",
+      "Title": "Overig <br> Інший",
+      "Header": "",
+      "Questions": [
+        {
+          "Id": "21",
+          "Number": "21",
+          "Text": "Heeft u nog andere vragen op opmerkingen? Die kunt u hier kwijt. <br> У вас є інші запитання чи коментарі? Ви можете втратити його тут,",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "5",
+      "Number": "5",
+      "Title": "Heeft u medische/pshycholoogische hulp nodig?",
+      "Header": "Here we ask several questions about your health/mental health situation to be able to help you as soon as possible. <br> Це секція запитань про ваш стан фізичного/психічного здоров'я. Ми хочемо вам допомогти якомога швидше",
+      "Questions": [
+        {
+          "Id": "22",
+          "Number": "22",
+          "Text": "Welke chronische medische aandoeningen hebt u? <br> Які хронічні захворювання ви маєте?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "23",
+          "Number": "23",
+          "Text": "Hebt u vitale medicijnen nodig? Zo ja, hebt u deze medicijnen op voorraad? <br> Чи використовуєте ви життєво-необхідні ліки? якщо так - то які і чи є у вас запас?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "24",
+          "Number": "24",
+          "Text": "Heeft u op dit moment gezondheidsklachten? <br> Чи є у вас скарги на здоров'я на даний момент?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "25",
+          "Number": "25",
+          "Text": "Officieel vastgestelde diagnoses in relatie tot geestelijke gezondheid <br> Чи є у вас офіційно діагностовані стани психічного здоров'я? Якщо так - опишіть включно з історією звороби.",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    }
+  ]
+}

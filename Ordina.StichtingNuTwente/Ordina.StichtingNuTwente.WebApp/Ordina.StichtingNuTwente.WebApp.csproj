@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="GastgezinIntake.json" />
+    <Content Remove="VluchtelingIntake.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="jQuery" Version="3.6.0" />
+
+    <None Include="GastgezinIntake.json" />
+    <None Include="VluchtelingIntake.json" />
   </ItemGroup>
 
   <ItemGroup>
