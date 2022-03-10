@@ -6,8 +6,8 @@
 
 <header>
     <div class="text-center">
-        <h1 class="Title">@Html.DisplayFor(model => model.Title)</h1>
-        <p>@Html.DisplayFor(model => model.Header)</p>
+        <h1 class="Title">@Html.Raw(Model.Title)</h1>
+        <p>@Html.Raw(Model.Header)</p>
     </div>
 </header>
 
@@ -21,15 +21,15 @@
             {
                 <div class="row" id="Section">
                     <div class="text-center" style="">
-                        <h3>@s.Title</h3>
-                        <p>@s.Header</p>
+                        <h3>@Html.Raw(s.Title)</h3>
+                        <p>@Html.Raw(s.Header)</p>
 
 
                         @foreach (Question q in s.Questions)
                         {
                             <div class="text-center" id="Question">
                                 <div class="card-title">
-                                    <p>@q.Number. @q.Text</p>
+                                    <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
                                     <input type="hidden" name="answer.Id" value="@q.Id"/>
                                     <input type="text" id="txt" class="form-control"  name="answer.value" size = "100" />
                                     <br> <br>
