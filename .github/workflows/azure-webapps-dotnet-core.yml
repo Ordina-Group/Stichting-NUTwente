@@ -35,13 +35,13 @@ jobs:
         run: dotnet build Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.WebApp/Ordina.StichtingNuTwente.WebApp.csproj  --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.WebApp/Ordina.StichtingNuTwente.WebApp.csproj  -c Release -o ${{env.DOTNET_ROOT}}
+        run: dotnet publish Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.WebApp/Ordina.StichtingNuTwente.WebApp.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
