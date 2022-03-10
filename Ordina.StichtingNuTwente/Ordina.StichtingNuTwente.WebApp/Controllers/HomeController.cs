@@ -20,14 +20,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            Form questionForm = _formBusiness.createFormFromJson(1);
+            string file = "GastgezinIntake.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
 
         [HttpPost]
         public IActionResult Save(AnswersViewModel form) 
         {
-            Form questionForm = _formBusiness.createFormFromJson(1);
+            string file = "GastgezinIntake.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
 

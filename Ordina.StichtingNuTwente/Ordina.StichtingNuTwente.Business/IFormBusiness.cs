@@ -3,6 +3,6 @@ namespace Ordina.StichtingNuTwente.Business
 {
     public interface IFormBusiness
     {
-        public Form createFormFromJson(int formId);
+        public Form createFormFromJson(int formId, string fileName);
     }
 }
