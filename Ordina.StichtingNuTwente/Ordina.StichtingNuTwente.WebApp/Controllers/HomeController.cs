@@ -53,27 +53,36 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Route("ReactionDetail")]
+        [Route("getnutwenteoverheidreactiesdetailniveau")]
         [HttpGet]
         [ActionName("Index")]
-        public IActionResult ReactionDetail(int id)
+        public IActionResult getnutwenteoverheidreactiesdetailniveau(int id)
         {
             Form questionForm = _reactionService.GetAnwersFromId(id);
             return View(questionForm);
         }
 
-        [Route("GetAllReactions")]
+        [Route("Bedankt")]
         [HttpGet]
-        public IActionResult GetAllReactions()
+        public IActionResult Bedankt()
+        {
+           
+            return View();
+        }
+
+        [Route("getnutwenteoverheidreacties")]
+        [HttpGet]
+        [ActionName("GetAllReactions")]
+        public IActionResult getnutwenteoverheidreacties()
         {
             var responses = _reactionService.GetAllRespones();
             return View(responses);
         }
 
-        [Route("GetAllReactionsForForm")]
+        [Route("getnutwenteoverheidreactiesspecifiek")]
         [HttpGet]
-        [ActionName("Index")]
-        public IActionResult GetAllReactionsForForm(int formId)
+        [ActionName("GetAllReactions")]
+        public IActionResult getnutwenteoverheidreactiesspecifiek(int formId)
         {
             var responses = _reactionService.GetAllRespones(formId);
             return View(responses);
@@ -96,16 +105,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             }
 
-            string fileLoc = "GastgezinAanmelding.json";
-
-            Form questionForm = _formBusiness.createFormFromJson(1, fileLoc);
-
-            return View(questionForm);
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

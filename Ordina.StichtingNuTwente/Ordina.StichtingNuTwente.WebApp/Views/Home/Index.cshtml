@@ -3,13 +3,19 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    bool hasAnswers = false;
 }
 
 <header>
-    <div class="text-center">
-        <h1 class="Title">@Html.Raw(Model.Title)</h1>
-        <p>@Html.Raw(Model.Header)</p>
+   <div class="card">
+        <div class="card-header">             
+            <h1 class="Title">@Html.Raw(Model.Title)</h1>
+        </div>
+        <div class="card-body">
+            <p style="align-self:center; max-width:50%">@Html.Raw(Model.Header)</p>
+        </div>
     </div>
+    <br/>
 </header>
 
 <body>
@@ -17,79 +23,100 @@
 
         @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
         {
-             
+            
             @Html.AntiForgeryToken()
             @foreach (Section s in Model.Sections)
             {
+  
+   
+  
                 <div class="row" id="Section">
-                    <div class="text-center" style="">
-                        <h3>@Html.Raw(s.Title)</h3>
-                        <p>@Html.Raw(s.Header)</p>
-
-
-                        @foreach (Question q in s.Questions)
-                        {
-
-                            <div class="text-center" id="Question">
-                                <div class="card-title">
-                                    <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                    <input type="hidden" name="Nummer" value="@q.Id"/>
-                                    <input type="text" id="txt" class="form-control" value="@q.Answer" name="Antwoord" size = "100" />
-                                    <br> <br>
-                                </div>
+                    <div class="" style="">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>@Html.Raw(s.Title)</h3>
                             </div>
+                            <div class="card-body">
+                                <p>@Html.Raw(s.Header)</p>
+
+
+                                @foreach (Question q in s.Questions)
+                                {
+                                    
+                                    if(q.Answer !="" && q.Answer !=null)
+                                    {
+
+                                        hasAnswers = true;
+                                    }
+                                    <div class="row" id="Question">
+                                        <div class="card-title">
+                                            <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                            <input type="hidden" name="Nummer" value="@q.Id"/>
+                                            <input type="text" id="txt" class="form-control" value="@q.Answer" name="Antwoord" size = "100" />
+                                            <br> <br>
+                                        </div>
+                                    </div>
                             
                             
-                        }
+                                }
+                            </div>
+                        </div>
+                        <br/>
                     </div>
                 </div>
             }
-            <input id="btnsubmit" type="submit"/>
+            if (!hasAnswers)
+            {
+                <input id="btnsubmit" type="submit"/>
+            }
         }
         <br />
         <br />
     </div>
-    <script>   
-    $(document).ready(function () {   
+    
+        <script>   
+        $(document).ready(function () {   
 
-        $.fn.serializeObject = function()
-        {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function() {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-
-        $("#btnsubmit").click(function (e) {   
-            e.preventDefault();
-
-            const json = $("#questionsForm").serializeObject();
-            var jsonStr = '{"answer":[], "Id":"@Model.Id"}';
-            var obj = JSON.parse(jsonStr);
-            for (let i = 0; i < json.Nummer.length; i++) 
+            $.fn.serializeObject = function()
             {
-                obj['answer'].push({"Nummer":json.Nummer[i],"Antwoord":json.Antwoord[i]});
-            }
-            $.ajax({   
-                url: "/Home/Save",   
-                type: "POST",   
-                dataType: 'json',   
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
-                data: {"answers":JSON.stringify(obj)   }
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+
+            $("#btnsubmit").click(function (e) {   
+                e.preventDefault();
+
+                const json = $("#questionsForm").serializeObject();
+                var jsonStr = '{"answer":[], "Id":"@Model.Id"}';
+                var obj = JSON.parse(jsonStr);
+                for (let i = 0; i < json.Nummer.length; i++) 
+                {
+                    obj['answer'].push({"Nummer":json.Nummer[i],"Antwoord":json.Antwoord[i]});
+                }
+                $.ajax({   
+                    url: "/Home/Save",   
+                    type: "POST",   
+                    dataType: 'json',   
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                    data: {"answers":JSON.stringify(obj)   },
+                }).fail(function()  {
+                   window.location = "/Bedankt";   
+                });//for some reason this works and done does not 
             });   
         });   
-    });   
-</script>  
- 
+    </script>  
+
 </body>
 
 
