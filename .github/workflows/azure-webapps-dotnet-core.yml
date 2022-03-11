@@ -30,7 +30,13 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+      
+      - name: Setup Nuget
+        uses: Nuget/setup-nuget@v1.0.5
 
+      - name: Restore nuget packages
+        run: nuget restore Ordina.StichtingNuTwente.sln
+      
       - name: Build with dotnet
         run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
 
