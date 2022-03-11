@@ -25,5 +25,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             return dbModel;
                 
         }
+
+        public static AnswersViewModel FromDatabaseToWebModel(Reactie dbModel)
+        {
+            var webModel = new AnswersViewModel();
+            webModel.Id = dbModel.FormulierId.ToString();
+            webModel.AnswerDate = dbModel.DatumIngevuld;
+            webModel.answer = dbModel.Antwoorden.ToList().ConvertAll(a => AnswerMapping.FromDatabaseToWebModel(a));
+            return webModel;
+        }
     }
 }

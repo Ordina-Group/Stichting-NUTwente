@@ -18,5 +18,7 @@
 
         public string Id { get; set; }
 
+        public DateTime AnswerDate { get; set; }
+
     }
 }
