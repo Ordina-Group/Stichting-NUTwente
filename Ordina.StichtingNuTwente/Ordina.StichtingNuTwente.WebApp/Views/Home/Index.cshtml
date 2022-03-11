@@ -1,52 +1,95 @@
 ﻿@using Ordina.StichtingNuTwente.Entities
 @model Ordina.StichtingNuTwente.Entities.Form
+
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <header>
     <div class="text-center">
-        <h1 class="Title">@Html.DisplayFor(model => model.Title)</h1>
-        <p>@Html.DisplayFor(model => model.Header)</p>
+        <h1 class="Title">@Html.Raw(Model.Title)</h1>
+        <p>@Html.Raw(Model.Header)</p>
     </div>
 </header>
 
 <body>
     <div>
 
-         @using (Html.BeginForm("Save","Home",FormMethod.Post))
-         {
+        @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
+        {
+             
             @Html.AntiForgeryToken()
             @foreach (Section s in Model.Sections)
             {
                 <div class="row" id="Section">
                     <div class="text-center" style="">
-                        <h3>@s.Title</h3>
-                        <p>@s.Header</p>
+                        <h3>@Html.Raw(s.Title)</h3>
+                        <p>@Html.Raw(s.Header)</p>
 
 
                         @foreach (Question q in s.Questions)
                         {
+
                             <div class="text-center" id="Question">
                                 <div class="card-title">
-                                    <p>@q.Number. @q.Text</p>
-                                    <input type="hidden" name="answer.Id" value="@q.Id"/>
-                                    <input type="text" id="txt" class="form-control"  name="answer.value" size = "100" />
+                                    <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                    <input type="hidden" name="Nummer" value="@q.Id"/>
+                                    <input type="text" id="txt" class="form-control" value="@q.Answer" name="Antwoord" size = "100" />
                                     <br> <br>
                                 </div>
                             </div>
+                            
+                            
                         }
                     </div>
                 </div>
             }
-            <input type="submit"/>
+            <input id="btnsubmit" type="submit"/>
         }
         <br />
         <br />
     </div>
+    <script>   
+    $(document).ready(function () {   
 
-    
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
 
+        $("#btnsubmit").click(function (e) {   
+            e.preventDefault();
+
+            const json = $("#questionsForm").serializeObject();
+            var jsonStr = '{"answer":[], "Id":"@Model.Id"}';
+            var obj = JSON.parse(jsonStr);
+            for (let i = 0; i < json.Nummer.length; i++) 
+            {
+                obj['answer'].push({"Nummer":json.Nummer[i],"Antwoord":json.Antwoord[i]});
+            }
+            $.ajax({   
+                url: "/Home/Save",   
+                type: "POST",   
+                dataType: 'json',   
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                data: {"answers":JSON.stringify(obj)   }
+            });   
+        });   
+    });   
+</script>  
+ 
 </body>
 
 

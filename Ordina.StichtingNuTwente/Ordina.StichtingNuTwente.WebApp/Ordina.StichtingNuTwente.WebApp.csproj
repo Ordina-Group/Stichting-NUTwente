@@ -7,12 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <Content Remove="GastgezinIntake.json" />
+    <Content Remove="VluchtelingIntake.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <None Include="GastgezinIntake.json" />
+    <None Include="VluchtelingIntake.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Business\Ordina.StichtingNuTwente.Business.csproj" />
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Entities\Ordina.StichtingNuTwente.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\jquery\dist\jquery.serializejson.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
