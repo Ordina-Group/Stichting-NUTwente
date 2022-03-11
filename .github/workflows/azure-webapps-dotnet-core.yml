@@ -38,7 +38,7 @@ jobs:
         run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
         
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
       
       - name: Build with dotnet
         run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
