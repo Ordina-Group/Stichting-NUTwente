@@ -22,24 +22,36 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _reactionService = reactionService;
         }
 
-        //[Route("GastgezinAanmelding")]
+        [Route("GastgezinAanmelding")]
         [HttpGet]
-        public IActionResult Index()
+        [ActionName("Index")]
+        public IActionResult IndexGastgezinAanmelding()
         {
             string file = "GastgezinAanmelding.json";
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
 
-        /*
+        
         [Route("GastgezinIntake")]
         [HttpGet]
-        public IActionResult Index()
+        [ActionName("Index")]
+        public IActionResult IndexGastgezinIntake()
         {
             string file = "GastgezinIntake.json";
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
-        }*/
+        }
+
+        [Route("VluchtelingIntake")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult IndexVluchtelingIntake()
+        {
+            string file = "VluchtelingIntake.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }
 
         [HttpPost]
         public IActionResult Save(string answers)
