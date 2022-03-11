@@ -13,11 +13,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IFormBusiness _formBusiness;
+        private readonly IReactionService _reactionService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
+            _reactionService = reactionService;
         }
 
         [HttpGet]
@@ -35,6 +37,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (answers != null)
                 {
                     var answerData =JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    _reactionService.Save(answerData);
                 }
             }
             catch (Exception ex)

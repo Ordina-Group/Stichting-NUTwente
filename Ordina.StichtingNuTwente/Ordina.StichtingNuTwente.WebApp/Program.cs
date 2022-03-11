@@ -1,6 +1,7 @@
 using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.Business.DataLayer;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Business.Services;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)
@@ -14,7 +15,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 
 builder.Services.AddDatabaseContext(config);
-
+builder.Services.AddScoped<IReactionService, ReactionService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
