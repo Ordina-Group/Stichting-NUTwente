@@ -22,7 +22,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _reactionService = reactionService;
         }
 
-        [Route("GastgezinAanmelding")]
+        //[Route("GastgezinAanmelding")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -57,7 +57,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             }
 
-            Form questionForm = _formBusiness.createFormFromJson(1);
+            string fileLoc = "GastgezinAanmelding.json";
+
+            Form questionForm = _formBusiness.createFormFromJson(1, fileLoc);
 
             return View(questionForm);
         }
