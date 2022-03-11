@@ -10,9 +10,14 @@ namespace Ordina.StichtingNuTwente.Data
 {
     public class NuTwenteContext : DbContext
     {
+
+
         public NuTwenteContext(DbContextOptions<NuTwenteContext> options): base(options)
         {
             this.Database.EnsureCreated();
+            this.Database.Migrate();
+
+
         }
 
         public DbSet<Vrijwilliger> Vrijwilligers { get; set; }
