@@ -14,7 +14,7 @@ namespace Ordina.StichtingNuTwente.Business.DataLayer
     {
         public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration) {
             services.AddDbContext<NuTwenteContext>(
-                        options => options.UseSqlServer(configuration.GetConnectionString("NuTwente"))
+                        options => options.UseSqlServer(configuration.GetConnectionString("NuTwente"), sqlServerOptionsAction: x => x.EnableRetryOnFailure())
                         );
         }
     }

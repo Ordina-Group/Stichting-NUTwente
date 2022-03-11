@@ -18,7 +18,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
             int id = 0;
             int.TryParse(viewModel.Nummer, out id);
-            dbModel.Nummer = id;
+            dbModel.IdVanVraag = id;
             dbModel.Response = viewModel.Antwoord;
             return dbModel;
                 

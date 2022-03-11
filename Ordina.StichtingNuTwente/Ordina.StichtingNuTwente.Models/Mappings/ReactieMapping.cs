@@ -20,6 +20,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             int.TryParse(viewModel.Id, out id);
              
             dbModel.FormulierId = id;
+            dbModel.DatumIngevuld = DateTime.Now;
             dbModel.Antwoorden = viewModel.answer.ConvertAll(a => AnswerMapping.FromWebToDatabaseModel(a));
             return dbModel;
                 
