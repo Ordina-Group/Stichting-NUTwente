@@ -33,6 +33,9 @@ jobs:
 
       - name: Restore nuget packages
         run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
+      
+      - name: Restore nuget packages 
+        run: nuget Update-Package –reinstall
         
       - name: Restore dependencies
         run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
