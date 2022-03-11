@@ -24,9 +24,9 @@
                 {
                     <tr>
                         <th scope="row">@item.ReactieId</th>
-                        <td> <a href="/ReactionDetail?id=@item.ReactieId">Bekijk Reactie</a></td>
+                        <td> <a href="/getnutwenteoverheidreactiesdetailniveau?id=@item.ReactieId">Bekijk Reactie</a></td>
                         <td>@item.AnswerDate</td>
-                        <td>@item.FormulierNaam</td>
+                        <td><a href="/getnutwenteoverheidreactiesspecifiek?formId=@item.FormulierId">@item.FormulierNaam</a></td>
                     </tr>
                 }
             </tbody>
