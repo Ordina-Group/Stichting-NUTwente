@@ -44,3 +44,15 @@ body {
     background-color: #04AA6D;
     color: white;
 }
+.navbar {
+    background-color: #3A75C4;
+}
+nav .navbar-toggler-icon {
+    color: #F9DD16 !important;
+}
+
+nav .navbar-nav li a {
+    color: #F9DD16 !important;
+}
+.btn-primary {
+}
