@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Restore nuget packages
-        run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln -Force -NoCache
+        run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln -Force 
         
       - name: Restore dependencies
         run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
