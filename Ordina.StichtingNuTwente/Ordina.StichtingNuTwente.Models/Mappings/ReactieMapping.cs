@@ -34,5 +34,29 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             webModel.answer = dbModel.Antwoorden.ToList().ConvertAll(a => AnswerMapping.FromDatabaseToWebModel(a));
             return webModel;
         }
+
+        public static AnswerListModel FromDatabaseToWebListModel(Reactie dbModel)
+        {
+            var webModel = new AnswerListModel();
+            webModel.FormulierId = dbModel.FormulierId.ToString();
+            webModel.AnswerDate = dbModel.DatumIngevuld;
+            webModel.ReactieId = dbModel.Id;
+            switch(webModel.FormulierId)
+            {
+                case "1":
+                    webModel.FormulierNaam = "Aanmelden OPVANG in Twente";
+                    break;
+                case "2":
+                    webModel.FormulierNaam = "Intake Gastgezin Oekraïne";
+                    break;
+                case "3":
+                    webModel.FormulierNaam = "Intake Vluchteling Oekraïne";
+                    break;
+                default:
+                    break;
+            }
+            return webModel;
+        }
+        
     }
 }

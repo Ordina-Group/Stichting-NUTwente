@@ -6,5 +6,9 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     public interface IReactionService
     {
         public bool Save(AnswersViewModel viewModel);
+
+        public Form GetAnwersFromId(int Id);
+
+        public List<AnswerListModel> GetAllRespones(int? form = null);
     }
 }

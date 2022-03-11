@@ -21,4 +21,15 @@
         public DateTime AnswerDate { get; set; }
 
     }
+
+    public class AnswerListModel
+    {
+        public int ReactieId { get; set; }
+
+        public DateTime AnswerDate { get; set; }
+
+        public string FormulierId { get; set; }
+
+        public string FormulierNaam { get; set; }
+    }
 }

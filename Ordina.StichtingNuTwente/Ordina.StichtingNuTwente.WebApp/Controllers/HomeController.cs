@@ -53,6 +53,34 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        [Route("ReactionDetail")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult ReactionDetail(int id)
+        {
+            Form questionForm = _reactionService.GetAnwersFromId(id);
+            return View(questionForm);
+        }
+
+        [Route("GetAllReactions")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult GetAllReactions()
+        {
+            var responses = _reactionService.GetAllRespones();
+            return View(responses);
+        }
+
+        [Route("GetAllReactionsForForm")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult GetAllReactionsForForm(int formId)
+        {
+            var responses = _reactionService.GetAllRespones(formId);
+            return View(responses);
+        }
+
+
         [HttpPost]
         public IActionResult Save(string answers)
         {
