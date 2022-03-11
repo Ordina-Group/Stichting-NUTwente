@@ -10,7 +10,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
     {
         public string Response { get; set; }
 
-        public int Nummer { get; set; }
+        public int IdVanVraag { get; set; }
 
     }
 }
