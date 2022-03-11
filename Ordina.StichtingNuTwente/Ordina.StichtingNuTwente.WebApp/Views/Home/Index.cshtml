@@ -8,7 +8,7 @@
 <header>
     <div class="text-center">
         <h1 class="Title">@Html.Raw(Model.Title)</h1>
-        <p>@Html.Raw(Model.Header)</p>
+        <p style="align-self:center; max-width:50%">@Html.Raw(Model.Header)</p>
     </div>
 </header>
 
@@ -22,7 +22,7 @@
             @foreach (Section s in Model.Sections)
             {
                 <div class="row" id="Section">
-                    <div class="text-center" style="">
+                    <div class="row" style="">
                         <h3>@Html.Raw(s.Title)</h3>
                         <p>@Html.Raw(s.Header)</p>
 
@@ -30,7 +30,7 @@
                         @foreach (Question q in s.Questions)
                         {
 
-                            <div class="text-center" id="Question">
+                            <div class="row" id="Question">
                                 <div class="card-title">
                                     <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
                                     <input type="hidden" name="Nummer" value="@q.Id"/>
