@@ -29,6 +29,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        /*
+        [Route("GastgezinIntake")]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            string file = "GastgezinIntake.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }*/
+
         [HttpPost]
         public IActionResult Save(string answers)
         {
@@ -45,15 +55,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             Form questionForm = _formBusiness.createFormFromJson(1);
-        }
-
-        [Route("GastgezinIntake")]
-        [HttpGet]
-        public IActionResult Index()
-        {
-            string file = "GastgezinIntake.json";
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
         }
 
         public IActionResult Privacy()
