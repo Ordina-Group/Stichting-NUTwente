@@ -62,6 +62,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        [Route("Bedankt")]
+        [HttpGet]
+        public IActionResult Bedankt()
+        {
+           
+            return View();
+        }
+
         [Route("GetAllReactions")]
         [HttpGet]
         public IActionResult GetAllReactions()
@@ -96,11 +104,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             }
 
-            string fileLoc = "GastgezinAanmelding.json";
+            return View();
 
-            Form questionForm = _formBusiness.createFormFromJson(1, fileLoc);
-
-            return View(questionForm);
         }
 
         public IActionResult Privacy()

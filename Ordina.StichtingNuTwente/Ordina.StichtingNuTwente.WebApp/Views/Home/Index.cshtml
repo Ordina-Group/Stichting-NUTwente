@@ -84,8 +84,10 @@
                 type: "POST",   
                 dataType: 'json',   
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
-                data: {"answers":JSON.stringify(obj)   }
-            });   
+                data: {"answers":JSON.stringify(obj)   },
+            }).fail(function()  {
+               window.location = "/Bedankt";   
+            });//for some reason this works and done does not 
         });   
     });   
 </script>  
