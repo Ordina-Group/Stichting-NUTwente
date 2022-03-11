@@ -3,6 +3,7 @@ using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.WebApp.Models;
 using System.Diagnostics;
 using Ordina.StichtingNuTwente.Entities;
+using System.Text.Json;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -25,6 +26,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
+
+        [HttpPost]
+        public IActionResult Save(string answers) 
+        {
+            try
+            {
+                if (answers != null)
+                {
+                    var answerData =JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            
+            Form questionForm = _formBusiness.createFormFromJson(1);
 
         [Route("GastgezinIntake")]
         [HttpGet]

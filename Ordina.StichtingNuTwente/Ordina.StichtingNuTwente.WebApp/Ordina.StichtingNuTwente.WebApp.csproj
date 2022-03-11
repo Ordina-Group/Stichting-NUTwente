@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.6.0" />
+
     <None Include="GastgezinIntake.json" />
     <None Include="VluchtelingIntake.json" />
   </ItemGroup>
@@ -19,6 +21,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Business\Ordina.StichtingNuTwente.Business.csproj" />
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Entities\Ordina.StichtingNuTwente.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\jquery\dist\jquery.serializejson.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
