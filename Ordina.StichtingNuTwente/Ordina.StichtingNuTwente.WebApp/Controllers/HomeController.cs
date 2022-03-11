@@ -28,21 +28,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save(string answers) 
+        public IActionResult Save(string answers)
         {
             try
             {
                 if (answers != null)
                 {
-                    var answerData =JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                 }
             }
             catch (Exception ex)
             {
 
             }
-            
+
             Form questionForm = _formBusiness.createFormFromJson(1);
+        }
 
         [Route("GastgezinIntake")]
         [HttpGet]
