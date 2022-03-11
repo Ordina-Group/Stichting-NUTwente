@@ -1,0 +1,37 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@model List<AnswerListModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<body>
+    <div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Link</th>
+                <th scope="col">Reactie datum</th>
+                <th scope="col">Formulier</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.ReactieId</th>
+                        <td> <a href="/ReactionDetail?id=@item.ReactieId">Bekijk Reactie</a></td>
+                        <td>@item.AnswerDate</td>
+                        <td>@item.FormulierNaam</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+      </div>
+</body>
+
+

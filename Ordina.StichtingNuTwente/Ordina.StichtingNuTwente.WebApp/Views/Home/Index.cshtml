@@ -34,7 +34,7 @@
                                 <div class="card-title">
                                     <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
                                     <input type="hidden" name="Nummer" value="@q.Id"/>
-                                    <input type="text" id="txt" class="form-control"  name="Antwoord" size = "100" />
+                                    <input type="text" id="txt" class="form-control" value="@q.Answer" name="Antwoord" size = "100" />
                                     <br> <br>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
             e.preventDefault();
 
             const json = $("#questionsForm").serializeObject();
-            var jsonStr = '{"answer":[], "Id":"1"}';
+            var jsonStr = '{"answer":[], "Id":"@Model.Id"}';
             var obj = JSON.parse(jsonStr);
             for (let i = 0; i < json.Nummer.length; i++) 
             {

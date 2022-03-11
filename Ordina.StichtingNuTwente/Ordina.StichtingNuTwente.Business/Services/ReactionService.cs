@@ -39,7 +39,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var viewModel = new Form();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbModel =reactieRepository.GetById(Id);
+            var dbModel =reactieRepository.GetById(Id, "Antwoorden");
             if(dbModel !=null)
             {
                 var fileName = "";

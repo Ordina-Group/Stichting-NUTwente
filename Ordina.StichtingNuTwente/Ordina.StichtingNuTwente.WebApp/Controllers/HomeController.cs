@@ -64,7 +64,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [Route("GetAllReactions")]
         [HttpGet]
-        [ActionName("Index")]
         public IActionResult GetAllReactions()
         {
             var responses = _reactionService.GetAllRespones();
