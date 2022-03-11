@@ -22,17 +22,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore nuget packages
-        run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln -Force 
         
       - name: Restore dependencies
         run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
