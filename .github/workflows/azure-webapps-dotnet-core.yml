@@ -32,9 +32,7 @@ jobs:
             ${{ runner.os }}-nuget-
       
       - name: Setup Nuget
-        uses: Nuget/setup-nuget@v2
-        with:
-          nuget-version: 'latest'
+        uses: Nuget/setup-nuget@v1
 
       - name: Restore nuget packages
         run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
