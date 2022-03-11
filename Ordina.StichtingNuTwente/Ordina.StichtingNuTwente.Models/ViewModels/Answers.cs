@@ -1,8 +1,8 @@
-﻿namespace Ordina.StichtingNuTwente.WebApp.Models
+﻿namespace Ordina.StichtingNuTwente.Models.ViewModels
 {
     public class Answers
     {
-        public int Nummer { get; set; }
+        public string Nummer { get; set; }
 
         public string Antwoord { get; set; }
 
@@ -16,7 +16,7 @@
         }
         public List<Answers> answer { get; set; }
 
-        public string id { get; set; }
+        public string Id { get; set; }
 
     }
 }

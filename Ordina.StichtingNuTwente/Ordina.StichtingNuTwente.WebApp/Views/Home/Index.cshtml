@@ -17,7 +17,6 @@
 
         @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
         {
-            int teller = 0;
              
             @Html.AntiForgeryToken()
             @foreach (Section s in Model.Sections)
@@ -34,13 +33,12 @@
                             <div class="text-center" id="Question">
                                 <div class="card-title">
                                     <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                    <input type="hidden" name="answer.Id" value="@q.Id"/>
-                                    <input type="text" id="txt" class="form-control"  name="answer.value" size = "80" />
+                                    <input type="hidden" name="Nummer" value="@q.Number"/>
+                                    <input type="text" id="txt" class="form-control"  name="Antwoord" size = "100" />
                                     <br> <br>
                                 </div>
                             </div>
                             
-                                teller++;
                             
                         }
                     </div>
@@ -60,7 +58,6 @@
             var a = this.serializeArray();
             $.each(a, function() {
                 if (o[this.name] !== undefined) {
-                    console.log()
                     if (!o[this.name].push) {
                         o[this.name] = [o[this.name]];
                     }
@@ -75,13 +72,12 @@
         $("#btnsubmit").click(function (e) {   
             e.preventDefault();
 
-            const form = $(e.target);
             const json = $("#questionsForm").serializeObject();
-            var jsonStr = '{"answer":[]}';
+            var jsonStr = '{"answer":[], "Id":"1"}';
             var obj = JSON.parse(jsonStr);
             for (let i = 0; i < json.Nummer.length; i++) 
             {
-                obj['answer'].push({"Id":json.Nummer[i],"Antwoord":json.Antwoord[i]});
+                obj['answer'].push({"Nummer":json.Nummer[i],"Antwoord":json.Antwoord[i]});
             }
             $.ajax({   
                 url: "/Home/Save",   

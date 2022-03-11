@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ordina.StichtingNuTwente.Models;
+using Ordina.StichtingNuTwente.Models.Models;
 
 namespace Ordina.StichtingNuTwente.Data
 {
