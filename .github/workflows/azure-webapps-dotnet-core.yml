@@ -57,7 +57,7 @@ jobs:
         with:
           files: './appsettings.json'
         env:
-          Connectionstrings.NuTwente: 'Server=tcp:nutwente-server.database.windows.net,1433;Initial Catalog=nutwente;Integrated Security=True'
+          Connectionstrings.NuTwente: 'Server=tcp:nutwente-server.database.windows.net,1433;Initial Catalog=nutwente;Authentication=Active Directory Default'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
