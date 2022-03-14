@@ -32,7 +32,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        
+
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("Index")]
@@ -68,15 +68,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("Index")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
-            Form questionForm = _reactionService.GetAnwersFromId(id);
-            return View(questionForm);
+            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            {
+                Form questionForm = _reactionService.GetAnwersFromId(id);
+                return View(questionForm);
+            }
+            else
+            {
+                return Redirect("loginnutwentevrijwilligers");
+            }
         }
 
         [Route("Bedankt")]
         [HttpGet]
         public IActionResult Bedankt()
         {
-           
+
             return View();
         }
 
@@ -85,8 +92,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
-            var responses = _reactionService.GetAllRespones();
-            return View(responses);
+            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            {
+                var responses = _reactionService.GetAllRespones();
+                return View(responses);
+            }
+            else
+            {
+                return Redirect("loginnutwentevrijwilligers");
+            }
         }
 
         [Route("getnutwenteoverheidreactiesspecifiek158436form")]
@@ -94,8 +108,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
-            var responses = _reactionService.GetAllRespones(formId);
-            return View(responses);
+            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            {
+                var responses = _reactionService.GetAllRespones(formId);
+                return View(responses);
+            }
+            else
+            {
+                return Redirect("loginnutwentevrijwilligers");
+            }
         }
 
         [Route("downloadexport15filefromform")]
@@ -103,10 +124,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("Bedankt")]
         public IActionResult downloadexport15filefromform(int formId)
         {
-
-            var file = _reactionService.GenerateExportCSV(formId);
-            MemoryStream stream = new MemoryStream(file);
-            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            {
+                var file = _reactionService.GenerateExportCSV(formId);
+                MemoryStream stream = new MemoryStream(file);
+                return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+            }
+            else
+            {
+                return Redirect("loginnutwentevrijwilligers");
+            }
         }
 
 
@@ -118,7 +145,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 if (answers != null)
                 {
-                    var answerData =JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Save(answerData);
                 }
             }
