@@ -175,8 +175,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
                 outputFile.Delete();
             }
-           
-            
 
             return retVal;
         }

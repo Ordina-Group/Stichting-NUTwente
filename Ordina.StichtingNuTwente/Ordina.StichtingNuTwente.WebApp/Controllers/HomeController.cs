@@ -63,10 +63,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Route("getnutwenteoverheidreactiesdetailniveau")]
+        [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
         [ActionName("Index")]
-        public IActionResult getnutwenteoverheidreactiesdetailniveau(int id)
+        public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             Form questionForm = _reactionService.GetAnwersFromId(id);
             return View(questionForm);
@@ -80,28 +80,28 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
-        [Route("getnutwenteoverheidreacties")]
+        [Route("getnutwenteoverheidreacties987456list")]
         [HttpGet]
         [ActionName("GetAllReactions")]
-        public IActionResult getnutwenteoverheidreacties()
+        public IActionResult getnutwenteoverheidreacties987456list()
         {
             var responses = _reactionService.GetAllRespones();
             return View(responses);
         }
 
-        [Route("getnutwenteoverheidreactiesspecifiek")]
+        [Route("getnutwenteoverheidreactiesspecifiek158436form")]
         [HttpGet]
         [ActionName("GetAllReactions")]
-        public IActionResult getnutwenteoverheidreactiesspecifiek(int formId)
+        public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
             var responses = _reactionService.GetAllRespones(formId);
             return View(responses);
         }
 
-        [Route("downloadexport")]
+        [Route("downloadexport15filefromform")]
         [HttpGet]
         [ActionName("Bedankt")]
-        public IActionResult downloadexport(int formId)
+        public IActionResult downloadexport15filefromform(int formId)
         {
 
             var file = _reactionService.GenerateExportCSV(formId);
