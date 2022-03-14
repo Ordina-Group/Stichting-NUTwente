@@ -137,7 +137,7 @@
           "Id": "13",
           "Number": "13",
           "Text": "Hoe is uw gezin samengesteld?",
-          "Description": "",
+          "Description": "Alleenstaand, samenwonend, etc.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"

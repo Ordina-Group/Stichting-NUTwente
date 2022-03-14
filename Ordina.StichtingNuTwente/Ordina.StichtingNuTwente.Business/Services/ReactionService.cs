@@ -54,6 +54,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     case 3:
                         fileName = "VluchtelingIntake.json";
                         break;
+                    case 4:
+                        fileName = "VrijwilligerAanmelding.json";
+                        break;
                 }
                 string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
                 viewModel = JObject.Parse(jsonString).ToObject<Form>();
