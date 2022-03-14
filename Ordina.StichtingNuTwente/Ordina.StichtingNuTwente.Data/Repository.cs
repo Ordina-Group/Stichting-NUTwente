@@ -15,9 +15,17 @@ namespace Ordina.StichtingNuTwente.Data
             entities = context.Set<T>();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string includeProperties = null)
         {
-            return entities.AsEnumerable();
+            IQueryable<T> q = entities;
+            if (includeProperties != null)
+            {
+                foreach (var p in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    q = q.Include(p);
+                }
+            }
+            return q.AsEnumerable();
         }
 
         public T Create(T entity)

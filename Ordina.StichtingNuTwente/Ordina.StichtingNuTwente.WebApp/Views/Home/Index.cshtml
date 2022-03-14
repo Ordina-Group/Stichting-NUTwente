@@ -5,7 +5,6 @@
     ViewData["Title"] = "Home Page";
     bool hasAnswers = false;
 }
--moz-text-size-adjustader>
    <div class="card">
         <div class="card-header">             
             <h1 class="Title">@Html.Raw(Model.Title)</h1>
@@ -15,10 +14,9 @@
         </div>
     </div>
     <br/>
-</header>
 
 <body>
-    <div onkeydown="return event.key != 'Enter';">
+    <div >
 
         @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
         {
@@ -93,6 +91,14 @@
                 });
                 return o;
             };
+            $(document).keypress(function(e)
+            {
+                if(e.keyCode === 13)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            });
 
             $("#btnsubmit").click(function (e) {   
                 e.preventDefault();

@@ -41,4 +41,13 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="output.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="template.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
