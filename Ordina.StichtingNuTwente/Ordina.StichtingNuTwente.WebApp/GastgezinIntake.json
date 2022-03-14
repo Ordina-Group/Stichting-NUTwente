@@ -16,7 +16,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "",
+          "PropertyName": ""
         },
         {
           "Id": "2",

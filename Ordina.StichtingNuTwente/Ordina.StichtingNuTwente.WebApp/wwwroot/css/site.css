@@ -56,3 +56,18 @@ nav .navbar-nav li a {
 }
 .btn-primary {
 }
+a.badge
+{
+    text-decoration:none
+}
+    a.badge:hover {
+        text-decoration: none;
+        color: #F9DD16 !important;
+    }
+.badge-info {
+    color: #fff;
+    background-color: #3A75C4;
+}
+.float-right{
+    float:right;
+}

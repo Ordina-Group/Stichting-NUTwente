@@ -88,6 +88,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(responses);
         }
 
+        [Route("downloadexport")]
+        [HttpGet]
+        [ActionName("Bedankt")]
+        public IActionResult downloadexport(int formId)
+        {
+
+            var file = _reactionService.GenerateExportCSV(formId);
+            MemoryStream stream = new MemoryStream(file);
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+        }
+
+
 
         [HttpPost]
         public IActionResult Save(string answers)

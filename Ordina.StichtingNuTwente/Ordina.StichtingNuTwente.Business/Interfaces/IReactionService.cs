@@ -10,5 +10,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public Form GetAnwersFromId(int Id);
 
         public List<AnswerListModel> GetAllRespones(int? form = null);
+
+        public byte[] GenerateExportCSV(int? formId = null);
     }
 }

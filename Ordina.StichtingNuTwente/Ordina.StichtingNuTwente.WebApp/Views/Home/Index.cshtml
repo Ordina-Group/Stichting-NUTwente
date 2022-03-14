@@ -93,6 +93,14 @@
                 });
                 return o;
             };
+            $(document).keypress(function(e)
+            {
+                if(e.keyCode === 13)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            });
 
             $("#btnsubmit").click(function (e) {   
                 e.preventDefault();
