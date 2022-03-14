@@ -53,6 +53,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        [Route("VrijwilligerAanmelding")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult IndexVrijwilligerAanmelding()
+        {
+            string file = "VrijwilligerAanmelding.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }
+
         [Route("getnutwenteoverheidreactiesdetailniveau")]
         [HttpGet]
         [ActionName("Index")]
@@ -87,6 +97,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var responses = _reactionService.GetAllRespones(formId);
             return View(responses);
         }
+
+        [Route("downloadexport")]
+        [HttpGet]
+        [ActionName("Bedankt")]
+        public IActionResult downloadexport(int formId)
+        {
+
+            var file = _reactionService.GenerateExportCSV(formId);
+            MemoryStream stream = new MemoryStream(file);
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+        }
+
 
 
         [HttpPost]
