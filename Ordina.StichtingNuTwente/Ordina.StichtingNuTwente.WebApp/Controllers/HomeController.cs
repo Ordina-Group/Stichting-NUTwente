@@ -53,6 +53,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        [Route("VrijwilligerAanmelding")]
+        [HttpGet]
+        [ActionName("Index")]
+        public IActionResult IndexVrijwilligerAanmelding()
+        {
+            string file = "VrijwilligerAanmelding.json";
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+        }
+
         [Route("getnutwenteoverheidreactiesdetailniveau")]
         [HttpGet]
         [ActionName("Index")]

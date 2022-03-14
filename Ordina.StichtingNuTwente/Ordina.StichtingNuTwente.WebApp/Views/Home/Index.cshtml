@@ -5,8 +5,7 @@
     ViewData["Title"] = "Home Page";
     bool hasAnswers = false;
 }
-
-<header>
+-moz-text-size-adjustader>
    <div class="card">
         <div class="card-header">             
             <h1 class="Title">@Html.Raw(Model.Title)</h1>
@@ -19,7 +18,7 @@
 </header>
 
 <body>
-    <div>
+    <div onkeydown="return event.key != 'Enter';">
 
         @using (Html.BeginForm("Save","Home",FormMethod.Post,new { id="questionsForm"}))
         {
@@ -51,13 +50,14 @@
                                     <div class="row" id="Question">
                                         <div class="card-title">
                                             <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                            
                                             <input type="hidden" name="Nummer" value="@q.Id"/>
                                             <input type="text" id="txt" class="form-control" value="@q.Answer" name="Antwoord" size = "100" />
-                                            <br> <br>
+                                            <i style="font-size : 15px">@Html.Raw(q.Description)</i>
                                         </div>
                                     </div>
                             
-                            
+                                 <br>
                                 }
                             </div>
                         </div>
