@@ -1,7 +1,7 @@
 {
   "Id": "1",
-  "Title": "Aanmelden OPVANG in Twente",
-  "Header": "De enquête duurt ongeveer 4 minuten om te voltooien. De oorlog in Oekraïne kwam onverwacht en Nederland en de regio Twente zijn niet voorbereid op grootschalige hulp. Veel mensen willen de vluchtelingen helpen, maar weten niet hoe. Organisaties en bedrijven zetten ook acties op, maar moeten dan vaak zelf het wiel uitvinden. Noaberschap Ukraine-Twente springt in deze bres en coördineert de verschillende groepen en zorgt voor host-families in Twente.",
+  "Title": "Aanmelden gastgezin in Twente",
+  "Header": "Bedankt voor het komen naar de informatiesessie. Deze vragenlijst is voor als u zeker weet dat het opvangen van Oekraïense vluchtelingen iets voor u is. <br> Hierna nemen we zo snel mogelijk met u contact op om nader kennis te maken en de faciliteiten ook de zien. ",
   "Sections": [
     {
       "Id": "1",
@@ -12,15 +12,6 @@
         {
           "Id": "1",
           "Number": "1",
-          "Text": "Dankjewel namens Noaberschap Ukraine Twente, bent u een: particulier, bedrijf/organisatie of een officiële instantie",
-          "Description": "",
-          "InputType": "radio",
-          "InputOptions": [ "Particulier", "Bedrijf/organisatie", "Officiële insantie" ],
-          "Required": "true"
-        },
-        {
-          "Id": "2",
-          "Number": "2",
           "Text": "Uw naam",
           "Description": "Voornaam en achternaam",
           "InputType": "text",
@@ -28,10 +19,19 @@
           "Required": "true"
         },
         {
+          "Id": "2",
+          "Number": "2",
+          "Text": "Woont u in Twente of heeft u opvangmogelijkheden in Twente?",
+          "Description": "Als u niet in Twente woont, kunnen wij niet gebruik maken van uw aanbod voor onderdak. Neem contact op met bijvoorbeeld TakeCarebnb voor mogelijkheden bij u in de buurt",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
           "Id": "3",
           "Number": "3",
-          "Text": "Woonadres",
-          "Description": "Adres, postcode, woonplaats",
+          "Text": "In welke stad of welk dorp in Twente woont u of heeft u onderdak?",
+          "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -39,7 +39,7 @@
         {
           "Id": "4",
           "Number": "4",
-          "Text": "Mobiel nummer",
+          "Text": "Wat is uw postcode?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -48,7 +48,7 @@
         {
           "Id": "5",
           "Number": "5",
-          "Text": "Email",
+          "Text": "Wat is uw straat+huisnummer",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -57,26 +57,26 @@
         {
           "Id": "6",
           "Number": "6",
-          "Text": "Voorkeur, opvang voor: Famillies (Volwassene + kind), Alleenstaande, Jongeren (Studenten), Groepen, (5 personen of meer)",
+          "Text": "Wat is uw telefoonnummer waar we u het makkelijkst op kunnen bereiken?",
           "Description": "",
-          "InputType": "radio",
-          "InputOptions": [ "Families (Volwassene+kind)", "Alleenstaande", "Jongeren (Studenten)", "Groepen", "(5 personen of meer)" ],
+          "InputType": "text",
+          "InputOptions": "",
           "Required": "true"
         },
         {
           "Id": "7",
           "Number": "7",
-          "Text": "Hoelang kunt u opvangen?",
+          "Text": "Wat is uw email",
           "Description": "",
-          "InputType": "radio",
-          "InputOptions": [ "1 Maand", "3 Maanden", "Zolang als nodig!" ],
+          "InputType": "text",
+          "InputOptions": "",
           "Required": "true"
         },
         {
           "Id": "8",
           "Number": "8",
-          "Text": "Hoeveel mensen kunt u maximaal opvangen?",
-          "Description": "",
+          "Text": "Wat is uw gezinssituatie?",
+          "Description": "Alleenstaand, samenwonend, gezin, studentenhuis, anders/nvt",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -84,20 +84,56 @@
         {
           "Id": "9",
           "Number": "9",
-          "Text": "Heeft u overige/onze hulp nodig bij het realiseren van onderdak?",
+          "Text": "Hoeveel mensen zou u kunnen opvangen?",
           "Description": "",
-          "InputType": "radio",
-          "InputOptions": [ "Ja", "Alleen de basis behoefte ( Slaapzak, kleding, voedsel )", "Nee, alles kan ikzelf organiseren" ],
+          "InputType": "text",
+          "InputOptions": "",
           "Required": "true"
         },
         {
           "Id": "10",
           "Number": "10",
-          "Text": "Heeft u nog vragen aan Noaberschap Ukraine Twente?",
+          "Text": "Heeft u een voorkeur voor het opvangen van een bepaalde gezinssamenstelling? Bijvoorbeeld een gezin met jonge kinderen, met oude kinderen, zonder kinderen of juist ouders?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "11",
+          "Number": "11",
+          "Text": "Heeft u specifieke hobbies? Wij kunnen niet garanderen dat we helemaal soortgelijke mensen vinden, maar we vinden het belangrijk dat hostfamilies en vluchtelingen een beetje in hetzelfde geloven",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "12",
+          "Number": "12",
+          "Text": "Hoe lang zou u mensen kunnen opvangen?",
+          "Description": "1-3 weken, 1-3 maanden, langer dan 3 maanden, zo lang als mogelijk is, anders",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
+        },
+        {
+          "Id": "13",
+          "Number": "13",
+          "Text": "Wilt u nog iets toevoegen? (Dit kan ook tijdens het intakegesprek)",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
+        },
+        {
+          "Id": "14",
+          "Number": "14",
+          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden. Gaat u hiermee akkoord?",
+          "Description": "Ja/nee",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "true"
         }
       ]
     }
