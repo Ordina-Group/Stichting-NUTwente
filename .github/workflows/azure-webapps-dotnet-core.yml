@@ -1,5 +1,4 @@
 name: Build and deploy ASP.Net Core app to an Azure Web App
-  uses: jacobtomlinson/gha-find-replace@2.0.0
 
 env:
   AZURE_WEBAPP_NAME: nutwente    # set this to the name of your Azure Web App
