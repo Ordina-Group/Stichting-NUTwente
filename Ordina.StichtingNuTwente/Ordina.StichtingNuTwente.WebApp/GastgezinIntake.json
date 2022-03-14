@@ -1,7 +1,7 @@
 {
   "Id": "2",
   "Title": "Intake Gastgezin Oekraïne",
-  "Header": "Bedankt voor uw aanmelding als gastgezin. Nutwente.nl gebruikt de gegevens op dit formulier uitsluitend om uw aanmelding te verwerken en zo goed mogelijk een passende plaatsing te organiseren. Door de plotseling ontstane situatie is echter nog veel onzeker en we vragen daarvoor uw begrip.",
+  "Header": "Bedankt voor uw aanmelding als gastgezin. Nutwente.nl gebruikt de gegevens op dit formulier om uw aanmelding te verwerken en zo goed mogelijk een passende plaatsing te organiseren. Door de plotseling ontstane situatie is echter nog veel onzeker en we vragen daarvoor uw begrip.",
   "Sections": [
     {
       "Id": "1",
@@ -16,7 +16,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false",
+          "Required": "true",
           "Object": "",
           "PropertyName": ""
         },
@@ -51,7 +51,7 @@
           "Id": "5",
           "Number": "5",
           "Text": "Geboortedatum (dd-mm-jjjj)",
-          "Description": "Wij vragen naar uw geboortedatum omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig is.",
+          "Description": "Wij vragen naar uw geboortedatum omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -60,7 +60,7 @@
           "Id": "6",
           "Number": "6",
           "Text": "Geboorteplaats",
-          "Description": "Wij vragen naar uw geboorteplaats omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig is.",
+          "Description": "Wij vragen naar uw geboorteplaats omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -130,7 +130,7 @@
         {
           "Id": "13",
           "Number": "13",
-          "Text": "Plaats",
+          "Text": "Plaatsnaam",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -264,7 +264,7 @@
           "Id": "26",
           "Number": "26",
           "Text": "Waar kan/kunnen uw gast(en) gebruik van maken?",
-          "Description": "toilet, wastafel, douche/bad, wasmachine, wasdroger, koelkast, keuken, televisie, computer, woonkamer, tuin/balkon, Andere",
+          "Description": "",
           "InputType": "checkbox",
           "InputOptions": [
             "toilet",
@@ -375,7 +375,7 @@
         {
           "Id": "37",
           "Number": "37",
-          "Text": "Heeft u allergieïn die voor plaatsing van belang kunnen zijn?",
+          "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",

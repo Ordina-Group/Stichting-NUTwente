@@ -16,7 +16,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "true"
         },
         {
           "Id": "2",
@@ -34,7 +34,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "true"
         },
         {
           "Id": "4",
@@ -43,7 +43,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "true"
         },
         {
           "Id": "5",
@@ -52,7 +52,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "true"
         },
         {
           "Id": "6",
