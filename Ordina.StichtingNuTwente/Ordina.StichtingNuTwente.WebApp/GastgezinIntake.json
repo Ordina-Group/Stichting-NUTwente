@@ -48,7 +48,7 @@
         {
           "Id": "5",
           "Number": "5",
-          "Text": "geboortedatum en geboorteplaats",
+          "Text": "Geboortedatum (dd-mm-jjjj) en geboorteplaats",
           "Description": "Wij vragen naar uw geboortedatum en geboorteplaats omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig is.",
           "InputType": "text",
           "InputOptions": "",
@@ -217,7 +217,7 @@
           "Id": "21",
           "Number": "21",
           "Text": "Is er voldoende privacy voor uw gast(en)?",
-          "Description": "Er is tenminste ��n woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
+          "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -226,7 +226,7 @@
           "Id": "22",
           "Number": "22",
           "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
-          "Description": "(tenminste 0,36 m3, ofwel ��n grote staande kast per persoon)",
+          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -243,7 +243,7 @@
         {
           "Id": "24",
           "Number": "24",
-          "Text": "Kan/Kunnen uw gast(en) gebruik maken van",
+          "Text": "Waar kan/kunnen uw gast(en) gebruik van maken? Denk aan: wastafel, computer, wasmachine, etc.",
           "Description": "",
           "InputType": "checkbox",
           "InputOptions": [
@@ -292,7 +292,7 @@
         {
           "Id": "28",
           "Number": "28",
-          "Text": "Mogen uw gast(en) binnenshuis roken? buitenshuis?",
+          "Text": "Mogen uw gast(en) binnenshuis roken? Buitenshuis?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",

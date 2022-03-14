@@ -58,7 +58,7 @@
           "Id": "6",
           "Number": "6",
           "Text": "Reisdocument <br> Проїзний документ (Паспорт чи інше, наведіть)",
-          "Description": "indien voorhanden. Graag soort document en documentnummer vermelden. <br> якщо доступно. Вкажіть тип документа та номер документа.",
+          "Description": "Indien voorhanden. Graag soort document en documentnummer vermelden. <br> якщо доступно. Вкажіть тип документа та номер документа.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"

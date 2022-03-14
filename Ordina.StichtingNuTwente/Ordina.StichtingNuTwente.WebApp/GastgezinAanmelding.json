@@ -12,7 +12,7 @@
         {
           "Id": "1",
           "Number": "1",
-          "Text": "Dankjewel namens Noaberschap Ukraine Twente, bent u een:",
+          "Text": "Dankjewel namens Noaberschap Ukraine Twente, bent u een: particulier, bedrijf/organisatie of een officiële instantie",
           "Description": "",
           "InputType": "radio",
           "InputOptions": [ "Particulier", "Bedrijf/organisatie", "Officiële insantie" ],
@@ -39,7 +39,7 @@
         {
           "Id": "4",
           "Number": "4",
-          "Text": "Mobielnummer",
+          "Text": "Mobiel nummer",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -57,7 +57,7 @@
         {
           "Id": "6",
           "Number": "6",
-          "Text": "Voorkeur, opvang voor:",
+          "Text": "Voorkeur, opvang voor: Famillies (Volwassene + kind), Alleenstaande, Jongeren (Studenten), Groepen, (5 personen of meer)",
           "Description": "",
           "InputType": "radio",
           "InputOptions": [ "Families (Volwassene+kind)", "Alleenstaande", "Jongeren (Studenten)", "Groepen", "(5 personen of meer)" ],
