@@ -1,4 +1,5 @@
 ﻿using FastExcel;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using Ordina.StichtingNuTwente.Business.Interfaces;
@@ -146,7 +147,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     else
                     {
                         cells.Add(new Cell(1, dbItems[dbitemIndex].Id));
-                        cells.Add(new Cell(2, dbItems[dbitemIndex].DatumIngevuld));
+                        cells.Add(new Cell(2, (dbItems[dbitemIndex].DatumIngevuld).ToString("dd/MM/yyyy HH:mm:ss")));
                         var colum = 2;
 
                         foreach (var antwoord in dbItems[dbitemIndex].Antwoorden)
