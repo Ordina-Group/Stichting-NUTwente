@@ -1,19 +1,19 @@
 {
   "Id": "4",
-  "Title": "Aanmelden VRIJWILLIGER in Twente",
-  "Header": "De enquête duurt een paar minuten om te voltooien. De oorlog in Oekraïne kwam onverwacht en Nederland en de regio Twente zijn niet voorbereid op grootschalige hulp. Veel mensen willen de vluchtelingen helpen, maar weten niet hoe. Organisaties en bedrijven zetten ook acties op, maar moeten dan vaak zelf het wiel uitvinden. Noaberschap Ukraine-Twente springt in deze bres en coördineert de verschillende groepen en zorgt voor host-families in Twente. Wij danken u voor uw aanmelding als vrijwilliger!",
+  "Title": "Aanmelden Vrijwilliger",
+  "Header": "Bedankt dat u zich aanmeldt als vrijwilliger! Thank you for donating a part of your time to aid Ukrainian refugees.",
   "Sections": [
     {
       "Id": "1",
       "Number": "1",
-      "Title": "",
-      "Header": "",
+      "Title": "Personalia",
+      "Header": "Wij gebruiken de volgende gegevens om contact met u op te nemen en voor het in gang zetten van een VOG-aanvraag.<br>We use the following data to contact you.",
       "Questions": [
         {
           "Id": "1",
           "Number": "1",
-          "Text": "Uw naam",
-          "Description": "Voornaam en achternaam",
+          "Text": "Naam<br>Name",
+          "Description": "Voornaam en achternaam<br>First name and last name",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -21,8 +21,8 @@
         {
           "Id": "2",
           "Number": "2",
-          "Text": "Woonadres",
-          "Description": "Adres, postcode, woonplaats",
+          "Text": "Geboortedatum (dd-mm-jjjj)<br>Date of birth (dd-mm-yyyy)",
+          "Description": "Wij hebben uw geboorteplaats en -datum nodig voor identificatie, omdat u mogelijk een VOG zult moeten aanvragen.<br>We need your place and date of birth for identification, because you might need to apply for a VOG.",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -30,7 +30,7 @@
         {
           "Id": "3",
           "Number": "3",
-          "Text": "Mobiel nummer",
+          "Text": "Geboorteplaats<br>Place of birth",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -39,7 +39,7 @@
         {
           "Id": "4",
           "Number": "4",
-          "Text": "Email",
+          "Text": "Nationaliteit<br>Nationality",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -48,8 +48,8 @@
         {
           "Id": "5",
           "Number": "5",
-          "Text": "Op welke manier wilt u zich inzetten? Wat voor rol heeft u voor ogen?",
-          "Description": "",
+          "Text": "Telefoonnummer<br>Phone number",
+          "Description": "Het nummer waaronder wij u het best kunnen bereiken<br>The number where we can reach you most easily",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -57,19 +57,156 @@
         {
           "Id": "6",
           "Number": "6",
+          "Text": "e-mail",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "2",
+      "Number": "2",
+      "Title": "Mijn aanbod<br>My offer",
+      "Header": "In deze sectie geeft u een ruwe indicatie van het soort vrijwilligerswerk. Meer precieze afspraken maken we met u persoonlijk, omdat geen enkel persoon \"in een formuliertje past\".<br>In this section you provide a rough indication of the type of voluntary work. We will make more precise arrangements with you in person, because nobody \"fits in a form\".",
+      "Questions": [
+        {
+          "Id": "7",
+          "Number": "7",
+          "Text": "Op welke manier wilt u bijdragen? (meerdere antwoorden mogelijk)<br>How would you like to contribute? (more than one answer possible)",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Ik wil mij inzetten om vluchtelingen bij te staan en begeleiden (I want to commit to assisting and accompanying refugees)",
+            "Ik wil gastgezinnen bezoeken en/of begeleiden (I want to visit and/or accompany host families)",
+            "Ik wil helpen in de organisatie van NUTwente (I want to help in the organization of NUTwente)",
+            "Ik wil als tolk helpen (I want to help out as an interpreter)",
+            "Ik wil telefoondiensten draaien (I want to do telephone service)",
+            "Andere (Other)"
+          ],
+          "Required": "false"
+        },
+        {
+          "Id": "8",
+          "Number": "8",
+          "Text": "Wilt op de vorige vraag (7) nog iets toelichten?<br>Would you like to elaborate on the previous question (7)?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "9",
+          "Number": "9",
           "Text": "Heeft u al ervaring met vrijwilligerswerk/vluchtelingenhulp? Zo ja, wat?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
-          "Id": "6",
-          "Number": "6",
+          "Id": "10",
+          "Number": "10",
+          "Text": "Heeft u specifieke vaardigheden die relevant kunnen zijn?<br>Do you have specific skills that may be relevant?",
+          "Description": "Dit is mogelijk ook van belang om gastgezinnen te ondersteunen die vastlopen.<br>This might be relevant also for supporting host families who run into problems.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "11",
+          "Number": "11",
           "Text": "Heeft u nog vragen aan Noaberschap Ukraine Twente?",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Almelo",
+            "Borne",
+            "Dinkelland",
+            "Enschede",
+            "Haaksbergen",
+            "Hellendoorn",
+            "Hof van Twente",
+            "Hengelo",
+            "Losser",
+            "Oldenzaal",
+            "Rijssen-Holten",
+            "Tubbergen",
+            "Twenterand",
+            "Wierden",
+            "Maakt me niet uit (It is the same to me)"
+          ],
+          "Required": "false"
+        },
+        {
+          "Id": "12",
+          "Number": "12",
+          "Text": "Op welke tijdstippen bent u beschikbaar?<br>At which times are you available?",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "'s Ochtends (in the mornings)",
+            "'s Middags (afternoons)",
+            "'s Avonds (at night)",
+            "Liefst op werkdagen (preferrably on working days)",
+            "Liefst in de weekends (preferrably in the weekends)",
+            "Maakt me niet uit (It is the same to me)"
+          ],
+          "Required": "false"
+        },
+        {
+          "Id": "13",
+          "Number": "13",
+          "Text": "Wilt op de vorige vraag (12) nog iets toelichten?<br>Would you like to elaborate on the previous question (12)?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "14",
+          "Number": "14",
+          "Text": "Welke talen spreekt u?<br>Which languages do you speak?",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "UA",
+            "NL",
+            "RU",
+            "EN",
+            "Other"
+          ],
+          "Required": "false"
+        },
+        {
+          "Id": "15",
+          "Number": "15",
+          "Text": "Bent u gecertificeerd als tolk?<br>Are you certified as an interpreter?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "16",
+          "Number": "16",
+          "Text": "Heeft u nog vragen aan Nutwente.nl (Noaberschap Ukraine Twente)?<br>Do you have any questions for Nutwente.nl",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "17",
+          "Number": "17",
+          "Text": "Ik ben bij een briefing voor vrijwilligers van Nutwente.nl aanwezig geweest.<br>I have attended briefing by Nutwente.nl for volunteers",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "ja (yes)",
+            "nee (no)"
+          ],
           "Required": "false"
         }
       ]

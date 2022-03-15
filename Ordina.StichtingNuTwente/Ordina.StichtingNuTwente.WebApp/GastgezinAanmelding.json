@@ -1,7 +1,7 @@
 {
   "Id": "1",
-  "Title": "Aanmelden gastgezin in Twente",
-  "Header": "Bedankt voor het komen naar de informatiesessie. Deze vragenlijst is voor als u zeker weet dat het opvangen van Oekraïense vluchtelingen iets voor u is. <br> Hierna nemen we zo snel mogelijk met u contact op om nader kennis te maken en de faciliteiten ook de zien. ",
+  "Title": "Aanmelden Gastgezin in Twente",
+  "Header": "Bedankt voor uw belangstelling. Deze vragenlijst is voor als u zeker weet dat het opvangen van Oekraïense vluchtelingen iets voor u is. <br> Hierna nemen we zo snel mogelijk met u contact op, om nader kennis te maken en de faciliteiten te zien. ",
   "Sections": [
     {
       "Id": "1",
@@ -13,7 +13,7 @@
           "Id": "1",
           "Number": "1",
           "Text": "Uw naam",
-          "Description": "Voornaam en achternaam",
+          "Description": "Uw naam",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -30,7 +30,7 @@
         {
           "Id": "3",
           "Number": "3",
-          "Text": "In welke stad of welk dorp in Twente woont u of heeft u onderdak?",
+          "Text": "In welke stad of welk dorp in Twente biedt u onderdak aan?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -39,7 +39,7 @@
         {
           "Id": "4",
           "Number": "4",
-          "Text": "Wat is uw postcode?",
+          "Text": "Postcode",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -48,7 +48,7 @@
         {
           "Id": "5",
           "Number": "5",
-          "Text": "Wat is uw straat+huisnummer",
+          "Text": "Straat+huisnummer",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -57,7 +57,7 @@
         {
           "Id": "6",
           "Number": "6",
-          "Text": "Wat is uw telefoonnummer waar we u het makkelijkst op kunnen bereiken?",
+          "Text": "Wat is het telefoonnummer waar we u het makkelijkst op kunnen bereiken?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -70,16 +70,16 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "8",
           "Number": "8",
           "Text": "Wat is uw gezinssituatie?",
-          "Description": "Alleenstaand, samenwonend, gezin, studentenhuis, anders/nvt",
+          "Description": "Alleenstaand, samenwonend, gezin, studentenhuis, anders",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "9",
@@ -88,7 +88,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "10",
@@ -97,7 +97,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "11",
@@ -106,7 +106,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "12",
@@ -115,7 +115,7 @@
           "Description": "1-3 weken, 1-3 maanden, langer dan 3 maanden, zo lang als mogelijk is, anders",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "false"
         },
         {
           "Id": "13",
