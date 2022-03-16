@@ -79,7 +79,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("UpdateForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             if (LoggedIn(2))
@@ -161,6 +161,26 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Save(answerData);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return View();
+
+        }
+
+        [HttpPut]
+        public IActionResult Update(string answers, int id)
+        {
+            try
+            {
+                if (answers != null && HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    _reactionService.Update(answerData, id);
                 }
             }
             catch (Exception ex)
