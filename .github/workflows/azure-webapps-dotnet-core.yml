@@ -22,20 +22,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Set up dependency caching for faster builds
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-      
-      - name: Setup Nuget
-        uses: Nuget/setup-nuget@v1.0.5
-
-      - name: Restore nuget packages
-        run: nuget restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
+        
+      - name: Restore dependencies
+        run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
       
       - name: Build with dotnet
         run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
@@ -61,6 +50,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+
+  
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './appsettings.json'
+        env:
+          Connectionstrings.NuTwente: 'Server=tcp:nutwente-server.database.windows.net,1433;Initial Catalog=nutwente;Authentication=Active Directory Default'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
