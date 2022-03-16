@@ -33,15 +33,37 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
         }
 
+        public void Update(AnswersViewModel viewModel, int id)
+        {
+            var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
+            dbmodel.Id = id;
+            var reactieRepository = new Repository<Reactie>(_context);
+            var existingReaction = reactieRepository.GetById(id, "Antwoorden");
+            foreach (var antwoord in dbmodel.Antwoorden)
+            {
+                var dbAntwoord = existingReaction.Antwoorden.SingleOrDefault(a => a.IdVanVraag == antwoord.IdVanVraag);
+                if (dbAntwoord != null)
+                {
+                    dbAntwoord.Response = antwoord.Response;
+                }
+                else
+                {
+                    existingReaction.Antwoorden.Add(antwoord);
+                }
+            }
+
+            reactieRepository.Update(existingReaction);
+        }
+
         public Form GetAnwersFromId(int Id)
         {
             var viewModel = new Form();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbModel =reactieRepository.GetById(Id, "Antwoorden");
-            if(dbModel !=null)
+            var dbModel = reactieRepository.GetById(Id, "Antwoorden");
+            if (dbModel != null)
             {
                 var fileName = "";
-                switch(dbModel.FormulierId)
+                switch (dbModel.FormulierId)
                 {
                     case 1:
                         fileName = "GastgezinAanmelding.json";
@@ -58,9 +80,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
                 string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
                 viewModel = JObject.Parse(jsonString).ToObject<Form>();
-                foreach(var section in viewModel.Sections)
+                foreach (var section in viewModel.Sections)
                 {
-                    foreach(var question in section.Questions)
+                    foreach (var question in section.Questions)
                     {
                         var antwoord = dbModel.Antwoorden.FirstOrDefault(a => a.IdVanVraag == question.Id);
                         if (antwoord != null)
@@ -73,21 +95,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return viewModel;
         }
 
-        public List<AnswerListModel> GetAllRespones(int? form= null)
+        public List<AnswerListModel> GetAllRespones(int? form = null)
         {
-            List<AnswerListModel> viewModel= new List<AnswerListModel>();
+            List<AnswerListModel> viewModel = new List<AnswerListModel>();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbItems = reactieRepository.GetAll(); 
-            if (form !=null)
+            var dbItems = reactieRepository.GetAll();
+            if (form != null)
             {
-                dbItems = dbItems.Where(f=> f.FormulierId== form.Value);
+                dbItems = dbItems.Where(f => f.FormulierId == form.Value);
             }
             viewModel = dbItems.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
             return viewModel;
         }
 
 
-        public byte[] GenerateExportCSV(int? formId =null)
+        public byte[] GenerateExportCSV(int? formId = null)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             byte[] retVal = null;
@@ -112,7 +134,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     case 4:
                         fileName = "VrijwilligerAanmelding.json";
                         break;
-                        
+
                 }
                 string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
                 var form = JObject.Parse(jsonString).ToObject<Form>();
@@ -122,7 +144,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 //Create a worksheet with some rows
                 var worksheet = new Worksheet();
                 var rows = new List<Row>();
-              
+
                 var totalRows = dbItems.Count() + 1;
                 var dbitemIndex = 0;
                 for (int rowNumber = 1; rowNumber <= totalRows; rowNumber++)

@@ -6,6 +6,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     public interface IReactionService
     {
         public bool Save(AnswersViewModel viewModel);
+        public void Update(AnswersViewModel viewModel, int id);
 
         public Form GetAnwersFromId(int Id);
 
