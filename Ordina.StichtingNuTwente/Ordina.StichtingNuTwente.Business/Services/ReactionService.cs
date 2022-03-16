@@ -2,12 +2,14 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Data;
 using Ordina.StichtingNuTwente.Entities;
 using Ordina.StichtingNuTwente.Models.Mappings;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
+using System.Reflection;
 using System.Text;
 
 namespace Ordina.StichtingNuTwente.Business.Services
@@ -24,6 +26,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             var reactieRepository = new Repository<Reactie>(_context);
             dbmodel = reactieRepository.Create(dbmodel);
+            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
             if (dbmodel.Id > 0)
             {
                 return true;
@@ -54,7 +57,111 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
 
             reactieRepository.Update(existingReaction);
+            UpdateDatabaseWithRelationalObjects(viewModel, existingReaction, id);
         }
+
+        public void UpdateDatabaseWithRelationalObjects(AnswersViewModel viewModel, Reactie reactie, int id = 0)
+        {
+            int formId = 0;
+            int.TryParse(viewModel.Id, out formId);
+            var form = FormHelper.GetFormFromFileId(formId);
+            var PersoonRepo = new Repository<Persoon>(_context);
+            var AdresRepo = new Repository<Adres>(_context);
+            var dbPersoon = new Persoon();
+            var dbAdres = new Adres();
+            if (id!= 0)
+            {
+                dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie") ;
+                dbPersoon = dbPersoon?? new Persoon();
+                dbAdres = AdresRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
+                dbAdres = dbAdres ?? new Adres();
+            }
+           
+            if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Adres")))
+            {
+                dbAdres = CreateDbObjectFromFormFilledWithAnswers<Adres>(form, viewModel, dbAdres);
+                if (dbAdres != null)
+                {
+                    if (dbAdres.Id == 0)
+                    {
+                        dbAdres.Reactie = reactie;
+                        AdresRepo.Create(dbAdres);
+                    }
+                    else
+                    {
+                        AdresRepo.Update(dbAdres);
+                    }
+                }
+            }
+            if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Persoon")))
+            {
+                dbPersoon = CreateDbObjectFromFormFilledWithAnswers<Persoon>(form, viewModel, dbPersoon);
+                if (dbPersoon != null)
+                {
+                    if (dbPersoon.Id == 0)
+                    {
+                        if(dbAdres !=null)
+                        {
+                            dbPersoon.Adres = dbAdres;
+                        }    
+                        dbPersoon.Reactie = reactie;
+                        PersoonRepo.Create(dbPersoon);
+                    }
+                    else
+                    {
+                        PersoonRepo.Update(dbPersoon);
+                    }
+                }
+            }
+        }
+
+
+        private T CreateDbObjectFromFormFilledWithAnswers<T>(Form form, AnswersViewModel viewModel, T classObject)
+        {
+            var typeObject = typeof(T);
+            foreach (var prop in typeObject.GetProperties())
+            {
+                foreach (var s in form.Sections)
+                {
+                    foreach (var q in s.Questions)
+                    {
+                        var answer = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == q.Id.ToString());
+                        if (answer != null && !string.IsNullOrEmpty(answer.Antwoord) && q.ParameterName == prop.Name)
+                        {
+                            PropertyInfo propInfo = typeObject.GetProperty(prop.Name);
+                            if (propInfo != null)
+                            {
+                                object value = null;
+                                switch (prop.PropertyType.Name.ToLower())
+                                {
+                                    case "string":
+                                        value = answer.Antwoord;
+                                        break;
+                                    case "boolean":
+                                        value = Convert.ToBoolean(answer.Antwoord);
+                                        break;
+                                    case "datetime":
+                                        value = Convert.ToDateTime(answer.Antwoord);
+                                        break;
+                                    case "int32":
+                                        value = Convert.ToInt32(answer.Antwoord);
+                                        break;
+                                    case "decimal":
+                                        value = Convert.ToDecimal(answer.Antwoord);
+                                        break;
+                                    default:
+                                        value = answer.Antwoord;
+                                        break;
+                                }
+                                propInfo.SetValue(classObject, value);
+                            }
+                        }
+                    }
+                }
+            }
+            return classObject;
+        }
+
 
         public Form GetAnwersFromId(int Id)
         {
@@ -63,24 +170,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbModel = reactieRepository.GetById(Id, "Antwoorden");
             if (dbModel != null)
             {
-                var fileName = "";
-                switch (dbModel.FormulierId)
-                {
-                    case 1:
-                        fileName = "GastgezinAanmelding.json";
-                        break;
-                    case 2:
-                        fileName = "GastgezinIntake.json";
-                        break;
-                    case 3:
-                        fileName = "VluchtelingIntake.json";
-                        break;
-                    case 4:
-                        fileName = "VrijwilligerAanmelding.json";
-                        break;
-                }
-                string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
-                viewModel = JObject.Parse(jsonString).ToObject<Form>();
+                viewModel = FormHelper.GetFormFromFileId(dbModel.FormulierId); 
                 foreach (var section in viewModel.Sections)
                 {
                     foreach (var question in section.Questions)
@@ -120,25 +210,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             if (formId != null)
             {
                 dbItems = dbItems.Where(f => f.FormulierId == formId.Value).ToList();
-                var fileName = "";
-                switch (formId.Value)
-                {
-                    case 1:
-                        fileName = "GastgezinAanmelding.json";
-                        break;
-                    case 2:
-                        fileName = "GastgezinIntake.json";
-                        break;
-                    case 3:
-                        fileName = "VluchtelingIntake.json";
-                        break;
-                    case 4:
-                        fileName = "VrijwilligerAanmelding.json";
-                        break;
-
-                }
-                string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
-                var form = JObject.Parse(jsonString).ToObject<Form>();
+                var form = FormHelper.GetFormFromFileId(formId.Value);
                 var templateFile = new FileInfo("template.xlsx");
                 var outputFile = new FileInfo("output.xlsx");
 

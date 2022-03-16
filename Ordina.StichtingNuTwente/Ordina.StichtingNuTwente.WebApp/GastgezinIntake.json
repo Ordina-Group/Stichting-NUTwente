@@ -17,8 +17,8 @@
           "InputType": "text",
           "InputOptions": "",
           "Required": "true",
-          "Object": "",
-          "PropertyName": ""
+          "Object": "Persoon",
+          "ParameterName": "Naam"
         },
         {
           "Id": "2",
@@ -27,7 +27,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Adres",
+          "ParameterName": "Straat"
         },
         {
           "Id": "3",
@@ -36,7 +38,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Adres",
+          "ParameterName": "Postcode"
         },
         {
           "Id": "4",
@@ -45,7 +49,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Adres",
+          "ParameterName": "Woonplaats"
         },
         {
           "Id": "5",
@@ -54,7 +60,9 @@
           "Description": "Wij vragen naar uw geboortedatum omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "GeboorteDatum"
         },
         {
           "Id": "6",
@@ -63,7 +71,9 @@
           "Description": "Wij vragen naar uw geboorteplaats omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Geboorteplaats"
         },
         {
           "Id": "7",
@@ -72,7 +82,9 @@
           "Description": "NuTwente gebruikt dit telefoonnummer om contact met u op te nemen. Alleen als de situatie dat vereist geven wij dit nummer door aan andere hulpverlenende instanties, zodat zij met u contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit nummer niet.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer"
         },
         {
           "Id": "8",
@@ -90,7 +102,9 @@
           "Description": "NuTwente gebruikt dit e-mail adres om u te informeren of contact met u op te nemen als er geen haast bij is. Als de situatie dat vereist geven wij dit e-mail adres door aan andere hulpverlenende instanties, zodat zij contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit e-mail adres niet.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Email"
         },
         {
           "Id": "10",
@@ -178,7 +192,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Talen"
         },
         {
           "Id": "18",

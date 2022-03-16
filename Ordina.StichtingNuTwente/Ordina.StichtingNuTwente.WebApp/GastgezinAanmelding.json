@@ -16,7 +16,9 @@
           "Description": "Uw naam",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Naam"
         },
         {
           "Id": "2",
@@ -34,7 +36,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Woonplaats"
         },
         {
           "Id": "4",
@@ -43,7 +47,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Postcode"
         },
         {
           "Id": "5",
@@ -52,7 +58,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Straat"
         },
         {
           "Id": "6",
@@ -61,7 +69,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer"
         },
         {
           "Id": "7",
@@ -70,7 +80,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Email"
         },
         {
           "Id": "8",

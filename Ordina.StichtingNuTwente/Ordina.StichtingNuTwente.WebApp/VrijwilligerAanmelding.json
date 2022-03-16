@@ -16,7 +16,9 @@
           "Description": "Voornaam en achternaam<br>First name and last name",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Naam"
         },
         {
           "Id": "2",
@@ -25,7 +27,9 @@
           "Description": "Wij hebben uw geboorteplaats en -datum nodig voor identificatie, omdat u mogelijk een VOG zult moeten aanvragen.<br>We need your place and date of birth for identification, because you might need to apply for a VOG.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "GeboorteDatum"
         },
         {
           "Id": "3",
@@ -34,7 +38,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Geboorteplaats"
         },
         {
           "Id": "4",
@@ -43,7 +49,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Nationaliteit"
         },
         {
           "Id": "5",
@@ -52,7 +60,9 @@
           "Description": "Het nummer waaronder wij u het best kunnen bereiken<br>The number where we can reach you most easily",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer"
         },
         {
           "Id": "6",
@@ -61,7 +71,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Email"
         }
       ]
     },
@@ -177,7 +189,9 @@
             "EN",
             "Other"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Talen"
         },
         {
           "Id": "15",

@@ -27,5 +27,9 @@ namespace Ordina.StichtingNuTwente.Data
         public DbSet<Antwoord> Antwoorden { get; set; }
 
         public DbSet<Reactie> Reacties { get; set; }
+
+        public DbSet<Adres> Adres { get; set; }
+
+        public DbSet<Persoon> Persoon { get; set; }
     }
 }

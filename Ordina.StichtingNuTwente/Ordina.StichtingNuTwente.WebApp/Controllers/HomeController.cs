@@ -6,6 +6,7 @@ using Ordina.StichtingNuTwente.Entities;
 using System.Text.Json;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -27,7 +28,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("Index")]
         public IActionResult IndexGastgezinAanmelding()
         {
-            string file = "GastgezinAanmelding.json";
+            string file = FormHelper.GetFilenameFromId(1);
+            
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
@@ -40,7 +42,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             if (LoggedIn(1))
             {
-                string file = "GastgezinIntake.json";
+                string file = FormHelper.GetFilenameFromId(2);
                 Form questionForm = _formBusiness.createFormFromJson(1, file);
                 return View(questionForm);
             }
@@ -57,7 +59,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             if (LoggedIn(1))
             {
-                string file = "VluchtelingIntake.json";
+                string file = FormHelper.GetFilenameFromId(3);
                 Form questionForm = _formBusiness.createFormFromJson(1, file);
                 return View(questionForm);
             }
@@ -72,7 +74,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("Index")]
         public IActionResult IndexVrijwilligerAanmelding()
         {
-            string file = "VrijwilligerAanmelding.json";
+            string file = FormHelper.GetFilenameFromId(4);
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }

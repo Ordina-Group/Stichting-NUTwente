@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Ordina.StichtingNuTwente.Models.Models;
+using System.Linq.Expressions;
 
 namespace Ordina.StichtingNuTwente.Data
 {
@@ -53,6 +54,25 @@ namespace Ordina.StichtingNuTwente.Data
             return q.SingleOrDefault(x => x.Id == id);
 
         }
+
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
+        {
+            IQueryable<T> q = entities;
+            if (filter != null)
+            {
+                q = q.Where(filter);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var p in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    q = q.Include(p);
+                }
+            }
+            return q.FirstOrDefault();
+        }
+    
 
         public void Update(T entity)
         {
