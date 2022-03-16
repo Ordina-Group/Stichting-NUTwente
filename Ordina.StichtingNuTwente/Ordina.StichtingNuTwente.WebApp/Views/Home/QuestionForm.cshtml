@@ -3,6 +3,9 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    
+    bool updateMode = !String.IsNullOrEmpty(Context.Request.Query["id"]);
+
 }
 <div class="card">
     <div class="card-header">
@@ -67,8 +70,14 @@
                     </div>
                 </div>
             }
-
-            <button class="btn btn-primary" id="updatebtn">Update</button>
+            @if (updateMode)
+            {
+                <button class="btn btn-primary" id="updatebtn">Update</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" id="createbtn">Submit</button>
+            }
         </form>
         <br />
         <br />
@@ -105,16 +114,27 @@
                         obj.answer[id] = {"Nummer":id,"Antwoord":value};
                     }
                 })
-\
-                $.ajax({
-                    url: "/Home/Update",
-                    type: "PUT",
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    data: {"answers":JSON.stringify(obj), "id":@Context.Request.Query["id"]    },
-                }).fail(function()  {
-                   window.location.href = "/getnutwenteoverheidreacties987456list";
-                });
+                if(@updateMode){
+                    $.ajax({
+                        url: "/Home/Update",
+                        type: "PUT",
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: {"answers":JSON.stringify(obj), "id":@Context.Request.Query["id"]    },
+                    }).fail(function()  {
+                       window.location.href = "/getnutwenteoverheidreacties987456list";
+                    });
+                } else {
+                    $.ajax({   
+                        url: "/Home/Save",   
+                        type: "POST",   
+                        dataType: 'json',   
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',   
+                        data: {"answers":JSON.stringify(obj)   },
+                    }).fail(function()  {
+                       window.location = "/Bedankt";   
+                    }
+               }
             });
         });
     </script>
