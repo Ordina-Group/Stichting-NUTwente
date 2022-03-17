@@ -1,0 +1,169 @@
+﻿@using Ordina.StichtingNuTwente.Entities
+@model Ordina.StichtingNuTwente.Entities.Form
+
+@{
+    ViewData["Title"] = "Home Page";
+
+    bool updateMode = !String.IsNullOrEmpty(Context.Request.Query["id"]);
+
+}
+<div class="card">
+    <div class="card-header">
+        <h1 class="Title">@Html.Raw(Model.Title)</h1>
+    </div>
+    <div class="card-body">
+        <p>@Html.Raw(Model.Header)</p>
+    </div>
+</div>
+<br />
+
+<body>
+    <div>
+
+        <form id="questionsForm" novalidate>
+
+            @Html.AntiForgeryToken()
+            @foreach (Section s in Model.Sections)
+            {
+                <div class="row" id="Section">
+                    <div class="" style="">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>@Html.Raw(s.Title)</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>@Html.Raw(s.Header)</p>
+
+
+                                @foreach (Question q in s.Questions)
+                                {
+                                    <div class="row" id="Question">
+                                        <div class="card-title">
+                                            @if (q.InputType == "checkbox")
+                                            {
+                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                                @foreach (string cbOption in @q.InputOptions)
+                                                {
+
+                                                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                                                    <div class="field-invalid">
+                                                        Dit veld is verplicht <br/>
+                                                    </div>
+                                                    <label class="form-check-label" for="question-@q.Id-@cbOption">
+                                                        @cbOption
+                                                    </label>
+
+                                                    <br />
+                                                }
+                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
+                                            }
+                                            else
+                                            {
+                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                                <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
+                                                <div class="field-invalid">
+                                                    Dit veld is verplicht <br/>
+                                                </div>
+                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
+                                            }
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+                                }
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            }
+            @if (updateMode)
+            {
+                <button class="btn btn-primary" id="submitbtn">Update</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" id="submitbtn">Submit</button>
+            }
+        </form>
+        <br />
+        <br />
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $(document).keypress(function(e)
+            {
+                if(e.keyCode === 13)
+                {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            $("#submitbtn").click(function (e) {
+                e.preventDefault();
+
+                if(document.getElementById("questionsForm").checkValidity()){
+                    var obj = {"answer":[], "Id":"@Model.Id"};
+                    $(".question").each(function() {
+                        var id = $(this).attr('id').split("-")[1];
+                        var value = $(this).val();
+                        if($(this).attr('type') === "checkbox"){
+                            if($(this).is(':checked')){
+                                if(obj.answer[id] !== undefined){
+                                    obj.answer[id].Antwoord += ("," + value);
+                                } else {
+                                    obj.answer[id] = {"Nummer":id,"Antwoord":value}
+                                }
+                            }
+                        } else {
+                            obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                        }
+                    })
+                    let awnsers = obj.answer;
+                    obj.answer = [];
+                    for(let i = 0; i < awnsers.length; i++){
+                        let awns = awnsers[i];
+                        console.log(awns)
+                        if(awns !== null && awns !== undefined){
+                            obj.answer.push(awns)
+                        }
+                    }
+                    console.log(obj.answer )
+
+                    if("@updateMode" === "True" ) {
+                        $.ajax({
+                            url: "/Home/Update",
+                            type: "PUT",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
+                        }).fail(function()  {
+                           window.location.href = "/getnutwenteoverheidreacties987456list";
+                        });
+                     } else {
+                        $.ajax({
+                            url: "/Home/Save",
+                            type: "POST",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj)   }
+                        }).fail(function()  {
+                           window.location = "/Bedankt";
+                        });
+                    }
+               } else {
+                   $("#questionsForm").addClass('was-validated')
+                   window.scrollTo(0, 0);
+               }
+            });
+        });
+    </script>
+
+</body>
+
+

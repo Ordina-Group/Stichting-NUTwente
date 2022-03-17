@@ -59,3 +59,16 @@ a.badge
 .float-right{
     float:right;
 }
+
+input:invalid {
+    border-left: 5px solid #a94442;
+}
+.field-invalid {
+    display: none;
+}
+
+
+form.was-validated input:invalid ~ .field-invalid {
+    display: block;
+    color: red;
+}

@@ -27,7 +27,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinAanmelding()
         {
             string file = FormHelper.GetFilenameFromId(1);
@@ -39,7 +39,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize]
         [Route("GastgezinIntake")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
             if (LoggedIn(1))
@@ -57,7 +57,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize]
         [Route("VluchtelingIntake")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
             if (LoggedIn(1))
@@ -75,7 +75,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [AllowAnonymous]
         [Route("VrijwilligerAanmelding")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexVrijwilligerAanmelding()
         {
             string file = FormHelper.GetFilenameFromId(4);
@@ -86,7 +86,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
-        [ActionName("UpdateForm")]
+        [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             if (LoggedIn(2))
