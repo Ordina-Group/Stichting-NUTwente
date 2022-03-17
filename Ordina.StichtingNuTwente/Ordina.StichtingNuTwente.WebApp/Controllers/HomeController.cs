@@ -50,7 +50,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=GastgezinIntake");
+                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=VluchtelingIntake");
+                return Redirect("/loginnutwentevrijwilligers?redirect=VluchtelingIntake");
             }
         }
 
@@ -96,7 +96,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
         [AllowAnonymous]
@@ -121,7 +121,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
@@ -138,7 +138,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
@@ -156,7 +156,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
