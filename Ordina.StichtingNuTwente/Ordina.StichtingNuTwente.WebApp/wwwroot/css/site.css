@@ -69,6 +69,6 @@ input:invalid {
 
 
 form.was-validated input:invalid ~ .field-invalid {
-    display: inline-block;
+    display: block;
     color: red;
 }
