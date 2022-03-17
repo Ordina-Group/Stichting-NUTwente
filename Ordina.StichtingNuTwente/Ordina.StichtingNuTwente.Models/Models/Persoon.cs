@@ -20,6 +20,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
             Nationaliteit = "";
             Talen = "";
         }
+
         public string Naam { get; set; }
 
         public string GeboorteDatum  { get; set; }
