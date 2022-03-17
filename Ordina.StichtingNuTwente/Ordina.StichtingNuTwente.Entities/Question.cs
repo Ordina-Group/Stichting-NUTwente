@@ -17,5 +17,9 @@
         public bool Required { get; set; }
 
         public string Answer { get; set; }
+
+        public string Object { get; set; }
+
+        public string ParameterName { get; set; }
     }
 }
