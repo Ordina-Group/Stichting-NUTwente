@@ -6,10 +6,12 @@ using Ordina.StichtingNuTwente.Entities;
 using System.Text.Json;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,7 +24,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
             _reactionService = reactionService;
         }
-
+        [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
         [ActionName("Index")]
@@ -34,7 +36,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-
+        [Authorize]
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("Index")]
@@ -52,6 +54,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize]
         [Route("VluchtelingIntake")]
         [HttpGet]
         [ActionName("Index")]
@@ -69,6 +72,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [AllowAnonymous]
         [Route("VrijwilligerAanmelding")]
         [HttpGet]
         [ActionName("Index")]
@@ -79,6 +83,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
         [ActionName("UpdateForm")]
@@ -94,7 +99,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
-
+        [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
         public IActionResult Bedankt()
@@ -103,6 +108,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreacties987456list")]
         [HttpGet]
         [ActionName("GetAllReactions")]
@@ -119,6 +125,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreactiesspecifiek158436form")]
         [HttpGet]
         [ActionName("GetAllReactions")]
@@ -135,6 +142,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize]
         [Route("downloadexport15filefromform")]
         [HttpGet]
         [ActionName("Bedankt")]
@@ -174,6 +182,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         }
 
+        [Authorize]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {

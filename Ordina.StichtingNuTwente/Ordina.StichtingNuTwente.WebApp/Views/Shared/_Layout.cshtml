@@ -16,11 +16,12 @@
     <link rel="stylesheet" href="~/Ordina.StichtingNuTwente.WebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
-    @if(Context.Session.GetString("loggedIn") != null){
-        <header>
-            <a class="btn btn-primary" href="logout">Log uit</a>
-        </header>
-    }
+    <header>
+        <partial name="_LoginPartial" />
+        @if(Context.Session.GetString("loggedIn") != null){
+            <a class="btn btn-outline-primary" href="logout">Log uit (Overzicht)</a>
+        }
+    </header>
     <div class="container">
         <main role="main" class="mt-5 pb-3">
             @RenderBody()
