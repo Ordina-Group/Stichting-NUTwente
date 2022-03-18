@@ -24,7 +24,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
             _reactionService = reactionService;
         }
-        [AllowAnonymous]
+     //   [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -36,43 +36,33 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+      //  [Authorize]
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
-            if (LoggedIn(1))
-            {
-                string file = FormHelper.GetFilenameFromId(2);
-                Form questionForm = _formBusiness.createFormFromJson(1, file);
-                return View(questionForm);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
-            }
+            
+            string file = FormHelper.GetFilenameFromId(2);
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            return View(questionForm);
+            
         }
 
-        [Authorize]
+       // [Authorize]
         [Route("VluchtelingIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
-            if (LoggedIn(1))
-            {
+           
                 string file = FormHelper.GetFilenameFromId(3);
                 Form questionForm = _formBusiness.createFormFromJson(1, file);
                 return View(questionForm);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=VluchtelingIntake");
-            }
+           
         }
 
-        [AllowAnonymous]
+   //     [AllowAnonymous]
         [Route("VrijwilligerAanmelding")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -83,7 +73,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+//[Authorize]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -99,7 +89,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
-        [AllowAnonymous]
+     //   [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
         public IActionResult Bedankt()
@@ -108,7 +98,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
         [Route("getnutwenteoverheidreacties987456list")]
         [HttpGet]
         [ActionName("GetAllReactions")]
@@ -125,7 +115,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize]
+     //   [Authorize]
         [Route("getnutwenteoverheidreactiesspecifiek158436form")]
         [HttpGet]
         [ActionName("GetAllReactions")]
@@ -142,7 +132,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize]
+     //   [Authorize]
         [Route("downloadexport15filefromform")]
         [HttpGet]
         [ActionName("Bedankt")]
@@ -182,7 +172,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         }
 
-        [Authorize]
+    //    [Authorize]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {
