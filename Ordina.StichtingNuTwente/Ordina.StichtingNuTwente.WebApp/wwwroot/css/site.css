@@ -72,3 +72,13 @@ form.was-validated input:invalid ~ .field-invalid {
     display: block;
     color: red;
 }
+
+.field-invalid-cyrilic {
+    display: none;
+}
+
+
+input.contains-cyrilic ~ .field-invalid-cyrilic {
+    display: block;
+    color: red;
+}
