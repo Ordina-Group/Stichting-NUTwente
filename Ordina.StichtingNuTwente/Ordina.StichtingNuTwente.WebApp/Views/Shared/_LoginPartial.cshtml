@@ -1,0 +1,8 @@
+﻿@using System.Security.Principal
+
+@if (User.Identity.IsAuthenticated)
+{
+        <header>
+            <a class="btn btn-primary" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
+        </header>  
+}

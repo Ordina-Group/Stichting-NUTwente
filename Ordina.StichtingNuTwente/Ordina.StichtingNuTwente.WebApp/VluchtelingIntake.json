@@ -16,7 +16,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Naam"
         },
         {
           "Id": "2",
@@ -25,7 +27,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Adres",
+          "ParameterName": "Woonplaats"
         },
         {
           "Id": "3",
@@ -34,7 +38,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Geboorteplaats"
         },
         {
           "Id": "4",
@@ -43,6 +49,8 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
+          "Object": "Persoon",
+          "ParameterName": "GeboorteDatum",
           "Required": "true"
         },
         {
@@ -52,7 +60,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Nationaliteit"
         },
         {
           "Id": "6",
@@ -61,7 +71,9 @@
           "Description": "Wij vragen dit om voor te kunnen inschatten of er een tolk nodig is. <br> Ми просимо це, щоб мати можливість заздалегідь оцінити, чи потрібен перекладач.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Talen"
         },
         {
           "Id": "7",
@@ -79,7 +91,9 @@
           "Description": "NuTwente gebruikt dit telefoonnummer om contact met u op te kunnen nemen. Alleen als de situatie dat vereist geven wij dit nummer door aan andere hulpverlenende instanties, zodat zij met u contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit nummer niet. <br> NuTwente буде використовувати цей номер телефону, щоб зв’язатися з вами. Ми передамо цей номер іншим службам екстреної допомоги, лише якщо цього вимагає ситуація, щоб вони могли зв’язатися з вами. Ми не використовуємо цей номер для інших цілей.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer"
         },
         {
           "Id": "9",
@@ -88,7 +102,9 @@
           "Description": "NuTwente gebruikt dit e-mail adres om u te informeren of contact met u op te nemen als er geen haast bij is. Als de situatie dat vereist geven wij dit e-mail adres door aan andere hulpverlenende instanties, zodat zij contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit e-mail adres niet. <br> NuTwente використовує цю адресу електронної пошти, щоб повідомити вам або зв’язатися з вами, якщо немає поспіху. Якщо ситуація вимагає, ми передамо цю адресу електронної пошти іншим службам екстреної допомоги, щоб вони могли зв’язатися з вами. Ми не використовуємо цю адресу електронної пошти для інших цілей.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Email"
         },
         {
           "Id": "10",

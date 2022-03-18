@@ -16,7 +16,9 @@
           "Description": "Uw naam",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Naam"
         },
         {
           "Id": "2",
@@ -34,7 +36,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Woonplaats"
         },
         {
           "Id": "4",
@@ -43,7 +47,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Postcode"
         },
         {
           "Id": "5",
@@ -52,7 +58,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Adres",
+          "ParameterName": "Straat"
         },
         {
           "Id": "6",
@@ -61,7 +69,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer"
         },
         {
           "Id": "7",
@@ -70,7 +80,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Email"
         },
         {
           "Id": "8",
@@ -118,8 +130,17 @@
           "Required": "false"
         },
         {
-          "Id": "13",
+          "Id": "15",
           "Number": "13",
+          "Text": "Bent u bij een informatieavond van Nutwente.nl aanwezig geweest?",
+          "Description": "plaats en datum invullen a.u.b.",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "13",
+          "Number": "143",
           "Text": "Wilt u nog iets toevoegen? (Dit kan ook tijdens het intakegesprek)",
           "Description": "",
           "InputType": "text",
@@ -128,7 +149,7 @@
         },
         {
           "Id": "14",
-          "Number": "14",
+          "Number": "15",
           "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden. Gaat u hiermee akkoord?",
           "Description": "Ja/nee",
           "InputType": "text",

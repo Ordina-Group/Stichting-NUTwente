@@ -59,3 +59,26 @@ a.badge
 .float-right{
     float:right;
 }
+
+input:invalid {
+    border-left: 5px solid #a94442;
+}
+.field-invalid {
+    display: none;
+}
+
+
+form.was-validated input:invalid ~ .field-invalid {
+    display: block;
+    color: red;
+}
+
+.field-invalid-cyrilic {
+    display: none;
+}
+
+
+input.contains-cyrilic ~ .field-invalid-cyrilic {
+    display: block;
+    color: red;
+}

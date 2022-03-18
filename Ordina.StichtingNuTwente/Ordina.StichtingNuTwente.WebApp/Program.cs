@@ -1,3 +1,7 @@
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+
 using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.Business.DataLayer;
 using Ordina.StichtingNuTwente.Business.Interfaces;
@@ -21,6 +25,21 @@ builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));
+
+builder.Services.AddAuthorization(options =>
+{
+    // By default, all incoming requests will be authorized according to 
+    // the default policy
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+builder.Services.AddRazorPages(options => {
+
+})
+        .AddMvcOptions(options => { })
+        .AddMicrosoftIdentityUI();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +55,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 

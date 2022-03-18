@@ -6,9 +6,12 @@ using Ordina.StichtingNuTwente.Entities;
 using System.Text.Json;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,64 +24,82 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
             _reactionService = reactionService;
         }
-
+        [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinAanmelding()
         {
-            string file = "GastgezinAanmelding.json";
+            string file = FormHelper.GetFilenameFromId(1);
+            
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
 
-
+        [Authorize]
         [Route("GastgezinIntake")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
-            string file = "GastgezinIntake.json";
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
+            if (LoggedIn(1))
+            {
+                string file = FormHelper.GetFilenameFromId(2);
+                Form questionForm = _formBusiness.createFormFromJson(1, file);
+                return View(questionForm);
+            }
+            else
+            {
+                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
+            }
         }
 
+        [Authorize]
         [Route("VluchtelingIntake")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
-            string file = "VluchtelingIntake.json";
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
+            if (LoggedIn(1))
+            {
+                string file = FormHelper.GetFilenameFromId(3);
+                Form questionForm = _formBusiness.createFormFromJson(1, file);
+                return View(questionForm);
+            }
+            else
+            {
+                return Redirect("/loginnutwentevrijwilligers?redirect=VluchtelingIntake");
+            }
         }
 
+        [AllowAnonymous]
         [Route("VrijwilligerAanmelding")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult IndexVrijwilligerAanmelding()
         {
-            string file = "VrijwilligerAanmelding.json";
+            string file = FormHelper.GetFilenameFromId(4);
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
-        [ActionName("Index")]
+        [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
-            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            if (LoggedIn(2))
             {
                 Form questionForm = _reactionService.GetAnwersFromId(id);
                 return View(questionForm);
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
-
+        [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
         public IActionResult Bedankt()
@@ -87,44 +108,47 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreacties987456list")]
         [HttpGet]
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
-            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            if (LoggedIn(2))
             {
                 var responses = _reactionService.GetAllRespones();
                 return View(responses);
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
+        [Authorize]
         [Route("getnutwenteoverheidreactiesspecifiek158436form")]
         [HttpGet]
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
-            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            if (LoggedIn(2))
             {
                 var responses = _reactionService.GetAllRespones(formId);
                 return View(responses);
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
+        [Authorize]
         [Route("downloadexport15filefromform")]
         [HttpGet]
         [ActionName("Bedankt")]
         public IActionResult downloadexport15filefromform(int formId)
         {
-            if (HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+            if (LoggedIn(2))
             {
                 var file = _reactionService.GenerateExportCSV(formId);
                 MemoryStream stream = new MemoryStream(file);
@@ -132,7 +156,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             else
             {
-                return Redirect("loginnutwentevrijwilligers");
+                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
             }
         }
 
@@ -158,10 +182,46 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         }
 
+        [Authorize]
+        [HttpPut]
+        public IActionResult Update(string answers, int id)
+        {
+            try
+            {
+                if (answers != null && HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    _reactionService.Update(answerData, id);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return View();
+
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        private bool LoggedIn(int minAccessLevel)
+        {
+            var accessToken = HttpContext.Session.GetString("loggedIn");
+
+            switch (accessToken)
+            {
+                case "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC": //Vrijwilliger
+                    return minAccessLevel < 3;
+                case "4F7F9757-4D80-42E8-8583-634503A6E387": // Gast
+                    return minAccessLevel < 2;
+            }
+            return false;
         }
     }
 }
