@@ -204,7 +204,7 @@
         },
         {
           "Id": "16",
-          "Number": "16",
+          "Number": "17",
           "Text": "Heeft u nog vragen aan Nutwente.nl (Noaberschap Ukraine Twente)?<br>Do you have any questions for Nutwente.nl",
           "Description": "",
           "InputType": "text",
@@ -213,7 +213,7 @@
         },
         {
           "Id": "17",
-          "Number": "17",
+          "Number": "16",
           "Text": "Bent u al bij een briefing voor vrijwilligers van Nutwente.nl aanwezig geweest? (plaats en datum invullen a.u.b)<br>Have you already attended a briefing for volunteers of NuTwente.nl? (please fill out location and date)",
           "Description": "",
           "InputType": "text",

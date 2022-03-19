@@ -12,8 +12,8 @@
         {
           "Id": "1",
           "Number": "1",
-          "Text": "Uw naam",
-          "Description": "Uw naam",
+          "Text": "Voornaam",
+          "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true",
@@ -21,10 +21,10 @@
           "ParameterName": "Naam"
         },
         {
-          "Id": "2",
+          "Id": "15",
           "Number": "2",
-          "Text": "Woont u in Twente of heeft u opvangmogelijkheden in Twente?",
-          "Description": "Als u niet in Twente woont, kunnen wij niet gebruik maken van uw aanbod voor onderdak. Neem contact op met bijvoorbeeld TakeCarebnb voor mogelijkheden bij u in de buurt",
+          "Text": "Achternaam",
+          "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true"
@@ -33,7 +33,7 @@
           "Id": "3",
           "Number": "3",
           "Text": "In welke stad of welk dorp in Twente biedt u onderdak aan?",
-          "Description": "",
+          "Description": "Als u niet in Twente woont, kunnen wij niet gebruik maken van uw aanbod voor onderdak. Neem contact op met bijvoorbeeld TakeCarebnb voor mogelijkheden bij u in de buurt",
           "InputType": "text",
           "InputOptions": "",
           "Required": "true",
