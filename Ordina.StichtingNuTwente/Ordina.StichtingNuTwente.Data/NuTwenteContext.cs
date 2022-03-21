@@ -16,8 +16,15 @@ namespace Ordina.StichtingNuTwente.Data
         {
             this.Database.EnsureCreated();
             this.Database.Migrate();
+        }
 
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Gastgezin>().HasMany(x => x.Vluchtelingen).WithOne(x => x.Gastgezin);
+            modelBuilder.Entity<Gastgezin>().HasOne(g => g.Begeleider);
+            modelBuilder.Entity<Gastgezin>().HasOne(g => g.Contact);
         }
 
         public DbSet<Vrijwilliger> Vrijwilligers { get; set; }
