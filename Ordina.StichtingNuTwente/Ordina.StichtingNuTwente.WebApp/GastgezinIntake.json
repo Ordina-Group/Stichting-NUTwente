@@ -211,7 +211,7 @@
       "Id": "4",
       "Number": "4",
       "Title": "Praktische zaken",
-      "Header": "Wij vragen naar de faciliteiten die u voor vluchtelingen beschikbaar heeft. NuTwente kan daar dan rekening mee houden. Bij elk antwoord kunt u desgewenst opmerkingen toevoegen.",
+      "Header": "Wij vragen naar de faciliteiten die u voor vluchtelingen beschikbaar heeft. NuTwente kan daar dan rekening mee houden bij het plaatsen van vluchtelingen.",
       "Questions": [
         {
           "Id": "19",
@@ -223,26 +223,35 @@
           "Required": "false"
         },
         {
-          "Id": "20",
+          "Id": "50",
           "Number": "20",
-          "Text": "Voor hoeveel (echt-)paren heeft u een slaapplaats?",
+          "Text": "Voor hoeveel volwassenen heeft u in totaal plaats?",
+          "Description": "",
+          "InputType": "integer",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "20",
+          "Number": "21",
+          "Text": "Voor hoeveel volwassenen heeft u een tweepersoons slaapplaats?",
           "Description": "(matras tenminste 140x200 cm)",
-          "InputType": "text",
+          "InputType": "integer",
           "InputOptions": "",
           "Required": "false"
         },
         {
           "Id": "21",
-          "Number": "21",
-          "Text": "Voor hoeveel volwassen personen heeft u een slaapplaats?",
+          "Number": "22",
+          "Text": "Voor hoeveel volwassenen heeft u een eenpersoons slaapplaats?",
           "Description": "(matras tenminste 80x200 cm)",
-          "InputType": "text",
+          "InputType": "integer",
           "InputOptions": "",
           "Required": "false"
         },
         {
           "Id": "22",
-          "Number": "22",
+          "Number": "23",
           "Text": "Is er voldoende ruimte in de slaapkamers?",
           "Description": "(tenminste 3,5 m2 per persoon)",
           "InputType": "text",
@@ -251,7 +260,7 @@
         },
         {
           "Id": "23",
-          "Number": "23",
+          "Number": "24",
           "Text": "Is er voldoende privacy voor uw gast(en)?",
           "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "text",
@@ -260,18 +269,9 @@
         },
         {
           "Id": "24",
-          "Number": "24",
+          "Number": "25",
           "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
           "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "25",
-          "Number": "25",
-          "Text": "Staat er een stoel op de slaapkamer?",
-          "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -400,7 +400,7 @@
         {
           "Id": "38",
           "Number": "38",
-          "Text": "Bent u in in staat om de vluchtelingen van de trein/bus/vliegveld af te halen?",
+          "Text": "Bent u in in staat om uw vluchtelingen op te halen?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -417,10 +417,14 @@
         {
           "Id": "39",
           "Number": "39",
-          "Text": "Welke basisscholen zijn bij u in de buurt?",
+          "Text": "Zijn er basisscholen zijn bij u in de buurt?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee",
+            "Weet niet"
+          ],
           "Required": "false"
         },
         {
@@ -444,49 +448,14 @@
       ]
     },
     {
-      "Id": "6",
-      "Number": "6",
-      "Title": "Uw voorbereiding",
-      "Header": "Tijdens de intake bespreekt een van onze medewerkers met u welke impact een plaatsing heeft op uw persoonlijke leven. Zaken die u hierover wilt vastleggen kunt u in deze rubriek kwijt.",
-      "Questions": [
-        {
-          "Id": "42",
-          "Number": "42",
-          "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
-          "Description": "Op schaal van 1 tot 5",
-          "InputType": "stars",
-          "InputOptions": [ "5" ],
-          "Required": "false"
-        },
-        {
-          "Id": "43",
-          "Number": "43",
-          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "44",
-          "Number": "44",
-          "Text": "Zijn er beperkingen waarmee NuTwente rekening dient te houden bij plaatsing?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        }
-      ]
-    },
-    {
       "Id": "7",
-      "Number": "7",
+      "Number": "6",
       "Title": "Toetsing SNF-criteria",
       "Header": "Om vast te kunnen stellen in welke mate de plaatsingslocatie voldoet aan de SNF-criteria stellen we nog een aantal vragen.",
       "Questions": [
         {
           "Id": "45",
-          "Number": "45",
+          "Number": "42",
           "Text": "Is de verlichting en electra in de natte ruimte(s) spatwaterdicht?",
           "Description": "",
           "InputType": "stars",
@@ -495,7 +464,7 @@
         },
         {
           "Id": "46",
-          "Number": "46",
+          "Number": "43",
           "Text": "Is er daglicht in de verblijfsruimte(s)?",
           "Description": "",
           "InputType": "text",
@@ -504,7 +473,7 @@
         },
         {
           "Id": "47",
-          "Number": "47",
+          "Number": "44",
           "Text": "Is er daglicht in de slaapruimte(s)?",
           "Description": "",
           "InputType": "text",
@@ -513,7 +482,7 @@
         },
         {
           "Id": "48",
-          "Number": "48",
+          "Number": "45",
           "Text": "In welke ruimtes zijn werkende rookmelders en/of CO2 melders?",
           "Description": "",
           "InputType": "text",
@@ -523,11 +492,42 @@
       ]
     },
     {
-      "Id": "8",
-      "Number": "8",
-      "Title": "Opmerkingen",
-      "Header": "",
+      "Id": "6",
+      "Number": "7",
+      "Title": "Uw voorbereiding",
+      "Header": "Tijdens de intake bespreekt een van onze medewerkers met u welke impact een plaatsing heeft op uw persoonlijke leven. Zaken die u hierover wilt vastleggen kunt u in deze rubriek kwijt.",
       "Questions": [
+        {
+          "Id": "43",
+          "Number": "46",
+          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "44",
+          "Number": "47",
+          "Text": "Zijn er beperkingen waarmee NuTwente rekening dient te houden bij plaatsing?",
+          "Description": "",
+          "InputType": "text",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "42",
+          "Number": "48",
+          "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "onvoldoende",
+            "voldoende",
+            "goed"
+          ],
+          "Required": "false"
+        },
         {
           "Id": "49",
           "Number": "49",
