@@ -125,7 +125,7 @@
 
 
                 if( document.getElementById("questionsForm").checkValidity()){
-                    var obj = {"answer":[], "Id":"@Model.Id"};
+                    var obj = {"answer":[], "Id":"@Model.Id"}; //"UserId":"User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value"
                     $(".question").each(function() {
                         var id = $(this).attr('id').split("-")[1];
                         var value = $(this).val();

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.WebApp.Models;
 using System.Diagnostics;
 using Ordina.StichtingNuTwente.Entities;
@@ -24,7 +23,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _formBusiness = formBusiness;
             _reactionService = reactionService;
         }
-     //   [AllowAnonymous]
+        [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -36,7 +35,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-      //  [Authorize]
+        [Authorize]
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -49,7 +48,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             
         }
 
-       // [Authorize]
+        [Authorize]
         [Route("VluchtelingIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -62,7 +61,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
            
         }
 
-   //     [AllowAnonymous]
+        [AllowAnonymous]
         [Route("VrijwilligerAanmelding")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -73,23 +72,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-//[Authorize]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
-        {
-            if (LoggedIn(2))
-            {
+        {   
                 Form questionForm = _reactionService.GetAnwersFromId(id);
                 return View(questionForm);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
-            }
         }
-     //   [AllowAnonymous]
+        [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
         public IActionResult Bedankt()
@@ -98,56 +90,35 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
-        //[Authorize]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("getnutwenteoverheidreacties987456list")]
         [HttpGet]
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
-            if (LoggedIn(2))
-            {
                 var responses = _reactionService.GetAllRespones();
                 return View(responses);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
-            }
         }
 
-     //   [Authorize]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("getnutwenteoverheidreactiesspecifiek158436form")]
         [HttpGet]
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
-            if (LoggedIn(2))
-            {
                 var responses = _reactionService.GetAllRespones(formId);
                 return View(responses);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
-            }
         }
 
-     //   [Authorize]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("downloadexport15filefromform")]
         [HttpGet]
         [ActionName("Bedankt")]
         public IActionResult downloadexport15filefromform(int formId)
         {
-            if (LoggedIn(2))
-            {
                 var file = _reactionService.GenerateExportCSV(formId);
                 MemoryStream stream = new MemoryStream(file);
                 return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=getnutwenteoverheidreacties987456list");
-            }
         }
 
 
@@ -167,18 +138,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
 
             }
-
             return View();
-
         }
 
-    //    [Authorize]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {
             try
             {
-                if (answers != null && HttpContext.Session.GetString("loggedIn") == "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC")
+                if (answers != null)
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Update(answerData, id);
@@ -188,9 +157,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
 
             }
-
             return View();
-
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
