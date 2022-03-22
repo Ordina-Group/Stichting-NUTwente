@@ -9,10 +9,9 @@ namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class Gastgezin: BaseEntity
     {
-
         public ICollection<Persoon> Vluchtelingen { get; set; }
         public Persoon Contact { get; set; }
-        public Persoon Begeleider { get; set; }
+        public Vrijwilliger Begeleider { get; set; }
         public GastgezinStatus Status { get; set; }
     }
 }
