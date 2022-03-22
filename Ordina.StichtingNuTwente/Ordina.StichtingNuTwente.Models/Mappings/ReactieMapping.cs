@@ -3,6 +3,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             dbModel.FormulierId = id;
             dbModel.DatumIngevuld = DateTime.Now;
             dbModel.Antwoorden = viewModel.answer.ConvertAll(a => AnswerMapping.FromWebToDatabaseModel(a));
+            //dbModel.UserId = viewModel.UserId;
             return dbModel;
                 
         }
@@ -32,6 +34,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             webModel.Id = dbModel.FormulierId.ToString();
             webModel.AnswerDate = dbModel.DatumIngevuld;
             webModel.answer = dbModel.Antwoorden.ToList().ConvertAll(a => AnswerMapping.FromDatabaseToWebModel(a));
+            //webModel.UserId = dbModel.UserId;
             return webModel;
         }
 
@@ -41,6 +44,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             webModel.FormulierId = dbModel.FormulierId.ToString();
             webModel.AnswerDate = dbModel.DatumIngevuld;
             webModel.ReactieId = dbModel.Id;
+            //webModel.UserId = dbModel.UserId;
             switch(webModel.FormulierId)
             {
                 case "1":

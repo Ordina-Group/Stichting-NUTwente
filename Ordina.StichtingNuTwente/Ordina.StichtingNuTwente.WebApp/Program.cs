@@ -25,18 +25,19 @@ builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 
-//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-//        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));
 
-//builder.Services.AddAuthorization(options =>
-//{
-//    // By default, all incoming requests will be authorized according to 
-//    // the default policy
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
-builder.Services.AddRazorPages(options => {
-
-})
+builder.Services.AddAuthorization(options =>
+{
+    // By default, all incoming requests will be authorized according to 
+    // the default policy
+    options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger"));
+    options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat"));
+    options.AddPolicy("RequireCoördinatorRole", policy => policy.RequireClaim("groups", "group-coördinator"));
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+builder.Services.AddRazorPages(options => {})
         .AddMvcOptions(options => { })
         .AddMicrosoftIdentityUI();
 
@@ -55,8 +56,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
