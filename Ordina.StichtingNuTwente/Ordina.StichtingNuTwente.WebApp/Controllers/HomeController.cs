@@ -41,11 +41,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
-            
-            string file = FormHelper.GetFilenameFromId(2);
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
-            return View(questionForm);
-            
+            if (LoggedIn(1))
+            {
+                string file = FormHelper.GetFilenameFromId(2);
+                Form questionForm = _formBusiness.createFormFromJson(2, file);
+                return View(questionForm);
+            }
+            else
+            {
+                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
+            }
         }
 
         [Authorize]
@@ -54,11 +59,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
-           
+
+            if (LoggedIn(1))
+            {
                 string file = FormHelper.GetFilenameFromId(3);
-                Form questionForm = _formBusiness.createFormFromJson(1, file);
+                Form questionForm = _formBusiness.createFormFromJson(3, file);
                 return View(questionForm);
-           
+            }
+            else
+            {
+                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
+            }
+          
         }
 
         [AllowAnonymous]

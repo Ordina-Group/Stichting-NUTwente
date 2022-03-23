@@ -45,7 +45,7 @@
                                                 @foreach (string cbOption in @q.InputOptions)
                                                 {
 
-                                                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                                                    <input class="form-check-input question" type="checkbox" value="@cbOption"  id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
                                                     <div class="field-invalid">
                                                         Dit veld is verplicht <br />
                                                     </div>
@@ -150,7 +150,6 @@
                             obj.answer.push(awns)
                         }
                     }
-                    console.log(obj.answer )
 
                     if("@updateMode" === "True" ) {
                         $.ajax({
