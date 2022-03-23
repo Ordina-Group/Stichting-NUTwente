@@ -28,12 +28,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
             if (aadID != null)
             {
-                //var userDetails = this.UserService.GetUserByAADId(aadID.Value);
+                var userDetails = this.UserService.GetUserByAADId(aadID.Value);
                 var email = User.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
                 var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
                 var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
                 var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
-                /*if (userDetails != null)
+                if (userDetails != null)
                 {
                     
                     if (userDetails.FirstName != givenname ||
@@ -47,7 +47,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             FirstName = givenname,
                             LastName = surname,
                             Email = email,
-                            Roles = groups.ToList()
+                            Roles = groups.ToList(),
+                            AADId = aadID.Value
                         };
                         UserService.UpdateUser(newUserDetails, aadID.Value);
                     }
@@ -59,10 +60,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         FirstName = givenname,
                         LastName = surname,
                         Email = email,
-                        Roles = groups.ToList()
+                        Roles = groups.ToList(),
+                        AADId = aadID.Value
                     };
                     UserService.Save(newUserDetails);
-                }*/
+                }
                 return View(new UserViewModel(new UserDetails()
                 {
                     FirstName = givenname,
