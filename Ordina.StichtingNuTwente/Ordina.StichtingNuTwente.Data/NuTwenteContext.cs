@@ -14,8 +14,8 @@ namespace Ordina.StichtingNuTwente.Data
 
         public NuTwenteContext(DbContextOptions<NuTwenteContext> options) : base(options)
         {
-            this.Database.EnsureCreated();
-            this.Database.Migrate();
+            //this.Database.EnsureCreated();
+            //this.Database.Migrate();
         }
 
 
@@ -29,8 +29,6 @@ namespace Ordina.StichtingNuTwente.Data
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
         }
-
-        public DbSet<Vrijwilliger> Vrijwilligers { get; set; }
 
         public DbSet<Gastgezin> Gastgezinnen { get; set; }
 
