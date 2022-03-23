@@ -20,6 +20,8 @@
 
         public DateTime AnswerDate { get; set; }
 
+        //public string UserId { get; set; }
+
     }
 
     public class AnswerListModel
@@ -31,5 +33,7 @@
         public string FormulierId { get; set; }
 
         public string FormulierNaam { get; set; }
+
+        //public string UserId { get; set; }
     }
 }

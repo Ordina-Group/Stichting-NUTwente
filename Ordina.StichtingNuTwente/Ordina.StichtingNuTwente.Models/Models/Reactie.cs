@@ -14,5 +14,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         public int FormulierId { get; set; }
 
+        //public string UserId { get; set; }
+
     }
 }
