@@ -44,12 +44,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userInDB;
         }
 
-        public bool Save(UserDetails user)
+        public void Save(UserDetails user)
         {
             var userRepository = new Repository<UserDetails>(_context);
-            user.Id = -1;
             var dbModel = userRepository.Create(user);
-            return dbModel.Id > 0;
         }
     }
 }
