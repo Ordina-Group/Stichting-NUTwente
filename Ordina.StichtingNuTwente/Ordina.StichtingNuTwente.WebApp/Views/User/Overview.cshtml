@@ -4,6 +4,12 @@
 
 <h1> Welkom @Model.FirstName @Model.LastName</h1>
 
-@if(Model.Roles.Contains("")){
-
+@if(Model.Roles.Contains("group-vrijwilliger")){
+    <a href="/VrijwilligerAanmelding" class="btn btn-primary">Vrijwilliger Aanmeldformulier</a><br />
+    <a href="/GastgezinAanmelding" class="btn btn-primary">Gastgezin Aanmeldformulier</a><br />
+    <a href="/GastgezinIntake" class="btn btn-primary">Gastgezin Intake</a><br />
+    <a href="/VluchtelingIntake" class="btn btn-primary">Vluchteling Intake</a><br />
+}
+@if(Model.Roles.Contains("group-secretariaat")){
+    <a href="/getnutwenteoverheidreacties987456list" class="btn btn-primary">Formulier overzicht</a><br />
 }
