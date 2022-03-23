@@ -24,6 +24,8 @@ builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));

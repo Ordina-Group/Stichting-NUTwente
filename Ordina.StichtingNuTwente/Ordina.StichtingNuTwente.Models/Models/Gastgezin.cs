@@ -11,7 +11,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
     {
         public ICollection<Persoon> Vluchtelingen { get; set; }
         public Persoon Contact { get; set; }
-        public Vrijwilliger Begeleider { get; set; }
+        public UserDetails Begeleider { get; set; }
         public GastgezinStatus Status { get; set; }
     }
 }

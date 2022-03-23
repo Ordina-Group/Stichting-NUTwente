@@ -10,7 +10,7 @@ using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -30,7 +30,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IndexGastgezinAanmelding()
         {
             string file = FormHelper.GetFilenameFromId(1);
-            
+
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
         }
@@ -41,16 +41,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
-            if (LoggedIn(1))
-            {
-                string file = FormHelper.GetFilenameFromId(2);
-                Form questionForm = _formBusiness.createFormFromJson(2, file);
-                return View(questionForm);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
-            }
+            string file = FormHelper.GetFilenameFromId(2);
+            Form questionForm = _formBusiness.createFormFromJson(2, file);
+            return View(questionForm);
         }
 
         [Authorize]
@@ -59,18 +52,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
+            string file = FormHelper.GetFilenameFromId(3);
+            Form questionForm = _formBusiness.createFormFromJson(3, file);
+            return View(questionForm);
 
-            if (LoggedIn(1))
-            {
-                string file = FormHelper.GetFilenameFromId(3);
-                Form questionForm = _formBusiness.createFormFromJson(3, file);
-                return View(questionForm);
-            }
-            else
-            {
-                return Redirect("/loginnutwentevrijwilligers?redirect=GastgezinIntake");
-            }
-          
         }
 
         [AllowAnonymous]
@@ -89,9 +74,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpGet]
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
-        {   
-                Form questionForm = _reactionService.GetAnwersFromId(id);
-                return View(questionForm);
+        {
+            Form questionForm = _reactionService.GetAnwersFromId(id);
+            return View(questionForm);
         }
         [AllowAnonymous]
         [Route("Bedankt")]
@@ -108,8 +93,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
-                var responses = _reactionService.GetAllRespones();
-                return View(responses);
+            var responses = _reactionService.GetAllRespones();
+            return View(responses);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -118,8 +103,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
-                var responses = _reactionService.GetAllRespones(formId);
-                return View(responses);
+            var responses = _reactionService.GetAllRespones(formId);
+            return View(responses);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -128,9 +113,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("Bedankt")]
         public IActionResult downloadexport15filefromform(int formId)
         {
-                var file = _reactionService.GenerateExportCSV(formId);
-                MemoryStream stream = new MemoryStream(file);
-                return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+            var file = _reactionService.GenerateExportCSV(formId);
+            MemoryStream stream = new MemoryStream(file);
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
         }
 
 
@@ -176,21 +161,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-
-        private bool LoggedIn(int minAccessLevel)
-        {
-            var accessToken = HttpContext.Session.GetString("loggedIn");
-
-            switch (accessToken)
-            {
-                case "22D4B2BA-EA60-4CC7-AF9B-860B31A321CC": //Vrijwilliger
-                    return minAccessLevel < 3;
-                case "4F7F9757-4D80-42E8-8583-634503A6E387": // Gast
-                    return minAccessLevel < 2;
-            }
-            return false;
         }
     }
 }
