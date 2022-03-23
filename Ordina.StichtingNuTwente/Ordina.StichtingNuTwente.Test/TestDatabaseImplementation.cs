@@ -10,7 +10,7 @@ namespace Ordina.StichtingNuTwente.Test
     [TestClass]
     public class TestDatabaseImplementation
     {
-        private Repository<Vrijwilliger> vrijwilligerRepository;
+        private Repository<Adres> adresRepository;
         private NuTwenteContext context;
         private static DbContextOptions<NuTwenteContext> contextOptions;
 
@@ -27,19 +27,20 @@ namespace Ordina.StichtingNuTwente.Test
         {
             context = new NuTwenteContext(contextOptions);
 
-            vrijwilligerRepository = new Repository<Vrijwilliger>(context);
+            adresRepository = new Repository<Adres>(context);
         }
 
         [TestMethod]
         public void WhenCreatingRecordInDatabase_RecordIsAdded()
         {
-            var vrijwilliger = new Vrijwilliger
+            var adres = new Adres
             {
-                FirstName = "Dummy",
-                LastName = "Test"
+                Straat = "teststraat",
+                Postcode = "2234GS",
+                Woonplaats = "Tilburg"
             };
 
-            var createdVrijwilliger = vrijwilligerRepository.Create(vrijwilliger);
+            var createdVrijwilliger = adresRepository.Create(adres);
 
             Assert.IsNotNull(createdVrijwilliger);
             Assert.IsTrue(createdVrijwilliger.Id > 0);
@@ -48,59 +49,63 @@ namespace Ordina.StichtingNuTwente.Test
         [TestMethod]
         public void WhenUpdatingRecordInDatabase_RecordIsUpdated()
         {
-            var vrijwilliger = new Vrijwilliger
+            var adres = new Adres
             {
-                FirstName = "DummyUpdate",
-                LastName = "Test"
+                Straat = "teststraat",
+                Postcode = "2234GS",
+                Woonplaats = "Tilburg"
             };
 
-            var createdVrijwilliger = vrijwilligerRepository.Create(vrijwilliger);
+            var createdVrijwilliger = adresRepository.Create(adres);
             Assert.IsNotNull(createdVrijwilliger);
 
-            createdVrijwilliger.FirstName = "Changed";
-            vrijwilligerRepository.Update(createdVrijwilliger);
+            createdVrijwilliger.Straat = "Changed";
+            adresRepository.Update(createdVrijwilliger);
 
-            var updatedVrijwilliger = vrijwilligerRepository.GetById(createdVrijwilliger.Id);
+            var updatedVrijwilliger = adresRepository.GetById(createdVrijwilliger.Id);
 
-            Assert.IsTrue(updatedVrijwilliger.FirstName == "Changed");
+            Assert.IsTrue(updatedVrijwilliger.Straat == "Changed");
         }
 
         [TestMethod]
         [ExpectedException(typeof(DbUpdateConcurrencyException))]
         public void WhenUpdatingRecordInDatabaseThatDoesNotExits_ThrowsDbUpdateConcurrencyException()
         {
-            var vrijwilliger = new Vrijwilliger
+            var adres = new Adres
             {
                 Id = -1,
-                FirstName = "DummyUpdate",
-                LastName = "Test"
+                Straat = "teststraat",
+                Postcode = "2234GS",
+                Woonplaats = "Tilburg"
             };
 
-            vrijwilligerRepository.Update(vrijwilliger);
+
+            adresRepository.Update(adres);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void WhenUpdatingRecordInDatabaseThatIsNull_ThrowsArgumentNullException()
         {
-            vrijwilligerRepository.Update(null);
+            adresRepository.Update(null);
         }
 
         [TestMethod]
         public void WhenDeletingRecordInDatabase_RecordIsDeleted()
         {
-            var vrijwilliger = new Vrijwilliger
+            var adres = new Adres
             {
-                FirstName = "DummyUpdate",
-                LastName = "Test"
+                Straat = "teststraat",
+                Postcode = "2234GS",
+                Woonplaats = "Tilburg"
             };
 
-            var createdVrijwilliger = vrijwilligerRepository.Create(vrijwilliger);
+            var createdVrijwilliger = adresRepository.Create(adres);
             Assert.IsNotNull(createdVrijwilliger);
 
-            vrijwilligerRepository.Delete(createdVrijwilliger);
+            adresRepository.Delete(createdVrijwilliger);
 
-            var updatedVrijwilliger = vrijwilligerRepository.GetById(createdVrijwilliger.Id);
+            var updatedVrijwilliger = adresRepository.GetById(createdVrijwilliger.Id);
 
             Assert.IsNull(updatedVrijwilliger);
         }
@@ -109,22 +114,23 @@ namespace Ordina.StichtingNuTwente.Test
         [ExpectedException(typeof(ArgumentNullException))]
         public void WhenDeletingRecordInDatabaseThatIsNull_ThrowsArgumentNullException()
         {
-            vrijwilligerRepository.Delete(null);
+            adresRepository.Delete(null);
         }
 
         [TestMethod]
         public void WhenGettingRecordById_RecordIsReturned()
         {
-            var vrijwilliger = new Vrijwilliger
+            var adres = new Adres
             {
-                FirstName = "DummyGet",
-                LastName = "Test"
+                Straat = "teststraat",
+                Postcode = "2234GS",
+                Woonplaats = "Tilburg"
             };
 
-            var createdVrijwilliger = vrijwilligerRepository.Create(vrijwilliger);
+            var createdVrijwilliger = adresRepository.Create(adres);
             Assert.IsNotNull(createdVrijwilliger);
 
-            var retrievedVrijwilliger = vrijwilligerRepository.GetById(createdVrijwilliger.Id);
+            var retrievedVrijwilliger = adresRepository.GetById(createdVrijwilliger.Id);
 
             Assert.IsTrue(retrievedVrijwilliger.Id == createdVrijwilliger.Id);
         }
@@ -132,7 +138,7 @@ namespace Ordina.StichtingNuTwente.Test
         [TestMethod]
         public void WhenGettingRecordByIdThatDoesNotExist_NullIsReturned()
         {
-            var retrievedVrijwilliger = vrijwilligerRepository.GetById(-1);
+            var retrievedVrijwilliger = adresRepository.GetById(-1);
 
             Assert.IsNull(retrievedVrijwilliger);
         }
@@ -141,11 +147,11 @@ namespace Ordina.StichtingNuTwente.Test
         public static void ClassCleanup()
         {
             var tempContext = new NuTwenteContext(contextOptions);
-            var cleanupRepo =  new Repository<Vrijwilliger>(tempContext);
+            var cleanupRepo =  new Repository<Adres>(tempContext);
 
             var toDelete = cleanupRepo
                .GetAll()
-               .Where(x => x.LastName == "Test");
+               .Where(x => x.Straat == "Test");
 
             toDelete
                 .ToList()
