@@ -42,5 +42,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         [ForeignKey("fkAdresId")]
         public virtual Adres? Adres { get; set; }
+
+        [ForeignKey("fkGastgezinId")]
+        public virtual Gastgezin? Gastgezin { get; set; }
     }
 }

@@ -275,5 +275,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return retVal;
         }
 
+        public bool Delete(int reactionId)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            var awnserRepository = new Repository<Antwoord>(_context);
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
+
+            foreach(var antwoord in existingReaction.Antwoorden)
+            {
+                awnserRepository.Delete(antwoord);
+            }
+            reactieRepository.Delete(existingReaction);
+
+            return reactieRepository.GetById(reactionId) == null;
+        }
     }
 }
