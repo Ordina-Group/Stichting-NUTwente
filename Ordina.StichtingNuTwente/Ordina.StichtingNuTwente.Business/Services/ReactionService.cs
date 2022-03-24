@@ -279,11 +279,23 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var reactieRepository = new Repository<Reactie>(_context);
             var awnserRepository = new Repository<Antwoord>(_context);
+            var personRepository = new Repository<Persoon>(_context);
+            var adresRepository = new Repository<Adres>(_context);
             var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
 
             foreach(var antwoord in existingReaction.Antwoorden)
             {
                 awnserRepository.Delete(antwoord);
+            }
+
+            var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
+            if (adres != null)
+                adresRepository.Delete(adres);
+
+            var person = personRepository.GetAll("Reactie").FirstOrDefault(r => r.Reactie != null && r.Reactie.Id == reactionId);
+            if (person != null)
+            {
+                personRepository.Delete(person);
             }
             reactieRepository.Delete(existingReaction);
 
