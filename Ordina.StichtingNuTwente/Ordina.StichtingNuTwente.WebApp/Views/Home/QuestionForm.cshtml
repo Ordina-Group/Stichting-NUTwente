@@ -45,7 +45,7 @@
                                                 @foreach (string cbOption in @q.InputOptions)
                                                 {
 
-                                                    <input class="form-check-input question" type="checkbox" value="@cbOption"  id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                                                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
                                                     <div class="field-invalid">
                                                         Dit veld is verplicht <br />
                                                     </div>
@@ -54,6 +54,20 @@
                                                     </label>
 
                                                     <br />
+                                                }
+                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
+                                            }
+                                            else if (q.InputType == "radiobutton")
+                                            {
+                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                                @foreach (string rbOption in @q.InputOptions)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
+                                                        <label class="form-check-label" for="question-@q.Id-@rbOption">
+                                                            @rbOption
+                                                        </label>
+                                                    </div>
                                                 }
                                                 <i style="font-size : 15px">@Html.Raw(q.Description)</i>
                                             }
@@ -137,6 +151,11 @@
                                     obj.answer[id] = {"Nummer":id,"Antwoord":value}
                                 }
                             }
+                        } else if($(this).attr('type') === "radio"){
+                            console.log($(this))
+                            if($(this).is(':checked')){
+                                obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                            }
                         } else {
                             obj.answer[id] = {"Nummer":id,"Antwoord":value};
                         }
@@ -145,7 +164,6 @@
                     obj.answer = [];
                     for(let i = 0; i < awnsers.length; i++){
                         let awns = awnsers[i];
-                        console.log(awns)
                         if(awns !== null && awns !== undefined){
                             obj.answer.push(awns)
                         }
