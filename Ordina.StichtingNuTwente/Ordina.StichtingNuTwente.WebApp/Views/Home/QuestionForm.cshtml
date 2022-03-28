@@ -104,6 +104,11 @@
                 <button class="btn btn-primary" id="submitbtn">Submit</button>
             }
         </form>
+        @if (updateMode)
+        {
+            <br /><br />
+            <button class="btn btn-danger" id="delete">Verwijderen</button>
+        }
         <br />
         <br />
     </div>
@@ -195,6 +200,20 @@
                    window.scrollTo(0, 0);
                }
             });
+            $("#delete").click(function (e) {
+                if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {
+                        $.ajax({
+                            url: "/Home/Delete",
+                            type: "DELETE",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"id":"@Context.Request.Query["id"]"   }
+                        }).fail(function()  {
+                           window.location = "/getnutwenteoverheidreacties987456list";
+                        });
+                }
+            });
+
         });
     </script>
 
