@@ -159,6 +159,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [HttpDelete]
+        public IActionResult Delete(string id)
+        {
+            try
+            {
+                var numId = int.Parse(id);
+                _reactionService.Delete(numId);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
