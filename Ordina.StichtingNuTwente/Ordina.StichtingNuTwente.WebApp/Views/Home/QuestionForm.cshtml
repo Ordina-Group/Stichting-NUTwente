@@ -183,7 +183,7 @@
                }
             });
             $("#delete").click(function (e) {
-                if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden permanent wilt verwijderen?") == true) {
+                if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {
                         $.ajax({
                             url: "/Home/Delete",
                             type: "DELETE",
