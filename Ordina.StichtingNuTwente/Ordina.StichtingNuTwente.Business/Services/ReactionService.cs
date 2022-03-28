@@ -229,15 +229,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         cells.Add(new Cell(1, "ReactieId"));
                         cells.Add(new Cell(2, "Datum ingevuld"));
                         var colum = 2;
+                        var questions = new List<Question>();
                         foreach (var section in form.Sections)
                         {
                             foreach (var question in section.Questions)
                             {
-                                colum++;
-                                cells.Add(new Cell(colum, question.Text));
-
+                                questions.Add(question);
                             }
                         }
+                        var QuestionsOrderedByID = questions.OrderBy(q => q.Id);
+                        foreach(var question in QuestionsOrderedByID)
+                        {
+                            colum++;
+                            cells.Add(new Cell(colum, question.Text));
+                        }
+
                     }
                     else
                     {
