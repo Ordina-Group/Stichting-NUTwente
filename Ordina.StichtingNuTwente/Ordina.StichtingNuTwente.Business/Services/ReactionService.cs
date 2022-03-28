@@ -237,24 +237,39 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                 questions.Add(question);
                             }
                         }
-                        var QuestionsOrderedByID = questions.OrderBy(q => q.Id);
-                        foreach(var question in QuestionsOrderedByID)
+                        var questionsOrderedById = questions.OrderBy(q => q.Id).ToList();
+                        for(int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
                         {
-                            colum++;
-                            cells.Add(new Cell(colum, question.Text));
+                            if(questionsOrderedById.FirstOrDefault(q => q.Id == i) != null)
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, questionsOrderedById.FirstOrDefault(q => q.Id == i).Text));
+                            }
+                            else
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, ""));
+                            }
                         }
-
                     }
                     else
                     {
                         cells.Add(new Cell(1, dbItems[dbitemIndex].Id));
                         cells.Add(new Cell(2, (dbItems[dbitemIndex].DatumIngevuld).ToString("dd/MM/yyyy HH:mm:ss")));
                         var colum = 2;
-
-                        foreach (var antwoord in dbItems[dbitemIndex].Antwoorden)
+                        var answersOrderedById = dbItems[dbitemIndex].Antwoorden.OrderBy(a => a.IdVanVraag).ToList();
+                        for (int i = 1; i <= answersOrderedById.MaxBy(a => a.IdVanVraag).IdVanVraag; i++)
                         {
-                            colum++;
-                            cells.Add(new Cell(colum, antwoord.Response));
+                            if (answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i) != null)
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i).Response));
+                            }
+                            else
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, ""));
+                            }
                         }
                         dbitemIndex++;
                     }
