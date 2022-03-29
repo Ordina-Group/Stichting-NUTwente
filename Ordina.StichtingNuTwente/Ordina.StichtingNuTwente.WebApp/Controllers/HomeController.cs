@@ -7,6 +7,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
+using Ordina.StichtingNuTwente.Models.Models;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -16,12 +17,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IFormBusiness _formBusiness;
         private readonly IReactionService _reactionService;
+        private readonly IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
             _reactionService = reactionService;
+            _userService = userService;
         }
         [AllowAnonymous]
         [Route("GastgezinAanmelding")]
@@ -43,6 +46,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             string file = FormHelper.GetFilenameFromId(2);
             Form questionForm = _formBusiness.createFormFromJson(2, file);
+            questionForm.UserDetails = GetUser();
+            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
         }
 
@@ -54,6 +59,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             string file = FormHelper.GetFilenameFromId(3);
             Form questionForm = _formBusiness.createFormFromJson(3, file);
+            questionForm.UserDetails = GetUser();
+            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
 
         }
@@ -76,6 +83,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             Form questionForm = _reactionService.GetAnwersFromId(id);
+            questionForm.UserDetails = GetUser();
+            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
         }
         [AllowAnonymous]
@@ -179,6 +188,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public UserDetails? GetUser()
+        {
+            var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+            if (aadID != null)
+            {
+                var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                return userDetails;
+            }
+            return null;
+        }
+
+        public List<UserDetails> GetAllVrijwilligers()
+        {
+            return _userService.GetUsersByRole("group-vrijwilliger").ToList();
         }
     }
 }

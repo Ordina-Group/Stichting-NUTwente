@@ -45,6 +45,8 @@ builder.Services.AddRazorPages(options => {})
         .AddMvcOptions(options => { })
         .AddMicrosoftIdentityUI();
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
