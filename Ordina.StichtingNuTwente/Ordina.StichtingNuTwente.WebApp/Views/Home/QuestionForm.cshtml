@@ -1,4 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Entities
+@using Ordina.StichtingNuTwente.Models.Models
 @model Ordina.StichtingNuTwente.Entities.Form
 
 @{
@@ -60,7 +61,26 @@
                                             else
                                             {
                                                 <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
+                                                @if (q.InputType == "vrijwilliger" && Model.AllUsers.Count > 0)
+                                                {
+                                                    <select name="Antwoord" class="form-select question" id="question-@q.Id">
+                                                        @foreach (UserDetails ud in Model.AllUsers)
+                                                        {
+                                                            @if ((q.Answer != null && (ud.FirstName + " " + ud.LastName + " " + (ud.Id)).Contains(q.Answer)) || (q.Answer == null && Model.UserDetails != null && (ud.FirstName + " " + ud.LastName + " (" + ud.Id + ")").Contains(Model.UserDetails.FirstName + " " + Model.UserDetails.LastName + " (" + Model.UserDetails.Id + ")")))
+                                                            {
+                                                                <option selected value="@ud.FirstName @ud.LastName (@ud.Id)">@ud.FirstName @ud.LastName (@ud.Id)</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@ud.FirstName @ud.LastName (@ud.Id)">@ud.FirstName @ud.LastName (@ud.Id)</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
+                                                }
                                                 <div class="field-invalid">
                                                     Dit veld is verplicht <br />
                                                 </div>
@@ -92,7 +112,9 @@
         </form>
         @if (updateMode)
         {
-            <br /><br />
+            <br />
+
+            <br />
             <button class="btn btn-danger" id="delete">Verwijderen</button>
         }
         <br />
