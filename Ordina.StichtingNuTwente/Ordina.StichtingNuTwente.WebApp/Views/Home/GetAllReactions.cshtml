@@ -1,54 +1,68 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
 @model List<AnswerListModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Reacties";
 }
 
 
 <body>
     <div>
-        <a class="btn btn-primary @(Context.Request.Query["formId"] == "1"?"disabled":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Filter aanmelden opvang in Twente</a>
-        <a class="btn btn-primary @(Context.Request.Query["formId"] == "2"?"disabled":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Filter intake gastgezin Oekraïne</a>
-        <a class="btn btn-primary @(Context.Request.Query["formId"] == "3"?"disabled":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Filter intake vluchteling Oekraïne</a>
-        <a class="btn btn-primary @(Context.Request.Query["formId"] == "4"?"disabled":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Filter aanmelden vrijwilliger</a>
-         
-        @foreach (var form in Model.GroupBy(d=> d.FormulierId))
+        <ul class="nav nav-tabs ">
+            <li class="nav-item">
+                <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "1"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "2"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "3"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "4"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
+            </li>
+        </ul>
+
+        @foreach (var form in Model.GroupBy(d => d.FormulierId))
         {
             <div class="row">
                 <div class="col-md-11">
-                     <h3>@form.First().FormulierNaam</h3>
+                    <h3>@form.First().FormulierNaam</h3>
                 </div>
-                  <div class="col-md-1">
-                <a class="badge badge-pill badge-info pointer float-right p-2 m-2" href="/downloadexport15filefromform?formId=@form.First().FormulierId">Export</a>
+                <div class="col-md-1">
+                    <a class="badge badge-pill badge-info pointer float-right p-2 m-2" href="/downloadexport15filefromform?formId=@form.First().FormulierId">Export</a>
                 </div>
             </div>
-           
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Link</th>
-                    <th scope="col">Reactie datum</th>
-                    <th scope="col">Formulier</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(var item in form )
-                {
+
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <th scope="row">@item.ReactieId</th>
-                        <td> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@item.ReactieId">Bekijk Reactie</a></td>
-                        <td>@item.AnswerDate</td>
-                        <td><a href="/getnutwenteoverheidreactiesspecifiek158436form?formId=@item.FormulierId">@item.FormulierNaam</a></td>
+                        <th scope="col">#</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Reactie datum</th>
+                        <th scope="col">Formulier</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <hr/>
+                </thead>
+                <tbody>
+                    @foreach (var item in form)
+                    {
+                        <tr>
+                            <th scope="row">@item.ReactieId</th>
+                            <td> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@item.ReactieId">Bekijk Reactie</a></td>
+                            <td>@item.AnswerDate</td>
+                            <td><a href="/getnutwenteoverheidreactiesspecifiek158436form?formId=@item.FormulierId">@item.FormulierNaam</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <hr />
         }
-      </div>
+    </div>
 </body>
 
 
