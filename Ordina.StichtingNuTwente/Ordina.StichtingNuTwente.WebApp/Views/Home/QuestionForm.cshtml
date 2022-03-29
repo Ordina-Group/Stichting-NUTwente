@@ -80,13 +80,13 @@
                                                     <select name="Antwoord" class="form-select question" id="question-@q.Id">
                                                         @foreach (UserDetails ud in Model.AllUsers)
                                                         {
-                                                            @if ((q.Answer != null && (ud.FirstName + " " + ud.LastName + " " + (ud.Id)).Contains(q.Answer)) || (q.Answer == null && Model.UserDetails != null && (ud.FirstName + " " + ud.LastName + " (" + ud.Id + ")").Contains(Model.UserDetails.FirstName + " " + Model.UserDetails.LastName + " (" + Model.UserDetails.Id + ")")))
+                                                            @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
                                                             {
-                                                                <option selected value="@ud.FirstName @ud.LastName (@ud.Id)">@ud.FirstName @ud.LastName (@ud.Id)</option>
+                                                                <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@ud.FirstName @ud.LastName (@ud.Id)">@ud.FirstName @ud.LastName (@ud.Id)</option>
+                                                                <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
                                                             }
                                                         }
                                                     </select>
