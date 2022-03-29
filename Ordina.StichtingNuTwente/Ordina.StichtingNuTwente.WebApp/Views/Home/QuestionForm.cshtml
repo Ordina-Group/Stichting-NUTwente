@@ -2,7 +2,7 @@
 @model Ordina.StichtingNuTwente.Entities.Form
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = Model.Title;
 
     bool updateMode = !String.IsNullOrEmpty(Context.Request.Query["id"]);
 
