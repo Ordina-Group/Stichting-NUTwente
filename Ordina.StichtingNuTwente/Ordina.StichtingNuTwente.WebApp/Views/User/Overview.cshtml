@@ -1,5 +1,6 @@
 ﻿@model Ordina.StichtingNuTwente.Models.ViewModels.UserViewModel
 @{
+    ViewData["Title"] = "Home";
 }
 <div class="row">
     <div class="col-3"></div>
@@ -19,7 +20,7 @@
         }
         @if (Model.Roles.Contains("group-secretariaat"))
         {
-            <a href="/getnutwenteoverheidreacties987456list" class="btn btn-primary full-width">Formulier overzicht</a>
+            <a href="/getnutwenteoverheidreacties987456list" class="btn btn-primary full-width">Reactie overzicht</a>
             <br /><br />
         }
     </div>
