@@ -11,5 +11,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ordina.StichtingNuTwente.Models\Ordina.StichtingNuTwente.Models.csproj" />
+  </ItemGroup>
+
 </Project>
  
