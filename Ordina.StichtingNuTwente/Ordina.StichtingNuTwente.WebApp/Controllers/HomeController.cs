@@ -123,8 +123,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult downloadexport15filefromform(int formId)
         {
             var file = _reactionService.GenerateExportCSV(formId);
+            var fileName = FormHelper.GetFilenameFromId(formId).Replace(".json", "");
+
             MemoryStream stream = new MemoryStream(file);
-            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("form Export {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("{1} {0:dd-MM-yyyy}.xlsx", DateTime.Now, fileName) };
         }
 
 

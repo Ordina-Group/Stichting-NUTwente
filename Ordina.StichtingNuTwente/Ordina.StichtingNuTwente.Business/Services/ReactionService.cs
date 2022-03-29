@@ -229,13 +229,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         cells.Add(new Cell(1, "ReactieId"));
                         cells.Add(new Cell(2, "Datum ingevuld"));
                         var colum = 2;
+                        var questions = new List<Question>();
                         foreach (var section in form.Sections)
                         {
                             foreach (var question in section.Questions)
                             {
+                                questions.Add(question);
+                            }
+                        }
+                        var questionsOrderedById = questions.OrderBy(q => q.Id).ToList();
+                        for(int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
+                        {
+                            if(questionsOrderedById.FirstOrDefault(q => q.Id == i) != null)
+                            {
                                 colum++;
-                                cells.Add(new Cell(colum, question.Text));
-
+                                cells.Add(new Cell(colum, questionsOrderedById.FirstOrDefault(q => q.Id == i).Text));
+                            }
+                            else
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, ""));
                             }
                         }
                     }
@@ -244,11 +257,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         cells.Add(new Cell(1, dbItems[dbitemIndex].Id));
                         cells.Add(new Cell(2, (dbItems[dbitemIndex].DatumIngevuld).ToString("dd/MM/yyyy HH:mm:ss")));
                         var colum = 2;
-
-                        foreach (var antwoord in dbItems[dbitemIndex].Antwoorden)
+                        var answersOrderedById = dbItems[dbitemIndex].Antwoorden.OrderBy(a => a.IdVanVraag).ToList();
+                        for (int i = 1; i <= answersOrderedById.MaxBy(a => a.IdVanVraag).IdVanVraag; i++)
                         {
-                            colum++;
-                            cells.Add(new Cell(colum, antwoord.Response));
+                            if (answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i) != null)
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i).Response));
+                            }
+                            else
+                            {
+                                colum++;
+                                cells.Add(new Cell(colum, ""));
+                            }
                         }
                         dbitemIndex++;
                     }
