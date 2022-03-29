@@ -19,7 +19,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public UserDetails? GetUserByAADId(string id)
         {
             var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().SingleOrDefault(u => u.AADId == id);
+            return userRepository.GetAll().FirstOrDefault(u => u.AADId == id);
         }
 
         public ICollection<UserDetails> GetUsersByRole(string role)
