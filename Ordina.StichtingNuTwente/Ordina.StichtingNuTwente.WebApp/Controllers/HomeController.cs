@@ -32,6 +32,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinAanmelding()
         {
+            checkIfUserExists();
             string file = FormHelper.GetFilenameFromId(1);
 
             Form questionForm = _formBusiness.createFormFromJson(1, file);
@@ -44,6 +45,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexGastgezinIntake()
         {
+            checkIfUserExists();
             string file = FormHelper.GetFilenameFromId(2);
             Form questionForm = _formBusiness.createFormFromJson(2, file);
             questionForm.UserDetails = GetUser();
@@ -57,6 +59,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexVluchtelingIntake()
         {
+            checkIfUserExists();
             string file = FormHelper.GetFilenameFromId(3);
             Form questionForm = _formBusiness.createFormFromJson(3, file);
             questionForm.UserDetails = GetUser();
@@ -71,6 +74,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult IndexVrijwilligerAanmelding()
         {
+            checkIfUserExists();
             string file = FormHelper.GetFilenameFromId(4);
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             return View(questionForm);
@@ -82,6 +86,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
+            checkIfUserExists();
             Form questionForm = _reactionService.GetAnwersFromId(id);
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
@@ -92,7 +97,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpGet]
         public IActionResult Bedankt()
         {
-
+            checkIfUserExists();
             return View();
         }
 
@@ -102,6 +107,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
+            checkIfUserExists();
             var responses = _reactionService.GetAllRespones();
             return View(responses);
         }
@@ -112,6 +118,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
+            checkIfUserExists();
             var responses = _reactionService.GetAllRespones(formId);
             return View(responses);
         }
@@ -205,6 +212,36 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public List<UserDetails> GetAllVrijwilligers()
         {
             return _userService.GetUsersByRole("group-vrijwilliger").ToList();
+        }
+
+
+        public void checkIfUserExists()
+        {
+            if (User != null && User.Claims.Count() > 0)
+            {
+                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+                if (aadID != null)
+                {
+                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                    if (userDetails == null)
+                    {
+                        var email = User.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
+                        var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
+                        var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+                        var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
+
+                        var newUserDetails = new UserDetails()
+                        {
+                            FirstName = givenname,
+                            LastName = surname,
+                            Email = email,
+                            Roles = groups.ToList(),
+                            AADId = aadID.Value
+                        };
+                        _userService.Save(newUserDetails);
+                    }
+                }
+            }
         }
     }
 }
