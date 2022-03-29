@@ -18,9 +18,6 @@
 <body>
     <header>
         <partial name="_LoginPartial" />
-        @if(Context.Session.GetString("loggedIn") != null){
-            <a class="btn btn-outline-primary" href="logout">Log uit (Overzicht)</a>
-        }
     </header>
     <div class="container">
         <main role="main" class="mt-5 pb-3">
