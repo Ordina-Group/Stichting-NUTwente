@@ -25,6 +25,7 @@ builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -37,6 +38,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger"));
     options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat"));
     options.AddPolicy("RequireCoördinatorRole", policy => policy.RequireClaim("groups", "group-coördinator"));
+    options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireClaim("groups", "group-superadmin"));
     options.FallbackPolicy = options.DefaultPolicy;
 });
 builder.Services.AddRazorPages(options => {})
