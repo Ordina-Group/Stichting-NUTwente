@@ -22,16 +22,15 @@
                                 <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
                                 <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
                                 <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
-
                             </div>
                         </li>
                         @if(User.HasClaim("groups", "group-secretariaat")){
                             <li class="nav-item">
-                                <a class="nav-link" @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" ? "active" : "" ) href="/getnutwenteoverheidreacties987456list">Reactie Overzicht</a>
+                                <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form"? "active" : "" )" href="/getnutwenteoverheidreacties987456list">Reactie Overzicht</a>
                             </li>
                         }
-                    </ul>
-                    <a class="btn btn-close-white" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
+                        </ul>
+                        <a class="nav-link btn-close-white" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
                 </div>
             </div>
         </nav>
