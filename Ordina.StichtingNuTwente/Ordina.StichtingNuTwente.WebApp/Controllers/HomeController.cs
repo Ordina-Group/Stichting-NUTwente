@@ -18,13 +18,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IFormBusiness _formBusiness;
         private readonly IReactionService _reactionService;
         private readonly IUserService _userService;
+        private readonly IGastgezinService _gastgezinService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IGastgezinService gastgezinService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
             _reactionService = reactionService;
             _userService = userService;
+            _gastgezinService = gastgezinService;
         }
         [AllowAnonymous]
         [Route("GastgezinAanmelding")]
@@ -92,6 +94,53 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
         }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("MijnGastgezinnen")]
+        [HttpGet]
+        [ActionName("MijnGastgezinnen")]
+        public IActionResult MijnGastgezinnen()
+        {
+            checkIfUserExists();
+
+            var mijnGastgezinnen = new MijnGastgezinnenModel();
+
+
+            var user = GetUser();
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                if (gastGezin.Contact == null)
+                {
+                    continue;
+                }
+
+                var contact = gastGezin.Contact;
+                var adres = gastGezin.Contact.Adres;
+                var adresText = "";
+                var woonplaatsText = "";
+
+                if (adres != null)
+                {
+                    adresText = adres.Straat;
+                    woonplaatsText = adres.Woonplaats;
+                }
+
+                mijnGastgezinnen.MijnGastgezinnen.Add(new MijnGastgezin
+                {
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText
+                });
+            }
+
+            return View(mijnGastgezinnen);
+        }
+
+
         [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
