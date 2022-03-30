@@ -240,10 +240,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         var questionsOrderedById = questions.OrderBy(q => q.Id).ToList();
                         for (int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
                         {
-                            if (questionsOrderedById.FirstOrDefault(q => q.Id == i) != null)
+                            var question = questionsOrderedById.FirstOrDefault(q => q.Id == i);
+                            if (question != null)
                             {
                                 colum++;
-                                cells.Add(new Cell(colum, questionsOrderedById.FirstOrDefault(q => q.Id == i).Text));
+                                cells.Add(new Cell(colum, question.Text));
                             }
                             else
                             {
