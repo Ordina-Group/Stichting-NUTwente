@@ -23,6 +23,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [Authorize]
+        [Route("MicrosoftIdentity/Account/AccessDenied")]
+        public IActionResult AccessDeniedCatch()
+        {
+            return View();
+        }
+
+        [Authorize]
         public IActionResult Overview()
         {
             var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));

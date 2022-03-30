@@ -39,7 +39,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -53,7 +53,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("VluchtelingIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
