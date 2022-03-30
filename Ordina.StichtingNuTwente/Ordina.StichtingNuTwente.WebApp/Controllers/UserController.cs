@@ -33,9 +33,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
                 var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
                 var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
+                if (givenname == null)
+                    givenname = "";
+                if (surname == null)
+                    surname = "";
                 if (userDetails != null)
                 {
-                    
+
                     if (userDetails.FirstName != givenname ||
                         userDetails.LastName != surname ||
                         userDetails.Email != email ||
@@ -52,7 +56,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         };
                         UserService.UpdateUser(newUserDetails, aadID.Value);
                     }
-                } 
+                }
                 else
                 {
                     var newUserDetails = new UserDetails()
