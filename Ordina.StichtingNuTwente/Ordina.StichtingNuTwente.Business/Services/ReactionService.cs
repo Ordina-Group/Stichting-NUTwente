@@ -70,14 +70,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var AdresRepo = new Repository<Adres>(_context);
             var dbPersoon = new Persoon();
             var dbAdres = new Adres();
-            if (id!= 0)
+            if (id != 0)
             {
-                dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie") ;
-                dbPersoon = dbPersoon?? new Persoon();
+                dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
+                dbPersoon = dbPersoon ?? new Persoon();
                 dbAdres = AdresRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
                 dbAdres = dbAdres ?? new Adres();
             }
-           
+
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Adres")))
             {
                 dbAdres = CreateDbObjectFromFormFilledWithAnswers<Adres>(form, viewModel, dbAdres);
@@ -101,10 +101,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     if (dbPersoon.Id == 0)
                     {
-                        if(dbAdres !=null)
+                        if (dbAdres != null)
                         {
                             dbPersoon.Adres = dbAdres;
-                        }    
+                        }
                         dbPersoon.Reactie = reactie;
                         PersoonRepo.Create(dbPersoon);
                     }
@@ -171,7 +171,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbModel = reactieRepository.GetById(Id, "Antwoorden");
             if (dbModel != null)
             {
-                viewModel = FormHelper.GetFormFromFileId(dbModel.FormulierId); 
+                viewModel = FormHelper.GetFormFromFileId(dbModel.FormulierId);
                 foreach (var section in viewModel.Sections)
                 {
                     foreach (var question in section.Questions)
@@ -238,9 +238,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                             }
                         }
                         var questionsOrderedById = questions.OrderBy(q => q.Id).ToList();
-                        for(int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
+                        for (int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
                         {
-                            if(questionsOrderedById.FirstOrDefault(q => q.Id == i) != null)
+                            if (questionsOrderedById.FirstOrDefault(q => q.Id == i) != null)
                             {
                                 colum++;
                                 cells.Add(new Cell(colum, questionsOrderedById.FirstOrDefault(q => q.Id == i).Text));
@@ -258,12 +258,20 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         cells.Add(new Cell(2, (dbItems[dbitemIndex].DatumIngevuld).ToString("dd/MM/yyyy HH:mm:ss")));
                         var colum = 2;
                         var answersOrderedById = dbItems[dbitemIndex].Antwoorden.OrderBy(a => a.IdVanVraag).ToList();
-                        for (int i = 1; i <= answersOrderedById.MaxBy(a => a.IdVanVraag).IdVanVraag; i++)
+                        var maxQuestionId = 0;
+                        if (answersOrderedById.Count > 0)
                         {
-                            if (answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i) != null)
+                            var maxAwnser = answersOrderedById.MaxBy(a => a.IdVanVraag);
+                            if (maxAwnser != null)
+                                maxQuestionId = maxAwnser.IdVanVraag;
+                        }
+                        for (int i = 1; i <= maxQuestionId; i++)
+                        {
+                            var awnser = answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i);
+                            if (awnser != null)
                             {
                                 colum++;
-                                cells.Add(new Cell(colum, answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i).Response));
+                                cells.Add(new Cell(colum, awnser.Response));
                             }
                             else
                             {
@@ -304,7 +312,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var adresRepository = new Repository<Adres>(_context);
             var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
 
-            foreach(var antwoord in existingReaction.Antwoorden)
+            foreach (var antwoord in existingReaction.Antwoorden)
             {
                 awnserRepository.Delete(antwoord);
             }
