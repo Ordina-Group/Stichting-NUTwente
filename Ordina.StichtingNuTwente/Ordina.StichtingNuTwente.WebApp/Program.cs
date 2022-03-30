@@ -25,6 +25,7 @@ builder.Services.AddScoped<IFormBusiness, FormBusiness>();
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IGastgezinService, GastgezinService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 
 

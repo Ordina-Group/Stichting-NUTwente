@@ -1,0 +1,83 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@model MijnGastgezinnenModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Mijn Gastgezinnen";
+}
+
+
+<body>
+    <div>
+        <ul class="nav nav-tabs ">
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
+            </li>
+        </ul>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Mijn Gastgezinnen</h3>
+            </div>
+        </div>
+
+
+        @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Naam</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Adres</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Woonplaats</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">Telefoonnummer</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">E-mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@mijnGastgezin.Naam</td>
+                    </tr>
+                    <tr>
+                        <td>@mijnGastgezin.Adres</td>
+                    </tr>
+                    <tr>
+                        <td>@mijnGastgezin.Woonplaats</td>
+                    </tr>
+                    <tr>
+                        <td>@mijnGastgezin.Telefoonnummer</td>
+                    </tr>
+                    <tr>
+                        <td>@mijnGastgezin.Email</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+        }
+    </div>
+</body>
+
+
