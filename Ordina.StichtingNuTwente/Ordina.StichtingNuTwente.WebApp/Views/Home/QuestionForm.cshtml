@@ -40,44 +40,9 @@
                                 {
                                     <div class="row" id="Question">
                                         <div class="card-title">
-                                            @if (q.InputType == "checkbox")
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @foreach (string cbOption in @q.InputOptions)
-                                                {
-
-                                                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
-                                                    <div class="field-invalid">
-                                                        Dit veld is verplicht <br />
-                                                    </div>
-                                                    <label class="form-check-label" for="question-@q.Id-@cbOption">
-                                                        @cbOption
-                                                    </label>
-
-                                                    <br />
-                                                }
-                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
-                                            else if (q.InputType == "radiobutton")
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @foreach (string rbOption in @q.InputOptions)
-                                                {
-                                                    <div class="form-check">
-                                                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
-                                                        <label class="form-check-label" for="question-@q.Id-@rbOption">
-                                                            @rbOption
-                                                        </label>
-                                                    </div>
-                                                }
-                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
-                                            else
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
+                                            <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                            @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
                                             <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
                                         </div>
 
                                     </div>

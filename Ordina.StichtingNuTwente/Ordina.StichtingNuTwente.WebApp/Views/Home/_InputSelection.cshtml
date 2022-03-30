@@ -7,6 +7,36 @@
 
 @switch (q.InputType)
 {
+    case "checkbox":
+        {
+            @foreach (string cbOption in @q.InputOptions)
+            {
+
+                <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                <div class="field-invalid">
+                    Dit veld is verplicht <br />
+                </div>
+                <label class="form-check-label" for="question-@q.Id-@cbOption">
+                    @cbOption
+                </label>
+
+                <br />
+            }
+            break;
+        }
+    case "radiobutton":
+        {
+            @foreach (string rbOption in @q.InputOptions)
+            {
+                <div class="form-check">
+                    <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
+                    <label class="form-check-label" for="question-@q.Id-@rbOption">
+                        @rbOption
+                    </label>
+                </div>
+            }
+            break;
+        }
     case "date":
         {
             <p style="font-size: 0.8rem;">Originele waarde: @q.Answer</p>
@@ -24,26 +54,26 @@
 
     @*case "vrijwilliger":
         {
-            if (Model.AllUsers.Count > 0)
-            {
-                <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
-                <select name="Antwoord" class="form-select question" id="question-@q.Id">
-                    @foreach (UserDetails ud in Model.AllUsers)
-                    {
-                        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
-                        {
-                            <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-                        }
-                        else
-                        {
-                            <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-                        }
-                    }
-                </select>
-                break;
-            }
+        if (Model.AllUsers.Count > 0)
+        {
+        <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
+        <select name="Antwoord" class="form-select question" id="question-@q.Id">
+        @foreach (UserDetails ud in Model.AllUsers)
+        {
+        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
+        {
+        <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
+        }
+        else
+        {
+        <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
+        }
+        }
+        </select>
+        break;
+        }
 
-            goto default;
+        goto default;
         }*@
     default:
         {
