@@ -22,7 +22,7 @@
             break;
         }
 
-    case "vrijwilliger":
+    @*case "vrijwilliger":
         {
             if (Model.AllUsers.Count > 0)
             {
@@ -44,7 +44,7 @@
             }
 
             goto default;
-        }
+        }*@
     default:
         {
             <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
