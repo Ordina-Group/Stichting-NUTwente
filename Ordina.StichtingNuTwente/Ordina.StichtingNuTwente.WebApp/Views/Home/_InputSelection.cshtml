@@ -63,7 +63,7 @@
                 <select name="Antwoord" class="form-select question" id="question-@q.Id">
                     @foreach (UserDetails ud in Model.AllUsers)
                     {
-                        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
+                        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split("(")[1]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
                         {
                             <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
                         }
