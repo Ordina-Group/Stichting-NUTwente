@@ -14,7 +14,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             UserService = userService;
         }
 
-
         [Authorize]
         [Route("Account/SignOut")]
         public IActionResult SignOutCatch()
@@ -27,13 +26,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult AccessDeniedCatch()
         {
             return View();
-        }
-        [Authorize]
-        [Route("User/EditProfile")]
-        public IActionResult EditProfile()
-        {
-
-            return Redirect("/MicrosoftIdentity/Account/EditProfile");
         }
 
         [Authorize]

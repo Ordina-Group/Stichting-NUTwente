@@ -52,8 +52,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 return null;
             }
             var userRepository = new Repository<UserDetails>(_context);
-            userInDB.Roles = userInDB.Roles;
-            userInDB.Email = userInDB.Email;
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
             userRepository.Update(userInDB);
