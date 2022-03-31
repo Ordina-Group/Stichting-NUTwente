@@ -28,6 +28,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGastgezinService, GastgezinService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IPersoonService, PersoonService>();
+builder.Services.AddScoped<IMailService, MailService>();
 
 
 
