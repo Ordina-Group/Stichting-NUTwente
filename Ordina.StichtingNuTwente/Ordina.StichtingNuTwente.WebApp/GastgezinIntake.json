@@ -58,7 +58,7 @@
           "Number": "5",
           "Text": "Geboortedatum (dd-mm-jjjj)",
           "Description": "Wij vragen naar uw geboortedatum omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
-          "InputType": "text",
+          "InputType": "date",
           "InputOptions": "",
           "Required": "false",
           "Object": "Persoon",
