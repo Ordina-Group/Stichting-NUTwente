@@ -1,6 +1,6 @@
-﻿@using Ordina.StichtingNuTwente.Entities
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels
 @using Ordina.StichtingNuTwente.Models.Models
-@model Ordina.StichtingNuTwente.Entities.Form
+@model Form
 
 @{
     ViewData["Title"] = Model.Title;
@@ -40,70 +40,9 @@
                                 {
                                     <div class="row" id="Question">
                                         <div class="card-title">
-                                            @if (q.InputType == "checkbox")
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @foreach (string cbOption in @q.InputOptions)
-                                                {
-
-                                                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
-                                                    <div class="field-invalid">
-                                                        Dit veld is verplicht <br />
-                                                    </div>
-                                                    <label class="form-check-label" for="question-@q.Id-@cbOption">
-                                                        @cbOption
-                                                    </label>
-
-                                                    <br />
-                                                }
-                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
-                                            else if (q.InputType == "radiobutton")
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @foreach (string rbOption in @q.InputOptions)
-                                                {
-                                                    <div class="form-check">
-                                                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
-                                                        <label class="form-check-label" for="question-@q.Id-@rbOption">
-                                                            @rbOption
-                                                        </label>
-                                                    </div>
-                                                }
-                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
-                                            else
-                                            {
-                                                <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
-                                                @*@if (q.InputType == "vrijwilliger" && Model.AllUsers.Count > 0)
-                                                {
-                                                    <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
-                                                    <select name="Antwoord" class="form-select question" id="question-@q.Id">
-                                                        @foreach (UserDetails ud in Model.AllUsers)
-                                                        {
-                                                            @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
-                                                            {
-                                                                <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-                                                            }
-                                                        }
-                                                    </select>
-                                                }
-                                                else
-                                                {*@
-                                                    <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
-                                                @*}*@
-                                                <div class="field-invalid">
-                                                    Dit veld is verplicht <br />
-                                                </div>
-                                                <div class="field-invalid-cyrilic">
-                                                    будь ласка, використовуйте лише голландську або англійську<br />
-                                                </div>
-                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
-                                            }
+                                            <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                            @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
+                                            <i style="font-size : 15px">@Html.Raw(q.Description)</i>
                                         </div>
 
                                     </div>
@@ -135,7 +74,8 @@
         <br />
         <br />
     </div>
-
+    @await Html.PartialAsync("_InputValidation.cshtml")
+    @await Html.PartialAsync("_Submit.cshtml", new SubmitFormPartialViewModel(){UpdateMode = updateMode, FormId = Model.Id})
     <script>
 
         $(document).ready(function () {
@@ -147,81 +87,6 @@
                     e.preventDefault();
                     return false;
                 }
-            });
-            const cyrillicPattern = /^[\u0400-\u04FF]+$/;
-
-            //custom validation
-            $(".question").change(function() {
-                var value = $(this).val();
-                if(cyrillicPattern.test(value)){
-                    $(this).addClass("contains-cyrilic")
-                    this.setCustomValidity("будь ласка, використовуйте лише голландську або англійську");
-                } else{
-                    this.setCustomValidity("");
-                    $(this).removeClass("contains-cyrilic")
-                }
-            });
-
-            $("#submitbtn").click(function (e) {
-                e.preventDefault();
-
-
-                if( document.getElementById("questionsForm").checkValidity()){
-                    var obj = {"answer":[], "Id":"@Model.Id"}; //"UserId":"User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value"
-                    $(".question").each(function() {
-                        var id = $(this).attr('id').split("-")[1];
-                        var value = $(this).val();
-                        if($(this).attr('type') === "checkbox"){
-                            if($(this).is(':checked')){
-                                if(obj.answer[id] !== undefined){
-                                    obj.answer[id].Antwoord += ("," + value);
-                                } else {
-                                    obj.answer[id] = {"Nummer":id,"Antwoord":value}
-                                }
-                            }
-                        } else if($(this).attr('type') === "radio"){
-                            console.log($(this))
-                            if($(this).is(':checked')){
-                                obj.answer[id] = {"Nummer":id,"Antwoord":value};
-                            }
-                        } else {
-                            obj.answer[id] = {"Nummer":id,"Antwoord":value};
-                        }
-                    })
-                    let awnsers = obj.answer;
-                    obj.answer = [];
-                    for(let i = 0; i < awnsers.length; i++){
-                        let awns = awnsers[i];
-                        if(awns !== null && awns !== undefined){
-                            obj.answer.push(awns)
-                        }
-                    }
-
-                    if("@updateMode" === "True" ) {
-                        $.ajax({
-                            url: "/Home/Update",
-                            type: "PUT",
-                            dataType: 'json',
-                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                            data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
-                        }).fail(function()  {
-                           window.location.href = "/getnutwenteoverheidreacties987456list";
-                        });
-                     } else {
-                        $.ajax({
-                            url: "/Home/Save",
-                            type: "POST",
-                            dataType: 'json',
-                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                            data: {"answers":JSON.stringify(obj)   }
-                        }).fail(function()  {
-                           window.location = "/Bedankt";
-                        });
-                    }
-               } else {
-                   $("#questionsForm").addClass('was-validated')
-                   window.scrollTo(0, 0);
-               }
             });
             $("#delete").click(function (e) {
                 if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {

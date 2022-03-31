@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using Ordina.StichtingNuTwente.Entities;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
