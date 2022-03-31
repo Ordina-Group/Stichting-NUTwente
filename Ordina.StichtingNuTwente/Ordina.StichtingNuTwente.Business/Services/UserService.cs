@@ -44,6 +44,20 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userInDB;
         }
 
+        public UserDetails? UpdateUserFromProfileEdit(UserDetails user, string aadId)
+        {
+            var userInDB = GetUserByAADId(aadId);
+            if (userInDB == null)
+            {
+                return null;
+            }
+            var userRepository = new Repository<UserDetails>(_context);
+            userInDB.FirstName = user.FirstName;
+            userInDB.LastName = user.LastName;
+            userRepository.Update(userInDB);
+            return userInDB;
+        }
+
         public void Save(UserDetails user)
         {
             var userRepository = new Repository<UserDetails>(_context);
