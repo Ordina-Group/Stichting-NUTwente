@@ -28,6 +28,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             return View();
         }
+        [Authorize]
+        [Route("User/EditProfile")]
+        public IActionResult EditProfile()
+        {
+
+            return Redirect("/MicrosoftIdentity/Account/EditProfile");
+        }
 
         [Authorize]
         public IActionResult Overview()
@@ -61,7 +68,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             Roles = groups.ToList(),
                             AADId = aadID.Value
                         };
-                        UserService.UpdateUser(newUserDetails, aadID.Value);
+                        if (User.HasClaim("http://schemas.microsoft.com/claims/authnclassreference" , "b2c_1a_profileedit")) UserService.UpdateUserFromProfileEdit(newUserDetails, aadID.Value);
+                        else UserService.UpdateUser(newUserDetails, aadID.Value);
                     }
                 }
                 else
