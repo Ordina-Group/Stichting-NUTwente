@@ -216,22 +216,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public void checkIfUserExists()
         {
-            if (User != null && User.Claims.Count() > 0)
+            var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+            if (aadID != null)
             {
-                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
-                if (aadID != null)
+                var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                var email = User.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
+                var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
+                var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+                var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
+                if (givenname == null)
+                    givenname = "";
+                if (surname == null)
+                    surname = "";
+                if (userDetails != null)
                 {
-                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
-                    if (userDetails == null)
+
+                    if (userDetails.FirstName != givenname ||
+                        userDetails.LastName != surname ||
+                        userDetails.Email != email ||
+                        !userDetails.Roles.All(groups.Contains) ||
+                        !groups.All(userDetails.Roles.Contains))
                     {
-                        var email = User.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
-                        var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
-                        var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
-                        var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
-                        if (givenname == null)
-                            givenname = "";
-                        if (surname == null)
-                            surname = "";
                         var newUserDetails = new UserDetails()
                         {
                             FirstName = givenname,
@@ -240,8 +245,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             Roles = groups.ToList(),
                             AADId = aadID.Value
                         };
-                        _userService.Save(newUserDetails);
+                        if (User.HasClaim("http://schemas.microsoft.com/claims/authnclassreference", "b2c_1a_profileedit")) _userService.UpdateUserFromProfileEdit(newUserDetails, aadID.Value);
+                        else _userService.UpdateUser(newUserDetails, aadID.Value);
                     }
+                }
+                else
+                {
+                    var newUserDetails = new UserDetails()
+                    {
+                        FirstName = givenname,
+                        LastName = surname,
+                        Email = email,
+                        Roles = groups.ToList(),
+                        AADId = aadID.Value
+                    };
+                    _userService.Save(newUserDetails);
                 }
             }
         }

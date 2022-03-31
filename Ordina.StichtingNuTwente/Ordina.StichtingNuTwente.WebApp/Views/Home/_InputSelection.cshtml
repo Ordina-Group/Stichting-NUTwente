@@ -52,29 +52,32 @@
             break;
         }
 
-    @*case "vrijwilliger":
+    case "vrijwilliger":
         {
-        if (Model.AllUsers.Count > 0)
-        {
-        <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
-        <select name="Antwoord" class="form-select question" id="question-@q.Id">
-        @foreach (UserDetails ud in Model.AllUsers)
-        {
-        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
-        {
-        <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-        }
-        else
-        {
-        <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
-        }
-        }
-        </select>
-        break;
-        }
+            if (Model.AllUsers.Count > 0)
+            {
+                @if (q.Answer != null)
+                {
+                    <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
+                }
+                <select name="Antwoord" class="form-select question" id="question-@q.Id">
+                    @foreach (UserDetails ud in Model.AllUsers)
+                    {
+                        @if ((q.Answer != null && q.Answer.Split(" ").Count() > 2 && (q.Answer.Split(" ")[2]).Contains(ud.Email)) || (q.Answer == null && Model.UserDetails != null && ud.Id == Model.UserDetails.Id))
+                        {
+                            <option selected value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
+                        }
+                        else
+                        {
+                            <option value="@ud.FirstName @ud.LastName (@ud.Email)">@ud.FirstName @ud.LastName (@ud.Email)</option>
+                        }
+                    }
+                </select>
+                break;
+            }
 
-        goto default;
-        }*@
+            goto default;
+        }
     default:
         {
             <input type="text" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
