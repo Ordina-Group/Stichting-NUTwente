@@ -1,5 +1,4 @@
-﻿using Ordina.StichtingNuTwente.Entities;
-using Ordina.StichtingNuTwente.Models.ViewModels;
+﻿using Ordina.StichtingNuTwente.Models.ViewModels;
 
 namespace Ordina.StichtingNuTwente.Business.Interfaces
 {

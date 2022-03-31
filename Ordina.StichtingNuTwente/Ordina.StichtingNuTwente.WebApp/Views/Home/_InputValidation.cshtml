@@ -1,0 +1,29 @@
+﻿<script>
+    $(document).ready(function () {
+        const cyrillicPattern = /^[\u0400-\u04FF]+$/;
+        const poscodePattern = /[0-9]{4}[A-Z]{2}/;
+        //custom validation
+        $(".question").change(function() {
+            console.log("test");
+            var value = $(this).val();
+            if(cyrillicPattern.test(value)){
+                $(this).addClass("contains-cyrilic")
+                this.setCustomValidity("будь ласка, використовуйте лише голландську або англійську");
+            } else {
+                this.setCustomValidity("");
+                $(this).removeClass("contains-cyrilic")
+            }
+        });
+
+        $(".postcode").change(function() {
+            var value = $(this).val();
+            if(!poscodePattern.test(value)){
+                $(this).addClass("invalid-postcode")
+                this.setCustomValidity("Postcode moet bestaan uit 4 cijfers en 2 hoofdletters zonder spaties");
+            } else{
+                this.setCustomValidity("");
+                $(this).removeClass("invalid-postcode")
+            }
+        });
+    });
+</script>

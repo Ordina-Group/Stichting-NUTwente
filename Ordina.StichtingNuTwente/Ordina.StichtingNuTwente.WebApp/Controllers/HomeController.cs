@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.WebApp.Models;
 using System.Diagnostics;
-using Ordina.StichtingNuTwente.Entities;
 using System.Text.Json;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Business.Interfaces;
@@ -39,7 +38,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
@@ -53,7 +52,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("VluchtelingIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
