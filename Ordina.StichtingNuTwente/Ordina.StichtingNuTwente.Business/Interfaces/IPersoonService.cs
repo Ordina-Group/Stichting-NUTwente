@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
-    public interface IMailService
+    public interface IPersoonService
     {
-        public Task<bool> sendMail(Mail mail);
-
-        public void setFromMail(string mailAdress);
-
-        public void setApiKey(string apiKey);
-
+        public Persoon? getPersoon(int id);
+        public Persoon? getPersoonByReactionId(int reactionId);
     }
 }

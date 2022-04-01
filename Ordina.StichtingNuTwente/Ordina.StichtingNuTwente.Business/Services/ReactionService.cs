@@ -38,6 +38,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
         }
 
+        public int? SaveAndGetReactieId(AnswersViewModel viewModel)
+        {
+            var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
+            var reactieRepository = new Repository<Reactie>(_context);
+            dbmodel = reactieRepository.Create(dbmodel);
+            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
+            if (dbmodel.Id > 0)
+            {
+                return dbmodel.Id;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public void Update(AnswersViewModel viewModel, int id)
         {
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
