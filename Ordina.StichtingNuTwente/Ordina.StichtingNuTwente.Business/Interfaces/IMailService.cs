@@ -14,5 +14,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void setFromMail(string mailAdress);
 
         public void setApiKey(string apiKey);
+
     }
 }
