@@ -18,7 +18,7 @@
                             Formulieren
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coördinator", "group-superadmin"))
+                            @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                             {
                                 <a class="dropdown-item" href="/VluchtelingIntake">Vluchteling Intake</a>
                                 <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
@@ -27,7 +27,7 @@
                             <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
                         </div>
                     </li>
-                    @if (User.HasClaims("groups", "group-secretariaat", "group-coördinator", "group-superadmin"))
+                    @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item">
                             <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form"? "active" : "" )" href="/getnutwenteoverheidreacties987456list">Reactie Overzicht</a>
