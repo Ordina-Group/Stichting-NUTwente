@@ -35,9 +35,9 @@ builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to 
     // the default policy
-    options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger","group-secretariaat", "group-coördinator", "group-superadmin"));
-    options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat", "group-coördinator", "group-superadmin"));
-    options.AddPolicy("RequireCoördinatorRole", policy => policy.RequireClaim("groups", "group-coördinator", "group-superadmin"));
+    options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger","group-secretariaat", "group-coordinator", "group-superadmin"));
+    options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat", "group-coordinator", "group-superadmin"));
+    options.AddPolicy("RequireCoordinatorRole", policy => policy.RequireClaim("groups", "group-coordinator", "group-superadmin"));
     options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireClaim("groups", "group-superadmin"));
     options.FallbackPolicy = options.DefaultPolicy;
 });
