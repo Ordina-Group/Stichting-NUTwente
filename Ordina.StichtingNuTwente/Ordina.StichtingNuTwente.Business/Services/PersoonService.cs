@@ -1,14 +1,10 @@
-﻿using Ordina.StichtingNuTwente.Data;
+﻿using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Data;
 using Ordina.StichtingNuTwente.Models.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
-    public class PersoonService
+    public class PersoonService: IPersoonService
     {
         private readonly NuTwenteContext _context;
         public PersoonService(NuTwenteContext context)
@@ -22,7 +18,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return persoonRepository.GetById(id);
         }
 
-        public Persoon? GetPersoonByReactieId(int reactieId)
+        public Persoon? GetPersoonByReactieId(int? reactieId)
         {
             var persoonRepository = new Repository<Persoon>(_context);
             return persoonRepository.GetFirstOrDefault(p => p.Reactie.Id == reactieId);
