@@ -8,6 +8,7 @@ using Ordina.StichtingNuTwente.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Business.Services;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -19,14 +20,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IReactionService _reactionService;
         private readonly IUserService _userService;
         private readonly IGastgezinService _gastgezinService;
+        private readonly IPersoonService _persoonService;
+        private readonly IMailService _mailService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IGastgezinService gastgezinService)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IGastgezinService gastgezinService, IPersoonService persoonService, IMailService mailService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
             _reactionService = reactionService;
             _userService = userService;
             _gastgezinService = gastgezinService;
+            _persoonService = persoonService;
+            _mailService = mailService;
         }
         [AllowAnonymous]
         [Route("GastgezinAanmelding")]
@@ -196,6 +201,35 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Save(answerData);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SaveAndSendEmail(string answers)
+        {
+            try
+            {
+                if (answers != null)
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    var reactieId = _reactionService.SaveAndGetReactieId(answerData);
+                    var persoon = _persoonService.getPersoonByReactionId(reactieId);
+                    var mail = new Mail()
+                    {
+                        MailToAdress = persoon.Email,
+                        MailToName = persoon.Naam,
+                        Subject = "Bevestiging van aanmelding",
+                        MailFromName = "Stichting NUTwente",
+                        Message = "Bedankt voor uw inschrijving."
+
+                    };
+
                 }
             }
             catch (Exception ex)
