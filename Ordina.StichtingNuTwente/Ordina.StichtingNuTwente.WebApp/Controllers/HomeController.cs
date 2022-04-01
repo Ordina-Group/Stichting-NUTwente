@@ -374,7 +374,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveAndSendEmail(string answers)
+        public async Task<IActionResult> SaveAndSendEmailAsync(string answers)
         {
             try
             {
@@ -382,17 +382,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     var reactieId = _reactionService.SaveAndGetReactieId(answerData);
-                    var persoon = _persoonService.getPersoonByReactionId(reactieId);
-                    var mail = new Mail()
-                    {
-                        MailToAdress = persoon.Email,
-                        MailToName = persoon.Naam,
-                        Subject = "Bevestiging van aanmelding",
-                        MailFromName = "Stichting NUTwente",
-                        Message = "Bedankt voor uw inschrijving."
-
-                    };
-
+                    var persoon = _persoonService.GetPersoonByReactieId(reactieId);
+                    MailHelper mailHelper = new MailHelper(_mailService);
+                    bool success = await mailHelper.bevestiging(persoon);
                 }
             }
             catch (Exception ex)
