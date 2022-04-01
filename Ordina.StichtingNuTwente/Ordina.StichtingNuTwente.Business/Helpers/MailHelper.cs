@@ -1,4 +1,5 @@
-﻿using Ordina.StichtingNuTwente.Models.Models;
+﻿using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,12 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 {
     public class MailHelper
     {
-        private MailService _mailService { get; set; }
+        private IMailService _mailService { get; set; }
 
         private string DefaultSendAdress { get; set; }
         private string SendName { get; set; }
 
-        public MailHelper(MailService mailService)
+        public MailHelper(IMailService mailService)
         {
             _mailService = mailService;
             DefaultSendAdress = "secretariaat@NUTwente.nl";
@@ -39,6 +40,22 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             mail.Message = "Beste " + persoon.Naam + ", \n" + "Zojuist bent u toegewezen aan het gastgezin van: " + gastgezin.Contact.Naam + ". U kunt hem/haar bereiken via mail: " + gastgezin.Contact.Email + ", of via telefoon: " + gastgezin.Contact.Mobiel + ", om een afspraak te maken.";
 
             bool succes = await(_mailService.sendMail(mail));
+
+            return succes;
+        }
+
+        public async Task<bool> bevestiging(Persoon persoon)
+        {
+            _mailService.setFromMail(DefaultSendAdress);
+            var mail = new Mail()
+            {
+                MailToAdress = persoon.Email,
+                MailToName = persoon.Naam,
+                Subject = "Bevestiging van aanmelding",
+                MailFromName = "Stichting NUTwente",
+                Message = "Beste " + persoon.Naam + ", \n" + "Bedankt voor uw inschrijving. Voor meer informatie kunt u terecht op onze website: https://www.nutwente.nl/"
+            };
+            bool succes = await (_mailService.sendMail(mail));
 
             return succes;
         }

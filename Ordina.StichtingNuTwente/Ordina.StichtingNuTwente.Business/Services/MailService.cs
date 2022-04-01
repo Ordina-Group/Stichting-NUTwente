@@ -22,15 +22,15 @@ public class MailService : IMailService
             PlainTextContent = mail.Message
         };
         msg.AddTo(new EmailAddress(mail.MailToAdress, mail.MailToName));
-        //var response = await client.SendEmailAsync(msg);
+        var response = await client.SendEmailAsync(msg);
 
         //Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
 
-        //return response.IsSuccessStatusCode;
+        return response.IsSuccessStatusCode;
 
-        Console.WriteLine("Mail sent: " + msg);
+        //Console.WriteLine("Mail sent: " + msg);
 
-        return true;
+        //return true;
     }
 
     public void setFromMail(string mailAdress)

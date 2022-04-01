@@ -88,6 +88,81 @@
                     return false;
                 }
             });
+            const cyrillicPattern = /^[\u0400-\u04FF]+$/;
+
+            //custom validation
+            $(".question").change(function() {
+                var value = $(this).val();
+                if(cyrillicPattern.test(value)){
+                    $(this).addClass("contains-cyrilic")
+                    this.setCustomValidity("будь ласка, використовуйте лише голландську або англійську");
+                } else{
+                    this.setCustomValidity("");
+                    $(this).removeClass("contains-cyrilic")
+                }
+            });
+
+            $("#submitbtn").click(function (e) {
+                e.preventDefault();
+
+
+                if( document.getElementById("questionsForm").checkValidity()){
+                    var obj = {"answer":[], "Id":"@Model.Id"}; //"UserId":"User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value"
+                    $(".question").each(function() {
+                        var id = $(this).attr('id').split("-")[1];
+                        var value = $(this).val();
+                        if($(this).attr('type') === "checkbox"){
+                            if($(this).is(':checked')){
+                                if(obj.answer[id] !== undefined){
+                                    obj.answer[id].Antwoord += ("," + value);
+                                } else {
+                                    obj.answer[id] = {"Nummer":id,"Antwoord":value}
+                                }
+                            }
+                        } else if($(this).attr('type') === "radio"){
+                            console.log($(this))
+                            if($(this).is(':checked')){
+                                obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                            }
+                        } else {
+                            obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                        }
+                    })
+                    let awnsers = obj.answer;
+                    obj.answer = [];
+                    for(let i = 0; i < awnsers.length; i++){
+                        let awns = awnsers[i];
+                        if(awns !== null && awns !== undefined){
+                            obj.answer.push(awns)
+                        }
+                    }
+
+                    if("@updateMode" === "True" ) {
+                        $.ajax({
+                            url: "/Home/Update",
+                            type: "PUT",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
+                        }).fail(function()  {
+                           window.location.href = "/getnutwenteoverheidreacties987456list";
+                        });
+                     } else {
+                        $.ajax({
+                            url: "/Home/Save",
+                            type: "POST",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj)   }
+                        }).fail(function()  {
+                           window.location = "/Bedankt";
+                        });
+                    }
+               } else {
+                   $("#questionsForm").addClass('was-validated')
+                   window.scrollTo(0, 0);
+               }
+            });
             $("#delete").click(function (e) {
                 if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {
                     $.ajax({
