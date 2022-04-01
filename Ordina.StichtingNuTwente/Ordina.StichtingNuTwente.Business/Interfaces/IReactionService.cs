@@ -5,6 +5,8 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
     public interface IReactionService
     {
+        public bool Save(AnswersViewModel viewModel);
+        public int SaveAndGetReactieId(AnswersViewModel viewModel);
         public bool Save(AnswersViewModel viewModel, int? gastgezinId);
         public bool Delete(int reactionId);
         public void Update(AnswersViewModel viewModel, int id);
