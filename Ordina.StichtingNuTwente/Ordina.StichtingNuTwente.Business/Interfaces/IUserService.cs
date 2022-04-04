@@ -13,6 +13,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public UserDetails? UpdateUser(UserDetails user, string aadId);
         public UserDetails? UpdateUserFromProfileEdit(UserDetails user, string aadId);
         public ICollection<UserDetails> GetUsersByRole(string role);
+        public ICollection<UserDetails> GetAllUsers();
         public void Save(UserDetails user);
     }
 }
