@@ -86,6 +86,16 @@ input.invalid-postcode ~ .field-invalid-postcode {
     color: red;
 }
 
+input.invalid-email ~ .field-invalid-email {
+    display: block;
+    color: red;
+}
+
+input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
+    display: block;
+    color: red;
+}
+
 .full-width {
     width: 100%;
 }

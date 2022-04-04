@@ -51,6 +51,22 @@
             </div>
             break;
         }
+    case "email":
+        {
+            <input type="text" placeholder="voorbeeld@nutwente.nl" id="question-@q.Id" class="form-control question email" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
+            <div class="field-invalid-email">
+                Voer een geldig e-mailadres adress in <br />
+            </div>
+            break;
+        }
+    case "phoneNumber":
+        {
+            <input type="tel" placeholder="+31601234567" id="question-@q.Id" class="form-control question phoneNumber" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"")/>
+            <div class="field-invalid-phoneNumber">
+                Voer een geldig telefoonnummer in, bijvoorbeeld: +31601234567 <br />
+            </div>
+            break;
+        }
 
     case "vrijwilliger":
         {
