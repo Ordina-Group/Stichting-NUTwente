@@ -28,6 +28,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userRepository.GetAll().Where(u => u.Roles.Contains(role)).ToList();
         }
 
+        public ICollection<UserDetails> GetAllUsers()
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            return userRepository.GetAll().ToList();
+        }
+
         public UserDetails? UpdateUser(UserDetails user, string aadId)
         {
             var userInDB = GetUserByAADId(aadId);

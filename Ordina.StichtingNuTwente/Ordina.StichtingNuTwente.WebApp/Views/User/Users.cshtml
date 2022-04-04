@@ -1,0 +1,22 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@model List<UserViewModel>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Voornaam</th>
+            <th scope="col">Achternaam</th>
+            <th scope="col">E-mailadres</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <th scope="row">@u.FirstName</th>
+                <td>@u.LastName</td>
+                <td>@u.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
