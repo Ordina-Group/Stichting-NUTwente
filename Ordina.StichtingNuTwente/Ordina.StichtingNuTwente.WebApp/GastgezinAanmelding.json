@@ -67,7 +67,7 @@
           "Number": "6",
           "Text": "Wat is het telefoonnummer waar we u het makkelijkst op kunnen bereiken?",
           "Description": "",
-          "InputType": "text",
+          "InputType": "phoneNumber",
           "InputOptions": "",
           "Required": "true",
           "Object": "Persoon",
@@ -80,7 +80,7 @@
           "Description": "",
           "InputType": "email",
           "InputOptions": "",
-          "Required": "false",
+          "Required": "true",
           "Object": "Persoon",
           "ParameterName": "Email"
         },
