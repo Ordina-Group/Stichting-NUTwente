@@ -3,23 +3,25 @@
 @{
     ViewData["Title"] = "Overzicht Vrijwilligers";
 }
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Voornaam</th>
-            <th scope="col">Achternaam</th>
-            <th scope="col">E-mailadres</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model)
-        {
+<body>
+    <h3>@ViewData["Title"]</h3>
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <th scope="row">@u.FirstName</th>
-                <td>@u.LastName</td>
-                <td>@u.Email</td>
+                <th scope="col">Voornaam</th>
+                <th scope="col">Achternaam</th>
+                <th scope="col">E-mailadres</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <th scope="row">@u.FirstName</th>
+                    <td>@u.LastName</td>
+                    <td>@u.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
