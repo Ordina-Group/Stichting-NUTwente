@@ -7,5 +7,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     {
         public Persoon? GetPersoon(int id);
         public Persoon? GetPersoonByReactieId(int? reactionId);
+        public ICollection<Persoon> GetAllPersonen();
+        public ICollection<Persoon> GetAllVluchtelingen();
     }
 }

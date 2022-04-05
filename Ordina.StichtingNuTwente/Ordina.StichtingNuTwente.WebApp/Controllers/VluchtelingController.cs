@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -7,16 +10,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         private readonly IPersoonService _persoonService;
 
-        public HomeController(IPersoonservice persoonservice)
+        public VluchtelingController(IPersoonService persoonservice)
         {
             _persoonService = persoonservice;
-            
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("vluchtelingenOverzicht")]
         public IActionResult Vluchtelingen()
         {
-
-            return View();
+            List<VluchtelingListView> viewModel = new List<VluchtelingListView>();
+            var vluchtelingen = _persoonService.GetAllVluchtelingen();
+            viewModel = vluchtelingen.ToList().ConvertAll(v => new VluchtelingListView(v));
+            return View(viewModel);
         }
     }
 }
