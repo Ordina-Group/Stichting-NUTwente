@@ -1,5 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@model List<VluchtelingListView>
 @{
+    ViewData["Title"] = "Overzicht Vluchtelingen";
 }
+<body>
+    <h3>@ViewData["Title"]</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Naam</th>
+                <th scope="col">E-mailadres</th>
+                <th scope="col">Reactie</th>
+                <th scope="col">Gastgezin</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in Model)
+            {
+                <tr>
+                    <th scope="row">@v.Naam</th>
+                    <td>@v.Email</td>
+                    <td><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@v.Reactie.Id">Bekijk Reactie</a></td>
+                    <td>@v.Gastgezin</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
