@@ -207,7 +207,7 @@
           "Number": "17",
           "Text": "Heeft u nog vragen aan Nutwente.nl (Noaberschap Ukraine Twente)?<br>Do you have any questions for Nutwente.nl",
           "Description": "",
-          "InputType": "text",
+          "InputType": "textArea",
           "InputOptions": "",
           "Required": "false"
         },
