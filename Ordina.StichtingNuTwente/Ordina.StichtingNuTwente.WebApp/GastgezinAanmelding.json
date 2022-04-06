@@ -143,17 +143,17 @@
           "Number": "14",
           "Text": "Wilt u nog iets toevoegen? (Dit kan ook tijdens het intakegesprek)",
           "Description": "",
-          "InputType": "text",
+          "InputType": "textArea",
           "InputOptions": "",
           "Required": "false"
         },
         {
           "Id": "14",
           "Number": "15",
-          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden. Gaat u hiermee akkoord?",
-          "Description": "Ja/nee",
-          "InputType": "text",
-          "InputOptions": "",
+          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": ["Ik ga hiermee akkoord"],
           "Required": "true"
         }
       ]
