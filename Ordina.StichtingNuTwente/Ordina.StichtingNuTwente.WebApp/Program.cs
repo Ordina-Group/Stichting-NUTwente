@@ -26,6 +26,8 @@ builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddScoped<IPersoonService, PersoonService>();
+
 
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
