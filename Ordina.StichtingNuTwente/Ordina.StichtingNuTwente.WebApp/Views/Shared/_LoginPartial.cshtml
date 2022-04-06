@@ -29,21 +29,28 @@
                     </li>
                     @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form"? "active" : "" )" href="/getnutwenteoverheidreacties987456list">Reactie Overzicht</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form" || Accessor.HttpContext.Request.Path.Value == "/user/Users" || Accessor.HttpContext.Request.Path.Value == "/vluchtelingenOverzicht"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Overzichten
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/getnutwenteoverheidreacties987456list">Reacties</a>
+                                <a class="dropdown-item" href="/user/Users">Vrijwilligers</a>
+                                <a class="dropdown-item" href="/vluchtelingenOverzicht">Vluchtelingen</a>
+                            </div>
                         </li>
                     }
                 </ul>
-                 <ul class="navbar-nav">
-                 <li class="nav-item dropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             @User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value @User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value
                         </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">Profiel wijzigen</a>
-                    <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
-                </div>
-                </li>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">Profiel wijzigen</a>
+                            <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

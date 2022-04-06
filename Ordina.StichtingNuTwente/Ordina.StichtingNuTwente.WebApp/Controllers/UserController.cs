@@ -28,6 +28,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        public IActionResult Users()
+        {
+            List<UserViewModel> viewModel = new List<UserViewModel>();
+            var users = UserService.GetUsersByRole("group-vrijwilliger");
+            users.Concat(UserService.GetUsersByRole("group-superadmin"));
+            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u)
+            {
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Roles = u.Roles
+            });
+            return View(viewModel);
+        }
+
+
         [Authorize]
         public IActionResult Overview()
         {
