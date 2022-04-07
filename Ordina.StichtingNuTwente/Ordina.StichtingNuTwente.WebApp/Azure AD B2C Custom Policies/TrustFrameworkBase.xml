@@ -299,6 +299,18 @@
 				<UserInputType>TextBox</UserInputType>
 			</ClaimType>
 
+			<ClaimType Id="telephoneNumber">
+				<DisplayName>Telefoonnummer</DisplayName>
+				<DataType>string</DataType>
+				<DefaultPartnerClaimTypes>
+					<Protocol Name="OAuth2" PartnerClaimType="phone_number" />
+					<Protocol Name="OpenIdConnect" PartnerClaimType="phone_number" />
+					<Protocol Name="SAML2" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/telephonenumber" />
+				</DefaultPartnerClaimTypes>
+				<UserHelpText>Voer je telefoonnummer in.</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+
 		</ClaimsSchema>
 
 		<ClaimsTransformations>
@@ -591,6 +603,7 @@
 						<PersistedClaim ClaimTypeReferenceId="otherMails" />
 						<PersistedClaim ClaimTypeReferenceId="givenName" />
 						<PersistedClaim ClaimTypeReferenceId="surname" />
+						<PersistedClaim ClaimTypeReferenceId="telephoneNumber" />
 					</PersistedClaims>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="objectId" />
@@ -621,6 +634,7 @@
 						<OutputClaim ClaimTypeReferenceId="otherMails" />
 						<OutputClaim ClaimTypeReferenceId="givenName" />
 						<OutputClaim ClaimTypeReferenceId="surname" />
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
 				</TechnicalProfile>
@@ -652,6 +666,7 @@
 						<!-- Optional claims. -->
 						<PersistedClaim ClaimTypeReferenceId="givenName" />
 						<PersistedClaim ClaimTypeReferenceId="surname" />
+						<PersistedClaim ClaimTypeReferenceId="telephoneNumber" />
 					</PersistedClaims>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="objectId" />
@@ -684,6 +699,7 @@
 						<OutputClaim ClaimTypeReferenceId="accountEnabled" />
 						<OutputClaim ClaimTypeReferenceId="otherMails" />
 						<OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<OutputClaimsTransformations>
 						<OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
@@ -727,6 +743,7 @@
 						<!-- Optional claims -->
 						<PersistedClaim ClaimTypeReferenceId="givenName" />
 						<PersistedClaim ClaimTypeReferenceId="surname" />
+						<PersistedClaim ClaimTypeReferenceId="telephoneNumber" />
 					</PersistedClaims>
 					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
 				</TechnicalProfile>
@@ -749,6 +766,7 @@
 						<OutputClaim ClaimTypeReferenceId="otherMails" />
 						<OutputClaim ClaimTypeReferenceId="givenName" />
 						<OutputClaim ClaimTypeReferenceId="surname" />
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
 				</TechnicalProfile>
@@ -778,6 +796,7 @@
 						<InputClaim ClaimTypeReferenceId="displayName" />
 						<InputClaim ClaimTypeReferenceId="givenName" />
 						<InputClaim ClaimTypeReferenceId="surname" />
+						<InputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</InputClaims>
 					<OutputClaims>
 						<!-- These claims are not shown to the user because their value is obtained through the "ValidationTechnicalProfiles"
@@ -793,6 +812,7 @@
 						<OutputClaim ClaimTypeReferenceId="displayName" />
 						<OutputClaim ClaimTypeReferenceId="givenName" />
 						<OutputClaim ClaimTypeReferenceId="surname" />
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<ValidationTechnicalProfiles>
 						<ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
@@ -815,6 +835,7 @@
                  ValidationTechnicalProfile referenced below so it can be written to directory after being updated by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
 						<InputClaim ClaimTypeReferenceId="givenName" />
 						<InputClaim ClaimTypeReferenceId="surname" />
+						<InputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</InputClaims>
 					<OutputClaims>
 						<!-- Required claims -->
@@ -824,6 +845,7 @@
                  ValidationTechnicalProfile referenced below so it can be written to directory after being updated by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
 						<OutputClaim ClaimTypeReferenceId="givenName" />
 						<OutputClaim ClaimTypeReferenceId="surname" />
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<ValidationTechnicalProfiles>
 						<ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId" />
@@ -862,6 +884,7 @@
 						<OutputClaim ClaimTypeReferenceId="displayName" Required="true"/>
 						<OutputClaim ClaimTypeReferenceId="givenName" Required="true"/>
 						<OutputClaim ClaimTypeReferenceId="surName" Required="true"/>
+						<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 					</OutputClaims>
 					<ValidationTechnicalProfiles>
 						<ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />

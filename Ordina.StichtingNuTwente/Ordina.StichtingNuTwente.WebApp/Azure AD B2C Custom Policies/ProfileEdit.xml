@@ -40,6 +40,7 @@
 				<OutputClaim ClaimTypeReferenceId="givenName" />
 				<OutputClaim ClaimTypeReferenceId="surname" />
 				<OutputClaim ClaimTypeReferenceId="groups" />
+				<OutputClaim ClaimTypeReferenceId="telephoneNumber" />
 			</OutputClaims>
 			<SubjectNamingInfo ClaimType="sub" />
 		</TechnicalProfile>
