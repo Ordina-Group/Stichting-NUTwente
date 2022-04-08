@@ -13,5 +13,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public ICollection<string> Roles { get; set; }
+        public ICollection<Reactie> Reacties { get; set; }
     }
 }

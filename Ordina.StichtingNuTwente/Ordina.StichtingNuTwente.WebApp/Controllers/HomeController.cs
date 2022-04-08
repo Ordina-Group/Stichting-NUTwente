@@ -7,6 +7,7 @@ using Ordina.StichtingNuTwente.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.Mappings;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -135,6 +136,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("{1} {0:dd-MM-yyyy}.xlsx", DateTime.Now, fileName) };
         }
 
+        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [Route("mijnReacties")]
+        [HttpGet]
+        [ActionName("GetAllReactions")]
+        public IActionResult getMijnReacties()
+        {
+            checkIfUserExists();
+            var responses = _userService.GetMyReacties(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
+            if (responses != null)
+            {
+                var viewModel = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
+                return View(viewModel);
+            }
+            return Redirect("/User/Overview");
+
+        }
 
 
         [HttpPost]

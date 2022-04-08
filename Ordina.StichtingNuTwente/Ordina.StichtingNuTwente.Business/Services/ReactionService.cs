@@ -67,8 +67,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var form = FormHelper.GetFormFromFileId(formId);
             var PersoonRepo = new Repository<Persoon>(_context);
             var AdresRepo = new Repository<Adres>(_context);
+            var UserRepo = new Repository<UserDetails>(_context);
             var dbPersoon = new Persoon();
             var dbAdres = new Adres();
+            var dbUser = new UserDetails();
             if (id != 0)
             {
                 dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
@@ -91,6 +93,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         AdresRepo.Update(dbAdres);
                     }
+                }
+            }
+            if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "UserDetails")))
+            {
+                var userNameAndEmail = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Answer;
+                var emailString = userNameAndEmail.Split("(")[1].Split(")")[0];
+                dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(emailString));
+                if (dbUser != null)
+                {
+                    dbUser.Reacties.Add(reactie);
+                    UserRepo.Update(dbUser);
                 }
             }
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Persoon")))
@@ -198,7 +211,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             viewModel = dbItems.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
             return viewModel;
         }
-
 
         public byte[] GenerateExportCSV(int? formId = null)
         {
