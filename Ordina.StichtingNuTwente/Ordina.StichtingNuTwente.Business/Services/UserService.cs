@@ -53,6 +53,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             userInDB.Email = user.Email;
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
+            userInDB.PhoneNumber = user.PhoneNumber;
             userRepository.Update(userInDB);
             return userInDB;
         }
@@ -67,6 +68,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var userRepository = new Repository<UserDetails>(_context);
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
+            userInDB.PhoneNumber = user.PhoneNumber;
             userRepository.Update(userInDB);
             return userInDB;
         }
