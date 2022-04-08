@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220407125116_addedPhoneNumber")]
+    partial class addedPhoneNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,12 +179,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<int>("FormulierId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserDetailsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserDetailsId");
 
                     b.ToTable("Reacties");
                 });
@@ -282,13 +279,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Navigation("Reactie");
                 });
 
-            modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
-                {
-                    b.HasOne("Ordina.StichtingNuTwente.Models.Models.UserDetails", null)
-                        .WithMany("Reacties")
-                        .HasForeignKey("UserDetailsId");
-                });
-
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Gastgezin", b =>
                 {
                     b.Navigation("Vluchtelingen");
@@ -297,11 +287,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
                 {
                     b.Navigation("Antwoorden");
-                });
-
-            modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.UserDetails", b =>
-                {
-                    b.Navigation("Reacties");
                 });
 #pragma warning restore 612, 618
         }
