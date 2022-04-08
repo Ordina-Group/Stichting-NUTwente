@@ -113,7 +113,9 @@
           "Description": "(naam van de medewerker van NuTwente met wie u de intake heeft gedaan)",
           "InputType": "vrijwilliger",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "UserDetails",
+          "ParameterName": "Reactie"
         }
       ]
     },

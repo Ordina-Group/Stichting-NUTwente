@@ -34,6 +34,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userRepository.GetAll().ToList();
         }
 
+        public ICollection<Reactie> GetMyReacties(string AADId)
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            var reactions = userRepository.GetFirstOrDefault(u => u.AADId == AADId).Reacties;
+            return reactions;
+        }
+
         public UserDetails? UpdateUser(UserDetails user, string aadId)
         {
             var userInDB = GetUserByAADId(aadId);
