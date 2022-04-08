@@ -37,7 +37,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public ICollection<Reactie> GetMyReacties(string AADId)
         {
             var userRepository = new Repository<UserDetails>(_context);
-            var reactions = userRepository.GetFirstOrDefault(u => u.AADId == AADId).Reacties;
+            var reactions = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
             return reactions;
         }
 

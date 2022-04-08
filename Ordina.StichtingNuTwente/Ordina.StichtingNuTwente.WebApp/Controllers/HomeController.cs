@@ -80,18 +80,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("getnutwenteoverheidreactiesdetail25685niveau")]
         [HttpGet]
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             checkIfUserExists();
-            Form questionForm = _reactionService.GetAnwersFromId(id);
-            questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
-            return View(questionForm);
+            Reactie reactie = _reactionService.GetReactieFromId(id);
+            if (reactie != null)
+            {
+                if (reactie.UserDetails != null && reactie.UserDetails.AADId == User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                {
+                    Form questionForm = _reactionService.GetAnwersFromId(id);
+                    questionForm.UserDetails = GetUser();
+                    questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+                    return View(questionForm);
+                }
+            }
+            return Redirect("MicrosoftIdentity/Account/AccessDenied");
         }
+
         [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
@@ -149,7 +158,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var viewModel = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
                 return View(viewModel);
             }
-            return Redirect("/User/Overview");
+            return View();
 
         }
 
@@ -172,18 +181,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {
             try
             {
                 if (answers != null)
-                {
-                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    _reactionService.Update(answerData, id);
-                }
+            {
+                var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                _reactionService.Update(answerData, id);
             }
+        }
             catch (Exception ex)
             {
 
