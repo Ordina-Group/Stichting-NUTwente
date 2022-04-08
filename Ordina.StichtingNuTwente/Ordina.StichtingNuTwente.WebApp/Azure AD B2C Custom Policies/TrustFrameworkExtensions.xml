@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+TenantId="nutwenteb2c.onmicrosoft.com"
+PolicyId="B2C_1A_Roles_TrustFrameworkExtensions"
+PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkExtensions">
+	<BasePolicy>
+		<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+
+		<ClaimsSchema>
+			<ClaimType Id="groups">
+				<DisplayName>Comma delimited list of group names</DisplayName>
+				<DataType>stringCollection</DataType>
+				<UserInputType>Readonly</UserInputType>
+			</ClaimType>
+			<ClaimType Id="roles">
+				<DisplayName>Comma delimited list of AppRoleAssignment names</DisplayName>
+				<DataType>stringCollection</DataType>
+				<UserInputType>Readonly</UserInputType>
+			</ClaimType>
+			<ClaimType Id="isForgotPassword">
+				<DisplayName>isForgotPassword</DisplayName>
+				<DataType>boolean</DataType>
+				<AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
+			</ClaimType>
+			<ClaimType Id="phoneNumber">
+				<DisplayName>Phone Number</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Enter Phone Number</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+				<PredicateValidationReference Id="internationalOrNationalPhoneNumber" />
+			</ClaimType>
+			<ClaimType Id="nationalNumber">
+				<DisplayName>Phone Number</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Enter National Phone Number</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+				<PredicateValidationReference Id="nationalNumber" />
+			</ClaimType>
+		</ClaimsSchema>
+
+		<ContentDefinitions>
+			<!-- This content definition is to render an error page that displays unhandled errors. -->
+			<ContentDefinition Id="api.error">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.2.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.idpselections">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.idpselections.signup">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.signuporsignin">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:2.1.2</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.selfasserted">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.selfasserted.profileupdate">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.localaccountsignup">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
+			</ContentDefinition>
+			<ContentDefinition Id="api.localaccountpasswordreset">
+				<DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
+			</ContentDefinition>
+		</ContentDefinitions>
+	</BuildingBlocks>
+	<ClaimsProviders>
+		<ClaimsProvider>
+    <DisplayName>Local Account</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="ForgotPassword">
+        <DisplayName>Forgot your password?</DisplayName>
+        <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isForgotPassword" DefaultValue="true" AlwaysUseDefaultValue="true"/>
+        </OutputClaims>
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+      </TechnicalProfile>
+      <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+        <Metadata>
+          <Item Key="setting.forgotPasswordLinkOverride">ForgotPasswordExchange</Item>
+        </Metadata>
+      </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">fea985fe-c4ce-4b68-a21b-84dc7255b58d</Item>
+						<Item Key="IdTokenAudience">da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="fea985fe-c4ce-4b68-a21b-84dc7255b58d" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a" />
+					</InputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+		<ClaimsProvider>
+			<Domain>live.com</Domain>
+			<DisplayName>Microsoft Account</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="MSA-MicrosoftAccount-OpenIdConnect">
+					<DisplayName>Microsoft Account</DisplayName>
+					<Protocol Name="OpenIdConnect" />
+					<Metadata>
+						<Item Key="ProviderName">https://login.live.com</Item>
+						<Item Key="METADATA">https://login.live.com/.well-known/openid-configuration</Item>
+						<Item Key="response_types">code</Item>
+						<Item Key="response_mode">form_post</Item>
+						<Item Key="scope">openid profile email</Item>
+						<Item Key="HttpBinding">POST</Item>
+						<Item Key="UsePolicyInRedirectUri">false</Item>
+						<Item Key="client_id">87b4b102-312f-4a4c-ba69-814ed13f1df5</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="client_secret" StorageReferenceId="B2C_1A_MSASecret" />
+					</CryptographicKeys>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="oid" />
+						<OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+						<OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+						<OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+						<OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+						<OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+						<OutputClaim ClaimTypeReferenceId="email" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+						<OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+						<OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+						<OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+					</OutputClaimsTransformations>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<!-- /////////////////////// REST APIs ////////////////////////// -->
+		<ClaimsProvider>
+			<DisplayName>REST APIs</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="GetUserAppRoleAssignment">
+					<DisplayName>Retrieves security groups assigned to the user</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<!-- TODO: change this -->
+						<Item Key="ServiceUrl">https://nutwenteb2cgroups.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?code=J4L8wcZ2U4wWuFks1g5gxqt0P7tzh2x/IoiOyv6Qh0yyJ4QAfYTe6Q==</Item>
+						<Item Key="AuthenticationType">None</Item>
+						<Item Key="SendClaimsIn">Body</Item>
+						<Item Key="AllowInsecureAuthInProduction">true</Item>
+						<Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim Required="true" ClaimTypeReferenceId="objectId" />
+						<!-- this B2C tenant id -->
+						<InputClaim ClaimTypeReferenceId="tenantId" DefaultValue="{Policy:TenantObjectId}" />
+						<!-- The App we're signing in to -->
+						<InputClaim ClaimTypeReferenceId="client_id" PartnerClaimType="clientId"  DefaultValue="{OIDC:ClientId}" />
+						<!-- specify that we want both roles and groups back -->
+						<InputClaim ClaimTypeReferenceId="scope" DefaultValue="roles groups" AlwaysUseDefaultValue="true" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="roles" />
+						<OutputClaim ClaimTypeReferenceId="groups" />
+						<OutputClaim ClaimTypeReferenceId="tenantId" DefaultValue="{Policy:TenantObjectId}" AlwaysUseDefaultValue="true" />
+					</OutputClaims>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+	</ClaimsProviders>
+	<UserJourneys>
+		<UserJourney Id="CustomSignUpOrSignIn">
+			<OrchestrationSteps>
+
+				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection TargetClaimsExchangeId="MicrosoftAccountExchange" />
+						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+						<ClaimsProviderSelection TargetClaimsExchangeId="ForgotPasswordExchange" />
+					</ClaimsProviderSelections>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Check if the user has selected to sign in using one of the social providers -->
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="MicrosoftAccountExchange" TechnicalProfileReferenceId="MSA-MicrosoftAccount-OpenIdConnect" />
+						<ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+						<ClaimsExchange Id="ForgotPasswordExchange" TechnicalProfileReferenceId="ForgotPassword" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="3" Type="InvokeSubJourney">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+							<Value>isForgotPassword</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<JourneyList>
+						<Candidate SubJourneyReferenceId="PasswordReset" />
+					</JourneyList>
+				</OrchestrationStep>
+
+				<!-- For social IDP authentication, attempt to find the user account in the directory. -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>localAccountAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+				<OrchestrationStep Order="6" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+				<!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+				<OrchestrationStep Order="7" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+	</UserJourneys>
+	<SubJourneys>
+		<SubJourney Id="PasswordReset" Type="Call">
+			<OrchestrationSteps>
+				<!-- Validate user's email address. -->
+				<OrchestrationStep Order="1" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Collect and persist a new password. -->
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+			</OrchestrationSteps>
+		</SubJourney>
+	</SubJourneys>
+</TrustFrameworkPolicy>

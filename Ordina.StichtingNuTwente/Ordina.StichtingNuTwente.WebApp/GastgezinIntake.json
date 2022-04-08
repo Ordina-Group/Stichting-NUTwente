@@ -506,7 +506,7 @@
           "Number": "49",
           "Text": "Heeft u nog andere vragen op opmerkingen? Die kunt u hier kwijt",
           "Description": "",
-          "InputType": "text",
+          "InputType": "textArea",
           "InputOptions": "",
           "Required": "false"
         }
