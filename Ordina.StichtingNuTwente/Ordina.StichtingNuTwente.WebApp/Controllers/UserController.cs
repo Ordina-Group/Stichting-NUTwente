@@ -28,6 +28,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        public IActionResult Users()
+        {
+            List<UserViewModel> viewModel = new List<UserViewModel>();
+            var users = UserService.GetUsersByRole("group-vrijwilliger");
+            users.Concat(UserService.GetUsersByRole("group-superadmin"));
+            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u)
+            {
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Roles = u.Roles
+            });
+            return View(viewModel);
+        }
+
+
         [Authorize]
         public IActionResult Overview()
         {
@@ -38,17 +55,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var email = User.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
                 var givenname = User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
                 var surname = User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+                var phoneNumber = User.Claims.FirstOrDefault(c => c.Type.Contains("phone_number"))?.Value;
                 var groups = User.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
                 if (givenname == null)
                     givenname = "";
                 if (surname == null)
                     surname = "";
+                if (phoneNumber == null)
+                    phoneNumber = "";
                 if (userDetails != null)
                 {
 
                     if (userDetails.FirstName != givenname ||
                         userDetails.LastName != surname ||
                         userDetails.Email != email ||
+                        userDetails.PhoneNumber != phoneNumber ||
                         !userDetails.Roles.All(groups.Contains) ||
                         !groups.All(userDetails.Roles.Contains))
                     {
@@ -57,6 +78,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             FirstName = givenname,
                             LastName = surname,
                             Email = email,
+                            PhoneNumber = phoneNumber,
                             Roles = groups.ToList(),
                             AADId = aadID.Value
                         };

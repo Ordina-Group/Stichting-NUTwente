@@ -213,7 +213,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return _userService.GetUsersByRole("group-vrijwilliger").ToList();
         }
 
-
         public void checkIfUserExists()
         {
             var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));

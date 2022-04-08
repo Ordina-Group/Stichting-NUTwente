@@ -15,6 +15,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             LastName = userDetails.LastName;
             Email = userDetails.Email;
             Roles = userDetails.Roles;
+            PhoneNumber = userDetails.PhoneNumber;
+            
         }
 
         public UserViewModel()
@@ -22,11 +24,13 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             FirstName = string.Empty;
             LastName = string.Empty;
             Email = string.Empty;
+            PhoneNumber = string.Empty;
             Roles = new List<string>();
         }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public ICollection<string> Roles { get; set; }
 
 
