@@ -46,7 +46,11 @@
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
                     }).fail(function()  {
-                        history.go(-1);
+                        if(window.location.href != document.referrer){
+                        window.location = document.referrer;
+                        }else{
+                            window.location = "/";
+                        }
                     });
                  } else {
                     $.ajax({
