@@ -64,7 +64,7 @@
                 <button class="btn btn-primary" id="submitbtn">Submit</button>
             }
         </form>
-        @if (updateMode)
+        @if (updateMode && User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
         {
             <br />
 
