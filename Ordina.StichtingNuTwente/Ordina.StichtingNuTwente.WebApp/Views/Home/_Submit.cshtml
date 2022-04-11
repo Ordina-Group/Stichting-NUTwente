@@ -8,7 +8,7 @@
             e.preventDefault();
 
             if(document.getElementById("questionsForm").checkValidity()){
-                var obj = {"answer":[], "Id":"@Model.FormId"}; 
+                var obj = {"answer":[], "Id":"@Model.FormId"};
                 $(".question").each(function() {
                     var id = $(this).attr('id').split("-")[1];
                     var value = $(this).val();
@@ -46,7 +46,11 @@
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                         data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
                     }).fail(function()  {
-                       window.location.href = "/getnutwenteoverheidreacties987456list";
+                        if(window.location.href != document.referrer){
+                        window.location = document.referrer;
+                        }else{
+                            window.location = "/";
+                        }
                     });
                  } else {
                     $.ajax({

@@ -9,6 +9,7 @@
 
 <body>
     <div>
+        @if(Accessor.HttpContext.Request.Path.Value != "/mijnReacties"){
         <ul class="nav nav-tabs ">
             <li class="nav-item">
                 <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
@@ -26,6 +27,7 @@
                 <a class="nav-link @(Context.Request.Query["formId"] == "4"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
             </li>
         </ul>
+        }
 
         @foreach (var form in Model.GroupBy(d => d.FormulierId))
         {
