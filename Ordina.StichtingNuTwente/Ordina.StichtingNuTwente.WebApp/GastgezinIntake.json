@@ -113,7 +113,9 @@
           "Description": "(naam van de medewerker van NuTwente met wie u de intake heeft gedaan)",
           "InputType": "vrijwilliger",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "UserDetails",
+          "ParameterName": "Reactie"
         }
       ]
     },
@@ -216,8 +218,8 @@
         {
           "Id": "19",
           "Number": "19",
-          "Text": "Voor hoeveel kinderen heeft u een slaapplaats?",
-          "Description": "(matras kleiner dan 80x200 cm)",
+          "Text": "Voor hoeveel kleine kinderen heeft u een slaapplaats?",
+          "Description": "(bijv. kinderbedje, ledikant, wieg)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -225,26 +227,8 @@
         {
           "Id": "50",
           "Number": "20",
-          "Text": "Voor hoeveel volwassenen heeft u in totaal plaats?",
+          "Text": "Voor hoeveel volwassenen en grotere kinderen heeft u een slaapplaats?",
           "Description": "",
-          "InputType": "integer",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "20",
-          "Number": "21",
-          "Text": "Voor hoeveel volwassenen heeft u een tweepersoons slaapplaats?",
-          "Description": "(matras tenminste 140x200 cm)",
-          "InputType": "integer",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "21",
-          "Number": "22",
-          "Text": "Voor hoeveel volwassenen heeft u een eenpersoons slaapplaats?",
-          "Description": "(matras tenminste 80x200 cm)",
           "InputType": "integer",
           "InputOptions": "",
           "Required": "false"
@@ -346,17 +330,8 @@
         {
           "Id": "32",
           "Number": "32",
-          "Text": "Welke spullen heeft u op korte termijn nog nodig?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "33",
-          "Number": "33",
-          "Text": "Welke spullen heeft u op de langere termijn nodig?",
-          "Description": "",
+          "Text": "Heeft u nog spullen nodig?",
+          "Description": "(Nutwente zorgt zelf niet voor spullen, maar heeft wel contacten)",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false"
@@ -364,7 +339,7 @@
         {
           "Id": "34",
           "Number": "34",
-          "Text": "Kunnen uw gasten beschikken over een kluisje?",
+          "Text": "Kunnen uw gasten hun paspoort of andere belangrijke zaken veilig opbergen??",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
