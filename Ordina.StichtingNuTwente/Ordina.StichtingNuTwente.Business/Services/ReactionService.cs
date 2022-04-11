@@ -58,6 +58,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
             UpdateDatabaseWithRelationalObjects(viewModel, existingReaction, id);
         }
 
+        public void UpdateAll(int? id = 0)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            var reacties = reactieRepository.GetAll();
+            if (id != 0)
+            {
+                reacties = reacties.Where(r => r.FormulierId == id);
+            }
+            foreach (var reactie in reacties)
+            {
+                var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
+                UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+            }
+        }
+
         public void UpdateDatabaseWithRelationalObjects(AnswersViewModel viewModel, Reactie reactie, int id = 0)
         {
             int formId = 0;
@@ -97,20 +112,23 @@ namespace Ordina.StichtingNuTwente.Business.Services
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "UserDetails")))
             {
                 var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
-                var userNameAndEmail = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString()).Antwoord;
-                var email = userNameAndEmail.Split("(")[1].Split(")")[0];
-                dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
-                if (dbUser != null)
+                if (viewModel.answer.Any())
                 {
-                    if (dbUser.Reacties != null)
+                    var userNameAndEmail = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString()).Antwoord;
+                    var email = userNameAndEmail.Split("(")[1].Split(")")[0];
+                    dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
+                    if (dbUser != null)
                     {
-                        dbUser.Reacties.Add(reactie);
+                        if (dbUser.Reacties != null)
+                        {
+                            dbUser.Reacties.Add(reactie);
+                        }
+                        else
+                        {
+                            dbUser.Reacties = new List<Reactie>() { reactie };
+                        }
+                        UserRepo.Update(dbUser);
                     }
-                    else
-                    {
-                        dbUser.Reacties = new List<Reactie>() { reactie };
-                    }
-                    UserRepo.Update(dbUser);
                 }
             }
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Persoon")))

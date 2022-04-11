@@ -8,11 +8,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     public class MaintenanceController : Controller
     {
         private readonly IMaintenanceService maintenanceService;
+        private readonly IReactionService _reactionService;
         private readonly IWebHostEnvironment _environment;
-        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment)
+        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment, IReactionService reactionService)
         {
             this.maintenanceService = maintenanceService;
             _environment = environment;
+            _reactionService = reactionService;
         }
 
 
@@ -21,6 +23,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             return View();
         }
+
+        public IActionResult UpdateAll()
+        {
+            try
+            {
+                _reactionService.UpdateAll();
+                ViewBag.Message = "Database Update Successful!!";
+                return View("Index");
+        }
+            catch
+            {
+                ViewBag.Message = "Database Update failed!!";
+                return View("Index");
+            }
+
+}
 
         [HttpPost]
         public async Task<ActionResult> UploadFile(IFormFile file)
@@ -38,14 +56,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View();
+                return View("Index");
             }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File upload failed!!";
-                return View();
+                return View("Index");
             }
         }
     }

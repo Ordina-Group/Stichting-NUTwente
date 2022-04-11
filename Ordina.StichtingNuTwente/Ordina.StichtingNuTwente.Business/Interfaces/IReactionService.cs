@@ -8,6 +8,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public bool Save(AnswersViewModel viewModel);
         public bool Delete(int reactionId);
         public void Update(AnswersViewModel viewModel, int id);
+        public void UpdateAll(int? form = null);
 
         public Reactie GetReactieFromId(int Id);
 
