@@ -37,6 +37,8 @@
 			<OutputClaims>
 				<OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
 				<OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+				<OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="email" />
+				<OutputClaim ClaimTypeReferenceId="email" />
 				<OutputClaim ClaimTypeReferenceId="givenName" />
 				<OutputClaim ClaimTypeReferenceId="surname" />
 				<OutputClaim ClaimTypeReferenceId="groups" />
