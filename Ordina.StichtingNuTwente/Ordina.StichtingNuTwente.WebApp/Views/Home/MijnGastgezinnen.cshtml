@@ -1,0 +1,85 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@model MijnGastgezinnenModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Mijn Gastgezinnen";
+}
+
+<body>
+    <div>
+        <ul class="nav nav-tabs ">
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
+            </li>
+        </ul>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Mijn Gastgezinnen</h3>
+            </div>
+        </div>
+
+
+        <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Naam</th>
+                        <th scope="col">Adres</th>
+                        <th scope="col">Woonplaats</th>
+                        <th scope="col">Telefoonnummer</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Aanmelding</th>
+                        <th scope="col">Intake</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+                {
+                    <tr>
+                        <td>@mijnGastgezin.Naam</td>
+                        <td>@mijnGastgezin.Adres</td>
+                        <td>@mijnGastgezin.Woonplaats</td>
+                        <td>@mijnGastgezin.Telefoonnummer</td>
+                        <td>@mijnGastgezin.Email</td>
+                        <td>@if(mijnGastgezin.AanmeldFormulierId != 0)
+                            {
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">Aanmeld Formulier</a>
+                            }
+                        </td>
+                        <td>@if(mijnGastgezin.IntakeFormulierId != 0)
+                            {
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">Intake Formulier</a>
+                            }
+                            else
+                            {
+                                <a href="/GastgezinIntake?id=@mijnGastgezin.AanmeldFormulierId">Nieuwe Intake</a>                                
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+        </table>
+        <hr />
+    </div>
+</body>
+
+

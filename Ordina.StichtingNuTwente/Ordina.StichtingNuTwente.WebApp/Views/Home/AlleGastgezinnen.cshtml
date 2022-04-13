@@ -1,0 +1,80 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@model MijnGastgezinnenModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Mijn Gastgezinnen";
+}
+
+<body>
+    <div>
+        <ul class="nav nav-tabs ">
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
+            </li>
+        </ul>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Alle Gastgezinnen</h3>
+            </div>
+        </div>
+<!-- Twee lijsten: Met intake en zonder intake -->
+        <form method="post">
+        <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Naam</th>
+                        <th scope="col">Adres</th>
+                        <th scope="col">Woonplaats</th>
+                        <th scope="col">Telefoonnummer</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Toekennen aan vrijwilliger</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+                {
+                    <tr>
+                        <td>@mijnGastgezin.Naam</td>
+                        <td>@mijnGastgezin.Adres</td>
+                        <td>@mijnGastgezin.Woonplaats</td>
+                        <td>@mijnGastgezin.Telefoonnummer</td>
+                        <td>@mijnGastgezin.Email</td>
+                        <td>
+                            <select name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                <option value=""></option>
+                                @foreach(var vrijwilliger in Model.Vrijwilligers)
+                                {
+                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Opslaan</button>
+        </form>
+    </div>
+</body>
+
+

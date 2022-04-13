@@ -13,6 +13,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public Gastgezin? GetGastgezinForReaction(int formID);
         public Gastgezin? GetGastgezin(int id);
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger);
+        public ICollection<Gastgezin> GetAllGastgezinnen();
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id);
     }
 }
