@@ -28,6 +28,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService = userService;
             _gastgezinService = gastgezinService;
         }
+
         [AllowAnonymous]
         [Route("GastgezinAanmelding")]
         [HttpGet]
@@ -108,6 +109,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            _userService.GetUsersByRole("");
+
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -127,8 +130,78 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     woonplaatsText = adres.Woonplaats;
                 }
 
-                mijnGastgezinnen.MijnGastgezinnen.Add(new MijnGastgezin
+                int aanmeldFormulierId = 0;
+                int intakeFormulierId = 0;
+
+                if (gastGezin.Contact.Reactie != null)
                 {
+                    aanmeldFormulierId = gastGezin.Contact.Reactie.Id;
+                }
+
+                if (gastGezin.IntakeFormulier != null)
+                {
+                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
+                }
+
+                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                {
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText,
+                    AanmeldFormulierId = aanmeldFormulierId,
+                    IntakeFormulierId = intakeFormulierId
+                });
+            }
+
+            return View(mijnGastgezinnen);
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("AlleGastgezinnen")]
+        [HttpGet]
+        [ActionName("AlleGastgezinnen")]
+        public IActionResult AlleGastgezinnen()
+        {
+            checkIfUserExists();
+
+            var mijnGastgezinnen = new MijnGastgezinnenModel();
+
+            var vrijwilligers = GetAllVrijwilligers();
+            foreach (var vrijwilliger in vrijwilligers)
+            {
+                mijnGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
+                {
+                    Id = vrijwilliger.Id,
+                    Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
+                    Email = vrijwilliger.Email
+                });
+            }
+
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
+
+            foreach (var gastGezin in gastGezinnen.Where(e => e.Begeleider == null))
+            {
+                if (gastGezin.Contact == null)
+                {
+                    continue;
+                }
+
+                var contact = gastGezin.Contact;
+                var adres = gastGezin.Contact.Adres;
+                var adresText = "";
+                var woonplaatsText = "";
+
+                if (adres != null)
+                {
+                    adresText = adres.Straat;
+                    woonplaatsText = adres.Woonplaats;
+                }
+
+                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                {
+                    Id = gastGezin.Id,
                     Adres = adresText,
                     Email = contact.Email,
                     Naam = contact.Naam,
@@ -140,6 +213,42 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(mijnGastgezinnen);
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("AlleGastgezinnen")]
+        [HttpPost]
+        [ActionName("AlleGastgezinnen")]
+        public IActionResult AlleGastgezinnenPost(IFormCollection formCollection)
+        {
+            var vrijwilligers = GetAllVrijwilligers();
+         
+            Debug.WriteLine("Form:");
+            foreach (var key in formCollection.Keys)
+            {
+                if (!key.StartsWith("vrijwilliger_"))
+                {
+                    continue;
+                }
+
+                var value = formCollection[key];
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                var vrijwilligerId = Convert.ToInt32(value);
+                var gastgezinId = Convert.ToInt32(key.Substring(13));
+
+                var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
+                
+                if (gastgezinItem != null)
+                {
+                    gastgezinItem.Begeleider = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
+                    _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                }
+            }
+
+            return RedirectToAction("AlleGastgezinnen");
+        }
 
         [AllowAnonymous]
         [Route("Bedankt")]
@@ -184,8 +293,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             MemoryStream stream = new MemoryStream(file);
             return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("{1} {0:dd-MM-yyyy}.xlsx", DateTime.Now, fileName) };
         }
-
-
 
         [HttpPost]
         public IActionResult Save(string answers)

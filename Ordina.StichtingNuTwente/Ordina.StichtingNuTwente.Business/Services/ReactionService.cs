@@ -68,6 +68,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var form = FormHelper.GetFormFromFileId(formId);
             var PersoonRepo = new Repository<Persoon>(_context);
             var AdresRepo = new Repository<Adres>(_context);
+            var gastgezinRepo = new Repository<Gastgezin>(_context);
             var dbPersoon = new Persoon();
             var dbAdres = new Adres();
             if (id != 0)
@@ -114,6 +115,44 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
             }
+
+            //Formulier: Gastgezin aanmelden
+            if (form.Id == 1 && id == 0)
+            {
+                var gastgezin = new Gastgezin
+                {
+                    Contact = dbPersoon,
+                    Status = (int) GastgezinStatus.Aangemeld,                    
+                };
+
+                gastgezinRepo.Create(gastgezin);
+            }
+
+            /* 
+
+              SAme as line 97 voor
+              if form is Aanmeld (form.id = ?)
+              {
+                 - nieuw gastgezin, alleen contact ID
+                  -  status = aangemeld
+              }
+
+              if form is Intake (form.id = ?)
+              { 
+                 - 
+              }
+
+              (Aanpassing Gastgezinnen entiteit IntakeFormiler => Reacties.Id)
+             
+              Op mijn Gastgezinnen pagina Twee kolommen
+              - Aanmeld formulier
+              - Intake formulier of Nieuw intake formulier
+                (GastgezinIntake?GastGezinId=x)
+            
+              1. Aanmeld formlier
+              2. Coordinator koppeld Begeleider via overzicht Alle Gastgezinnen
+              3. Via mijn Gastgezin -> Nieuwe Intake
+             */
         }
 
 

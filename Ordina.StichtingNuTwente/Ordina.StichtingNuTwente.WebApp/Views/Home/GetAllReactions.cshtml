@@ -28,8 +28,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
+            </li>
         </ul>
-
+        <br/>
         @foreach (var form in Model.GroupBy(d => d.FormulierId))
         {
             <div class="row">

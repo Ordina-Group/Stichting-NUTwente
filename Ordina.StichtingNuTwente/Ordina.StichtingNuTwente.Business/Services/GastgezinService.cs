@@ -48,7 +48,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider").Where(g => g.Begeleider.Id == vrijwilliger.Id);
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
+            return gastgezinnen.ToList();
+        }
+
+        public ICollection<Gastgezin> GetAllGastgezinnen()
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie");
             return gastgezinnen.ToList();
         }
 
