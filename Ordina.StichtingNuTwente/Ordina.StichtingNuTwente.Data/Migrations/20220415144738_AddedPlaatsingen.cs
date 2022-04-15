@@ -9,13 +9,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "PhoneNumber",
-                table: "Users",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.AddColumn<int>(
                 name: "UserDetailsId",
                 table: "Reacties",
@@ -87,10 +80,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Reacties_UserDetailsId",
                 table: "Reacties");
-
-            migrationBuilder.DropColumn(
-                name: "PhoneNumber",
-                table: "Users");
 
             migrationBuilder.DropColumn(
                 name: "UserDetailsId",
