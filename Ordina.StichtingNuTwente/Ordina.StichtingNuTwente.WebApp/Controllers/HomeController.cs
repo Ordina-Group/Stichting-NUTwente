@@ -253,7 +253,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
 
                 var vrijwilligerId = Convert.ToInt32(value);
-                var gastgezinId = Convert.ToInt32(key.Substring(13));2
+                var gastgezinId = Convert.ToInt32(key.Substring(13));
 
                 var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
                 
