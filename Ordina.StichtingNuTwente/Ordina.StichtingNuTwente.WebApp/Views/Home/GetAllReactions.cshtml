@@ -41,7 +41,7 @@
             <br />
         }
 
-        @foreach (var form in Model.GroupBy(d => d.FormulierId))
+        @foreach (var form in Model.AnswerLists.GroupBy(d => d.FormulierId))
         {
             <div class="row">
                 <div class="col-md-11">
