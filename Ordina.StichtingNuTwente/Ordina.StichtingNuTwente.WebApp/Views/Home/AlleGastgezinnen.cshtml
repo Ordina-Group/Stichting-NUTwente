@@ -1,5 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
-@model MijnGastgezinnenModel
+@model AlleGastgezinnenModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
@@ -24,17 +24,28 @@
             <li class="nav-item">
                 <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
             </li>
+            @if(Model.IsVrijwilliger)
+            {
             <li class="nav-item">
                 <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
             </li>
+            }
+            @if(Model.IsSecretariaat)
+            {
             <li class="nav-item">
                 <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
             </li>
+            }
         </ul>
         <br/>
         <div class="row">
             <div class="col-md-12">
                 <h3>Alle Gastgezinnen</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Gastgezinnen zonder begeleider</h5>
             </div>
         </div>
 <!-- Twee lijsten: Met intake en zonder intake -->
@@ -47,12 +58,12 @@
                         <th scope="col">Woonplaats</th>
                         <th scope="col">Telefoonnummer</th>
                         <th scope="col">E-mail</th>
-                        <th scope="col">Toekennen aan vrijwilliger</th>
+                        <th scope="col">Toekennen aan begeleider</th>
                         <th scope="col">Details</th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+                @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
                 {
                     <tr>
                         <td>@mijnGastgezin.Naam</td>
@@ -76,6 +87,37 @@
         </table>
         <button type="submit" class="btn btn-primary">Opslaan</button>
         </form>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Gastgezinnen met begeleider</h5>
+            </div>
+        </div>
+                <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Naam</th>
+                        <th scope="col">Adres</th>
+                        <th scope="col">Woonplaats</th>
+                        <th scope="col">Telefoonnummer</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Begeleider</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
+                {
+                    <tr>
+                        <td>@mijnGastgezin.Naam</td>
+                        <td>@mijnGastgezin.Adres</td>
+                        <td>@mijnGastgezin.Woonplaats</td>
+                        <td>@mijnGastgezin.Telefoonnummer</td>
+                        <td>@mijnGastgezin.Email</td>
+                        <td>@mijnGastgezin.Begeleider</td>
+                    </tr>
+                }
+                </tbody>
+        </table>
     </div>
 </body>
 
