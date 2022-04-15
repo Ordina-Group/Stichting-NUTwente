@@ -64,22 +64,34 @@ a.badge
 input:invalid {
     border-left: 5px solid #a94442;
 }
-.field-invalid {
+
+
+
+
+
+[class^="field-invalid"] {
     display: none;
 }
-
 
 form.was-validated input:invalid ~ .field-invalid {
     display: block;
     color: red;
 }
-
-.field-invalid-cyrilic {
-    display: none;
+input.contains-cyrilic ~ .field-invalid-cyrilic {
+    display: block;
+    color: red;
+}
+input.invalid-postcode ~ .field-invalid-postcode {
+    display: block;
+    color: red;
 }
 
+input.invalid-email ~ .field-invalid-email {
+    display: block;
+    color: red;
+}
 
-input.contains-cyrilic ~ .field-invalid-cyrilic {
+input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
     display: block;
     color: red;
 }

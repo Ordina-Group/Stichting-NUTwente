@@ -1,8 +1,8 @@
 ﻿using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Data;
-using Ordina.StichtingNuTwente.Entities;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

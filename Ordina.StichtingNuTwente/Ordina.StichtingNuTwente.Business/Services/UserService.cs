@@ -4,6 +4,7 @@ using Ordina.StichtingNuTwente.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,6 +29,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userRepository.GetAll().Where(u => u.Roles.Contains(role)).ToList();
         }
 
+        public ICollection<UserDetails> GetAllUsers()
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            return userRepository.GetAll().ToList();
+        }
+
+        public ICollection<Reactie> GetMyReacties(string AADId)
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            var reactions = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
+            return reactions;
+        }
+
         public UserDetails? UpdateUser(UserDetails user, string aadId)
         {
             var userInDB = GetUserByAADId(aadId);
@@ -40,6 +54,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
             userInDB.Email = user.Email;
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
+            userInDB.PhoneNumber = user.PhoneNumber;
+            userRepository.Update(userInDB);
+            return userInDB;
+        }
+
+        public UserDetails? UpdateUserFromProfileEdit(UserDetails user, string aadId)
+        {
+            var userInDB = GetUserByAADId(aadId);
+            if (userInDB == null)
+            {
+                return null;
+            }
+            var userRepository = new Repository<UserDetails>(_context);
+            userInDB.FirstName = user.FirstName;
+            userInDB.LastName = user.LastName;
+            userInDB.PhoneNumber = user.PhoneNumber;
             userRepository.Update(userInDB);
             return userInDB;
         }
@@ -48,6 +78,62 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var userRepository = new Repository<UserDetails>(_context);
             var dbModel = userRepository.Create(user);
+        }
+
+        public void checkIfUserExists(ClaimsPrincipal user)
+        {
+            var aadID = user.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+            if (aadID != null)
+            {
+                var userDetails = GetUserByAADId(aadID.Value);
+                var email = user.Claims.FirstOrDefault(c => c.Type.Contains("emailaddress"))?.Value;
+                var givenname = user.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
+                var surname = user.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+                var phoneNumber = user.Claims.FirstOrDefault(c => c.Type.Contains("phone_number"))?.Value;
+                var groups = user.Claims.Where(c => c.Type.Contains("group")).Select(x => x.Value);
+                if (givenname == null)
+                    givenname = "";
+                if (surname == null)
+                    surname = "";
+                if (phoneNumber == null)
+                    phoneNumber = "";
+                if (userDetails != null)
+                {
+
+                    if (userDetails.FirstName != givenname ||
+                        userDetails.LastName != surname ||
+                        userDetails.Email != email ||
+                        userDetails.PhoneNumber != phoneNumber ||
+                        !userDetails.Roles.All(groups.Contains) ||
+                        !groups.All(userDetails.Roles.Contains))
+                    {
+                        var newUserDetails = new UserDetails()
+                        {
+                            FirstName = givenname,
+                            LastName = surname,
+                            Email = email,
+                            PhoneNumber = phoneNumber,
+                            Roles = groups.ToList(),
+                            AADId = aadID.Value
+                        };
+                        if (user.HasClaim("http://schemas.microsoft.com/claims/authnclassreference", "b2c_1a_profileedit")) UpdateUserFromProfileEdit(newUserDetails, aadID.Value);
+                        else UpdateUser(newUserDetails, aadID.Value);
+                    }
+                }
+                else
+                {
+                    var newUserDetails = new UserDetails()
+                    {
+                        FirstName = givenname,
+                        LastName = surname,
+                        Email = email,
+                        PhoneNumber = phoneNumber,
+                        Roles = groups.ToList(),
+                        AADId = aadID.Value
+                    };
+                    Save(newUserDetails);
+                }
+            }
         }
     }
 }

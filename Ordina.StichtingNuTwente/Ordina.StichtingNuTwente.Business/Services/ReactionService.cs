@@ -1,22 +1,19 @@
 ﻿using FastExcel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Data;
-using Ordina.StichtingNuTwente.Entities;
 using Ordina.StichtingNuTwente.Models.Mappings;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using System.Reflection;
-using System.Text;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class ReactionService : IReactionService
     {
         private readonly NuTwenteContext _context;
+
         public ReactionService(NuTwenteContext context)
         {
             _context = context;
@@ -72,6 +69,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
             UpdateDatabaseWithRelationalObjects(viewModel, existingReaction, id);
         }
 
+        public void UpdateAll(int? id = 0)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            var reacties = reactieRepository.GetAll();
+            if (id != 0)
+            {
+                reacties = reacties.Where(r => r.FormulierId == id);
+            }
+            foreach (var reactie in reacties)
+            {
+                var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
+                UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+            }
+        }
+
         public void UpdateDatabaseWithRelationalObjects(AnswersViewModel viewModel, Reactie reactie, int id = 0)
         {
             int formId = 0;
@@ -79,9 +91,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var form = FormHelper.GetFormFromFileId(formId);
             var PersoonRepo = new Repository<Persoon>(_context);
             var AdresRepo = new Repository<Adres>(_context);
+            var UserRepo = new Repository<UserDetails>(_context);
             var gastgezinRepo = new Repository<Gastgezin>(_context);
             var dbPersoon = new Persoon();
             var dbAdres = new Adres();
+            var dbUser = new UserDetails();
             if (id != 0)
             {
                 dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
@@ -103,6 +117,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     else
                     {
                         AdresRepo.Update(dbAdres);
+                    }
+                }
+            }
+            //attach user
+            if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "UserDetails")))
+            {
+                var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
+                if (viewModel.answer.Any())
+                {
+                    var userNameAndEmail = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString()).Antwoord;
+                    var email = userNameAndEmail.Split("(")[1].Split(")")[0];
+                    dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
+                    if (dbUser != null)
+                    {
+                        if (dbUser.Reacties != null)
+                        {
+                            dbUser.Reacties.Add(reactie);
+                        }
+                        else
+                        {
+                            dbUser.Reacties = new List<Reactie>() { reactie };
+                        }
+                        UserRepo.Update(dbUser);
                     }
                 }
             }
@@ -166,7 +203,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
              */
         }
 
-
         private T CreateDbObjectFromFormFilledWithAnswers<T>(Form form, AnswersViewModel viewModel, T classObject)
         {
             var typeObject = typeof(T);
@@ -177,7 +213,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     foreach (var q in s.Questions)
                     {
                         var answer = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == q.Id.ToString());
-                        if (answer != null && !string.IsNullOrEmpty(answer.Antwoord) && q.ParameterName == prop.Name)
+                        if (answer != null && !string.IsNullOrEmpty(answer.Antwoord) && q.ParameterName == prop.Name && q.Object == typeObject.Name)
                         {
                             PropertyInfo propInfo = typeObject.GetProperty(prop.Name);
                             if (propInfo != null)
@@ -188,18 +224,23 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                     case "string":
                                         value = answer.Antwoord;
                                         break;
+
                                     case "boolean":
                                         value = Convert.ToBoolean(answer.Antwoord);
                                         break;
+
                                     case "datetime":
                                         value = Convert.ToDateTime(answer.Antwoord);
                                         break;
+
                                     case "int32":
                                         value = Convert.ToInt32(answer.Antwoord);
                                         break;
+
                                     case "decimal":
                                         value = Convert.ToDecimal(answer.Antwoord);
                                         break;
+
                                     default:
                                         value = answer.Antwoord;
                                         break;
@@ -212,7 +253,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             return classObject;
         }
-
 
         public Form GetAnwersFromId(int Id)
         {
@@ -237,6 +277,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return viewModel;
         }
 
+        public Reactie GetReactieFromId(int Id)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            return reactieRepository.GetById(Id, "UserDetails");
+        }
+
         public List<AnswerListModel> GetAllRespones(int? form = null)
         {
             List<AnswerListModel> viewModel = new List<AnswerListModel>();
@@ -249,7 +295,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             viewModel = dbItems.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
             return viewModel;
         }
-
 
         public byte[] GenerateExportCSV(int? formId = null)
         {
@@ -341,7 +386,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     // Write the data
                     fastExcel.Write(worksheet, "sheet1");
-
                 }
                 using (var filestream = outputFile.OpenRead())
                 {
@@ -377,7 +421,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
             if (adres != null)
                 adresRepository.Delete(adres);
-
 
             reactieRepository.Delete(existingReaction);
 

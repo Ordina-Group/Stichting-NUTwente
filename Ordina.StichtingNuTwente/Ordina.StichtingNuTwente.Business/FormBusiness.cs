@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Ordina.StichtingNuTwente.Business.Interfaces;
-using Ordina.StichtingNuTwente.Entities;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System.Text;
 
 namespace Ordina.StichtingNuTwente.Business

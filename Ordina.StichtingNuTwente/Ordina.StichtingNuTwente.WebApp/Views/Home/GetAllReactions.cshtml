@@ -9,6 +9,8 @@
 
 <body>
     <div>
+        @if (Accessor.HttpContext.Request.Path.Value != "/mijnReacties")
+        {
         <ul class="nav nav-tabs ">
             <li class="nav-item">
                 <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
@@ -32,16 +34,25 @@
                 <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
             </li>
         </ul>
-        <br/>
-        @foreach (var form in Model.AnswerLists.GroupBy(d => d.FormulierId))
+        }
+        else
+        {
+            <h1>Intakegesprekken uitgevoerd door @User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value @User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value</h1>
+            <br />
+        }
+
+        @foreach (var form in Model.GroupBy(d => d.FormulierId))
         {
             <div class="row">
                 <div class="col-md-11">
                     <h3>@form.First().FormulierNaam</h3>
                 </div>
-                <div class="col-md-1">
-                    <a class="badge badge-pill badge-info pointer float-right p-2 m-2" href="/downloadexport15filefromform?formId=@form.First().FormulierId">Export</a>
-                </div>
+                @if (Accessor.HttpContext.Request.Path.Value != "/mijnReacties")
+                {
+                    <div class="col-md-1">
+                        <a class="badge badge-pill badge-info pointer float-right p-2 m-2" href="/downloadexport15filefromform?formId=@form.First().FormulierId">Export</a>
+                    </div>
+                }
             </div>
 
 

@@ -1,0 +1,55 @@
+﻿@using System.Net.Mail
+<script>
+    $(document).ready(function () {
+        const cyrillicPattern = /^[\u0400-\u04FF]+$/;
+        const poscodePattern = /[0-9]{4}[A-Z]{2}/;
+        const emailPattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+        const phoneNumberPattern = /^\+(?:[0-9]●?){6,14}[0-9]$/;
+        //custom validation
+        $(".question").change(function() {
+            console.log("test");
+            var value = $(this).val();
+            if(cyrillicPattern.test(value)){
+                $(this).addClass("contains-cyrilic")
+                this.setCustomValidity("будь ласка, використовуйте лише голландську або англійську");
+            } else {
+                this.setCustomValidity("");
+                $(this).removeClass("contains-cyrilic")
+            }
+        });
+
+        $(".postcode").change(function() {
+            var value = $(this).val();
+            if(!poscodePattern.test(value)){
+                $(this).addClass("invalid-postcode")
+                this.setCustomValidity("Postcode moet bestaan uit 4 cijfers en 2 hoofdletters zonder spaties");
+            } else{
+                this.setCustomValidity("");
+                $(this).removeClass("invalid-postcode")
+            }
+        });
+
+        $(".email").change(function() {
+            var value = $(this).val();
+            if(!emailPattern.test(value)){
+                $(this).addClass("invalid-email")
+                this.setCustomValidity("Voer een geldig e-mailadres adress in");
+            } else{
+                this.setCustomValidity("");
+                $(this).removeClass("invalid-email")
+            }
+        });
+
+        $(".phoneNumber").change(function() {
+            var value = $(this).val();
+            if(!phoneNumberPattern.test(value)){
+                $(this).addClass("invalid-phoneNumber")
+                this.setCustomValidity("Voer een geldig telefoonnummer in, bijvoorbeeld: \"+31612345678\"");
+            } else{
+                this.setCustomValidity("");
+                $(this).removeClass("invalid-phoneNumber")
+            }
+        });
+
+    });
+</script>
