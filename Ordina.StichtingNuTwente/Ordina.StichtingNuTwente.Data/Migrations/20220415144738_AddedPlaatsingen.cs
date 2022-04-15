@@ -9,12 +9,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "UserDetailsId",
-                table: "Reacties",
-                type: "int",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Plaatsingen",
                 columns: table => new
@@ -46,11 +40,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reacties_UserDetailsId",
-                table: "Reacties",
-                column: "UserDetailsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Plaatsingen_fkGastgezinId",
                 table: "Plaatsingen",
                 column: "fkGastgezinId");
@@ -59,31 +48,12 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                 name: "IX_Plaatsingen_VrijwilligerId",
                 table: "Plaatsingen",
                 column: "VrijwilligerId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Reacties_Users_UserDetailsId",
-                table: "Reacties",
-                column: "UserDetailsId",
-                principalTable: "Users",
-                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Reacties_Users_UserDetailsId",
-                table: "Reacties");
-
             migrationBuilder.DropTable(
                 name: "Plaatsingen");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Reacties_UserDetailsId",
-                table: "Reacties");
-
-            migrationBuilder.DropColumn(
-                name: "UserDetailsId",
-                table: "Reacties");
         }
     }
 }
