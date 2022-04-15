@@ -1,5 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
-@model List<AnswerListModel>
+@model AnswerModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
@@ -11,31 +11,43 @@
     <div>
         @if (Accessor.HttpContext.Request.Path.Value != "/mijnReacties")
         {
-            <ul class="nav nav-tabs ">
-                <li class="nav-item">
-                    <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(Context.Request.Query["formId"] == "1"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(Context.Request.Query["formId"] == "2"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(Context.Request.Query["formId"] == "3"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(Context.Request.Query["formId"] == "4"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
-                </li>
-            </ul>
+        <ul class="nav nav-tabs ">
+            <li class="nav-item">
+                <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "1"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "2"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "3"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(Context.Request.Query["formId"] == "4"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
+            </li>
+            @if(Model.IsVrijwilliger)
+            {
+            <li class="nav-item">
+                <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
+            </li>
+            }
+            @if(Model.IsSecretariaat)
+            {
+            <li class="nav-item">
+                <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
+            </li>
+            }
+        </ul>
         }
         else
         {
             <h1>Intakegesprekken uitgevoerd door @User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value @User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value</h1>
             <br />
         }
-
-        @foreach (var form in Model.GroupBy(d => d.FormulierId))
+        <br />
+        @foreach (var form in Model.AnswerLists.GroupBy(d => d.FormulierId))
         {
             <div class="row">
                 <div class="col-md-11">

@@ -135,5 +135,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
         }
+
+        public UserDetails? getUserFromClaimsPrincipal(ClaimsPrincipal user)
+        {
+            var aadId = user.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value;
+            var userRepository = new Repository<UserDetails>(_context);
+            return userRepository.GetAll().FirstOrDefault(u => u.AADId == aadId);
+        }
     }
 }
