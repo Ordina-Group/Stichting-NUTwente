@@ -6,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Models.ViewModels
 {
-    public class MijnGastgezinnenModel
+    public class MijnGastgezinnenModel : BaseModel
     {
         public MijnGastgezinnenModel()
         {
             MijnGastgezinnen = new List<GastGezin>();
-            Vrijwilligers = new List<Vrijwilliger>();
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
-
-        public List<Vrijwilliger> Vrijwilligers { get; set; }
     }
 
     public class GastGezin
@@ -33,6 +30,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public string Email { get; set; }
 
+        public string Begeleider { get; set; }
+
         public DateTime Intake { get; set; }
 
         public int AanmeldFormulierId { get; set; }
@@ -47,14 +46,19 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string Email { get; set; }
     }
 
-    public class AlleGastgezinnenModel
+    public class AlleGastgezinnenModel : BaseModel
     {
         public AlleGastgezinnenModel()
         {
-            AlleGastgezinnen = new List<GastGezin>();
+            Vrijwilligers = new List<Vrijwilliger>();
+
+            GastgezinnenZonderBegeleider = new List<GastGezin>();
+            GastgezinnenMetBegeleider = new List<GastGezin>();
         }
 
-        public List<GastGezin> AlleGastgezinnen { get; set; }
-    }
+        public List<Vrijwilliger> Vrijwilligers { get; set; }
 
+        public List<GastGezin> GastgezinnenZonderBegeleider { get; set; }
+        public List<GastGezin> GastgezinnenMetBegeleider { get; set; }
+    }
 }

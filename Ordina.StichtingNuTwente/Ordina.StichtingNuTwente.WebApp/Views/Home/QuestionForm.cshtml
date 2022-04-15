@@ -209,7 +209,7 @@
                         });
                      } else {
                         $.ajax({
-                            url: "/Home/Save",
+                            url: "/Home/Save?gastgezinId=@Model.GastgezinId",
                             type: "POST",
                             dataType: 'json',
                             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

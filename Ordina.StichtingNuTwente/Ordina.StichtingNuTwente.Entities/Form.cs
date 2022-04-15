@@ -11,5 +11,7 @@ namespace Ordina.StichtingNuTwente.Entities
 
         public UserDetails? UserDetails { get; set; }
         public List<UserDetails> AllUsers { get;} = new List<UserDetails>();
+
+        public int? GastgezinId { get; set; }
     }
 }
