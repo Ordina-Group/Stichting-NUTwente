@@ -11,5 +11,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public UserDetails? UserDetails { get; set; }
         public List<UserDetails> AllUsers { get;} = new List<UserDetails>();
+
+
+        public int? GastgezinId { get; set; }
     }
 }

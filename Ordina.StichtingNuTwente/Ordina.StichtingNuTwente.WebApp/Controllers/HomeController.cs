@@ -47,11 +47,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
-        public IActionResult IndexGastgezinIntake()
+        public IActionResult IndexGastgezinIntake(int? gastgezinId)
         {
             _userService.checkIfUserExists(User);
             string file = FormHelper.GetFilenameFromId(2);
             Form questionForm = _formBusiness.createFormFromJson(2, file);
+            questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
@@ -91,18 +92,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
             _userService.checkIfUserExists(User);
-            Reactie reactie = _reactionService.GetReactieFromId(id);
-            if (reactie != null)
-            {
-                if (reactie.UserDetails != null && reactie.UserDetails.AADId == User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
-                {
-                    Form questionForm = _reactionService.GetAnwersFromId(id);
-                    questionForm.UserDetails = GetUser();
-                    questionForm.AllUsers.AddRange(GetAllVrijwilligers());
-                    return View(questionForm);
-                }
-            }
-            return Redirect("MicrosoftIdentity/Account/AccessDenied");
+            Form questionForm = _reactionService.GetAnwersFromId(id);
+            questionForm.UserDetails = GetUser();
+            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            return View(questionForm);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -115,11 +108,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
-
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
             _userService.GetUsersByRole("");
-
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -154,6 +145,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
                 mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
                 {
+                    Id = gastGezin.Id,
                     Adres = adresText,
                     Email = contact.Email,
                     Naam = contact.Naam,
@@ -175,7 +167,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
 
-            var mijnGastgezinnen = new MijnGastgezinnenModel();
+            var mijnGastgezinnen = new AlleGastgezinnenModel();
 
             var vrijwilligers = GetAllVrijwilligers();
             foreach (var vrijwilliger in vrijwilligers)
@@ -190,7 +182,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
 
-            foreach (var gastGezin in gastGezinnen.Where(e => e.Begeleider == null))
+            foreach (var gastGezin in gastGezinnen)
             {
                 if (gastGezin.Contact == null)
                 {
@@ -208,16 +200,33 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     woonplaatsText = adres.Woonplaats;
                 }
 
-                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                if (gastGezin.Begeleider != null)
                 {
-                    Id = gastGezin.Id,
-                    Adres = adresText,
-                    Email = contact.Email,
-                    Naam = contact.Naam,
-                    Telefoonnummer = contact.Telefoonnummer,
-                    Woonplaats = woonplaatsText
-                });
+                    mijnGastgezinnen.GastgezinnenMetBegeleider.Add(new GastGezin
+                    {
+                        Id = gastGezin.Id,
+                        Adres = adresText,
+                        Email = contact.Email,
+                        Naam = contact.Naam,
+                        Telefoonnummer = contact.Telefoonnummer,
+                        Woonplaats = woonplaatsText,
+                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})"
+                    });
+                }
+                else
+                {
+                    mijnGastgezinnen.GastgezinnenZonderBegeleider.Add(new GastGezin
+                    {
+                        Id = gastGezin.Id,
+                        Adres = adresText,
+                        Email = contact.Email,
+                        Naam = contact.Naam,
+                        Telefoonnummer = contact.Telefoonnummer,
+                        Woonplaats = woonplaatsText
+                    });
+                }
             }
+
 
             return View(mijnGastgezinnen);
         }
@@ -259,8 +268,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return RedirectToAction("AlleGastgezinnen");
         }
 
-
-
         [AllowAnonymous]
         [Route("Bedankt")]
         [HttpGet]
@@ -277,8 +284,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreacties987456list()
         {
             _userService.checkIfUserExists(User);
-            var responses = _reactionService.GetAllRespones();
-            return View(responses);
+
+            var model = new AnswerModel
+            {
+                AnswerLists = _reactionService.GetAllRespones()
+            };
+            return View(model);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -288,8 +299,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
             _userService.checkIfUserExists(User);
-            var responses = _reactionService.GetAllRespones(formId);
-            return View(responses);
+            var model = new AnswerModel
+            {
+                AnswerLists = _reactionService.GetAllRespones(formId)
+            };
+            return View(model);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -324,14 +338,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
 
         [HttpPost]
-        public IActionResult Save(string answers)
+        public IActionResult Save(string answers, int? gastgezinId)
         {
             try
             {
                 if (answers != null)
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    _reactionService.Save(answerData);
+                    _reactionService.Save(answerData, gastgezinId);
                 }
             }
             catch (Exception ex)
