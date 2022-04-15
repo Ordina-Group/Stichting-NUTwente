@@ -48,7 +48,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,IntakeFormulier").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
             return gastgezinnen.ToList();
         }
 
@@ -70,7 +70,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id)
         {
-            throw new NotImplementedException();
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            gastgezinRepository.Update(gastgezin);
+            return gastgezin;
         }
     }
 }

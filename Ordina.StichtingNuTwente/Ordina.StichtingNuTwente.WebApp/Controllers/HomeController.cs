@@ -46,11 +46,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("GastgezinIntake")]
         [HttpGet]
         [ActionName("QuestionForm")]
-        public IActionResult IndexGastgezinIntake()
+        public IActionResult IndexGastgezinIntake(int? gastgezinId)
         {
             checkIfUserExists();
             string file = FormHelper.GetFilenameFromId(2);
             Form questionForm = _formBusiness.createFormFromJson(2, file);
+            questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             return View(questionForm);
@@ -106,11 +107,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
-
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
             _userService.GetUsersByRole("");
-
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -145,6 +144,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
                 mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
                 {
+                    Id = gastGezin.Id,
                     Adres = adresText,
                     Email = contact.Email,
                     Naam = contact.Naam,
@@ -166,7 +166,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             checkIfUserExists();
 
-            var mijnGastgezinnen = new MijnGastgezinnenModel();
+            var mijnGastgezinnen = new AlleGastgezinnenModel();
 
             var vrijwilligers = GetAllVrijwilligers();
             foreach (var vrijwilliger in vrijwilligers)
@@ -181,7 +181,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
 
-            foreach (var gastGezin in gastGezinnen.Where(e => e.Begeleider == null))
+            foreach (var gastGezin in gastGezinnen)
             {
                 if (gastGezin.Contact == null)
                 {
@@ -199,16 +199,33 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     woonplaatsText = adres.Woonplaats;
                 }
 
-                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                if (gastGezin.Begeleider != null)
                 {
-                    Id = gastGezin.Id,
-                    Adres = adresText,
-                    Email = contact.Email,
-                    Naam = contact.Naam,
-                    Telefoonnummer = contact.Telefoonnummer,
-                    Woonplaats = woonplaatsText
-                });
+                    mijnGastgezinnen.GastgezinnenMetBegeleider.Add(new GastGezin
+                    {
+                        Id = gastGezin.Id,
+                        Adres = adresText,
+                        Email = contact.Email,
+                        Naam = contact.Naam,
+                        Telefoonnummer = contact.Telefoonnummer,
+                        Woonplaats = woonplaatsText,
+                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})"
+                    });
+                }
+                else
+                {
+                    mijnGastgezinnen.GastgezinnenZonderBegeleider.Add(new GastGezin
+                    {
+                        Id = gastGezin.Id,
+                        Adres = adresText,
+                        Email = contact.Email,
+                        Naam = contact.Naam,
+                        Telefoonnummer = contact.Telefoonnummer,
+                        Woonplaats = woonplaatsText
+                    });
+                }
             }
+
 
             return View(mijnGastgezinnen);
         }
@@ -236,7 +253,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
 
                 var vrijwilligerId = Convert.ToInt32(value);
-                var gastgezinId = Convert.ToInt32(key.Substring(13));
+                var gastgezinId = Convert.ToInt32(key.Substring(13));2
 
                 var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
                 
@@ -266,8 +283,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreacties987456list()
         {
             checkIfUserExists();
-            var responses = _reactionService.GetAllRespones();
-            return View(responses);
+
+            var model = new AnswerModel
+            {
+                AnswerLists = _reactionService.GetAllRespones()
+            };
+            return View(model);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -277,8 +298,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
             checkIfUserExists();
-            var responses = _reactionService.GetAllRespones(formId);
-            return View(responses);
+            var model = new AnswerModel
+            {
+                AnswerLists = _reactionService.GetAllRespones(formId)
+            };
+            return View(model);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -295,14 +319,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Save(string answers)
+        public IActionResult Save(string answers, int? gastgezinId)
         {
             try
             {
                 if (answers != null)
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    _reactionService.Save(answerData);
+                    _reactionService.Save(answerData, gastgezinId);
                 }
             }
             catch (Exception ex)

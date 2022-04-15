@@ -22,7 +22,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             _context = context;
         }
 
-        public bool Save(AnswersViewModel viewModel)
+        public bool Save(AnswersViewModel viewModel, int? gastgezinId)
         {
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             var reactieRepository = new Repository<Reactie>(_context);
@@ -30,6 +30,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
             UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
             if (dbmodel.Id > 0)
             {
+                if (gastgezinId != null)
+                {
+                    var gastgezinRepository = new Repository<Gastgezin>(_context);
+                    var gastgezin = gastgezinRepository.GetById(gastgezinId.Value);
+                    if (gastgezin != null)
+                    {
+                        gastgezin.IntakeFormulier = dbmodel;
+                        gastgezinRepository.Update(gastgezin);
+                    }
+                }
+
                 return true;
             }
             else

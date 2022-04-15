@@ -8,7 +8,7 @@
 
     }
 
-    public class AnswersViewModel
+    public class AnswersViewModel : BaseModel
     {
         public AnswersViewModel()
         {
@@ -22,6 +22,11 @@
 
         //public string UserId { get; set; }
 
+    }
+
+    public class AnswerModel : BaseModel
+    {
+        public List<AnswerListModel> AnswerLists { get; set; }
     }
 
     public class AnswerListModel
