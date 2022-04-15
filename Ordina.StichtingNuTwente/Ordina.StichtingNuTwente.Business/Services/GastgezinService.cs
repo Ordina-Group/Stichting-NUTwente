@@ -74,5 +74,41 @@ namespace Ordina.StichtingNuTwente.Business.Services
             gastgezinRepository.Update(gastgezin);
             return gastgezin;
         }
+
+        public void AddPlaatsing(Plaatsing plaatsing)
+        {
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            plaatsingRepository.Create(plaatsing);
+        }
+        public void UpdatePlaatsing(Plaatsing plaatsing)
+        {
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            plaatsingRepository.Update(plaatsing);
+        }
+
+        public Plaatsing GetPlaatsing(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
+        {
+            //var plaatsingRepository = new Repository<Plaatsing>(_context);
+            //var plaatsingen = plaatsingRepository.GetAll("Gastgezin");
+            //if(gastGezinId != null)
+            //{
+            //    plaatsingen = plaatsingen.Where(p => p.Gastgezin.Id == gastGezinId);
+            //}    
+            //if (type != null)
+            //{
+            //    plaatsingen = plaatsingen.Where(p => p.PlacementType == type);
+            //}
+            //if(ageGroup != null)
+            //{
+            //    plaatsingen = plaatsingen.Where(p => p.AgeGroup == ageGroup);
+            //}
+            List<Plaatsing> plaatsingen = new();
+            return plaatsingen.ToList();
+        }
     }
 }

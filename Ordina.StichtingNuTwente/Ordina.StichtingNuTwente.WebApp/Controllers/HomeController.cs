@@ -238,7 +238,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult AlleGastgezinnenPost(IFormCollection formCollection)
         {
             var vrijwilligers = GetAllVrijwilligers();
-         
+
             Debug.WriteLine("Form:");
             foreach (var key in formCollection.Keys)
             {
@@ -257,7 +257,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezinId = Convert.ToInt32(key.Substring(13));
 
                 var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
-                
+
                 if (gastgezinItem != null)
                 {
                     gastgezinItem.Begeleider = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
@@ -329,13 +329,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var responses = _userService.GetMyReacties(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
             if (responses != null)
             {
-                var viewModel = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
+                var viewModel = new AnswerModel
+                {
+                    AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
+                };
                 return View(viewModel);
             }
             return View();
-
         }
-
 
         [HttpPost]
         public IActionResult Save(string answers, int? gastgezinId)
@@ -362,11 +363,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             try
             {
                 if (answers != null)
-            {
-                var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                _reactionService.Update(answerData, id);
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    _reactionService.Update(answerData, id);
+                }
             }
-        }
             catch (Exception ex)
             {
 
