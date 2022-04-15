@@ -3,35 +3,67 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-        <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 justify-content-between">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon navbar-light"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/" ? "active" : "" )" href="/">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/GastgezinIntake" || Accessor.HttpContext.Request.Path.Value == "/VluchtelingIntake" || Accessor.HttpContext.Request.Path.Value == "/GastgezinAanmelding" || Accessor.HttpContext.Request.Path.Value == "/VrijwilligerAanmelding"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Formulieren
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 justify-content-between">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon navbar-light"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/" ? "active" : "" )" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/GastgezinIntake" || Accessor.HttpContext.Request.Path.Value == "/VluchtelingIntake" || Accessor.HttpContext.Request.Path.Value == "/GastgezinAanmelding" || Accessor.HttpContext.Request.Path.Value == "/VrijwilligerAanmelding"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Formulieren
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                            {
                                 <a class="dropdown-item" href="/VluchtelingIntake">Vluchteling Intake</a>
                                 <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
-                                <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
-                                <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
+                            }
+                            <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
+                            <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
+                        </div>
+                    </li>
+                    @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form" || Accessor.HttpContext.Request.Path.Value == "/user/Users" || Accessor.HttpContext.Request.Path.Value == "/vluchtelingenOverzicht"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Overzichten
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/getnutwenteoverheidreacties987456list">Reacties</a>
+                                <a class="dropdown-item" href="/user/Users">Vrijwilligers</a>
+                                <a class="dropdown-item" href="/vluchtelingenOverzicht">Vluchtelingen</a>
                             </div>
                         </li>
-                        @if(User.HasClaim("groups", "group-secretariaat")){
-                            <li class="nav-item">
-                                <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form"? "active" : "" )" href="/getnutwenteoverheidreacties987456list">Reactie Overzicht</a>
-                            </li>
-                        }
-                        </ul>
-                        <a class="nav-link btn-close-white" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
-                </div>
+                    }
+                     @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Mijn Overzichten
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/mijnReacties">Reacties</a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value @User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="EditProfile">Profiel wijzigen</a>
+                            <a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Log uit</a>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 }

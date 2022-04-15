@@ -45,7 +45,7 @@
           "Number": "4",
           "Text": "Postcode",
           "Description": "",
-          "InputType": "text",
+          "InputType": "postcode",
           "InputOptions": "",
           "Required": "true",
           "Object": "Adres",
@@ -67,7 +67,7 @@
           "Number": "6",
           "Text": "Wat is het telefoonnummer waar we u het makkelijkst op kunnen bereiken?",
           "Description": "",
-          "InputType": "text",
+          "InputType": "phoneNumber",
           "InputOptions": "",
           "Required": "true",
           "Object": "Persoon",
@@ -78,9 +78,9 @@
           "Number": "7",
           "Text": "Wat is uw email",
           "Description": "",
-          "InputType": "text",
+          "InputType": "email",
           "InputOptions": "",
-          "Required": "false",
+          "Required": "true",
           "Object": "Persoon",
           "ParameterName": "Email"
         },
@@ -143,17 +143,17 @@
           "Number": "14",
           "Text": "Wilt u nog iets toevoegen? (Dit kan ook tijdens het intakegesprek)",
           "Description": "",
-          "InputType": "text",
+          "InputType": "textArea",
           "InputOptions": "",
           "Required": "false"
         },
         {
           "Id": "14",
           "Number": "15",
-          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden. Gaat u hiermee akkoord?",
-          "Description": "Ja/nee",
-          "InputType": "text",
-          "InputOptions": "",
+          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": ["Ik ga hiermee akkoord"],
           "Required": "true"
         }
       ]

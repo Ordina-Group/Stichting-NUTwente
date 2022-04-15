@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220408074412_AddedUserToReactie")]
+    partial class AddedUserToReactie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,13 +87,10 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("BegeleiderId")
+                    b.Property<int>("BegeleiderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IntakeFormulierId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -102,8 +101,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.HasIndex("BegeleiderId");
 
                     b.HasIndex("ContactId");
-
-                    b.HasIndex("IntakeFormulierId");
 
                     b.ToTable("Gastgezinnen");
                 });
@@ -216,10 +213,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Roles")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -251,7 +244,9 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                 {
                     b.HasOne("Ordina.StichtingNuTwente.Models.Models.UserDetails", "Begeleider")
                         .WithMany()
-                        .HasForeignKey("BegeleiderId");
+                        .HasForeignKey("BegeleiderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ordina.StichtingNuTwente.Models.Models.Persoon", "Contact")
                         .WithMany()
@@ -259,15 +254,9 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ordina.StichtingNuTwente.Models.Models.Reactie", "IntakeFormulier")
-                        .WithMany()
-                        .HasForeignKey("IntakeFormulierId");
-
                     b.Navigation("Begeleider");
 
                     b.Navigation("Contact");
-
-                    b.Navigation("IntakeFormulier");
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Persoon", b =>

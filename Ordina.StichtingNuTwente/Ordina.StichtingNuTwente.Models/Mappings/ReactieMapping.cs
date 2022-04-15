@@ -23,7 +23,6 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             dbModel.FormulierId = id;
             dbModel.DatumIngevuld = DateTime.Now;
             dbModel.Antwoorden = viewModel.answer.ConvertAll(a => AnswerMapping.FromWebToDatabaseModel(a));
-            //dbModel.UserId = viewModel.UserId;
             return dbModel;
                 
         }
@@ -33,8 +32,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             var webModel = new AnswersViewModel();
             webModel.Id = dbModel.FormulierId.ToString();
             webModel.AnswerDate = dbModel.DatumIngevuld;
-            webModel.answer = dbModel.Antwoorden.ToList().ConvertAll(a => AnswerMapping.FromDatabaseToWebModel(a));
-            //webModel.UserId = dbModel.UserId;
+            if (dbModel.Antwoorden != null)
+            {
+                webModel.answer = dbModel.Antwoorden.ToList().ConvertAll(a => AnswerMapping.FromDatabaseToWebModel(a));
+            }
+            //else
+            //{
+            //    webModel.answer = new List<Answers> { };
+            //}
             return webModel;
         }
 
@@ -44,7 +49,6 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             webModel.FormulierId = dbModel.FormulierId.ToString();
             webModel.AnswerDate = dbModel.DatumIngevuld;
             webModel.ReactieId = dbModel.Id;
-            //webModel.UserId = dbModel.UserId;
             switch(webModel.FormulierId)
             {
                 case "1":

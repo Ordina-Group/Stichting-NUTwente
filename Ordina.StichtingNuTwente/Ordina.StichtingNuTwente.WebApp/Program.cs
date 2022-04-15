@@ -27,6 +27,8 @@ builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGastgezinService, GastgezinService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
+builder.Services.AddScoped<IPersoonService, PersoonService>();
+
 
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -36,9 +38,9 @@ builder.Services.AddAuthorization(options =>
 {
     // By default, all incoming requests will be authorized according to 
     // the default policy
-    options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger"));
-    options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat"));
-    options.AddPolicy("RequireCoördinatorRole", policy => policy.RequireClaim("groups", "group-coördinator"));
+    options.AddPolicy("RequireVrijwilligerRole", policy => policy.RequireClaim("groups", "group-vrijwilliger","group-secretariaat", "group-coordinator", "group-superadmin"));
+    options.AddPolicy("RequireSecretariaatRole", policy => policy.RequireClaim("groups", "group-secretariaat", "group-coordinator", "group-superadmin"));
+    options.AddPolicy("RequireCoordinatorRole", policy => policy.RequireClaim("groups", "group-coordinator", "group-superadmin"));
     options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireClaim("groups", "group-superadmin"));
     options.FallbackPolicy = options.DefaultPolicy;
 });
