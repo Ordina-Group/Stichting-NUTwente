@@ -91,7 +91,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
             Form questionForm = _reactionService.GetAnwersFromId(id);
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
@@ -104,7 +104,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("MijnGastgezinnen")]
         public IActionResult MijnGastgezinnen()
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
 
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
@@ -165,7 +165,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("AlleGastgezinnen")]
         public IActionResult AlleGastgezinnen()
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
 
             var mijnGastgezinnen = new AlleGastgezinnenModel();
 
@@ -283,7 +283,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreacties987456list()
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
 
             var model = new AnswerModel
             {
@@ -298,7 +298,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("GetAllReactions")]
         public IActionResult getnutwenteoverheidreactiesspecifiek158436form(int formId)
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
             var model = new AnswerModel
             {
                 AnswerLists = _reactionService.GetAllRespones(formId)
