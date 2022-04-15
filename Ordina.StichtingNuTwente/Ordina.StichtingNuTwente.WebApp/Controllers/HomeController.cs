@@ -329,13 +329,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var responses = _userService.GetMyReacties(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
             if (responses != null)
             {
-                var viewModel = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
+                var viewModel = new AnswerModel
+                {
+                    AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
+                };
                 return View(viewModel);
             }
             return View();
-
         }
-
 
         [HttpPost]
         public IActionResult Save(string answers, int? gastgezinId)

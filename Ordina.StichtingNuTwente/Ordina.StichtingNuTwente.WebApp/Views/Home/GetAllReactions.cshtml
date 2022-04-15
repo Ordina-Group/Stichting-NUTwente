@@ -27,12 +27,18 @@
                 <li class="nav-item">
                     <a class="nav-link @(Context.Request.Query["formId"] == "4"?"active":"")" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
                 </li>
+                @if(Model.IsVrijwilliger)
+                {
                 <li class="nav-item">
                     <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
                 </li>
+                }
+                @if(Model.IsSecretariaat)
+                {
                 <li class="nav-item">
                     <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
                 </li>
+                }
             </ul>
         }
         else
