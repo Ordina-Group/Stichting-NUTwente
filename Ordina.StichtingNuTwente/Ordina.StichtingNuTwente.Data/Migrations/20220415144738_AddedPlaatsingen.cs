@@ -82,10 +82,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                 table: "Reacties");
 
             migrationBuilder.DropColumn(
-                name: "PhoneNumber",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
                 name: "UserDetailsId",
                 table: "Reacties");
         }
