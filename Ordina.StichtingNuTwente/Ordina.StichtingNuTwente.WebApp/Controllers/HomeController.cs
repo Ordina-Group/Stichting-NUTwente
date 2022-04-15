@@ -90,11 +90,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("QuestionForm")]
         public IActionResult getnutwenteoverheidreactiesdetail25685niveau(int id)
         {
-            checkIfUserExists();
-            Form questionForm = _reactionService.GetAnwersFromId(id);
-            questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
-            return View(questionForm);
+            _userService.checkIfUserExists(User);
+            Reactie reactie = _reactionService.GetReactieFromId(id);
+            if (reactie != null)
+            {
+                if (reactie.UserDetails != null && reactie.UserDetails.AADId == User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                {
+                    Form questionForm = _reactionService.GetAnwersFromId(id);
+                    questionForm.UserDetails = GetUser();
+                    questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+                    return View(questionForm);
+                }
+            }
+            return Redirect("MicrosoftIdentity/Account/AccessDenied");
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -103,7 +111,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("MijnGastgezinnen")]
         public IActionResult MijnGastgezinnen()
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
 
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
@@ -165,7 +173,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("AlleGastgezinnen")]
         public IActionResult AlleGastgezinnen()
         {
-            checkIfUserExists();
+            _userService.checkIfUserExists(User);
 
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
@@ -221,7 +229,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult AlleGastgezinnenPost(IFormCollection formCollection)
         {
             var vrijwilligers = GetAllVrijwilligers();
-         
+
             Debug.WriteLine("Form:");
             foreach (var key in formCollection.Keys)
             {
@@ -240,7 +248,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezinId = Convert.ToInt32(key.Substring(13));
 
                 var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
-                
+
                 if (gastgezinItem != null)
                 {
                     gastgezinItem.Begeleider = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
@@ -251,20 +259,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return RedirectToAction("AlleGastgezinnen");
         }
 
-            _userService.checkIfUserExists(User);
-            Reactie reactie = _reactionService.GetReactieFromId(id);
-            if (reactie != null)
-            {
-                if (reactie.UserDetails != null && reactie.UserDetails.AADId == User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
-                {
-                    Form questionForm = _reactionService.GetAnwersFromId(id);
-                    questionForm.UserDetails = GetUser();
-                    questionForm.AllUsers.AddRange(GetAllVrijwilligers());
-                    return View(questionForm);
-                }
-            }
-            return Redirect("MicrosoftIdentity/Account/AccessDenied");
-        }
+
 
         [AllowAnonymous]
         [Route("Bedankt")]
@@ -353,11 +348,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             try
             {
                 if (answers != null)
-            {
-                var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                _reactionService.Update(answerData, id);
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    _reactionService.Update(answerData, id);
+                }
             }
-        }
             catch (Exception ex)
             {
 

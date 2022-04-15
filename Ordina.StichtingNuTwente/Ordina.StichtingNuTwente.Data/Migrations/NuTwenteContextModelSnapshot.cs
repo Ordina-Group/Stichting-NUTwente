@@ -49,7 +49,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.HasIndex("fkReactieId");
 
-                    b.ToTable("Adres");
+                    b.ToTable("Adres", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Antwoord", b =>
@@ -74,7 +74,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.HasIndex("ReactieId");
 
-                    b.ToTable("Antwoorden");
+                    b.ToTable("Antwoorden", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Gastgezin", b =>
@@ -100,7 +100,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("Gastgezinnen");
+                    b.ToTable("Gastgezinnen", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Persoon", b =>
@@ -160,7 +160,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.HasIndex("fkReactieId");
 
-                    b.ToTable("Persoon");
+                    b.ToTable("Persoon", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
@@ -184,7 +184,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.HasIndex("UserDetailsId");
 
-                    b.ToTable("Reacties");
+                    b.ToTable("Reacties", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.UserDetails", b =>
@@ -211,17 +211,13 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Roles")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Adres", b =>
