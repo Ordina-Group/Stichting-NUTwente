@@ -18,5 +18,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public ICollection<Reactie> GetMyReacties(string aadId);
         public void checkIfUserExists(ClaimsPrincipal user);
         public void Save(UserDetails user);
+        public UserDetails? getUserFromClaimsPrincipal(ClaimsPrincipal user);
     }
 }

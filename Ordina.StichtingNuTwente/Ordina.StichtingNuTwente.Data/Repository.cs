@@ -52,7 +52,6 @@ namespace Ordina.StichtingNuTwente.Data
                 }
             }
             return q.SingleOrDefault(x => x.Id == id);
-
         }
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
