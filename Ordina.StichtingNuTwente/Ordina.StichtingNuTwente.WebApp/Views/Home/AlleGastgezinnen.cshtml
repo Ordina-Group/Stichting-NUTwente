@@ -59,7 +59,7 @@
                         <th scope="col">Telefoonnummer</th>
                         <th scope="col">E-mail</th>
                         <th scope="col">Toekennen aan begeleider</th>
-                        <th scope="col">Details</th>
+                        <th scope="col">Geplaatst</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,7 +80,7 @@
                                 }
                             </select>
                         </td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">details</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                     </tr>
                 }
                 </tbody>
@@ -102,6 +102,7 @@
                         <th scope="col">Telefoonnummer</th>
                         <th scope="col">E-mail</th>
                         <th scope="col">Begeleider</th>
+                        <th scope="col">Geplaatst</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,6 +115,7 @@
                         <td>@mijnGastgezin.Telefoonnummer</td>
                         <td>@mijnGastgezin.Email</td>
                         <td>@mijnGastgezin.Begeleider</td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                     </tr>
                 }
                 </tbody>

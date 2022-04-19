@@ -39,8 +39,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public int AanmeldFormulierId { get; set; }
 
         public int IntakeFormulierId { get; set; }
-
-        public string? PlaatsingString { get; set; }
+        public string? PlaatsingTag { get; set; }
     }
 
     public class Vrijwilliger
