@@ -1,6 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Bedankt";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Het formulier is succesvol opgeslagen.</p>
+<div style="text-align:center">
+    <h1>@ViewData["Title"]</h1>
+
+    <p>Het formulier is succesvol opgeslagen.</p>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <a href="https://www.nutwente.nl/" class="btn btn-primary">Terug naar nutwente.nl</a>
+    }
+</div>
