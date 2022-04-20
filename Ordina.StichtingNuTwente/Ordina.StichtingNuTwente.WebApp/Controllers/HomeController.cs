@@ -338,6 +338,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Save(string answers, int? gastgezinId)
         {
