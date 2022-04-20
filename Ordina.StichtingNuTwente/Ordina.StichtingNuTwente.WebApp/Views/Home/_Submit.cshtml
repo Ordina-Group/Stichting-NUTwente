@@ -42,25 +42,33 @@
                     $.ajax({
                         url: "/Home/Update",
                         type: "PUT",
-                        dataType: 'json',
+                        dataType: 'text',
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"    }
-                    }).fail(function()  {
-                        if(window.location.href != document.referrer){
-                        window.location = document.referrer;
-                        }else{
-                            window.location = "/";
-                        }
+                        data: {"answers":JSON.stringify(obj), "id":"@(Context.Request.Query["id"])"},
+                        success: function(){
+                            if(window.location.href != document.referrer){
+                                window.location = document.referrer;
+                            }else{
+                                window.location = "/";
+                            }
+                        },
+                        error: function() { 
+                        window.location = "/Error";  
+                        } 
                     });
                  } else {
                     $.ajax({
                         url: "/Home/Save",
                         type: "POST",
-                        dataType: 'json',
+                        dataType: 'text',
                         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        data: {"answers":JSON.stringify(obj)   }
-                    }).fail(function()  {
-                       window.location = "/Bedankt";
+                        data: {"answers":JSON.stringify(obj)},
+                        success: function(){
+                            window.location = "/Bedankt";
+                        },
+                        error: function() { 
+                        window.location = "/Error";
+                        }       
                     });
                 }
            } else {
