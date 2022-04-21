@@ -210,7 +210,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Naam = contact.Naam,
                         Telefoonnummer = contact.Telefoonnummer,
                         Woonplaats = woonplaatsText,
-                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})"
+                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id)
                     });
                 }
                 else
@@ -222,7 +223,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Email = contact.Email,
                         Naam = contact.Naam,
                         Telefoonnummer = contact.Telefoonnummer,
-                        Woonplaats = woonplaatsText
+                        Woonplaats = woonplaatsText,
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id)
                     });
                 }
             }
@@ -348,13 +350,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Save(answerData, gastgezinId);
+                    return Ok();
                 }
+                return BadRequest();
             }
             catch (Exception ex)
             {
-
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            return View();
         }
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
@@ -367,13 +370,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     _reactionService.Update(answerData, id);
+                    return Ok();
                 }
+                return BadRequest();
             }
             catch (Exception ex)
             {
-
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            return View();
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -384,20 +388,26 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 var numId = int.Parse(id);
                 _reactionService.Delete(numId);
+                return Ok();
             }
             catch (Exception ex)
             {
-
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            return View();
         }
 
+        [AllowAnonymous]
+        [Route("Error")]
+        public IActionResult FriendlyError()
+        {
+            return View();
+        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
         public UserDetails? GetUser()
         {

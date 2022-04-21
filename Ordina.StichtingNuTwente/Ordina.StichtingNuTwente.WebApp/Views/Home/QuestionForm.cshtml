@@ -90,18 +90,21 @@
             });
             $("#delete").click(function (e) {
                 if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {
-                        $.ajax({
-                            url: "/Home/Delete",
-                            type: "DELETE",
-                            dataType: 'json',
-                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                            data: {"id":"@Context.Request.Query["id"]"   }
-                        }).fail(function()  {
-                           window.location = "/getnutwenteoverheidreacties987456list";
-                        });
+                    $.ajax({
+                        url: "/Home/Delete",
+                        type: "DELETE",
+                        dataType: 'text',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: {"id":"@Context.Request.Query["id"]"},
+                        success: function(){
+                            window.location = "/getnutwenteoverheidreacties987456list";
+                        },
+                        error: function(){
+                            window.location = "/Error";
+                        }
+                    });
                 }
             });
-
         });
     </script>
 

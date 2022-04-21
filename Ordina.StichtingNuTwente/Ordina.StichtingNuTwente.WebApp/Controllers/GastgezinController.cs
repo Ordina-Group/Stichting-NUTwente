@@ -25,6 +25,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("gastgezin")]
         public IActionResult Gastgezin(int id)
         {
+            _userService.checkIfUserExists(User);
             var gastGezin = _gastgezinService.GetGastgezin(id);
 
             var viewModel = new GastgezinViewModel() { };
@@ -67,11 +68,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 };
             }
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
+            gastGezin.Plaatsingen.ToList().ForEach(p => viewModel.PlaatsingsGeschiedenis.Add(new PlaatsingViewModel(p)));
+            viewModel.PlaatsingsGeschiedenis = viewModel.PlaatsingsGeschiedenis.OrderByDescending(p => p.DateTime.Ticks).ToList();
+
             viewModel.PlaatsingDTO = new PlaatsingDTO();
 
             viewModel.PlaatsingStats = new PlaatsingStats();
             viewModel.PlaatsingStats.PlaatsVolwassen = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
             viewModel.PlaatsingStats.PlaatsKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
+            viewModel.PlaatsingStats.PlaatsOnbekend = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResVolwassen = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResOnbekend = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
@@ -81,43 +86,73 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
-        public IActionResult PostPlaatsing(int GastGezinId, int PlaatsVolwassen, int PlaatsKind)
+        public IActionResult PostPlaatsing(int GastGezinId, int PlacementType, int Volwassen, int Kind, int Onbekend)
         {
-            var PrevPlaatsVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
-            var PrevPlaatsKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
+            var plaatsType = (PlacementType)PlacementType;
+            var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Volwassene).Sum(p => p.Amount);
+            var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Kind).Sum(p => p.Amount);
+            var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Onbekend).Sum(p => p.Amount);
 
-            if (PlaatsVolwassen != PrevPlaatsVolwassen)
+
+            if (Volwassen != PrevVolwassen)
             {
                 var plaatsing = new Plaatsing()
                 {
                     Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
-                    Amount = PlaatsVolwassen - PrevPlaatsVolwassen,
+                    Amount = Volwassen - PrevVolwassen,
                     AgeGroup = AgeGroup.Volwassene,
-                    PlacementType = PlacementType.Plaatsing,
+                    PlacementType = plaatsType,
                     DateTime = DateTime.Now,
                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                 };
                 _gastgezinService.AddPlaatsing(plaatsing);
             }
-            if (PlaatsKind != PrevPlaatsKind)
+            if (Kind != PrevKind)
             {
                 var plaatsing = new Plaatsing()
                 {
                     Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
-                    Amount = PlaatsKind - PrevPlaatsKind,
+                    Amount = Kind - PrevKind,
                     AgeGroup = AgeGroup.Kind,
-                    PlacementType = PlacementType.Plaatsing,
+                    PlacementType = plaatsType,
                     DateTime = DateTime.Now,
                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                 };
                 _gastgezinService.AddPlaatsing(plaatsing);
             }
-            return Redirect("gastgezin");
+            if (Onbekend != PrevOnbekend)
+            {
+                var plaatsing = new Plaatsing()
+                {
+                    Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
+                    Amount = Onbekend - PrevOnbekend,
+                    AgeGroup = AgeGroup.Onbekend,
+                    PlacementType = plaatsType,
+                    DateTime = DateTime.Now,
+                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                };
+                _gastgezinService.AddPlaatsing(plaatsing);
+            }
+            return Redirect("/gastgezin?id="+ GastGezinId);
         }
 
-        public IActionResult DeletePlaatsing(int GastGezinId)
+        public IActionResult PostReservering(int GastGezinId, int PlacementType, int rVolwassen, int rKind, int rOnbekend)
         {
-            return PostPlaatsing(GastGezinId, 0, 0);
+            return PostPlaatsing(GastGezinId, PlacementType, rVolwassen, rKind, rOnbekend);
+        }
+
+        public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
+        {
+            var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
+            var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
+            var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
+            PostPlaatsing(GastGezinId, 1, PrevVolwassen+rVolwassen, PrevKind+rKind, PrevOnbekend+rOnbekend);
+            return Delete(GastGezinId, 0);
+        }
+
+            public IActionResult Delete(int GastGezinId, int PlacementType)
+        {
+            return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
         }
 
         public IActionResult UpdatePlaatsing()
