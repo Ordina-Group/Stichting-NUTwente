@@ -354,7 +354,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
 
             }
-            return View();
+            return Ok();
         }
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
@@ -373,7 +373,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
 
             }
-            return View();
+            return Ok();
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -389,15 +389,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
 
             }
-            return View();
+            return Ok();
         }
 
+        [AllowAnonymous]
+        [Route("Error")]
+        public IActionResult FriendlyError()
+        {
+            return View();
+        }
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
         public UserDetails? GetUser()
         {
