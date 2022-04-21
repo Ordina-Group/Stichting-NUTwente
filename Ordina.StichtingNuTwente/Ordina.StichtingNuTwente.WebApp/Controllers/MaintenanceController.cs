@@ -94,5 +94,32 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UploadUpdateGastgezin(IFormFile file)
+        {
+
+            string uploads = Path.Combine(_environment.WebRootPath, "");
+            string filePath = Path.Combine(uploads, Guid.NewGuid().ToString() + ".xlxs");
+            try
+            {
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    maintenanceService.UpdateDataFromExcel(fileStream, 1);
+                }
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View("Index");
+            }
+            catch
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File upload failed!!";
+                return View("Index");
+            }
+        }
+
     }
 }
