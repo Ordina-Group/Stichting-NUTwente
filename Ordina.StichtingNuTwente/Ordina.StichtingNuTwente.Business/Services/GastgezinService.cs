@@ -20,7 +20,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public Gastgezin? GetGastgezin(int id)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            return gastgezinRepository.GetById(id, "Contact,Vluchtelingen,Begeleider");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
@@ -93,22 +93,33 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
         {
-            //var plaatsingRepository = new Repository<Plaatsing>(_context);
-            //var plaatsingen = plaatsingRepository.GetAll("Gastgezin");
-            //if(gastGezinId != null)
-            //{
-            //    plaatsingen = plaatsingen.Where(p => p.Gastgezin.Id == gastGezinId);
-            //}    
-            //if (type != null)
-            //{
-            //    plaatsingen = plaatsingen.Where(p => p.PlacementType == type);
-            //}
-            //if(ageGroup != null)
-            //{
-            //    plaatsingen = plaatsingen.Where(p => p.AgeGroup == ageGroup);
-            //}
-            List<Plaatsing> plaatsingen = new();
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            var plaatsingen = plaatsingRepository.GetAll("Gastgezin");
+            if (gastGezinId != null)
+            {
+                plaatsingen = plaatsingen.Where(p => p.Gastgezin.Id == gastGezinId);
+            }
+            if (type != null)
+            {
+                plaatsingen = plaatsingen.Where(p => p.PlacementType == type);
+            }
+            if (ageGroup != null)
+            {
+                plaatsingen = plaatsingen.Where(p => p.AgeGroup == ageGroup);
+            }
+            //List<Plaatsing> plaatsingen = new();
             return plaatsingen.ToList();
+        }
+
+        public string GetPlaatsingTag(int gastgezinId)
+        {
+            var plaatsingen = GetPlaatsingen(gastgezinId);
+            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
+            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
+            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
+            int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
+            string tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            return tag;
         }
     }
 }

@@ -17,7 +17,19 @@
     <input type="file" name="file" id="file" />
     <br>
     <br>
-    <input class="btn btn-primary" type="submit" value="Upload en process Excell" />
+    <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
+    <br>
+    <br>
+}
+
+<h2>Upload Plaatsingsdata</h2>
+@using (Html.BeginForm("UploadPlaatsingFile","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Plaatsing Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
     <br>
     <br>
 }
