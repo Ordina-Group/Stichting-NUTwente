@@ -6,6 +6,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,10 +16,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
     {
         private readonly NuTwenteContext _context;
         private readonly IFormBusiness _formBusiness;
-        public MaintenanceService(NuTwenteContext context, IFormBusiness formBusiness)
+        private readonly IGastgezinService _gastgezinService;
+        private readonly IUserService _userService;
+        public MaintenanceService(NuTwenteContext context, IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService)
         {
             _context = context;
             _formBusiness = formBusiness;
+            _gastgezinService = gastgezinService;
+            _userService = userService;
         }
 
         public void LoadDataFromExcel(Stream excelStream, int formId)
@@ -88,5 +93,85 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 rowNum++;
             }
         }
+
+        public void LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User)
+        {
+            using FastExcel.FastExcel fastExcel = new(excelStream);
+            var worksheet = fastExcel.Worksheets[0];
+            worksheet.Read();
+            var rows = worksheet.Rows.ToArray();
+            var rowNum = 0;
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier");
+            foreach (var row in rows)
+            {
+                if (rowNum > 2)
+                {
+                    var index = 0;
+                    var cells = row.Cells;
+                    var done = false;
+                    Gastgezin gastgezin = new Gastgezin();
+                    int adults;
+                    int children;
+                    int unknown;
+                    foreach (var cell in cells)
+                    {
+                        if (index == 0)
+                        {
+                            gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier.Id == (int)cell.Value);
+                        }
+                        if (index == 8)
+                        {
+                            var val = cell.Value.ToString();
+                            if (val != null && val != "")
+                            {
+                                if (val.Contains("v"))
+                                {
+                                    var plaatsing = new Plaatsing()
+                                    {
+                                        DateTime = DateTime.Now,
+                                        AgeGroup = AgeGroup.Volwassene,
+                                        Amount = val[val.IndexOf("v") + 1],
+                                        Gastgezin = gastgezin,
+                                        PlacementType = PlacementType.Plaatsing,
+                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                    };
+                                    _gastgezinService.AddPlaatsing(plaatsing);
+                                }
+                                if (val.Contains("k"))
+                                {
+                                    var plaatsing = new Plaatsing()
+                                    {
+                                        DateTime = DateTime.Now,
+                                        AgeGroup = AgeGroup.Kind,
+                                        Amount = val[val.IndexOf("k") + 1],
+                                        Gastgezin = gastgezin,
+                                        PlacementType = PlacementType.Plaatsing,
+                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                    };
+                                    _gastgezinService.AddPlaatsing(plaatsing);
+                                }
+                                if (!val.Contains("v") && !val.Contains("k"))
+                                {
+                                    var plaatsing = new Plaatsing()
+                                    {
+                                        DateTime = DateTime.Now,
+                                        AgeGroup = AgeGroup.Onbekend,
+                                        Amount = int.Parse(val),
+                                        Gastgezin = gastgezin,
+                                        PlacementType = PlacementType.Plaatsing,
+                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                    };
+                                    _gastgezinService.AddPlaatsing(plaatsing);
+                                }
+                            }
+                        }
+                        index++;
+                    };
+                }
+                rowNum++;
+            }
+        }
     }
 }
+
