@@ -172,6 +172,80 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 rowNum++;
             }
         }
+
+        public void UpdateDataFromExcel(Stream excelStream, int formId)
+        {
+            using FastExcel.FastExcel fastExcel = new(excelStream);
+            var worksheet = fastExcel.Worksheets[0];
+            worksheet.Read();
+            var rows = worksheet.Rows.ToArray();
+            var rowNum = 0;
+            var reactieRepository = new Repository<Reactie>(_context);
+            string file = FormHelper.GetFilenameFromId(formId);
+            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            var colomnIndexToQuestionID = new Dictionary<int, int>();
+            foreach (var row in rows)
+            {
+                if (rowNum == 0)
+                {
+                    var index = 0;
+                    var cells = row.Cells;
+                    var done = false;
+
+                    foreach (var cell in cells)
+                    {
+                        foreach (var s in questionForm.Sections)
+                        {
+                            foreach (var q in s.Questions)
+                            {
+                                if (q.Text == cell.ToString())
+                                {
+                                    colomnIndexToQuestionID.Add(index, q.Id);
+                                    done = true;
+                                    break;
+                                }
+                            }
+                            if (done) break;
+                        }
+                        index++;
+                    }
+                }
+                else
+                {
+                    Reactie? reaction = null;
+
+
+                    var cells = row.Cells;
+
+                    var index = 0;
+                    foreach (var cell in cells)
+                    {
+                        if (index == 0)
+                        {
+                            var id = int.Parse(cell.ToString());
+                            reaction = reactieRepository.GetById(id, "Antwoorden");
+                        }
+                        else if (reaction != null && colomnIndexToQuestionID.ContainsKey(index))
+                        {
+                            var antwoord = new Antwoord();
+                            var id = colomnIndexToQuestionID[index];
+                            antwoord.IdVanVraag = id;
+                            antwoord.Response = cell.ToString();
+                            var a = reaction.Antwoorden.Where(a => a.IdVanVraag == id);
+                            foreach (var ant in a)
+                                reaction.Antwoorden.Remove(ant);
+                            reaction.Antwoorden.Add(antwoord);
+                        }
+                        index++;
+                    }
+                    if (reaction != null)
+                    {
+                        reactieRepository.Update(reaction);
+                    }
+                }
+                rowNum++;
+            }
+        }
     }
 }
 

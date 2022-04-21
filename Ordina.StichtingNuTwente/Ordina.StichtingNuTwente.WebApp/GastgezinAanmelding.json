@@ -74,6 +74,17 @@
           "ParameterName": "Telefoonnummer"
         },
         {
+          "Id": "17",
+          "Number": "6",
+          "Text": "Tweede telefoonnummer.",
+          "Description": "",
+          "InputType": "phoneNumber",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer2"
+        },
+        {
           "Id": "7",
           "Number": "7",
           "Text": "Wat is uw email",
@@ -153,7 +164,7 @@
           "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
           "Description": "",
           "InputType": "checkbox",
-          "InputOptions": ["Ik ga hiermee akkoord"],
+          "InputOptions": [ "Ik ga hiermee akkoord" ],
           "Required": "true"
         }
       ]
