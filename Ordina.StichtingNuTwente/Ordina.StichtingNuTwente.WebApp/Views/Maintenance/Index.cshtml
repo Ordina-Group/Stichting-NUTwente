@@ -13,7 +13,18 @@
 <h2>Basic File Upload</h2>
 @using (Html.BeginForm("UploadFile","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    <label for="file">Upload Gastgezin Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
+    <label for="file">Upload Gastgezin create Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
+    <br>
+    <br>
+}
+
+@using (Html.BeginForm("UploadUpdateGastgezin","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Gastgezin update Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
     <input type="file" name="file" id="file" />
     <br>
     <br>
