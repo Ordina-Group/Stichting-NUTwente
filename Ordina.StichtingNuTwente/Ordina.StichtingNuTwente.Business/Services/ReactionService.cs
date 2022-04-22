@@ -134,7 +134,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (awnser != null)
                     {
                         var userNameAndEmail = awnser.Antwoord;
-                        if (userNameAndEmail.Split("(").Count() > 0 && userNameAndEmail.Split("(")[1].Split(")").Count() > 0)
+                        if(userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
                         {
                             var email = userNameAndEmail.Split("(")[1].Split(")")[0];
                             dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
