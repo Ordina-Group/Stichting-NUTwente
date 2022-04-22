@@ -12,16 +12,19 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public Persoon()
         {
             Naam = "";
+            Achternaam = "";
             GeboorteDatum = "";
             Geboorteplaats = "";
             Email = "";
             Telefoonnummer = "";
+            Telefoonnummer2 = "";
             Mobiel = "";
             Nationaliteit = "";
             Talen = "";
         }
 
         public string Naam { get; set; }
+        public string Achternaam { get; set; }
 
         public string GeboorteDatum  { get; set; }
 
