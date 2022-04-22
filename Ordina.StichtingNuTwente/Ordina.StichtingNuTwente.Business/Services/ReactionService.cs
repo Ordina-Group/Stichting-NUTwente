@@ -130,20 +130,27 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
                 if (viewModel.answer.Any())
                 {
-                    var userNameAndEmail = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString()).Antwoord;
-                    var email = userNameAndEmail.Split("(")[1].Split(")")[0];
-                    dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
-                    if (dbUser != null)
+                    var awnser = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
+                    if (awnser != null)
                     {
-                        if (dbUser.Reacties != null)
+                        var userNameAndEmail = awnser.Antwoord;
+                        if (userNameAndEmail.Split("(").Count() > 0 && userNameAndEmail.Split("(")[1].Split(")").Count() > 0)
                         {
-                            dbUser.Reacties.Add(reactie);
+                            var email = userNameAndEmail.Split("(")[1].Split(")")[0];
+                            dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
+                            if (dbUser != null)
+                            {
+                                if (dbUser.Reacties != null)
+                                {
+                                    dbUser.Reacties.Add(reactie);
+                                }
+                                else
+                                {
+                                    dbUser.Reacties = new List<Reactie>() { reactie };
+                                }
+                                UserRepo.Update(dbUser);
+                            }
                         }
-                        else
-                        {
-                            dbUser.Reacties = new List<Reactie>() { reactie };
-                        }
-                        UserRepo.Update(dbUser);
                     }
                 }
             }
@@ -179,32 +186,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
                 gastgezinRepo.Create(gastgezin);
             }
-
-            /* 
-
-              SAme as line 97 voor
-              if form is Aanmeld (form.id = ?)
-              {
-                 - nieuw gastgezin, alleen contact ID
-                  -  status = aangemeld
-              }
-
-              if form is Intake (form.id = ?)
-              { 
-                 - 
-              }
-
-              (Aanpassing Gastgezinnen entiteit IntakeFormiler => Reacties.Id)
-             
-              Op mijn Gastgezinnen pagina Twee kolommen
-              - Aanmeld formulier
-              - Intake formulier of Nieuw intake formulier
-                (GastgezinIntake?GastGezinId=x)
-            
-              1. Aanmeld formlier
-              2. Coordinator koppeld Begeleider via overzicht Alle Gastgezinnen
-              3. Via mijn Gastgezin -> Nieuwe Intake
-             */
         }
 
         private T CreateDbObjectFromFormFilledWithAnswers<T>(Form form, AnswersViewModel viewModel, T classObject)
@@ -305,7 +286,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     from persoon in PeopleReaction.DefaultIfEmpty()
                     select new { reactie, persoon };
 
-            viewModel = t.ToList().ConvertAll(p => {
+            viewModel = t.OrderByDescending(x => x.reactie.Id).ToList().ConvertAll(p =>
+            {
                 var awnser = ReactieMapping.FromDatabaseToWebListModel(p.reactie);
                 awnser.Persoon = p.persoon;
                 return awnser;
