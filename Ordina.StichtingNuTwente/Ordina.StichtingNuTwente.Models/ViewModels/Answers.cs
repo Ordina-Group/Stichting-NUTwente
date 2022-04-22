@@ -1,4 +1,6 @@
-﻿namespace Ordina.StichtingNuTwente.Models.ViewModels
+﻿using Ordina.StichtingNuTwente.Models.Models;
+
+namespace Ordina.StichtingNuTwente.Models.ViewModels
 {
     public class Answers
     {
@@ -38,6 +40,8 @@
         public string FormulierId { get; set; }
 
         public string FormulierNaam { get; set; }
+
+        public Persoon? Persoon { get; set; }
 
         //public string UserId { get; set; }
     }
