@@ -289,7 +289,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var reactieRepository = new Repository<Reactie>(_context);
             var persoonRepository = new Repository<Persoon>(_context);
             var reacties = reactieRepository.GetAll();
-            var people = persoonRepository.GetAll("Reactie");
+            var people = persoonRepository.GetAll("Reactie,Adres");
             if (form != null)
             {
                 reacties = reacties.Where(f => f.FormulierId == form.Value);
