@@ -80,7 +80,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
             foreach (var reactie in reacties)
             {
                 var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
-                UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+                try
+                {
+                    UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+                }
+                catch (Exception) { }
             }
         }
 
