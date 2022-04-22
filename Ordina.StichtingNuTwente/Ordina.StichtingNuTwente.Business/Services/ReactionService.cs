@@ -6,7 +6,6 @@ using Ordina.StichtingNuTwente.Data;
 using Ordina.StichtingNuTwente.Models.Mappings;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace Ordina.StichtingNuTwente.Business.Services
@@ -131,10 +130,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
                 if (viewModel.answer.Any())
                 {
-                    var a = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
-                    if (a != null)
+                    var awnser = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
+                    if (awnser != null)
                     {
-                        var userNameAndEmail = a.Antwoord;
+                        var userNameAndEmail = awnser.Antwoord;
                         if (userNameAndEmail.Split("(").Count() > 0 && userNameAndEmail.Split("(")[1].Split(")").Count() > 0)
                         {
                             var email = userNameAndEmail.Split("(")[1].Split(")")[0];
