@@ -170,7 +170,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var gastgezin = new Gastgezin
                 {
                     Contact = dbPersoon,
-                    Status = (int) GastgezinStatus.Aangemeld,                    
+                    Status = (int)GastgezinStatus.Aangemeld,
                 };
 
                 gastgezinRepo.Create(gastgezin);
@@ -287,12 +287,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             List<AnswerListModel> viewModel = new List<AnswerListModel>();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbItems = reactieRepository.GetAll();
+            var persoonRepository = new Repository<Persoon>(_context);
+            var reacties = reactieRepository.GetAll();
+            var people = persoonRepository.GetAll("Reactie,Adres");
             if (form != null)
             {
-                dbItems = dbItems.Where(f => f.FormulierId == form.Value);
+                reacties = reacties.Where(f => f.FormulierId == form.Value);
             }
-            viewModel = dbItems.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
+            var t = from reactie in reacties
+                    join add in people
+                    on reactie.Id equals add.Reactie?.Id
+                    into PeopleReaction
+                    from persoon in PeopleReaction.DefaultIfEmpty()
+                    select new { reactie, persoon };
+
+            viewModel = t.ToList().ConvertAll(p => {
+                var awnser = ReactieMapping.FromDatabaseToWebListModel(p.reactie);
+                awnser.Persoon = p.persoon;
+                return awnser;
+            });
             return viewModel;
         }
 

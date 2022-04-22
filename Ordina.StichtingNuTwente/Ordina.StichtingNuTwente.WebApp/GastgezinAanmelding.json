@@ -27,7 +27,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "true"
+          "Required": "true",
+          "Object": "Persoon",
+          "ParameterName": "Achternaam"
         },
         {
           "Id": "3",
