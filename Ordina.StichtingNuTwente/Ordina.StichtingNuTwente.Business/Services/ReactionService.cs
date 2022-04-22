@@ -72,7 +72,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public void UpdateAll(int? id = 0)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            var reacties = reactieRepository.GetAll();
+            var reacties = reactieRepository.GetAll("Antwoorden");
             if (id != 0 && id != null)
             {
                 reacties = reacties.Where(r => r.FormulierId == id);
