@@ -9,6 +9,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Microsoft.Graph;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -246,6 +248,129 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 rowNum++;
             }
         }
+
+
+        public List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream)
+        {
+            var messages = new List<MaintenanceMessage>();
+
+            var reactieRepository = new Repository<Reactie>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+            var persoonRepository = new Repository<Persoon>(_context);
+
+            using FastExcel.FastExcel fastExcel = new(excelStream);
+            var worksheet = fastExcel.Worksheets[0];
+            worksheet.Read();
+            var rows = worksheet.Rows.ToArray();
+            for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+            {
+                var row = rows[rowIndex];
+                if (rowIndex == 0)
+                {
+                    continue;
+                }
+
+                int aanmeldId = 0;
+                int? intakeId = null;
+                string aanmeldIdText = "";
+                string intakeIdText = "";
+
+                try
+                {
+                    var cells = row.Cells.ToList();
+                    aanmeldIdText = cells[0].ToString();
+                    intakeIdText = cells[1].ToString();
+
+                    if (string.IsNullOrWhiteSpace(aanmeldIdText))
+                    {
+                        continue;
+                    }
+
+                    aanmeldId = Convert.ToInt32(aanmeldIdText);
+
+                    if (!string.IsNullOrWhiteSpace(intakeIdText))
+                    {
+                        try
+                        {
+                            intakeId = Convert.ToInt32(intakeIdText);
+                        }
+                        catch(FormatException)
+                        {
+                            //Ignore any format exception
+                        }
+                    }
+
+                    var persoon = persoonRepository.Get(e => e.Reactie.Id == aanmeldId, "Gastgezin");
+                    if (persoon == null)
+                    {
+                        messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Er is geen persoon met Reactie Id = Aanmeld Id", MaintenanceMessageType.Error));
+                        continue;
+                    }
+
+                    if (persoon.Gastgezin != null)
+                    {
+                        //Already has a gastgezin coupled
+                        messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Gastgezin bestaat al."));
+                        continue;
+                    }
+
+                    var gastgezin = new Gastgezin
+                    {
+                        Contact = persoon,
+                        Status = GastgezinStatus.Bezocht
+                    };
+
+                    if (intakeId.HasValue)
+                    {
+                        gastgezin.IntakeFormulier = reactieRepository.GetById((intakeId.Value));
+
+                        if (gastgezin.IntakeFormulier == null)
+                        {
+                            messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Intake formulier was niet gevonden. Gastgezin niet toegevoed", MaintenanceMessageType.Error));
+                            continue;
+                        }
+                    }
+
+                    gastgezinRespority.Create(gastgezin);
+
+                    persoon.Gastgezin = gastgezin;
+                    persoonRepository.Update(persoon);
+
+                    messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Gastgezin toegevoegd", MaintenanceMessageType.Success));
+                }
+                catch (FormatException ex)
+                {
+                    messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldIdText} Intake Id: {intakeIdText} - {ex.Message}", MaintenanceMessageType.Error));
+                }
+                catch (Exception ex)
+                {
+                    messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - {ex.Message}", MaintenanceMessageType.Error));
+                }
+            }
+
+            return messages;
+        }
+    }
+
+    public class MaintenanceMessage
+    {
+        public MaintenanceMessage(string message, MaintenanceMessageType messageType = MaintenanceMessageType.Info)
+        {
+            Message = message;
+            MessageType = messageType;
+        }
+
+        public string Message { get; set; }
+
+        public MaintenanceMessageType MessageType { get; set; }
+    }
+
+    public enum MaintenanceMessageType
+    {
+        Info,
+        Warning,
+        Error,
+        Success
     }
 }
 
