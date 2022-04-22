@@ -67,6 +67,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Link</th>
+                        <th scope="col">Naam</th>
                         <th scope="col">Reactie datum</th>
                         <th scope="col">Formulier</th>
                     </tr>
@@ -77,6 +78,7 @@
                         <tr>
                             <th scope="row">@item.ReactieId</th>
                             <td><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@item.ReactieId">Bekijk Reactie</a></td>
+                            <td>@item.Persoon?.Naam @item.Persoon?.Achternaam</td>
                             <td>@item.AnswerDate</td>
                             <td>@item.FormulierNaam</td>
                         </tr>
