@@ -78,8 +78,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 reacties = reacties.Where(r => r.FormulierId == id);
             }
-
-            var test = reacties.ToList();
             foreach (var reactie in reacties)
             {
                 var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
@@ -87,9 +85,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
                 }
-                catch (Exception e) { 
-                    Debug.WriteLine(e.ToString());
-                }
+                catch (Exception) { }
             }
         }
 
@@ -291,7 +287,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     from persoon in PeopleReaction.DefaultIfEmpty()
                     select new { reactie, persoon };
 
-            viewModel = t.OrderByDescending(x => x.reactie.Id).ToList().ConvertAll(p => {
+            viewModel = t.OrderByDescending(x => x.reactie.Id).ToList().ConvertAll(p =>
+            {
                 var awnser = ReactieMapping.FromDatabaseToWebListModel(p.reactie);
                 awnser.Persoon = p.persoon;
                 return awnser;
