@@ -72,15 +72,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public void UpdateAll(int? id = 0)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            var reacties = reactieRepository.GetAll();
-            if (id != 0)
+            var reacties = reactieRepository.GetAll("Antwoorden");
+            if (id != 0 && id != null)
             {
                 reacties = reacties.Where(r => r.FormulierId == id);
             }
             foreach (var reactie in reacties)
             {
                 var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
-                UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+                try
+                {
+                    UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+                }
+                catch (Exception) { }
             }
         }
 
@@ -126,20 +130,27 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
                 if (viewModel.answer.Any())
                 {
-                    var userNameAndEmail = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString()).Antwoord;
-                    var email = userNameAndEmail.Split("(")[1].Split(")")[0];
-                    dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
-                    if (dbUser != null)
+                    var awnser = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
+                    if (awnser != null)
                     {
-                        if (dbUser.Reacties != null)
+                        var userNameAndEmail = awnser.Antwoord;
+                        if(userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
                         {
-                            dbUser.Reacties.Add(reactie);
+                            var email = userNameAndEmail.Split("(")[1].Split(")")[0];
+                            dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
+                            if (dbUser != null)
+                            {
+                                if (dbUser.Reacties != null)
+                                {
+                                    dbUser.Reacties.Add(reactie);
+                                }
+                                else
+                                {
+                                    dbUser.Reacties = new List<Reactie>() { reactie };
+                                }
+                                UserRepo.Update(dbUser);
+                            }
                         }
-                        else
-                        {
-                            dbUser.Reacties = new List<Reactie>() { reactie };
-                        }
-                        UserRepo.Update(dbUser);
                     }
                 }
             }
@@ -170,37 +181,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var gastgezin = new Gastgezin
                 {
                     Contact = dbPersoon,
-                    Status = (int) GastgezinStatus.Aangemeld,                    
+                    Status = (int)GastgezinStatus.Aangemeld,
                 };
 
                 gastgezinRepo.Create(gastgezin);
             }
-
-            /* 
-
-              SAme as line 97 voor
-              if form is Aanmeld (form.id = ?)
-              {
-                 - nieuw gastgezin, alleen contact ID
-                  -  status = aangemeld
-              }
-
-              if form is Intake (form.id = ?)
-              { 
-                 - 
-              }
-
-              (Aanpassing Gastgezinnen entiteit IntakeFormiler => Reacties.Id)
-             
-              Op mijn Gastgezinnen pagina Twee kolommen
-              - Aanmeld formulier
-              - Intake formulier of Nieuw intake formulier
-                (GastgezinIntake?GastGezinId=x)
-            
-              1. Aanmeld formlier
-              2. Coordinator koppeld Begeleider via overzicht Alle Gastgezinnen
-              3. Via mijn Gastgezin -> Nieuwe Intake
-             */
         }
 
         private T CreateDbObjectFromFormFilledWithAnswers<T>(Form form, AnswersViewModel viewModel, T classObject)
@@ -287,12 +272,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             List<AnswerListModel> viewModel = new List<AnswerListModel>();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbItems = reactieRepository.GetAll();
+            var persoonRepository = new Repository<Persoon>(_context);
+            var reacties = reactieRepository.GetAll();
+            var people = persoonRepository.GetAll("Reactie,Adres");
             if (form != null)
             {
-                dbItems = dbItems.Where(f => f.FormulierId == form.Value);
+                reacties = reacties.Where(f => f.FormulierId == form.Value);
             }
-            viewModel = dbItems.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r));
+            var t = from reactie in reacties
+                    join add in people
+                    on reactie.Id equals add.Reactie?.Id
+                    into PeopleReaction
+                    from persoon in PeopleReaction.DefaultIfEmpty()
+                    select new { reactie, persoon };
+
+            viewModel = t.OrderByDescending(x => x.reactie.Id).ToList().ConvertAll(p =>
+            {
+                var awnser = ReactieMapping.FromDatabaseToWebListModel(p.reactie);
+                awnser.Persoon = p.persoon;
+                return awnser;
+            });
             return viewModel;
         }
 
