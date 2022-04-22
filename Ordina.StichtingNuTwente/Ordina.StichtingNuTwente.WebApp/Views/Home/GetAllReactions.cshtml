@@ -68,6 +68,9 @@
                         <th scope="col">#</th>
                         <th scope="col">Link</th>
                         <th scope="col">Naam</th>
+                        <th scope="col">Telefoon</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Woonplaats</th>
                         <th scope="col">Reactie datum</th>
                         <th scope="col">Formulier</th>
                     </tr>
@@ -79,6 +82,9 @@
                             <th scope="row">@item.ReactieId</th>
                             <td><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@item.ReactieId">Bekijk Reactie</a></td>
                             <td>@item.Persoon?.Naam @item.Persoon?.Achternaam</td>
+                            <td>@item.Persoon?.Telefoonnummer</td>
+                            <td>@item.Persoon?.Email</td>
+                            <td>@item.Persoon?.Adres?.Woonplaats</td>
                             <td>@item.AnswerDate</td>
                             <td>@item.FormulierNaam</td>
                         </tr>
