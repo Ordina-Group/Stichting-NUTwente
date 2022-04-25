@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Business.Services;
-using Ordina.StichtingNuTwente.Models.Mappings;
-using System.Security.Claims;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -371,6 +369,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveAndSendEmailAsync(string answers)
+        {
+            try
+            {
+                if (answers != null)
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    var reactieId = _reactionService.SaveAndGetReactieId(answerData);
+                    var persoon = _persoonService.GetPersoonByReactieId(reactieId);
+                    MailHelper mailHelper = new MailHelper(_mailService);
+                    bool success = await mailHelper.bevestiging(persoon);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View();
         }
 
         [HttpPost]

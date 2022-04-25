@@ -147,7 +147,19 @@
                         }).fail(function()  {
                            window.location.href = "/getnutwenteoverheidreacties987456list";
                         });
-                     } else {
+                    } 
+                    else if(@Model.Id == 1 || @Model.Id == 4){
+                        $.ajax({
+                            url: "/Home/SaveAndSendEmail",
+                            type: "POST",
+                            dataType: 'json',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj)   }
+                        }).fail(function()  {
+                           window.location = "/Bedankt";
+                        });
+                    }
+                    else {
                         $.ajax({
                             url: "/Home/Save",
                             type: "POST",
