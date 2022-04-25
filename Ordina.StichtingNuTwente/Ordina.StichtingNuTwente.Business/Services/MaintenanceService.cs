@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Microsoft.Graph;
 
 namespace Ordina.StichtingNuTwente.Business.Services
@@ -347,6 +346,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - {ex.Message}", MaintenanceMessageType.Error));
                 }
             }
+
+            messages.Add(new MaintenanceMessage($@"Gastgezinnen total in database: {gastgezinRespority.GetAll().Count()}", MaintenanceMessageType.Error));
 
             return messages;
         }
