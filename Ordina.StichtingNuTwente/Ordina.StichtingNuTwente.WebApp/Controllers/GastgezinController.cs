@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
-    [Authorize(Policy = "RequireCoordinatorRole")]
+    [Authorize(Policy = "RequireVrijwilligerRole")]
     public class GastgezinController : Controller
     {
         private readonly IGastgezinService _gastgezinService;
@@ -29,6 +29,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
             var gastGezin = _gastgezinService.GetGastgezin(id);
+            if (gastGezin == null)
+            {
+                Redirect("Error");
+            }
+            if (gastGezin.Begeleider.AADId != _userService.getUserFromClaimsPrincipal(User).AADId || !User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+            {
+                Redirect("User/AccesDeniedCatch");
+            }
 
             var viewModel = new GastgezinViewModel() { };
             if (gastGezin.Contact != null)
@@ -135,7 +143,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 };
                 _gastgezinService.AddPlaatsing(plaatsing);
             }
-            return Redirect("/gastgezin?id="+ GastGezinId);
+            return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
         public IActionResult PostReservering(int GastGezinId, int PlacementType, int rVolwassen, int rKind, int rOnbekend)
@@ -148,11 +156,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
             var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
             var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
-            PostPlaatsing(GastGezinId, 1, PrevVolwassen+rVolwassen, PrevKind+rKind, PrevOnbekend+rOnbekend);
+            PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
             return Delete(GastGezinId, 0);
         }
 
-            public IActionResult Delete(int GastGezinId, int PlacementType)
+        public IActionResult Delete(int GastGezinId, int PlacementType)
         {
             return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
         }
