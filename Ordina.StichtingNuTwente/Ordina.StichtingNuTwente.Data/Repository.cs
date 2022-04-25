@@ -41,7 +41,7 @@ namespace Ordina.StichtingNuTwente.Data
             return entity;
         }
 
-        public T GetById(int id, string includeProperties = null) 
+        public T GetById(int id, string includeProperties = null)
         {
             IQueryable<T> q = entities;
             if (includeProperties != null)
@@ -52,6 +52,20 @@ namespace Ordina.StichtingNuTwente.Data
                 }
             }
             return q.SingleOrDefault(x => x.Id == id);
+        }
+
+        public T Get(Expression<Func<T, bool>> where, string includeProperties = null)
+        {
+            IQueryable<T> q = entities;
+            if (includeProperties != null)
+            {
+                foreach (var p in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    q = q.Include(p);
+                }
+            }
+
+            return q.SingleOrDefault(where);
         }
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
