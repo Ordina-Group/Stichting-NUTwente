@@ -74,7 +74,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Telefoonnummer = contact.Telefoonnummer,
                     Woonplaats = woonplaatsText,
                     AanmeldFormulierId = aanmeldFormulierId,
-                    IntakeFormulierId = intakeFormulierId
+                    IntakeFormulierId = intakeFormulierId,
+                    Note = gastGezin.Note
                 };
             }
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
@@ -168,6 +169,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult UpdatePlaatsing()
         {
             return View();
+        }
+
+        public IActionResult PostNote(int GastGezinId, string Note)
+        {
+            _gastgezinService.UpdateNote(GastGezinId, Note);
+            return Redirect("/gastgezin?id=" + GastGezinId);
         }
     }
 }

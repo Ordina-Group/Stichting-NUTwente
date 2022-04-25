@@ -9,109 +9,135 @@
 <h2>Gastgezin @Model.GastGezin.Naam</h2>
 
 </br>
-<div class="row row-cols-3 row-cols-md-3 g-4">
-    <div class="col">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Contact Informatie</h5>
-                <p>
-                    Naam: @Model.GastGezin.Naam</br>
-                    Telefoonnummer: @Model.GastGezin.Telefoonnummer</br>
-                    Email: @Model.GastGezin.Email</br>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Informatie</h5>
+                    <p>
+                        Naam: @Model.GastGezin.Naam</br>
+                        Telefoonnummer: @Model.GastGezin.Telefoonnummer</br>
+                        Email: @Model.GastGezin.Email</br>
 
-                    <h5 class="card-title">Adres</h5>
-                    Straat: @Model.GastGezin.Adres</br>
-                    Woonplaats: @Model.GastGezin.Woonplaats</br>
-                    Postcode: 1111AA
-                </p>
-                <h5>Formulieren</h5>
-                <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="link">Aanmeldformulier</a>
-                </br>
-                @if (Model.GastGezin.IntakeFormulierId != 0)
+                        <h5 class="card-title">Adres</h5>
+                        Straat: @Model.GastGezin.Adres</br>
+                        Woonplaats: @Model.GastGezin.Woonplaats</br>
+                        Postcode: 1111AA
+                    </p>
+                    <h5>Formulieren</h5>
+                    <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="link">Aanmeldformulier</a>
+                    </br>
+                    @if (Model.GastGezin.IntakeFormulierId != 0)
+                    {
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="link">Intakeformulier</a>
+                    }
+                    else
+                    {
+
+                        <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3">Begin Intake</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="row row-cols-2">
+                @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
                 {
+                    <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                    <input type="hidden" name="PlacementType" value="1">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Geplaatst</h5>
+                                <p>Totaal: @(Model.PlaatsingStats.PlaatsKind + Model.PlaatsingStats.PlaatsVolwassen + Model.PlaatsingStats.PlaatsOnbekend)</p>
 
-                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="link">Intakeformulier</a>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Volwassenen</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="Volwassen" value="@Model.PlaatsingStats.PlaatsVolwassen">
+                                    </div>
+                                </div>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Kinderen</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="Kind" value="@Model.PlaatsingStats.PlaatsKind">
+                                    </div>
+                                </div>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Onbekend</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="Onbekend" value="@Model.PlaatsingStats.PlaatsOnbekend">
+                                    </div>
+                                </div>
+                                <div class="card-buttons mt-3">
+                                    <input type="submit" value="Update" class="btn btn-primary">
+                                    <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="1" class="btn btn-danger" style="float:right">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
-                else
+                @using (Html.BeginForm("PostReservering", "Gastgezin", FormMethod.Post))
                 {
+                    <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                    <input type="hidden" name="PlacementType" value="0">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Gereserveerd</h5>
+                                <p>Totaal: @(Model.PlaatsingStats.ResKind + Model.PlaatsingStats.ResVolwassen + Model.PlaatsingStats.ResOnbekend)</p>
 
-                    <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary">Begin Intake</a>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label-sm">Volwassenen</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="rVolwassen" value="@Model.PlaatsingStats.ResVolwassen">
+                                    </div>
+                                </div>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label-sm">Kinderen</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="rKind" value="@Model.PlaatsingStats.ResKind">
+                                    </div>
+                                </div>
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label-sm">Onbekend</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control form-control" id="colFormLabelSm" name="rOnbekend" value="@Model.PlaatsingStats.ResOnbekend">
+                                    </div>
+                                </div>
+                                <div class="card-buttons mt-3">
+                                    <input type="submit" value="Update" class="btn btn-primary">
+                                    <input type="submit" asp-controller="Gastgezin" asp-action="PlaatsReservering" value="Plaats" class="btn btn-success">
+                                    <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="0" class="btn btn-danger" style="float:right">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
+            </div>
+            <div class="row">
+                <div class="col g-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Notities</h5>
+                            @using (Html.BeginForm("PostNote", "Gastgezin", FormMethod.Post))
+                            {
+                                <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                                <div class="grow-wrap">
+                                    <textarea id="Id" rows="3" class="form-control question" name="Note" size="100" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
+                                </div>
+                                <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
-    {
-        <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-        <input type="hidden" name="PlacementType" value="1">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Geplaatst</h5>
-                    <p>Totaal: @(Model.PlaatsingStats.PlaatsKind + Model.PlaatsingStats.PlaatsVolwassen + Model.PlaatsingStats.PlaatsOnbekend)</p>
-
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label">Volwassenen</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="Volwassen" value="@Model.PlaatsingStats.PlaatsVolwassen">
-                        </div>
-                    </div>
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label">Kinderen</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="Kind" value="@Model.PlaatsingStats.PlaatsKind">
-                        </div>
-                    </div>
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label">Onbekend</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="Onbekend" value="@Model.PlaatsingStats.PlaatsOnbekend">
-                        </div>
-                    </div>
-                    <input type="submit" value="Update" class="btn btn-primary">
-                    <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="1" class="btn btn-danger" style="float:right">Clear</button>
-                </div>
-            </div>
-        </div>
-    }
-    @using (Html.BeginForm("PostReservering", "Gastgezin", FormMethod.Post))
-    {
-        <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-        <input type="hidden" name="PlacementType" value="0">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Gereserveerd</h5>
-                    <p>Totaal: @(Model.PlaatsingStats.ResKind + Model.PlaatsingStats.ResVolwassen + Model.PlaatsingStats.ResOnbekend)</p>
-
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label-sm">Volwassenen</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="rVolwassen" value="@Model.PlaatsingStats.ResVolwassen">
-                        </div>
-                    </div>
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label-sm">Kinderen</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="rKind" value="@Model.PlaatsingStats.ResKind">
-                        </div>
-                    </div>
-                    <div class="row justify-content-sm-left">
-                        <label for="colFormLabelSm" class="col col-form-label-sm">Onbekend</label>
-                        <div class="col">
-                            <input type="number" class="form-control form-control" id="colFormLabelSm" name="rOnbekend" value="@Model.PlaatsingStats.ResOnbekend">
-                        </div>
-                    </div>
-                    <div class=card-buttons>
-                        <input type="submit" value="Update" class="btn btn-primary">
-                        <input type="submit" asp-controller="Gastgezin" asp-action="PlaatsReservering" value="Plaats" class="btn btn-success">
-                        <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="0" class="btn btn-danger" style="float:right">Clear</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
 </div>
+
+
 </br>
 <h2>Plaatsingsgeschiedenis</h2>
 <table class="table table-striped">
