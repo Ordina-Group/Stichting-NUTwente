@@ -205,7 +205,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Belemmering"
         }
       ]
     },
@@ -222,7 +224,9 @@
           "Description": "(bijv. kinderbedje, ledikant, wieg)",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "KleineKinderen"
         },
         {
           "Id": "50",
@@ -231,7 +235,9 @@
           "Description": "",
           "InputType": "integer",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "VolwassenenGrotereKinderen"
         },
         {
           "Id": "22",
@@ -240,7 +246,9 @@
           "Description": "(tenminste 3,5 m2 per persoon)",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "SlaapkamerRuimte"
         },
         {
           "Id": "23",
@@ -249,7 +257,9 @@
           "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Privacy"
         },
         {
           "Id": "24",
@@ -258,7 +268,9 @@
           "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Opbergruimte"
         },
         {
           "Id": "26",
@@ -280,7 +292,9 @@
             "tuin/balkon",
             "Andere"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Faciliteiten"
         },
         {
           "Id": "27",
@@ -289,7 +303,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "ZelfKoken"
         },
         {
           "Id": "28",
@@ -298,7 +314,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "KoelkastRuimte"
         },
         {
           "Id": "29",
@@ -307,7 +325,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "DaglichtSlaapkamer"
         },
         {
           "Id": "30",
@@ -316,7 +336,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Roken"
         },
         {
           "Id": "31",
@@ -325,7 +347,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "AlchoholEnDrugs"
         },
         {
           "Id": "32",
@@ -343,7 +367,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "VeiligeOpbergruimte"
         },
         {
           "Id": "35",
@@ -352,7 +378,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "HuisdierenAanwezig"
         },
         {
           "Id": "36",
@@ -361,7 +389,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "HuisdierenMogelijk"
         },
         {
           "Id": "37",
@@ -370,7 +400,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Allergieen"
         },
         {
           "Id": "38",
@@ -379,7 +411,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "VluchtelingOphalen"
         }
       ]
     },
@@ -400,7 +434,9 @@
             "Nee",
             "Weet niet"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "BasisscholenAanwezig"
         },
         {
           "Id": "40",
@@ -409,7 +445,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "KinderenInDeBuurt"
         },
         {
           "Id": "41",
@@ -418,7 +456,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "FaciliteitenVoorKinderen"
         }
       ]
     },
@@ -488,7 +528,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Beperkingen"
         },
         {
           "Id": "42",

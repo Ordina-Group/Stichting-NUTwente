@@ -97,15 +97,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var AdresRepo = new Repository<Adres>(_context);
             var UserRepo = new Repository<UserDetails>(_context);
             var gastgezinRepo = new Repository<Gastgezin>(_context);
+            var plaatsingsInfoRepo = new Repository<PlaatsingsInfo>(_context);
             var dbPersoon = new Persoon();
             var dbAdres = new Adres();
             var dbUser = new UserDetails();
+            var dbPlaatsingsInfo = new PlaatsingsInfo();
             if (id != 0)
             {
                 dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
                 dbPersoon = dbPersoon ?? new Persoon();
                 dbAdres = AdresRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
                 dbAdres = dbAdres ?? new Adres();
+                dbPlaatsingsInfo = plaatsingsInfoRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie") ?? new PlaatsingsInfo();
             }
 
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Adres")))
@@ -134,7 +137,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (awnser != null)
                     {
                         var userNameAndEmail = awnser.Antwoord;
-                        if(userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
+                        if (userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
                         {
                             var email = userNameAndEmail.Split("(")[1].Split(")")[0];
                             dbUser = UserRepo.GetFirstOrDefault(u => u.Email.Contains(email));
@@ -185,6 +188,33 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 };
 
                 gastgezinRepo.Create(gastgezin);
+            }
+
+            if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "PlaatsingsInfo")))
+            {
+                dbPlaatsingsInfo = CreateDbObjectFromFormFilledWithAnswers<PlaatsingsInfo>(form, viewModel, dbPlaatsingsInfo);
+                if (dbPlaatsingsInfo != null)
+                {
+                    if (dbPlaatsingsInfo.Id == 0)
+                    {
+
+                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier!= null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
+                        if (gastgezin != null)
+                        {
+                            dbPlaatsingsInfo.Reactie = reactie;
+                            dbPlaatsingsInfo = plaatsingsInfoRepo.Create(dbPlaatsingsInfo);
+                            if (dbPlaatsingsInfo.Id != 0)
+                            {
+                                gastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                                gastgezinRepo.Update(gastgezin);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        plaatsingsInfoRepo.Update(dbPlaatsingsInfo);
+                    }
+                }
             }
         }
 
