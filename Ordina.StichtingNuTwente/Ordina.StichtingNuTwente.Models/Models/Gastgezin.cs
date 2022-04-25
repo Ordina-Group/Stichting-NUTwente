@@ -18,5 +18,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public ICollection<Plaatsing>? Plaatsingen { get; set; }
         public bool? HasVOG { get; set; }
         public string? Note { get; set; }
+        [ForeignKey("fkPlaatsingsId")]
+        public virtual PlaatsingsInfo? PlaatsingsInfo { get; set; }
     }
 }

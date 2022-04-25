@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Models.Models
 {
-    public class PlaatsingsInfo
+    public class PlaatsingsInfo : BaseEntity
     {
         public PlaatsingsInfo()
         {
@@ -52,5 +53,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string BasisscholenAanwezig { get; set; }
         public string KinderenInDeBuurt { get; set; }
         public string FaciliteitenVoorKinderen { get; set; }
+        public string Beperkingen { get; set; }
+        [ForeignKey("fkReactieId")]
+        public virtual Reactie? Reactie { get; set; }
     }
 }
