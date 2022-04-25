@@ -43,6 +43,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string? PlaatsingTag { get; set; }
 
         public string? ReserveTag { get; set; }
+        public PlaatsingsInfo? PlaatsingsInfo { get; set; }
     }
 
     public class Vrijwilliger
