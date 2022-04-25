@@ -8,35 +8,6 @@
 
 <body>
     <div>
-        <ul class="nav nav-tabs ">
-            @if(Model.IsVrijwilliger)
-            {
-                <li class="nav-item">
-                    <a class="nav-link active" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-                </li>
-            }
-            @if(Model.IsSecretariaat)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
-            </li>
-        </ul>
         <br/>
         <div class="row">
             <div class="col-md-12">
@@ -55,7 +26,8 @@
                         <th scope="col">E-mail</th>
                         <th scope="col">Aanmelding</th>
                         <th scope="col">Intake</th>
-                        <th scope="col">Details</th>
+                        <th scope="col">Geplaatst</th>
+                        <th scope="col">Gereserveerd</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,7 +53,8 @@
                                 <a href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>                                
                             }
                         </td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">Tag: @mijnGastgezin.PlaatsingTag</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
                     </tr>
                 }
                 </tbody>
