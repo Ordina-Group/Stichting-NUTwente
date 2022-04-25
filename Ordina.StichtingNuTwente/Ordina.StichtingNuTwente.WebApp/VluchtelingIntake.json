@@ -32,28 +32,6 @@
           "ParameterName": "Woonplaats"
         },
         {
-          "Id": "3",
-          "Number": "3",
-          "Text": "Geboorteplaats <br> Місце народження",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "true",
-          "Object": "Persoon",
-          "ParameterName": "Geboorteplaats"
-        },
-        {
-          "Id": "4",
-          "Number": "4",
-          "Text": "Geboortedatum (dd-mm-jjjj) <br> Дата народження (дд-мм-рррр)",
-          "Description": "",
-          "InputType": "date",
-          "InputOptions": "",
-          "Object": "Persoon",
-          "ParameterName": "GeboorteDatum",
-          "Required": "true"
-        },
-        {
           "Id": "5",
           "Number": "5",
           "Text": "Nationaliteit <br> Національність",
