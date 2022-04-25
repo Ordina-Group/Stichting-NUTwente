@@ -2,7 +2,7 @@
 
 namespace Ordina.StichtingNuTwente.Models.ViewModels
 {
-    public class Form
+    public class Form : BaseModel
     {
         public int Id { get; set; }
         public string Title { get; set; }
