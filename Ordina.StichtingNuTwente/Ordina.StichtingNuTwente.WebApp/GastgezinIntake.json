@@ -528,7 +528,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Beperkingen"
         },
         {
           "Id": "42",
