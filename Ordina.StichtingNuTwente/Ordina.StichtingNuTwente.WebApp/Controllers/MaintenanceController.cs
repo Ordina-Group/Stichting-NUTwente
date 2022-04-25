@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -17,11 +18,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _reactionService = reactionService;
         }
 
-
-
         public IActionResult Index()
         {
-            return View();
+            return View(new MaintenanceModel());
         }
 
         public IActionResult UpdateAll()
@@ -30,12 +29,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 _reactionService.UpdateAll();
                 ViewBag.Message = "Database Update Successful!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
             catch
             {
                 ViewBag.Message = "Database Update failed!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
 
         }
@@ -56,14 +55,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File upload failed!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
         }
 
@@ -83,14 +82,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File upload failed!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
         }
 
@@ -110,14 +109,47 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
             }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File upload failed!!";
-                return View("Index");
+                return View("Index", new MaintenanceModel());
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadImportGastgezinnen(IFormFile file)
+        {
+            var model = new MaintenanceModel();
+
+            string uploads = Path.Combine(_environment.WebRootPath, "");
+            string filePath = Path.Combine(uploads, Guid.NewGuid().ToString() + ".xlxs");
+            try
+            {
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    var messages = maintenanceService.ImportGastgezinnen(fileStream).ToList();
+                    model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+                    {
+                        Message = x.Message,
+                        MessageType = (MaintenanceMessageType) x.MessageType
+                    }));
+                }
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View("Index", model);
+            }
+            catch
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File upload failed!!";
+                return View("Index", model);
             }
         }
 
