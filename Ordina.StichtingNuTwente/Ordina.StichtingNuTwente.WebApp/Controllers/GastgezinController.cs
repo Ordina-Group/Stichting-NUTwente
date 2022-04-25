@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Runtime.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Models.Models;
@@ -17,6 +18,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService = gastgezinService;
             _userService = userService;
         }
+
         public IActionResult Overview()
         {
             return View();

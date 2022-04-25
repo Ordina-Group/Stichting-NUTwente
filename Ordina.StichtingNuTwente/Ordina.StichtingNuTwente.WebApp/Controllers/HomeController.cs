@@ -40,6 +40,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             string file = FormHelper.GetFilenameFromId(1);
 
             Form questionForm = _formBusiness.createFormFromJson(1, file);
+            FillBaseModel(questionForm);
             return View(questionForm);
         }
 
@@ -55,6 +56,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            FillBaseModel(questionForm);
             return View(questionForm);
         }
 
@@ -69,8 +71,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             Form questionForm = _formBusiness.createFormFromJson(3, file);
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            FillBaseModel(questionForm);
             return View(questionForm);
-
         }
 
         [AllowAnonymous]
@@ -82,6 +84,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             string file = FormHelper.GetFilenameFromId(4);
             Form questionForm = _formBusiness.createFormFromJson(1, file);
+            FillBaseModel(questionForm);
             return View(questionForm);
         }
 
@@ -95,10 +98,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             Form questionForm = _reactionService.GetAnwersFromId(id);
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            FillBaseModel(questionForm);
             return View(questionForm);
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
@@ -156,6 +160,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 });
             }
 
+            FillBaseModel(mijnGastgezinnen);
             return View(mijnGastgezinnen);
         }
 
@@ -229,7 +234,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
             }
 
-
+            FillBaseModel(mijnGastgezinnen);
             return View(mijnGastgezinnen);
         }
 
@@ -291,6 +296,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 AnswerLists = _reactionService.GetAllRespones()
             };
+            FillBaseModel(model);
             return View(model);
         }
 
@@ -305,6 +311,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 AnswerLists = _reactionService.GetAllRespones(formId)
             };
+            FillBaseModel(model);
             return View(model);
         }
 
@@ -335,6 +342,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
                 };
+                FillBaseModel(viewModel);
                 return View(viewModel);
             }
             return View();
@@ -423,6 +431,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public List<UserDetails> GetAllVrijwilligers()
         {
             return _userService.GetUsersByRole("group-vrijwilliger").ToList();
+        }
+
+        public void FillBaseModel(BaseModel model)
+        {
+            var user = GetUser();
+
+            if (user == null || user.Roles == null) return;
+            
+            model.IsSecretariaat = user.Roles.Contains("group-secretariaat");
+            model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
     }
 }

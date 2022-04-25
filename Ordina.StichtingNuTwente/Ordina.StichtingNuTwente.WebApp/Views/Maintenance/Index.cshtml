@@ -1,15 +1,26 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Ordina.StichtingNuTwente.Models.ViewModels.MaintenanceModel
 <h1>Maintenance</h1>
 <br>
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+{
+    <a>@ViewBag.Message</a>
+    <br>
+}
+@if (Model.Messages.Any())
+{
+    <br>
+    <h2>Execution Information:</h2>
+    @foreach(var message in Model.Messages)
+    {
+        <span style="color: @message.MessageTypeColor;">@message.Message</span><br/>
+    }
+    <hr/>
+}
 <h2>Update Relational Data</h2>
  <a class="btn btn-primary" asp-controller="Maintenance" asp-action="UpdateAll">Update</a>
 <br>
-<a>@ViewBag.Message</a>
-<br>
+<hr/>
 <h2>Basic File Upload</h2>
 @using (Html.BeginForm("UploadFile","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -18,10 +29,9 @@
     <br>
     <br>
     <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
-    <br>
-    <br>
 }
-
+<br>
+<hr/>
 @using (Html.BeginForm("UploadUpdateGastgezin","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <label for="file">Upload Gastgezin update Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
@@ -29,10 +39,9 @@
     <br>
     <br>
     <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
-    <br>
-    <br>
 }
-
+<br>
+<hr/>
 <h2>Upload Plaatsingsdata</h2>
 @using (Html.BeginForm("UploadPlaatsingFile","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -41,6 +50,17 @@
     <br>
     <br>
     <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
+}
+<br>
+<hr/>
+<h2>Upload Import Gastgezinnen</h2>
+@using (Html.BeginForm("UploadImportGastgezinnen","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Import Gastgezinnen Excel:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en verwerk Excel" />
     <br>
     <br>
 }

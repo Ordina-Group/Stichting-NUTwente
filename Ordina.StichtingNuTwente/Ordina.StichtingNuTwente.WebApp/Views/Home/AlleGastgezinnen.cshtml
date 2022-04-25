@@ -9,6 +9,18 @@
 <body>
     <div>
         <ul class="nav nav-tabs ">
+            @if(Model.IsVrijwilliger)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
+                </li>
+            }
+            @if(Model.IsSecretariaat)
+            {
+                <li class="nav-item active">
+                    <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
+                </li>
+            }
             <li class="nav-item">
                 <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
             </li>
@@ -24,18 +36,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
             </li>
-            @if(Model.IsVrijwilliger)
-            {
-            <li class="nav-item">
-                <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-            </li>
-            }
-            @if(Model.IsSecretariaat)
-            {
-            <li class="nav-item">
-                <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-            </li>
-            }
         </ul>
         <br/>
         <div class="row">
