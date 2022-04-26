@@ -207,5 +207,38 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UploadGastgezinAanmeldFromIntake(IFormFile file)
+        {
+            var model = new MaintenanceModel();
+
+            string uploads = Path.Combine(_environment.WebRootPath, "");
+            string filePath = Path.Combine(uploads, Guid.NewGuid().ToString() + ".xlxs");
+            try
+            {
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    var messages = maintenanceService.UpdateAanmeldingFromIntakeId(fileStream).ToList();
+                    model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+                    {
+                        Message = x.Message,
+                        MessageType = (MaintenanceMessageType)x.MessageType
+                    }));
+                }
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View("Index", model);
+            }
+            catch
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File upload failed!!";
+                return View("Index", model);
+            }
+        }
+
     }
 }
