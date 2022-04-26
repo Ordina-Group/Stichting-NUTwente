@@ -20,8 +20,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public Gastgezin? GetGastgezin(int id)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo");
 
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
@@ -121,6 +121,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             string tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
             return tag;
+        }
+
+        public void UpdateNote(int gastgezinId, string note)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            if(note == null)
+            {
+                note = "";
+            }
+            gastgezin.Note = note;
+            gastgezinRepository.Update(gastgezin);
         }
     }
 }
