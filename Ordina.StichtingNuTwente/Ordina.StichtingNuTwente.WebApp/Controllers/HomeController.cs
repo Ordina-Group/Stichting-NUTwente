@@ -376,8 +376,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {
-            try
-            {
+            //try
+            //{
                 if (answers != null)
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
@@ -385,11 +385,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     return Ok();
                 }
                 return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
