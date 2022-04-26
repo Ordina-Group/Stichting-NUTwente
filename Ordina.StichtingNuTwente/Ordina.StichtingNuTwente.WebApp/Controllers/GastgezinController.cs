@@ -31,11 +31,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var gastGezin = _gastgezinService.GetGastgezin(id);
             if (gastGezin == null)
             {
-                Redirect("Error");
+                return Redirect("Error");
             }
-            if (gastGezin.Begeleider.AADId != _userService.getUserFromClaimsPrincipal(User).AADId || !User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+            if (gastGezin.Begeleider != null)
             {
-                Redirect("User/AccesDeniedCatch");
+                if (!(gastGezin.Begeleider.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
+                {
+                    return Redirect("MicrosoftIdentity/Account/AccessDenied");
+                }
+            }else if(!User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+            {
+                return Redirect("MicrosoftIdentity/Account/AccessDenied");
             }
 
             var viewModel = new GastgezinViewModel() { };
