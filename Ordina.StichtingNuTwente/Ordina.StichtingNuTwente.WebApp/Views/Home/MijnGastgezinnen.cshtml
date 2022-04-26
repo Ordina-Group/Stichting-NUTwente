@@ -4,11 +4,12 @@
 
 @{
     ViewData["Title"] = "Mijn Gastgezinnen";
+    var Index = 0;
 }
 
 <body>
     <div>
-        <br/>
+        <br />
         <div class="row">
             <div class="col-md-12">
                 <h3>Mijn Gastgezinnen</h3>
@@ -16,51 +17,65 @@
         </div>
 
 
-        <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Naam</th>
-                        <th scope="col">Adres</th>
-                        <th scope="col">Woonplaats</th>
-                        <th scope="col">Telefoonnummer</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Aanmelding</th>
-                        <th scope="col">Intake</th>
-                        <th scope="col">Geplaatst</th>
-                        <th scope="col">Gereserveerd</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Adres</th>
+                    <th scope="col">Woonplaats</th>
+                    <th scope="col">Telefoonnummer</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Aanmelding</th>
+                    <th scope="col">Intake</th>
+                    <th scope="col">Geplaatst</th>
+                    <th scope="col">Gereserveerd</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
-                    <tr>
+                    Index++;
+                    <tr class="@(Index%2==0?".dark-row":"")">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
                         <td>@mijnGastgezin.Telefoonnummer</td>
                         <td>@mijnGastgezin.Email</td>
-                        <td>@if(mijnGastgezin.AanmeldFormulierId != 0)
+                        <td>
+                            @if (mijnGastgezin.AanmeldFormulierId != 0)
                             {
                                 <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">Aanmeld Formulier</a>
                             }
                         </td>
-                        <td>@if(mijnGastgezin.IntakeFormulierId != 0)
+                        <td>
+                            @if (mijnGastgezin.IntakeFormulierId != 0)
                             {
                                 <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">Intake Formulier</a>
                             }
                             else
                             {
-                                <a href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>                                
+                                <a href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>
                             }
                         </td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                        @if (mijnGastgezin.PlaatsingsInfo != null)
+                        {
+                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" /></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     </tr>
+                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index))
                 }
-                </tbody>
+            </tbody>
         </table>
         <hr />
     </div>
+    @await Html.PartialAsync("_showItem.cshtml")
 </body>
 
 
