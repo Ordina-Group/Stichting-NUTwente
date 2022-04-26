@@ -170,10 +170,28 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                         dbPersoon.Reactie = reactie;
                         PersoonRepo.Create(dbPersoon);
+                        if (form.Id == 2)
+                        {
+                            var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
+                            if (gastgezin != null)
+                            {
+                                gastgezin.Contact = dbPersoon;
+                                gastgezinRepo.Update(gastgezin);
+                            }
+                        }
                     }
                     else
                     {
                         PersoonRepo.Update(dbPersoon);
+                        if (form.Id == 2)
+                        {
+                            var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
+                            if (gastgezin != null)
+                            {
+                                gastgezin.Contact = dbPersoon;
+                                gastgezinRepo.Update(gastgezin);
+                            }
+                        }
                     }
                 }
             }
@@ -198,7 +216,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (dbPlaatsingsInfo.Id == 0)
                     {
 
-                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier!= null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
+                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
                         if (gastgezin != null)
                         {
                             dbPlaatsingsInfo.Reactie = reactie;

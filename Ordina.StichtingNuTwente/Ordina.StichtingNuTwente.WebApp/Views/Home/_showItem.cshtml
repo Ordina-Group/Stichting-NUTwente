@@ -1,0 +1,11 @@
+﻿<script>
+    $(".show").on("click",  function() {
+        let id = $(this).attr("id")
+        console.log($(this));
+        let hide = $(".hide[id=\"" + id +"\"]");
+        if(hide.hasClass("hidden"))
+            hide.removeClass("hidden")
+        else
+            hide.addClass("hidden")
+    })
+</script>
