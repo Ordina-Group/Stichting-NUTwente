@@ -27,6 +27,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
             _userService = userService;
         }
 
+
+        public List<MaintenanceMessage> LinkBegeleiderToGastgezin()
+        {
+            var messages = new List<MaintenanceMessage>();
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier.UserDetails,Begeleider");
+            foreach (var gastgezin in gastgezinnen)
+            {
+                if (gastgezin.IntakeFormulier != null && gastgezin.IntakeFormulier.UserDetails != null && gastgezin.Begeleider == null)
+                {
+                    var userDetails = gastgezin.IntakeFormulier.UserDetails;
+                    gastgezin.Begeleider = userDetails;
+                    gastgezinRepository.Update(gastgezin);
+                    messages.Add(new MaintenanceMessage($@"Gastgezin with id {gastgezin.Id} got linked with {userDetails.FirstName} {userDetails.LastName}", MaintenanceMessageType.Success));
+                }
+                else
+                {
+                    messages.Add(new MaintenanceMessage($@"Gastgezin with id {gastgezin.Id} did not change"));
+                }
+            }
+            return messages;
+        }
+
         public void LoadDataFromExcel(Stream excelStream, int formId)
         {
             using FastExcel.FastExcel fastExcel = new(excelStream);
