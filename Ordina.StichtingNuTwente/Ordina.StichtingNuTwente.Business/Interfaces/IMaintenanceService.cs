@@ -14,5 +14,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         void LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User);
         public List<MaintenanceMessage> UpdateDataFromExcel(Stream excelStream, int formId);
         List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream);
+        public List<MaintenanceMessage> LinkBegeleiderToGastgezin();
     }
 }

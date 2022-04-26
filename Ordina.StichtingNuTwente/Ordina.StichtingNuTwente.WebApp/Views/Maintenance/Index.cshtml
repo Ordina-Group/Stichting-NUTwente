@@ -66,6 +66,7 @@
 }
 
 <br>
+<hr/>
 <h2>Upload Update Intake formulieren</h2>
 @using (Html.BeginForm("UploadUpdateIntake","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -77,3 +78,9 @@
     <br>
     <br>
 }
+<br>
+<hr/>
+<h2>Update Gastgezin begeleider from form</h2>
+ <a class="btn btn-primary" asp-controller="Maintenance" asp-action="LinkBegeleiderToGastgezin">Link</a>
+<br>
+<hr/>
