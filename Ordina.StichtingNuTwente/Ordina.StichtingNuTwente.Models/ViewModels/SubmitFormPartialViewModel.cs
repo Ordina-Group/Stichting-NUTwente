@@ -10,5 +10,6 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
     {
         public bool UpdateMode { get; set; }
         public int FormId { get; set; }
+        public int? GastgezinId { get; set; }
     }
 }

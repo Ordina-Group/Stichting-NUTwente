@@ -33,27 +33,27 @@ namespace Ordina.StichtingNuTwente.Models.Models
             FaciliteitenVoorKinderen = "";
         }
 
-        public string Belemmering { get; set; }
-        public string KleineKinderen { get; set; }
-        public string VolwassenenGrotereKinderen { get; set; }
-        public string SlaapkamerRuimte { get; set; }
-        public string Privacy { get; set; }
-        public string Opbergruimte { get; set; }
-        public string Faciliteiten { get; set; }
-        public string ZelfKoken { get; set; }
-        public string KoelkastRuimte { get; set; }
-        public string DaglichtSlaapkamer { get; set; }
-        public string Roken { get; set; }
-        public string AlchoholEnDrugs { get; set; }
-        public string VeiligeOpbergruimte { get; set; }
-        public string HuisdierenAanwezig { get; set; }
-        public string HuisdierenMogelijk { get; set; }
-        public string Allergieen { get; set; }
-        public string VluchtelingOphalen { get; set; }
-        public string BasisscholenAanwezig { get; set; }
-        public string KinderenInDeBuurt { get; set; }
-        public string FaciliteitenVoorKinderen { get; set; }
-        public string Beperkingen { get; set; }
+        public string? Belemmering { get; set; }
+        public string? KleineKinderen { get; set; }
+        public string? VolwassenenGrotereKinderen { get; set; }
+        public string? SlaapkamerRuimte { get; set; }
+        public string? Privacy { get; set; }
+        public string? Opbergruimte { get; set; }
+        public string? Faciliteiten { get; set; }
+        public string? ZelfKoken { get; set; }
+        public string? KoelkastRuimte { get; set; }
+        public string? DaglichtSlaapkamer { get; set; }
+        public string? Roken { get; set; }
+        public string? AlchoholEnDrugs { get; set; }
+        public string? VeiligeOpbergruimte { get; set; }
+        public string? HuisdierenAanwezig { get; set; }
+        public string? HuisdierenMogelijk { get; set; }
+        public string? Allergieen { get; set; }
+        public string? VluchtelingOphalen { get; set; }
+        public string? BasisscholenAanwezig { get; set; }
+        public string? KinderenInDeBuurt { get; set; }
+        public string? FaciliteitenVoorKinderen { get; set; }
+        public string? Beperkingen { get; set; }
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
     }
