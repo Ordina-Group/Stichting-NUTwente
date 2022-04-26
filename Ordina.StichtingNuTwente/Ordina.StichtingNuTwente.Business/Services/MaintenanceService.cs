@@ -174,8 +174,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
         }
 
-        public void UpdateDataFromExcel(Stream excelStream, int formId)
+        public List<MaintenanceMessage> UpdateDataFromExcel(Stream excelStream, int formId)
         {
+            var messages = new List<MaintenanceMessage>();
+
+
             using FastExcel.FastExcel fastExcel = new(excelStream);
             var worksheet = fastExcel.Worksheets[0];
             worksheet.Read();
@@ -183,7 +186,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var rowNum = 0;
             var reactieRepository = new Repository<Reactie>(_context);
             string file = FormHelper.GetFilenameFromId(formId);
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            Form questionForm = _formBusiness.createFormFromJson(formId, file);
             var colomnIndexToQuestionID = new Dictionary<int, int>();
             foreach (var row in rows)
             {
@@ -197,6 +200,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         foreach (var s in questionForm.Sections)
                         {
+                            done = false;
                             foreach (var q in s.Questions)
                             {
                                 if (q.Text == cell.ToString())
@@ -225,6 +229,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             var id = int.Parse(cell.ToString());
                             reaction = reactieRepository.GetById(id, "Antwoorden");
+                            if(reaction == null)
+                            {
+                                messages.Add(new MaintenanceMessage($@"From with Id {id} was not found", MaintenanceMessageType.Warning));
+                            }
                         }
                         else if (reaction != null && colomnIndexToQuestionID.ContainsKey(index))
                         {
@@ -242,10 +250,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (reaction != null)
                     {
                         reactieRepository.Update(reaction);
+                        messages.Add(new MaintenanceMessage($@"From with Id {reaction.Id} was updated", MaintenanceMessageType.Success));
                     }
                 }
                 rowNum++;
             }
+            return messages.ToList();
         }
 
 

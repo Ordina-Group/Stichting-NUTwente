@@ -40,6 +40,40 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> UploadUpdateIntake(IFormFile file)
+        {
+
+            string uploads = Path.Combine(_environment.WebRootPath, "");
+            string filePath = Path.Combine(uploads, Guid.NewGuid().ToString() + ".xlxs");
+            try
+            {
+                var maintenanceModel = new MaintenanceModel();
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    var messages = maintenanceService.UpdateDataFromExcel(fileStream, 2);
+                    maintenanceModel.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+                    {
+                        Message = x.Message,
+                        MessageType = (MaintenanceMessageType)x.MessageType
+                    }));
+                }
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View("Index", maintenanceModel);
+            }
+            catch
+            {
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (fileInfo.Exists) fileInfo.Delete();
+                ViewBag.Message = "File upload failed!!";
+                return View("Index", new MaintenanceModel());
+            }
+        }
+
+
+        [HttpPost]
         public async Task<ActionResult> UploadFile(IFormFile file)
         {
 
