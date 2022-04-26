@@ -65,6 +65,17 @@
           "ParameterName": "Telefoonnummer"
         },
         {
+          "Id": "52",
+          "Number": "6",
+          "Text": "Tweede telefoonnummer",
+          "Description": "",
+          "InputType": "phoneNumber",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "Persoon",
+          "ParameterName": "Telefoonnummer2"
+        },
+        {
           "Id": "8",
           "Number": "8",
           "Text": "Wilt u deelnemen aan een WhatsApp groep?",
@@ -106,7 +117,7 @@
         {
           "Id": "11",
           "Number": "11",
-          "Text": "Adres van plaatsing",
+          "Text": "Adres van locatie",
           "Description": "(straatnaam, huisnummer, evt. toevoeging)",
           "InputType": "text",
           "InputOptions": "",
@@ -115,7 +126,7 @@
         {
           "Id": "12",
           "Number": "12",
-          "Text": "Postcode",
+          "Text": "Postcode van locatie",
           "Description": "",
           "InputType": "postcode",
           "InputOptions": "",
@@ -124,7 +135,7 @@
         {
           "Id": "13",
           "Number": "13",
-          "Text": "Plaatsnaam",
+          "Text": "Plaatsnaam van locatie",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
@@ -133,7 +144,7 @@
         {
           "Id": "14",
           "Number": "14",
-          "Text": "Telefoonnummer",
+          "Text": "Telefoonnummer van locatie",
           "Description": "Als een vaste telefoon op de plaatsingslocatie aanwezig is, kunt u hier het telefoonnummer invullen. NuTwente gebruikt dit om vluchtelingen te kunnen bereiken als dat niet lukt met een mobiel telefoonnummer.",
           "InputType": "phoneNumber",
           "InputOptions": "",

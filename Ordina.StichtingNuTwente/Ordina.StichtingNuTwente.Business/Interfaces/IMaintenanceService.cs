@@ -12,7 +12,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     {
         public void LoadDataFromExcel(Stream excel, int formId);
         void LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User);
-        public void UpdateDataFromExcel(Stream excelStream, int formId);
+        public List<MaintenanceMessage> UpdateDataFromExcel(Stream excelStream, int formId);
         List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream);
     }
 }
