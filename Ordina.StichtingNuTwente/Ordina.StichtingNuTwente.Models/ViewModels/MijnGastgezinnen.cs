@@ -43,6 +43,9 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string? PlaatsingTag { get; set; }
 
         public string? ReserveTag { get; set; }
+
+        public string? Note { get; set; }
+
         public PlaatsingsInfo? PlaatsingsInfo { get; set; }
     }
 
