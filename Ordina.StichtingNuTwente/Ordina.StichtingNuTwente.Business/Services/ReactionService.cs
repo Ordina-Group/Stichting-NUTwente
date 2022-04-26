@@ -201,6 +201,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 var gastgezin = new Gastgezin
                 {
+                    AanmeldFormulier = reactie,
                     Contact = dbPersoon,
                     Status = (int)GastgezinStatus.Aangemeld,
                 };
