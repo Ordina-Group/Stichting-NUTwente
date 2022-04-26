@@ -114,3 +114,16 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .dark-row {
     background-color: #f2f2f2;
 }
+
+
+.fixed-table {
+    table-layout: fixed;
+}
+
+.width-100 {
+    width:100%;
+}
+
+.fixed-table td {
+    word-wrap: break-word;
+}
