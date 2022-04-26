@@ -21,7 +21,7 @@
         </div>
         <!-- Twee lijsten: Met intake en zonder intake -->
         <form method="post">
-            <table class="table table-striped">
+            <table class="table table-striped fixed-table">
                 <thead>
                     <tr>
                         <th scope="col">Naam</th>
@@ -45,7 +45,7 @@
                             <td>@mijnGastgezin.Telefoonnummer</td>
                             <td>@mijnGastgezin.Email</td>
                             <td>
-                                <select name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                                     <option value=""></option>
                                     @foreach (var vrijwilliger in Model.Vrijwilligers)
                                     {
@@ -68,7 +68,7 @@
                 <h5>Gastgezinnen met begeleider</h5>
             </div>
         </div>
-        <table class="table">
+        <table class="table fixed-table">
             <thead>
                 <tr>
                     <th scope="col">Naam</th>
