@@ -252,7 +252,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             var id = int.Parse(cell.ToString());
                             reaction = reactieRepository.GetById(id, "Antwoorden");
-                            if(reaction == null)
+                            if (reaction == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"From with Id {id} was not found", MaintenanceMessageType.Warning));
                             }
@@ -326,7 +326,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             intakeId = Convert.ToInt32(intakeIdText);
                         }
-                        catch(FormatException)
+                        catch (FormatException)
                         {
                             //Ignore any format exception
                         }
@@ -381,6 +381,67 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
 
             messages.Add(new MaintenanceMessage($@"Gastgezinnen total in database: {gastgezinRespority.GetAll().Count()}", MaintenanceMessageType.Error));
+
+            return messages;
+        }
+        public List<MaintenanceMessage> UpdateAanmeldingFromIntakeId(Stream excelStream)
+        {
+            var messages = new List<MaintenanceMessage>();
+
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+            var reactieRespority = new Repository<Reactie>(_context);
+
+            using FastExcel.FastExcel fastExcel = new(excelStream);
+            var worksheet = fastExcel.Worksheets[0];
+            worksheet.Read();
+            var rows = worksheet.Rows.ToArray();
+            for (var rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+            {
+                var row = rows[rowIndex];
+                if (rowIndex == 0)
+                {
+                    continue;
+                }
+                var cells = row.Cells.ToList();
+                if (cells.Count > 1)
+                {
+                    string intakeIdText = cells[0].ToString();
+                    string aanmeldIdText = cells[1].ToString();
+                    int intakeId = 0;
+                    int aanmeldId = 0;
+                    try
+                    {
+                        intakeId = int.Parse(intakeIdText);
+                        aanmeldId = int.Parse(aanmeldIdText);
+                    }
+                    catch (Exception)
+                    {
+                        messages.Add(new MaintenanceMessage($@"Could not parse {intakeIdText} or {aanmeldIdText}", MaintenanceMessageType.Error));
+                    }
+                    var gastgezin = gastgezinRespority.GetFirstOrDefault(x => x.IntakeFormulier != null && x.IntakeFormulier.Id == intakeId, "IntakeFormulier,AanmeldFormulier");
+                    if(gastgezin == null)
+                    {
+                        messages.Add(new MaintenanceMessage($@"no gastgezin found with intake id {intakeId}", MaintenanceMessageType.Error));
+                        continue;
+                    }
+
+                    var aanmeldFormulier = reactieRespority.GetFirstOrDefault( x => x.Id == aanmeldId);
+                    if (aanmeldFormulier == null)
+                    {
+                        messages.Add(new MaintenanceMessage($@"no form found with aanmeld id {aanmeldId}", MaintenanceMessageType.Error));
+                        continue;
+                    }
+
+                    gastgezin.AanmeldFormulier = aanmeldFormulier;
+                    gastgezinRespority.Update(gastgezin);
+                    messages.Add(new MaintenanceMessage($@"Coupled {aanmeldId} to {intakeId}", MaintenanceMessageType.Success));
+                }
+                else
+                {
+                    messages.Add(new MaintenanceMessage($@"Not all cells defined", MaintenanceMessageType.Error));
+                }
+
+            }
 
             return messages;
         }

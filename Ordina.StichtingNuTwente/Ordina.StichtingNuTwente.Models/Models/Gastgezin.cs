@@ -15,6 +15,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public UserDetails? Buddy { get; set; }
         public GastgezinStatus? Status { get; set; }
         public Reactie? IntakeFormulier { get; set; }
+        public Reactie? AanmeldFormulier { get; set; }
         public ICollection<Plaatsing>? Plaatsingen { get; set; }
         public bool? HasVOG { get; set; }
         public string? Note { get; set; }
