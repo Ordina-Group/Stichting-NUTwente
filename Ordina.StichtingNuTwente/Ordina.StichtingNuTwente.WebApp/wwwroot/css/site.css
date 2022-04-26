@@ -99,6 +99,18 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .full-width {
     width: 100%;
 }
-centered {
+.centered {
     text-align: center;
+}
+
+.hidden { 
+    display : none;
+}
+
+.hoverable:hover {
+    cursor: pointer;
+}
+
+.dark-row {
+    background-color: #f2f2f2;
 }

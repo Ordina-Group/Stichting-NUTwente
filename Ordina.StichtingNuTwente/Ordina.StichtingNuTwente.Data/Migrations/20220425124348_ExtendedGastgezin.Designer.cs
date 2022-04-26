@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220425124348_ExtendedGastgezin")]
+    partial class ExtendedGastgezin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +108,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("fkPlaatsingsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BegeleiderId");
@@ -118,8 +117,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.HasIndex("ContactId");
 
                     b.HasIndex("IntakeFormulierId");
-
-                    b.HasIndex("fkPlaatsingsId");
 
                     b.ToTable("Gastgezinnen");
                 });
@@ -227,108 +224,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.ToTable("Plaatsingen");
                 });
 
-            modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.PlaatsingsInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AlchoholEnDrugs")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Allergieen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BasisscholenAanwezig")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Belemmering")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Beperkingen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DaglichtSlaapkamer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Faciliteiten")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FaciliteitenVoorKinderen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HuisdierenAanwezig")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HuisdierenMogelijk")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KinderenInDeBuurt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KleineKinderen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KoelkastRuimte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Opbergruimte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Privacy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Roken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SlaapkamerRuimte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VeiligeOpbergruimte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VluchtelingOphalen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VolwassenenGrotereKinderen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZelfKoken")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("fkReactieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("fkReactieId");
-
-                    b.ToTable("PlaatsingsInfos");
-                });
-
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
                 {
                     b.Property<int>("Id")
@@ -428,10 +323,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .WithMany()
                         .HasForeignKey("IntakeFormulierId");
 
-                    b.HasOne("Ordina.StichtingNuTwente.Models.Models.PlaatsingsInfo", "PlaatsingsInfo")
-                        .WithMany()
-                        .HasForeignKey("fkPlaatsingsId");
-
                     b.Navigation("Begeleider");
 
                     b.Navigation("Buddy");
@@ -439,8 +330,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("IntakeFormulier");
-
-                    b.Navigation("PlaatsingsInfo");
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Persoon", b =>
@@ -481,15 +370,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Navigation("Gastgezin");
 
                     b.Navigation("Vrijwilliger");
-                });
-
-            modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.PlaatsingsInfo", b =>
-                {
-                    b.HasOne("Ordina.StichtingNuTwente.Models.Models.Reactie", "Reactie")
-                        .WithMany()
-                        .HasForeignKey("fkReactieId");
-
-                    b.Navigation("Reactie");
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
