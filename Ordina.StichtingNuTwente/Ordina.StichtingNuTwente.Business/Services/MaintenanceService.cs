@@ -129,7 +129,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier");
             foreach (var row in rows)
             {
-                if (rowNum > 2)
+                if (rowNum > 1)
                 {
                     var index = 0;
                     var cells = row.Cells;
@@ -138,16 +138,46 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     int adults;
                     int children;
                     int unknown;
+                    DateTime resDate = new DateTime();
+                    DateTime plaatsingDate = new DateTime();
+
                     foreach (var cell in cells)
                     {
                         if (index == 0)
                         {
                             gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier.Id == (int)cell.Value);
                         }
-                        if (index == 8)
+                        if (index == 1)
                         {
                             var val = cell.Value.ToString();
-                            if (val != null && val != "")
+                            if (val.Contains("on hold"))
+                            {
+                                gastgezin.Status = GastgezinStatus.OnHold;
+                                _gastgezinService.UpdateGastgezin(gastgezin,gastgezin.Id);
+                            }
+                        }
+                        if (index == 2)
+                        {
+                            var val = cell.Value.ToString();
+                            if (val != ".")
+                            {
+                                double d = double.Parse(val);
+                                resDate = DateTime.FromOADate(d);
+                            }
+                        }
+                        if (index == 3)
+                        {
+                            var val = cell.Value.ToString();
+                            if (val != ".")
+                            {
+                                double d = double.Parse(val);
+                                plaatsingDate = DateTime.FromOADate(d);
+                            }
+                        }
+                        if (index == 4)
+                        {
+                            var val = cell.Value.ToString();
+                            if (val != ".")
                             {
                                 if (val.Contains("v"))
                                 {
@@ -252,7 +282,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             var id = int.Parse(cell.ToString());
                             reaction = reactieRepository.GetById(id, "Antwoorden");
-                            if(reaction == null)
+                            if (reaction == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"From with Id {id} was not found", MaintenanceMessageType.Warning));
                             }
@@ -326,7 +356,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             intakeId = Convert.ToInt32(intakeIdText);
                         }
-                        catch(FormatException)
+                        catch (FormatException)
                         {
                             //Ignore any format exception
                         }
