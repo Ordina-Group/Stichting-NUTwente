@@ -3,7 +3,7 @@
 
 @if (Model.PlaatsingsInfo != null)
 {
-    <tr class="hide hidden" id="@Model.Index">
+    <tr class="hide hidden @(Model.Index%2==0?"dark-row":"")" id="@Model.Index">
         <td colspan="10">
             <div class="row" style="margin:0px;padding:0px;">
                 <div class="col-6"><p><b>Alchohol&drugs:</b> @Model.PlaatsingsInfo.AlchoholEnDrugs</p></div>
