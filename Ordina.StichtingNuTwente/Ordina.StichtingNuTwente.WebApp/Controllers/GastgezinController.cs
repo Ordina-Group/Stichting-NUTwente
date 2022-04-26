@@ -176,5 +176,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.UpdateNote(GastGezinId, Note);
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
+
+        [HttpPost]
+        public IActionResult PostVOG(bool HasVOG, int GastGezinId)
+        {
+            _gastgezinService.UpdateVOG(HasVOG, GastGezinId);
+            return Ok();
+        }
     }
 }

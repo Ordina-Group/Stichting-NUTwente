@@ -47,6 +47,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string? Note { get; set; }
 
         public PlaatsingsInfo? PlaatsingsInfo { get; set; }
+
+        public bool? HasVOG { get; set; }
     }
 
     public class Vrijwilliger

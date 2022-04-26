@@ -134,5 +134,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
             gastgezin.Note = note;
             gastgezinRepository.Update(gastgezin);
         }
+
+        public void UpdateVOG(bool hasVOG, int gastgezinId)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            if (hasVOG == null)
+            {
+                hasVOG = false;
+            }
+            gastgezin.HasVOG = hasVOG;
+            gastgezinRepository.Update(gastgezin);
+        }
     }
 }
