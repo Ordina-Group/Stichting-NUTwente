@@ -391,6 +391,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinRespority = new Repository<Gastgezin>(_context);
             var reactieRespority = new Repository<Reactie>(_context);
 
+            var gastgezinnen = gastgezinRespority.GetAll("AanmeldFormulier,Contact.Reactie");
+            foreach (var gastgezin in gastgezinnen)
+            {
+                if (gastgezin.AanmeldFormulier == null)
+                {
+                    gastgezin.AanmeldFormulier = gastgezin.Contact.Reactie;
+                }
+            }
+
             using FastExcel.FastExcel fastExcel = new(excelStream);
             var worksheet = fastExcel.Worksheets[0];
             worksheet.Read();
@@ -419,13 +428,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         messages.Add(new MaintenanceMessage($@"Could not parse {intakeIdText} or {aanmeldIdText}", MaintenanceMessageType.Error));
                     }
                     var gastgezin = gastgezinRespority.GetFirstOrDefault(x => x.IntakeFormulier != null && x.IntakeFormulier.Id == intakeId, "IntakeFormulier,AanmeldFormulier");
-                    if(gastgezin == null)
+                    if (gastgezin == null)
                     {
                         messages.Add(new MaintenanceMessage($@"no gastgezin found with intake id {intakeId}", MaintenanceMessageType.Error));
                         continue;
                     }
 
-                    var aanmeldFormulier = reactieRespority.GetFirstOrDefault( x => x.Id == aanmeldId);
+                    var aanmeldFormulier = reactieRespority.GetFirstOrDefault(x => x.Id == aanmeldId);
                     if (aanmeldFormulier == null)
                     {
                         messages.Add(new MaintenanceMessage($@"no form found with aanmeld id {aanmeldId}", MaintenanceMessageType.Error));
