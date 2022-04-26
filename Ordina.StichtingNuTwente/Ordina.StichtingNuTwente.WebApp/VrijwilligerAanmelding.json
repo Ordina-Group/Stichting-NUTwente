@@ -21,28 +21,6 @@
           "ParameterName": "Naam"
         },
         {
-          "Id": "2",
-          "Number": "2",
-          "Text": "Geboortedatum (dd-mm-jjjj)<br>Date of birth (dd-mm-yyyy)",
-          "Description": "Wij hebben uw geboorteplaats en -datum nodig voor identificatie, omdat u mogelijk een VOG zult moeten aanvragen.<br>We need your place and date of birth for identification, because you might need to apply for a VOG.",
-          "InputType": "date",
-          "InputOptions": "",
-          "Required": "true",
-          "Object": "Persoon",
-          "ParameterName": "GeboorteDatum"
-        },
-        {
-          "Id": "3",
-          "Number": "3",
-          "Text": "Geboorteplaats<br>Place of birth",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "true",
-          "Object": "Persoon",
-          "ParameterName": "Geboorteplaats"
-        },
-        {
           "Id": "4",
           "Number": "4",
           "Text": "Nationaliteit<br>Nationality",

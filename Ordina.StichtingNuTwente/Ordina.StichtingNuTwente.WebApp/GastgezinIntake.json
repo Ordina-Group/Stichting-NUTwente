@@ -54,28 +54,6 @@
           "ParameterName": "Woonplaats"
         },
         {
-          "Id": "5",
-          "Number": "5",
-          "Text": "Geboortedatum (dd-mm-jjjj)",
-          "Description": "Wij vragen naar uw geboortedatum omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
-          "InputType": "date",
-          "InputOptions": "",
-          "Required": "false",
-          "Object": "Persoon",
-          "ParameterName": "GeboorteDatum"
-        },
-        {
-          "Id": "6",
-          "Number": "6",
-          "Text": "Geboorteplaats",
-          "Description": "Wij vragen naar uw geboorteplaats omdat er bij plaatsing een Verklaring Omtrent Gedrag nodig kan zijn.",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false",
-          "Object": "Persoon",
-          "ParameterName": "Geboorteplaats"
-        },
-        {
           "Id": "7",
           "Number": "7",
           "Text": "Telefoonnummer",
