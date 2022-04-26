@@ -64,3 +64,16 @@
     <br>
     <br>
 }
+
+<br>
+<h2>Upload Update Intake formulieren</h2>
+@using (Html.BeginForm("UploadUpdateIntake","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload  Update Intake formulieren Excel:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en verwerk Excel" />
+    <br>
+    <br>
+}
