@@ -96,6 +96,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
             Form questionForm = _reactionService.GetAnwersFromId(id);
+            if (questionForm == null || questionForm.Sections == null)
+                return Redirect("Error");
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             FillBaseModel(questionForm);
@@ -420,7 +422,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             return View();
         }
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -448,7 +450,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var user = GetUser();
 
             if (user == null || user.Roles == null) return;
-            
+
             model.IsSecretariaat = user.Roles.Contains("group-secretariaat");
             model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
