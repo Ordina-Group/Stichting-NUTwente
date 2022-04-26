@@ -61,9 +61,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 int aanmeldFormulierId = 0;
                 int intakeFormulierId = 0;
 
-                if (gastGezin.Contact.Reactie != null)
+                if (gastGezin.AanmeldFormulier != null)
                 {
-                    aanmeldFormulierId = gastGezin.Contact.Reactie.Id;
+                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
                 }
 
                 if (gastGezin.IntakeFormulier != null)
