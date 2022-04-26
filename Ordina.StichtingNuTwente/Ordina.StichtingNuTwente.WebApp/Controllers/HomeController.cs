@@ -159,7 +159,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     IntakeFormulierId = intakeFormulierId,
                     PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                     ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
-                    PlaatsingsInfo = gastGezin.PlaatsingsInfo
+                    PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                    HasVOG = gastGezin.HasVOG
                 });
             }
 

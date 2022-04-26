@@ -29,6 +29,7 @@
                     <th scope="col">Intake</th>
                     <th scope="col">Geplaatst</th>
                     <th scope="col">Gereserveerd</th>
+                    <th scope="col">VOG</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -60,6 +61,7 @@
                         </td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
                             <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" /></td>
@@ -77,5 +79,6 @@
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
 </body>
+
 
 

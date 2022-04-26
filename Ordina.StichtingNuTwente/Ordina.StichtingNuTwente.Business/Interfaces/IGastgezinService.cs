@@ -21,5 +21,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null);
         string GetPlaatsingTag(int gastgezinId, PlacementType placementType);
         public void UpdateNote(int gastgezinId, string note);
+        public void UpdateVOG(bool hasVOG, int gastgezinId);
     }
 }

@@ -12,18 +12,6 @@
         @if (Accessor.HttpContext.Request.Path.Value != "/mijnReacties")
         {
         <ul class="nav nav-tabs ">
-            @if(Model.IsVrijwilliger)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-                </li>
-            }
-            @if(Model.IsSecretariaat)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-                </li>
-            }
             <li class="nav-item">
                 <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list"?"active":"")" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
             </li>

@@ -9,36 +9,6 @@
 
 <body>
     <div>
-        <ul class="nav nav-tabs ">
-            @if (Model.IsVrijwilliger)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-                </li>
-            }
-            @if (Model.IsSecretariaat)
-            {
-                <li class="nav-item active">
-                    <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
-            </li>
-        </ul>
-        <br />
         <div class="row">
             <div class="col-md-12">
                 <h3>Alle Gastgezinnen</h3>
@@ -62,6 +32,7 @@
                         <th scope="col">Toekennen aan begeleider</th>
                         <th scope="col">Geplaatst</th>
                         <th scope="col">Gereserveerd</th>
+                        <th scope="col">VOG</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,6 +55,7 @@
                             </td>
                             <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                             <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                            <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         </tr>
                     }
                 </tbody>
@@ -107,6 +79,7 @@
                     <th scope="col">Begeleider</th>
                     <th scope="col">Geplaatst</th>
                     <th scope="col">Gereserveerd</th>
+                    <th scope="col">VOG</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -123,6 +96,7 @@
                         <td>@mijnGastgezin.Begeleider</td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
                             <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" /></td>

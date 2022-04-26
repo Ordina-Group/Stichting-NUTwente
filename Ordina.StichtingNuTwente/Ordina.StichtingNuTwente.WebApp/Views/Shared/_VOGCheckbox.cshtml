@@ -1,0 +1,19 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@model VOGCheckboxPartial
+
+<input class="form-check-input" type="checkbox" name="HasVOG" id="@Model.GastgezinId" @((Model.HasVOG != null && Model.HasVOG == true)?"checked":"")>
+
+<script>
+    $("input[name='HasVOG']").change(function(){
+        var hasVOG = false;
+        if ($(this).is(':checked')) hasVOG = true;
+        var gastgezinId = parseInt($(this).attr("id"));
+         $.ajax({
+            url: "/Gastgezin/PostVOG",
+            type: "POST",
+            dataType: 'text',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {"HasVOG":hasVOG, "gastgezinId":gastgezinId} 
+        });
+    });
+</script>
