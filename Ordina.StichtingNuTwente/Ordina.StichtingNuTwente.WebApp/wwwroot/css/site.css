@@ -110,3 +110,7 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .hoverable:hover {
     cursor: pointer;
 }
+
+.dark-row {
+    background-color: #f2f2f2;
+}

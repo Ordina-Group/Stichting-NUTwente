@@ -17,7 +17,7 @@
         </div>
 
 
-        <table class="table table-striped">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Naam</th>
@@ -36,7 +36,7 @@
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
                     Index++;
-                    <tr>
+                    <tr class="@(Index%2==0?".dark-row":"")">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
