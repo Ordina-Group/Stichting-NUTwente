@@ -14,7 +14,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [Route("Account/SignOut")]
         public IActionResult SignOutCatch()
         {
