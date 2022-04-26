@@ -4,7 +4,7 @@
 <input class="form-check-input" type="checkbox" name="HasVOG" id="@Model.GastgezinId" @((Model.HasVOG != null && Model.HasVOG == true)?"checked":"")>
 
 <script>
-    $("input[name='HasVOG']").change(function(){
+    $("#@(Model.GastgezinId)[name='HasVOG']").change(function(){
         var hasVOG = false;
         if ($(this).is(':checked')) hasVOG = true;
         var gastgezinId = parseInt($(this).attr("id"));

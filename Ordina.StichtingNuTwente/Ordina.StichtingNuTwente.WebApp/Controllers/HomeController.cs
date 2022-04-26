@@ -222,7 +222,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
                         PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                         ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
-                        PlaatsingsInfo = gastGezin.PlaatsingsInfo
+                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                        HasVOG = gastGezin.HasVOG
                     });
                 }
                 else
@@ -237,7 +238,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Woonplaats = woonplaatsText,
                         PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                         ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
-                        PlaatsingsInfo = gastGezin.PlaatsingsInfo
+                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                        HasVOG = gastGezin.HasVOG
                     });
                 }
             }
