@@ -36,7 +36,7 @@
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
                     Index++;
-                    <tr class="@(Index%2==0?".dark-row":"")">
+                    <tr class="@(Index%2==0?"dark-row":"")">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
