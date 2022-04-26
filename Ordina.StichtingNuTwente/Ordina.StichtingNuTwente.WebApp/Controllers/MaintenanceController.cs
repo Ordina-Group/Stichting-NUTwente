@@ -22,7 +22,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             return View(new MaintenanceModel());
         }
+        public IActionResult LinkBegeleiderToGastgezin()
+        {
+            try
+            {
+                var model = new MaintenanceModel();
+                var messages = maintenanceService.LinkBegeleiderToGastgezin();
+                model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+                {
+                    Message = x.Message,
+                    MessageType = (MaintenanceMessageType)x.MessageType
+                }));
+                ViewBag.Message = "Database Update Successful!!";
+                return View("Index", model);
+            }
+            catch
+            {
+                ViewBag.Message = "Database Update failed!!";
+                return View("Index", new MaintenanceModel());
+            }
 
+        }
         public IActionResult UpdateAll()
         {
             try
