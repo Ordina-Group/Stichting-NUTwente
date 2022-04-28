@@ -1,4 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@using Ordina.StichtingNuTwente.Models.Models
 @model GastgezinViewModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
@@ -6,9 +7,16 @@
     ViewData["Title"] = "Gastgezin";
 }
 
-<h2>Gastgezin @Model.GastGezin.Naam</h2>
+<h2>
+    Gastgezin @Model.GastGezin.Naam
+    @if (Model.GastGezin.Status == GastgezinStatus.OnHold)
+    {
+        <span class="badge bg-secondary">On Hold</span>
+    }
+</h2>
 
 </br>
+
 <div class="container">
     <div class="row">
         <div class="col-3">
@@ -18,9 +26,10 @@
                     <p>
                         Naam: @Model.GastGezin.Naam</br>
                         Telefoonnummer: @Model.GastGezin.Telefoonnummer</br>
-                        Email: @Model.GastGezin.Email</br>
-
-                        <h5 class="card-title">Adres</h5>
+                        Email: @Model.GastGezin.Email
+                    </p>
+                    <h5>Adres</h5>
+                    <p>
                         Straat: @Model.GastGezin.Adres</br>
                         Woonplaats: @Model.GastGezin.Woonplaats</br>
                         Postcode: 1111AA
@@ -34,8 +43,39 @@
                     }
                     else
                     {
-
                         <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3">Begin Intake</a>
+                    }
+                    </br>
+                    <h5 class="mt-3">Opties</h5>
+                    @using (Html.BeginForm("UpdateOpties", "Gastgezin", FormMethod.Post))
+                    {
+                        <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                        <div class="row mt-1">
+                            <label class="col-3">Status:</label>
+                            <div class="col">
+                                <select name="Status" id="status" class="form-select">
+                                    @foreach (var option in Enum.GetValues(typeof(GastgezinStatus)))
+                                    {
+
+                                        if ((GastgezinStatus)option == Model.GastGezin.Status)
+                                        {
+                                            <option selected value="@option">@option</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@option">@option</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <label class="col-3">VOG:</label>
+                            <div class="col">
+                                <input type="checkbox" class="form-check-input" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"")>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-primary mt-3" value=Opslaan>
                     }
                 </div>
             </div>
@@ -125,7 +165,7 @@
                             {
                                 <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                                 <div class="grow-wrap">
-                                    <textarea id="Id" rows="3" class="form-control question" name="Note" size="100" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
+                                    <textarea id="Id" rows="3" class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
                                 </div>
                                 <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
                             }
