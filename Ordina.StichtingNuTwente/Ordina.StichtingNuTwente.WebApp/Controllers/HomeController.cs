@@ -210,6 +210,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     adresText = adres.Straat;
                     woonplaatsText = adres.Woonplaats;
                 }
+                var aanmeldFormulierId = -1;
+                var intakeFormulierId = -1;
+                if (gastGezin.AanmeldFormulier != null)
+                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
+                if (gastGezin.IntakeFormulier != null)
+                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
 
                 if (gastGezin.Begeleider != null)
                 {
@@ -225,7 +231,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                         ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                        HasVOG = gastGezin.HasVOG
+                        HasVOG = gastGezin.HasVOG,
+                        AanmeldFormulierId = aanmeldFormulierId,
+                        IntakeFormulierId = intakeFormulierId,
                     });
                 }
                 else
@@ -241,7 +249,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                         ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                        HasVOG = gastGezin.HasVOG
+                        HasVOG = gastGezin.HasVOG,
+                        AanmeldFormulierId = aanmeldFormulierId,
+                        IntakeFormulierId = intakeFormulierId,
                     });
                 }
             }
