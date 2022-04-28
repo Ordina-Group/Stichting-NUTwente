@@ -24,6 +24,7 @@
             <table class="table table-striped fixed-table">
                 <thead>
                     <tr>
+                        <th scope="col">Ids</th>
                         <th scope="col">Naam</th>
                         <th scope="col">Adres</th>
                         <th scope="col">Woonplaats</th>
@@ -39,6 +40,7 @@
                     @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
                     {
                         <tr>
+                            <td>@mijnGastgezin.AanmeldFormulierId @(mijnGastgezin.IntakeFormulierId > 0? "/" + mijnGastgezin.IntakeFormulierId : "")</td>
                             <td>@mijnGastgezin.Naam</td>
                             <td>@mijnGastgezin.Adres</td>
                             <td>@mijnGastgezin.Woonplaats</td>
@@ -71,6 +73,7 @@
         <table class="table fixed-table">
             <thead>
                 <tr>
+                    <th scope="col">Ids</th>
                     <th scope="col">Naam</th>
                     <th scope="col">Adres</th>
                     <th scope="col">Woonplaats</th>
@@ -88,6 +91,7 @@
                 {
                     Index++;
                     <tr class="@(Index%2==0?"dark-row":"")">
+                        <td>@mijnGastgezin.AanmeldFormulierId @(mijnGastgezin.IntakeFormulierId > 0? "/" + mijnGastgezin.IntakeFormulierId : "")</td>
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
