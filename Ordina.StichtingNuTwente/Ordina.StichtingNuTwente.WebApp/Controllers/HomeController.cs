@@ -392,27 +392,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SaveAndSendEmailAsync(string answers)
-        {
-            try
-            {
-                if (answers != null)
-                {
-                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    var reactieId = _reactionService.SaveAndGetReactieId(answerData);
-                    var persoon = _persoonService.GetPersoonByReactieId(reactieId);
-                    MailHelper mailHelper = new MailHelper(_mailService);
-                    bool success = await mailHelper.bevestiging(persoon);
-                }
-            }
-            catch (Exception ex)
-            {
-
-            }
-            return View();
-        }
-
         [Authorize(Policy = "RequireSecretariaatRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)

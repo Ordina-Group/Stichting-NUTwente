@@ -9,9 +9,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     public class UserController : Controller
     {
         public IUserService _userService { get; }
-        public UserController(IUserService userService)
+        public IMailService _mailService { get; }
+        public UserController(IUserService userService, IMailService mailService)
         {
             _userService = userService;
+            _mailService = mailService;
         }
 
         [Authorize]
@@ -54,5 +56,30 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             UserDetails userDetails = _userService.GetUserByAADId(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
             return View(new UserViewModel(userDetails));
         }
+
+        [Authorize]
+        [ActionName("MailGroup")]
+        [HttpPost]
+        public IActionResult MailGroup(string onderwerp, string bericht) //, List<Persoon> personen)
+        {
+            if (onderwerp == null)
+            {
+                onderwerp = "Geen onderwerp";
+            }
+            if (bericht == null)
+            {
+                //error teruggeven
+                return View("Error");
+            }
+
+            // List<string> mailAdressen = personen.Select(p => p.Email).ToList();
+
+            List<string> mailAdressen = new List<string> { "Test1@hotmail.com", "Test2@hotmail.com", "Test3@hotmail.com" };
+
+            _mailService.sendGroupMail(onderwerp, bericht, mailAdressen);
+
+            return Redirect("/User/Overview");
+        }
+
     }
 }
