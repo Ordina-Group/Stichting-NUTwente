@@ -147,5 +147,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
             gastgezin.HasVOG = hasVOG;
             gastgezinRepository.Update(gastgezin);
         }
+        public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing)
+        {
+            var plaastingen = GetPlaatsingen(gastgezinId,plaatsing.PlacementType,plaatsing.AgeGroup);
+            if (plaastingen.FirstOrDefault(p => p.DateTime == plaatsing.DateTime && p.Amount == plaatsing.Amount) != null)
+            {
+                return true;
+            }
+            return false;
+
+
+        }
     }
 }

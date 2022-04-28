@@ -126,18 +126,24 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             string uploads = Path.Combine(_environment.WebRootPath, "");
             string filePath = Path.Combine(uploads, Guid.NewGuid().ToString() + ".xlxs");
+            var maintenanceModel = new MaintenanceModel();
             try
             {
                 using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    maintenanceService.LoadPlaatsingDataFromExcel(fileStream, User);
+                    var messages = maintenanceService.LoadPlaatsingDataFromExcel(fileStream, User);
+                    maintenanceModel.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+                    {
+                        Message = x.Message,
+                        MessageType = (MaintenanceMessageType)x.MessageType
+                    }));
                 }
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
-                return View("Index", new MaintenanceModel());
-            }
+                return View("Index", maintenanceModel);
+        }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -145,7 +151,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 ViewBag.Message = "File upload failed!!";
                 return View("Index", new MaintenanceModel());
             }
-        }
+}
 
         [HttpPost]
         public async Task<ActionResult> UploadUpdateGastgezin(IFormFile file)
