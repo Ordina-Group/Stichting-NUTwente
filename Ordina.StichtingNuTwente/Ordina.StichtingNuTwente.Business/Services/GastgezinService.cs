@@ -115,12 +115,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public string GetPlaatsingTag(int gastgezinId, PlacementType placementType)
         {
+            string tag = "";
+            var gastgezin = GetGastgezin(gastgezinId);
+            if (gastgezin.Status == GastgezinStatus.OnHold)
+            {
+                tag = "ON HOLD";
+                return tag;
+            }
             var plaatsingen = GetPlaatsingen(gastgezinId);
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
-            string tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
             return tag;
         }
 
