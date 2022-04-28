@@ -40,7 +40,13 @@
                     @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
                     {
                         <tr>
-                            <td>@mijnGastgezin.AanmeldFormulierId @(mijnGastgezin.IntakeFormulierId > 0? "/" + mijnGastgezin.IntakeFormulierId : "")</td>
+                            <td>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
+                                @if (mijnGastgezin.IntakeFormulierId > 0)
+                                {
+                                    <text>/ </text> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                                }
+                            </td>
                             <td>@mijnGastgezin.Naam</td>
                             <td>@mijnGastgezin.Adres</td>
                             <td>@mijnGastgezin.Woonplaats</td>
@@ -82,7 +88,7 @@
                     <th scope="col">Begeleider</th>
                     <th scope="col">Geplaatst</th>
                     <th scope="col">Gereserveerd</th>
-                    <th scope="col"style="width:32px">VOG</th>
+                    <th scope="col" style="width:32px">VOG</th>
                     <th scope="col" style="width:32px"></th>
                 </tr>
             </thead>
@@ -91,7 +97,13 @@
                 {
                     Index++;
                     <tr class="@(Index%2==0?"dark-row":"")">
-                        <td>@mijnGastgezin.AanmeldFormulierId @(mijnGastgezin.IntakeFormulierId > 0? "/" + mijnGastgezin.IntakeFormulierId : "")</td>
+                        <td>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
+                            @if (mijnGastgezin.IntakeFormulierId > 0)
+                            {
+                                <text>/ </text><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                            }
+                        </td>
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
@@ -103,7 +115,7 @@
                         <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16"/></td>
+                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
                         }
                         else
                         {
