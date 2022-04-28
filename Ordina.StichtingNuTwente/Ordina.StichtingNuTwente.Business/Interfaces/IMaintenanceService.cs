@@ -11,7 +11,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     public interface IMaintenanceService
     {
         public void LoadDataFromExcel(Stream excel, int formId);
-        void LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User);
+        public List<MaintenanceMessage> LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User);
         public List<MaintenanceMessage> UpdateDataFromExcel(Stream excelStream, int formId);
         List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream);
         public List<MaintenanceMessage> LinkBegeleiderToGastgezin();
