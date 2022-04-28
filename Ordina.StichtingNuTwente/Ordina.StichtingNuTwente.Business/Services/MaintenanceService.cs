@@ -118,8 +118,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
         }
 
-        public void LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User)
+        public List<MaintenanceMessage> LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User)
         {
+            var messages = new List<MaintenanceMessage>();
             using FastExcel.FastExcel fastExcel = new(excelStream);
             var worksheet = fastExcel.Worksheets[0];
             worksheet.Read();
@@ -129,7 +130,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier");
             foreach (var row in rows)
             {
-                if (rowNum > 1)
+                if (rowNum > 0)
                 {
                     var index = 0;
                     var cells = row.Cells;
@@ -145,86 +146,177 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         if (index == 0)
                         {
-                            gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier.Id == (int)cell.Value);
-                        }
-                        if (index == 1)
-                        {
-                            var val = cell.Value.ToString();
-                            if (val.Contains("on hold"))
+                            gastgezin = gastgezinnen.Where(g => g.IntakeFormulier != null).FirstOrDefault(g => g.IntakeFormulier.Id == int.Parse(cell.Value.ToString()));
+                            if (gastgezin == null)
                             {
-                                gastgezin.Status = GastgezinStatus.OnHold;
-                                _gastgezinService.UpdateGastgezin(gastgezin,gastgezin.Id);
+                                messages.Add(new MaintenanceMessage($@"Gastgezin with IntakeFormId {cell.Value} could not be found", MaintenanceMessageType.Error));
                             }
                         }
-                        if (index == 2)
+                        if (gastgezin != null)
                         {
-                            var val = cell.Value.ToString();
-                            if (val != ".")
+                            if (index == 1)
                             {
-                                double d = double.Parse(val);
-                                resDate = DateTime.FromOADate(d);
-                            }
-                        }
-                        if (index == 3)
-                        {
-                            var val = cell.Value.ToString();
-                            if (val != ".")
-                            {
-                                double d = double.Parse(val);
-                                plaatsingDate = DateTime.FromOADate(d);
-                            }
-                        }
-                        if (index == 4)
-                        {
-                            var val = cell.Value.ToString();
-                            if (val != ".")
-                            {
-                                if (val.Contains("v"))
+                                var val = cell.Value.ToString();
+                                if (val.Contains("on hold"))
                                 {
-                                    var plaatsing = new Plaatsing()
+                                    if (gastgezin.Status != GastgezinStatus.OnHold)
                                     {
-                                        DateTime = DateTime.Now,
-                                        AgeGroup = AgeGroup.Volwassene,
-                                        Amount = val[val.IndexOf("v") + 1],
-                                        Gastgezin = gastgezin,
-                                        PlacementType = PlacementType.Plaatsing,
-                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                    };
-                                    _gastgezinService.AddPlaatsing(plaatsing);
-                                }
-                                if (val.Contains("k"))
-                                {
-                                    var plaatsing = new Plaatsing()
+                                        gastgezin.Status = GastgezinStatus.OnHold;
+                                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
+                                        messages.Add(new MaintenanceMessage($@"OnHold status added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                    }
+                                    else
                                     {
-                                        DateTime = DateTime.Now,
-                                        AgeGroup = AgeGroup.Kind,
-                                        Amount = val[val.IndexOf("k") + 1],
-                                        Gastgezin = gastgezin,
-                                        PlacementType = PlacementType.Plaatsing,
-                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                    };
-                                    _gastgezinService.AddPlaatsing(plaatsing);
-                                }
-                                if (!val.Contains("v") && !val.Contains("k"))
-                                {
-                                    var plaatsing = new Plaatsing()
-                                    {
-                                        DateTime = DateTime.Now,
-                                        AgeGroup = AgeGroup.Onbekend,
-                                        Amount = int.Parse(val),
-                                        Gastgezin = gastgezin,
-                                        PlacementType = PlacementType.Plaatsing,
-                                        Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                    };
-                                    _gastgezinService.AddPlaatsing(plaatsing);
+                                        messages.Add(new MaintenanceMessage($@"OnHold status already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                    }
                                 }
                             }
+                            if (index == 2)
+                            {
+                                var val = cell.Value.ToString();
+                                if (val != ".")
+                                {
+                                    double d = double.Parse(val);
+                                    resDate = DateTime.FromOADate(d);
+                                }
+                            }
+                            if (index == 3)
+                            {
+                                var val = cell.Value.ToString();
+                                if (val != ".")
+                                {
+                                    double d = double.Parse(val);
+                                    plaatsingDate = DateTime.FromOADate(d);
+                                }
+                            }
+                            if (index == 4)
+                            {
+                                var val = cell.Value.ToString();
+                                if (val != ".")
+                                {
+                                    if (resDate != new DateTime())
+                                    {
+                                        if (val.Contains("v"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = resDate,
+                                                AgeGroup = AgeGroup.Volwassene,
+                                                Amount = int.Parse(val[val.IndexOf("v") + 1].ToString()),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Reservering,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                        if (val.Contains("k"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = resDate,
+                                                AgeGroup = AgeGroup.Kind,
+                                                Amount = int.Parse(val[val.IndexOf("k") + 1].ToString()),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Reservering,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                        if (!val.Contains("v") && !val.Contains("k"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = resDate,
+                                                AgeGroup = AgeGroup.Onbekend,
+                                                Amount = int.Parse(val),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Reservering,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                    }
+                                    if (plaatsingDate != new DateTime())
+                                    {
+                                        if (val.Contains("v"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = plaatsingDate,
+                                                AgeGroup = AgeGroup.Volwassene,
+                                                Amount = int.Parse(val[val.IndexOf("v") + 1].ToString()),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Plaatsing,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                        if (val.Contains("k"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = plaatsingDate,
+                                                AgeGroup = AgeGroup.Kind,
+                                                Amount = int.Parse(val[val.IndexOf("k") + 1].ToString()),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Plaatsing,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                        if (!val.Contains("v") && !val.Contains("k"))
+                                        {
+                                            var plaatsing = new Plaatsing()
+                                            {
+                                                DateTime = plaatsingDate,
+                                                AgeGroup = AgeGroup.Onbekend,
+                                                Amount = int.Parse(val),
+                                                Gastgezin = gastgezin,
+                                                PlacementType = PlacementType.Plaatsing,
+                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                            };
+                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
+                                            {
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                            }
+                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
+                                        }
+                                    }
+                                }
+                            }
+                            index++;
                         }
-                        index++;
-                    };
+                    }
                 }
                 rowNum++;
             }
+            return messages.ToList();
         }
 
         public List<MaintenanceMessage> UpdateDataFromExcel(Stream excelStream, int formId)
