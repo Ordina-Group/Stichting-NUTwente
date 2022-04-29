@@ -3,8 +3,11 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 justify-content-between">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm mb-3 justify-content-between">
         <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="favicon.ico" alt="" width="44" height="44">
+        </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-light"></span>
             </button>
@@ -41,7 +44,7 @@
                             </div>
                         </li>
                     }
-                     @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                    @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
