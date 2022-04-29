@@ -234,6 +234,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
                         IntakeFormulierId = intakeFormulierId,
+                        Note = gastGezin.Note,
                     });
                 }
                 else
@@ -252,6 +253,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
                         IntakeFormulierId = intakeFormulierId,
+                        Note = gastGezin.Note,
                     });
                 }
             }
