@@ -9,12 +9,13 @@
 
 <body>
     <div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Mijn Gastgezinnen</h3>
+        <nav class="nav nav-tabs d-flex justify-content-between">
+            <h3>Mijn Gastgezinnen</h3>
+            <div class="d-flex">
+            <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")"href="/MijnGastgezinnen?filter=Buddy">Buddy</a>
+            <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="/MijnGastgezinnen?filter=Intaker">Intaker</a>
             </div>
-        </div>
-
+        </nav>
         <table class="table fixed-table">
             <thead>
                 <tr>
