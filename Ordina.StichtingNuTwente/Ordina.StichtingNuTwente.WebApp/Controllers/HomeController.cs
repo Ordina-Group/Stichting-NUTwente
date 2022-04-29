@@ -108,7 +108,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
-        public IActionResult MijnGastgezinnen()
+        public IActionResult MijnGastgezinnen(string? filter)
         {
             _userService.checkIfUserExists(User);
 
@@ -116,6 +116,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            if (filter != null)
+            {
+                if (filter == "Buddy")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Buddy == user).ToList();
+                }
+                if (filter == "Intaker")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
+                }
+            }
             _userService.GetUsersByRole("");
 
             foreach (var gastGezin in gastGezinnen)
