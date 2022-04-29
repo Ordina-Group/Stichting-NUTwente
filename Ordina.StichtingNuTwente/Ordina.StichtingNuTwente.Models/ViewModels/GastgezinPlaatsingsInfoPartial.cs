@@ -11,11 +11,13 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
     {
         public PlaatsingsInfo? PlaatsingsInfo { get; set; }
         public int Index { get; set; }
+        public string? Notities { get; set; }
 
-        public GastgezinPlaatsingsInfoPartial(PlaatsingsInfo plaatsingsInfo, int index)
+        public GastgezinPlaatsingsInfoPartial(PlaatsingsInfo plaatsingsInfo, int index,string? notities)
         {
             PlaatsingsInfo = plaatsingsInfo;
             Index = index;
+            Notities = notities;
         }
 
 
