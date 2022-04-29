@@ -31,3 +31,8 @@
 label {
     display: block;
 }
+
+.card {
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+
+}

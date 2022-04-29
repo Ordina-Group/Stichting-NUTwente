@@ -71,6 +71,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     intakeFormulierId = gastGezin.IntakeFormulier.Id;
                 }
 
+                var plaatsingsInfo = new PlaatsingsInfo();
+
+                if(gastGezin.PlaatsingsInfo != null)
+                {
+                    plaatsingsInfo = gastGezin.PlaatsingsInfo;
+                }
+
                 viewModel.GastGezin = new GastGezin()
                 {
                     Id = id,
@@ -83,7 +90,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     IntakeFormulierId = intakeFormulierId,
                     Note = gastGezin.Note,
                     Status = gastGezin.Status,
-                    HasVOG= gastGezin.HasVOG
+                    HasVOG = gastGezin.HasVOG,
+                    PlaatsingsInfo = plaatsingsInfo,
                 };
             }
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
