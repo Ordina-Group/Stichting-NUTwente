@@ -57,28 +57,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(new UserViewModel(userDetails));
         }
 
-        [Authorize]
-        [ActionName("MailGroup")]
+        //[Authorize]
+        [AllowAnonymous]
+        [Route("user/MailGroup")]
         [HttpPost]
-        public IActionResult MailGroup(string onderwerp, string bericht) //, List<Persoon> personen)
+        [ActionName("MailGroup")]
+        public IActionResult MailGroup(string onderwerp, string bericht)
         {
-            if (onderwerp == null)
-            {
-                onderwerp = "Geen onderwerp";
-            }
-            if (bericht == null)
-            {
-                //error teruggeven
-                return View("Error");
-            }
 
-            // List<string> mailAdressen = personen.Select(p => p.Email).ToList();
+
+
+            //List<string> mailAdressen = personen.Select(p => p.Email).ToList();
 
             List<string> mailAdressen = new List<string> { "Test1@hotmail.com", "Test2@hotmail.com", "Test3@hotmail.com" };
 
             _mailService.sendGroupMail(onderwerp, bericht, mailAdressen);
 
-            return Redirect("/User/Overview");
+            return Ok();
         }
 
     }

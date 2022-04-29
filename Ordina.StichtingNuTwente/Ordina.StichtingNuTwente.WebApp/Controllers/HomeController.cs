@@ -343,7 +343,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 var viewModel = new AnswerModel
                 {
-                    AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
+                    //AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
                 };
                 FillBaseModel(viewModel);
                 return View(viewModel);
@@ -379,10 +379,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (answers != null)
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    var reactieId = _reactionService.SaveAndGetReactieId(answerData);
-                    var persoon = _persoonService.GetPersoonByReactieId(reactieId);
-                    MailHelper mailHelper = new MailHelper(_mailService);
-                    bool success = await mailHelper.bevestiging(persoon);
+                    //var reactieId = _reactionService.SaveAndGetReactieId(answerData);
+                    //var persoon = _persoonService.GetPersoonByReactieId(reactieId);
+                    //MailHelper mailHelper = new MailHelper(_mailService);
+                    //bool success = await mailHelper.bevestiging(persoon);
                 }
             }
             catch (Exception ex)
