@@ -81,7 +81,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Woonplaats = woonplaatsText,
                     AanmeldFormulierId = aanmeldFormulierId,
                     IntakeFormulierId = intakeFormulierId,
-                    Note = gastGezin.Note
+                    Note = gastGezin.Note,
+                    Status = gastGezin.Status,
+                    HasVOG= gastGezin.HasVOG
                 };
             }
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
@@ -188,6 +190,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _gastgezinService.UpdateVOG(HasVOG, GastGezinId);
             return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOpties(GastgezinStatus Status, bool HasVOG, int GastGezinId)
+        {
+            var Gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
+            Gastgezin.Status = Status;
+            Gastgezin.HasVOG = HasVOG;
+            _gastgezinService.UpdateGastgezin(Gastgezin, GastGezinId);
+            return Redirect("/gastgezin?id=" + GastGezinId);
         }
     }
 }
