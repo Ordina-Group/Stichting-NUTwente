@@ -7,127 +7,131 @@
     var Index = 0;
 }
 
-<body>
-    <div>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Alle Gastgezinnen</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen zonder begeleider</h5>
-            </div>
-        </div>
-        <!-- Twee lijsten: Met intake en zonder intake -->
-        <form method="post">
-            <table class="table table-striped fixed-table">
-                <thead>
-                    <tr>
-                        <th scope="col">Ids</th>
-                        <th scope="col">Naam</th>
-                        <th scope="col">Adres</th>
-                        <th scope="col">Woonplaats</th>
-                        <th scope="col">Telefoonnummer</th>
-                        <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
-                        <th scope="col">Toekennen aan begeleider</th>
-                        <th scope="col">Geplaatst</th>
-                        <th scope="col">Gereserveerd</th>
-                        <th scope="col">VOG</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
-                    {
-                        <tr>
-                            <td>
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
-                                @if (mijnGastgezin.IntakeFormulierId > 0)
-                                {
-                                    <text>/ </text> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
-                                }
-                            </td>
-                            <td>@mijnGastgezin.Naam</td>
-                            <td>@mijnGastgezin.Adres</td>
-                            <td>@mijnGastgezin.Woonplaats</td>
-                            <td>@mijnGastgezin.Telefoonnummer</td>
-                            <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
-                            <td>
-                                <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
-                                    <option value=""></option>
-                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
-                                    {
-                                        <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
-                                    }
-                                </select>
-                            </td>
-                            <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                            <td>@mijnGastgezin.ReserveTag</td>
-                            <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <button type="submit" class="btn btn-primary">Opslaan</button>
-        </form>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen met begeleider</h5>
-            </div>
-        </div>
-        <table class="table fixed-table">
-            <thead>
-                <tr>
-                    <th scope="col">Ids</th>
-                    <th scope="col">Naam</th>
-                    <th scope="col">Adres</th>
-                    <th scope="col">Woonplaats</th>
-                    <th scope="col">Telefoonnummer</th>
-                    <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
-                    <th scope="col">Begeleider</th>
-                    <th scope="col">Geplaatst</th>
-                    <th scope="col">Gereserveerd</th>
-                    <th scope="col" style="width:32px">VOG</th>
-                    <th scope="col" style="width:32px"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
-                {
-                    Index++;
-                    <tr class="@(Index%2==0?"dark-row":"")">
-                        <td>
-                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
-                            @if (mijnGastgezin.IntakeFormulierId > 0)
-                            {
-                                <text>/ </text><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
-                            }
-                        </td>
-                        <td>@mijnGastgezin.Naam</td>
-                        <td>@mijnGastgezin.Adres</td>
-                        <td>@mijnGastgezin.Woonplaats</td>
-                        <td>@mijnGastgezin.Telefoonnummer</td>
-                        <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
-                        <td>@mijnGastgezin.Begeleider</td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                        <td>@mijnGastgezin.ReserveTag</td>
-                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
-                        @if (mijnGastgezin.PlaatsingsInfo != null)
-                        {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, mijnGastgezin.Note))
-                }
-            </tbody>
-        </table>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Alle Gastgezinnen</h3>
     </div>
-    @await Html.PartialAsync("_showItem.cshtml")
-</body>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h5>Gastgezinnen zonder begeleider</h5>
+    </div>
+</div>
+<!-- Twee lijsten: Met intake en zonder intake -->
+<form method="post">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Ids</th>
+                <th scope="col">Naam</th>
+                <th scope="col">Adres</th>
+                <th scope="col">Woonplaats</th>
+                <th scope="col">Telefoonnummer</th>
+                <th scope="col">Toekennen aan begeleider</th>
+                <th scope="col">Geplaatst</th>
+                <th scope="col">Gereserveerd</th>
+                <th scope="col">VOG</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
+            {
+                <tr>
+                    <td>
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
+                        @if (mijnGastgezin.IntakeFormulierId > 0)
+                        {
+                            <text>/ </text> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                        }
+                    </td>
+                    <td class="text-break">@mijnGastgezin.Naam</td>
+                    <td class="text-break">@mijnGastgezin.Adres</td>
+                    <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                    <td>@mijnGastgezin.Telefoonnummer</td>
+                    <td>
+                        <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                            <option value=""></option>
+                            @foreach (var vrijwilliger in Model.Vrijwilligers)
+                            {
+                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                            }
+                        </select>
+                    </td>
+                    <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
+                    <td>@mijnGastgezin.ReserveTag</td>
+                    <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Opslaan</button>
+</form>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <h5>Gastgezinnen met begeleider</h5>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Ids</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Adres</th>
+            <th scope="col">Woonplaats</th>
+            <th scope="col">Telefoonnummer</th>
+            <th scope="col">Begeleider</th>
+            <th scope="col">Maximale capaciteit</th>
+            <th scope="col">Geplaatst</th>
+            <th scope="col">Gereserveerd</th>
+            <th scope="col" style="width:32px">VOG</th>
+            <th scope="col" style="width:32px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
+        {
+            Index++;
+            <tr class="@(Index%2==0?"dark-row":"")">
+                <td>
+                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
+                    @if (mijnGastgezin.IntakeFormulierId > 0)
+                    {
+                        <text>/ </text>
+
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                    }
+                </td>
+                <td class="text-break">@mijnGastgezin.Naam</td>
+                <td class="text-break">@mijnGastgezin.Adres</td>
+                <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                <td>@mijnGastgezin.Telefoonnummer</td>
+                <td>@mijnGastgezin.Begeleider</td>
+                @if (mijnGastgezin.PlaatsingsInfo != null)
+                {
+                    <td class="text-break"><b>v: </b>@mijnGastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen <b>k: </b>@mijnGastgezin.PlaatsingsInfo.KleineKinderen</td>
+                }
+                else
+                {
+                    <td><b>v: k:</b></td>
+                }
+                <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
+                <td>@mijnGastgezin.ReserveTag</td>
+                <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
+                @if (mijnGastgezin.PlaatsingsInfo != null)
+                {
+                    <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, mijnGastgezin.Note))
+        }
+    </tbody>
+</table>
+@await Html.PartialAsync("_showItem.cshtml")
+
 
 
