@@ -146,7 +146,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         if (index == 0)
                         {
-                            gastgezin = gastgezinnen.Where(g => g.IntakeFormulier != null).FirstOrDefault(g => g.IntakeFormulier.Id == int.Parse(cell.Value.ToString()));
+                            int number;
+                            bool success = int.TryParse(cell.Value.ToString(), out number);
+                            if (success)
+                            {
+                                gastgezin = gastgezinnen.Where(g => g.IntakeFormulier != null).FirstOrDefault(g => g.IntakeFormulier.Id == number);
+                            }
+                            else
+                            {
+                                messages.Add(new MaintenanceMessage($@"IntakeFormId for Gastgezin with IntakeFormId {cell.Value} could not be parsed", MaintenanceMessageType.Error));
+                            }
                             if (gastgezin == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"Gastgezin with IntakeFormId {cell.Value} could not be found", MaintenanceMessageType.Error));
@@ -310,8 +319,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                     }
                                 }
                             }
-                            index++;
+
                         }
+                        index++;
                     }
                 }
                 rowNum++;
