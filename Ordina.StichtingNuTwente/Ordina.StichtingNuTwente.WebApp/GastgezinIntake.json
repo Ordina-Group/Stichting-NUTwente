@@ -55,7 +55,7 @@
         },
         {
           "Id": "7",
-          "Number": "7",
+          "Number": "5",
           "Text": "Telefoonnummer",
           "Description": "NuTwente gebruikt dit telefoonnummer om contact met u op te nemen. Alleen als de situatie dat vereist geven wij dit nummer door aan andere hulpverlenende instanties, zodat zij met u contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit nummer niet.",
           "InputType": "phoneNumber",
@@ -542,6 +542,15 @@
           "InputType": "textArea",
           "InputOptions": "",
           "Required": "false"
+        },
+        {
+          "Id": "51",
+          "Number": "15",
+          "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [ "Ik ga hiermee akkoord" ],
+          "Required": "true"
         }
       ]
     }
