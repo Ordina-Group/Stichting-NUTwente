@@ -29,7 +29,7 @@
                         <th scope="col">Adres</th>
                         <th scope="col">Woonplaats</th>
                         <th scope="col">Telefoonnummer</th>
-                        <th scope="col">E-mail</th>
+                        <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
                         <th scope="col">Toekennen aan begeleider</th>
                         <th scope="col">Geplaatst</th>
                         <th scope="col">Gereserveerd</th>
@@ -51,7 +51,7 @@
                             <td>@mijnGastgezin.Adres</td>
                             <td>@mijnGastgezin.Woonplaats</td>
                             <td>@mijnGastgezin.Telefoonnummer</td>
-                            <td>@mijnGastgezin.Email</td>
+                            <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
                             <td>
                                 <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                                     <option value=""></option>
@@ -62,7 +62,7 @@
                                 </select>
                             </td>
                             <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                            <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                            <td>@mijnGastgezin.ReserveTag</td>
                             <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         </tr>
                     }
@@ -84,7 +84,7 @@
                     <th scope="col">Adres</th>
                     <th scope="col">Woonplaats</th>
                     <th scope="col">Telefoonnummer</th>
-                    <th scope="col">E-mail</th>
+                    <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
                     <th scope="col">Begeleider</th>
                     <th scope="col">Geplaatst</th>
                     <th scope="col">Gereserveerd</th>
@@ -108,10 +108,10 @@
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
                         <td>@mijnGastgezin.Telefoonnummer</td>
-                        <td>@mijnGastgezin.Email</td>
+                        <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
                         <td>@mijnGastgezin.Begeleider</td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.ReserveTag</a></td>
+                        <td>@mijnGastgezin.ReserveTag</td>
                         <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
