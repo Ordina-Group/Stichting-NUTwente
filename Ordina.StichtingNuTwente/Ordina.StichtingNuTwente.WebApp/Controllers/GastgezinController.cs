@@ -209,5 +209,76 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.UpdateGastgezin(Gastgezin, GastGezinId);
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("/BeschikbareGastgezinnen")]
+        [HttpGet]
+        public IActionResult BeschikbareGastgezinnen()
+        {
+            _userService.checkIfUserExists(User);
+
+            var mijnGastgezinnen = new MijnGastgezinnenModel();
+
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null).ToList();
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                if (gastGezin.Contact == null)
+                {
+                    continue;
+                }
+
+                var contact = gastGezin.Contact;
+                var adres = gastGezin.Contact.Adres;
+                var adresText = "";
+                var woonplaatsText = "";
+
+                if (adres != null)
+                {
+                    adresText = adres.Straat;
+                    woonplaatsText = adres.Woonplaats;
+                }
+                var aanmeldFormulierId = -1;
+                var intakeFormulierId = -1;
+                if (gastGezin.AanmeldFormulier != null)
+                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
+                if (gastGezin.IntakeFormulier != null)
+                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
+
+                if (gastGezin.Begeleider != null)
+                {
+                    mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                    {
+                        Id = gastGezin.Id,
+                        Adres = adresText,
+                        Email = contact.Email,
+                        Naam = contact.Naam + " " + contact.Achternaam,
+                        Telefoonnummer = contact.Telefoonnummer,
+                        Woonplaats = woonplaatsText,
+                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
+                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                        HasVOG = gastGezin.HasVOG,
+                        AanmeldFormulierId = aanmeldFormulierId,
+                        IntakeFormulierId = intakeFormulierId,
+                        Note = gastGezin.Note,
+                    });
+                }
+            }
+            mijnGastgezinnen.MijnGastgezinnen = mijnGastgezinnen.MijnGastgezinnen.OrderBy(g => g.Woonplaats).ThenBy(g => g.AanmeldFormulierId).ToList();
+            FillBaseModel(mijnGastgezinnen);
+            return View(mijnGastgezinnen);
+        }
+
+        public void FillBaseModel(BaseModel model)
+        {
+            var user = _userService.getUserFromClaimsPrincipal(User);
+
+            if (user == null || user.Roles == null) return;
+
+            model.IsSecretariaat = user.Roles.Contains("group-secretariaat");
+            model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
+        }
     }
 }
