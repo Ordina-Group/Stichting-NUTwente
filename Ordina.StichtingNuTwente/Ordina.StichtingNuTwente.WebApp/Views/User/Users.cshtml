@@ -2,6 +2,7 @@
 @model List<UserViewModel>
 @{
     ViewData["Title"] = "Overzicht Vrijwilligers";
+    List<string> mailAdressen = new List<string>();
 }
 <header>
     <meta charset="utf-8">
@@ -37,9 +38,17 @@
     </table>
 
     <div class="modal fade" id="modalMail" role="dialog">
-        @using (Html.BeginForm("MailGroup", "user", FormMethod.Post))
+        @using (Html.BeginForm("MailGroup", "User", FormMethod.Post))
         {
             <div class="modal-dialog">
+
+
+                foreach(var u in Model)
+                {
+                     mailAdressen.add(u.mail);
+                }
+
+                <input type="hidden" value=@mailAdressen name="mailAdressen">
 
                 <div class="modal-content">
                     <div class="modal-header">
@@ -48,17 +57,17 @@
                     <div class="modal-body">
                         <div class="row">
                             <h6>Onderwerp</h6>
-                            <!--<textarea id="onderwerp" name="onderwerp"></textarea>-->
-                            @Html.TextArea("onderwerp")
+                            <textarea id="onderwerp" name="onderwerp"></textarea>
+                            
                         </div>
                         <div class="row">
                             <h6>Bericht:</h6>
-                            <!--<textarea id="bericht" name="bericht" style="height=30px"> </textarea>-->
-                            @Html.TextArea("bericht")
+                            <textarea id="bericht" name="bericht" style="height=30px"> </textarea>
+                            
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-default" data-dismiss="modal" value="Verstuur">
-                    
+
+                    <input type="submit" class="btn btn-default" value="Verstuur">
                 </div>
             </div>
         }
