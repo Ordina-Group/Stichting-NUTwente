@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Overzicht Vrijwilligers";
     List<string> mailAdressen = new List<string>();
+    string emailAdressen = "";
 }
 <header>
     <meta charset="utf-8">
@@ -43,12 +44,13 @@
             <div class="modal-dialog">
 
 
-                foreach(var u in Model)
+                @foreach(var u in Model)
                 {
-                     mailAdressen.add(u.mail);
+                     mailAdressen.Add(u.Email);
+                     emailAdressen = string.Join(",", mailAdressen);
                 }
 
-                <input type="hidden" value=@mailAdressen name="mailAdressen">
+                <input type="hidden" value=@emailAdressen name="emailAdressen">
 
                 <div class="modal-content">
                     <div class="modal-header">
