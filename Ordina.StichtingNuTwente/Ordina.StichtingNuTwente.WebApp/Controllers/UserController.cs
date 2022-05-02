@@ -59,17 +59,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         //[Authorize]
         [AllowAnonymous]
-        [Route("user/MailGroup")]
+       // [Route("user/MailGroup")]
         [HttpPost]
-        [ActionName("MailGroup")]
-        public IActionResult MailGroup(string onderwerp, string bericht)
+        //[ActionName("MailGroup")]
+        public IActionResult MailGroup(string onderwerp, string bericht, List<string> mailAdressen)
         {
 
 
 
             //List<string> mailAdressen = personen.Select(p => p.Email).ToList();
 
-            List<string> mailAdressen = new List<string> { "Test1@hotmail.com", "Test2@hotmail.com", "Test3@hotmail.com" };
+           //List<string> mailAdressen = new List<string> { "Test1@hotmail.com", "Test2@hotmail.com", "Test3@hotmail.com" };
 
             _mailService.sendGroupMail(onderwerp, bericht, mailAdressen);
 
