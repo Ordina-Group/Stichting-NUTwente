@@ -26,6 +26,7 @@
                 <th scope="col">Naam</th>
                 <th scope="col">Adres</th>
                 <th scope="col">Woonplaats</th>
+                <th scope="col">Telefoonnummmer</th>
                 <th scope="col">Toekennen aan begeleider</th>
                 <th scope="col">Geplaatst</th>
                 <th scope="col">Gereserveerd</th>
@@ -46,6 +47,7 @@
                     <td class="text-break">@mijnGastgezin.Naam</td>
                     <td class="text-break">@mijnGastgezin.Adres</td>
                     <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                    <td>@mijnGastgezin.Telefoonnummer</td>
                     <td>
                         <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                             <option value=""></option>
@@ -77,6 +79,7 @@
             <th scope="col">Naam</th>
             <th scope="col">Adres</th>
             <th scope="col">Woonplaats</th>
+            <th scope="col">Telefoonnummmer</th>
             <th scope="col">Begeleider</th>
             <th scope="col">Maximale capaciteit</th>
             <th scope="col">Geplaatst</th>
@@ -102,6 +105,7 @@
                 <td class="text-break">@mijnGastgezin.Naam</td>
                 <td class="text-break">@mijnGastgezin.Adres</td>
                 <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                <td>@mijnGastgezin.Telefoonnummer</td>
                 <td>@mijnGastgezin.Begeleider</td>
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
