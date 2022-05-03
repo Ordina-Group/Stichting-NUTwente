@@ -59,6 +59,10 @@
                             </div>
                         </li>
                     }
+                    @if (User.HasClaims("groups", "group-superadmin"))
+                    {
+                        <span style="padding-left: 50px;"><a href="/Maintenance/Index" class="btn btn-danger">Maintenance</a></span>
+                    }
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">

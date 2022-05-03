@@ -586,27 +586,172 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             return messages;
         }
-    }
 
-    public class MaintenanceMessage
-    {
-        public MaintenanceMessage(string message, MaintenanceMessageType messageType = MaintenanceMessageType.Info)
+        public DatabaseIntegrityModel TestDatabaseIntregity()
         {
-            Message = message;
-            MessageType = messageType;
+            var result = new DatabaseIntegrityModel();
+
+            result.Inconsistencies.Add(TestDoubleAanmeldIntakeInGastgezinnen());
+            result.Inconsistencies.Add(TestMissingGastgezin());
+            result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
+            result.Inconsistencies.Add(TestCicleReference());
+
+            result.Statistics.Add(TestCountAllTables());
+            result.Statistics.Add(TestHowManyAanmeldDontHaveIntake());
+
+            return result;
         }
 
-        public string Message { get; set; }
+        private DatabaseIntegrityTest TestDoubleAanmeldIntakeInGastgezinnen()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Duplicate Aanmeld / Intake",
+                Description = "Checking all Gastgezin->Persoon->Reacties duplicates (Aanmeld formulier) and all Gastgezinnen->IntakeFormulierId (Intake formulier)"
+            };
 
-        public MaintenanceMessageType MessageType { get; set; }
-    }
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
 
-    public enum MaintenanceMessageType
-    {
-        Info,
-        Warning,
-        Error,
-        Success
+            var gastgezinnen = gastgezinRespority.GetAll("AanmeldFormulier");
+
+            var duplicateAanmelding = from c in gastgezinnen
+                    group c by c.AanmeldFormulier into g
+                    where g.Skip(1).Any()
+                    from c in g
+                    select c;
+
+            if (duplicateAanmelding.Count() == 0)
+            {
+                result.AddMessage("No duplicaties for AanmeldFormulier for Gastgezinnen", DatabaseIntegrityLevel.Success);
+            }
+            else
+            {
+                foreach (var gastgezin in duplicateAanmelding)
+                {
+                    result.AddMessage($@"Duplicate Aanmeld: GastgezinId {gastgezin.Id}, AanmeldFormulierId {gastgezin.AanmeldFormulier.Id}", DatabaseIntegrityLevel.Error);
+                }
+            }
+
+            var duplicateIntake = from c in gastgezinnen
+                where c.IntakeFormulier != null
+                group c by c.IntakeFormulier into g
+                where g.Skip(1).Any()
+                from c in g
+                select c;
+
+            if (duplicateIntake.Count() == 0)
+            {
+                result.AddMessage("No duplicaties for IntakeFormulier for Gastgezinnen", DatabaseIntegrityLevel.Success);
+            }
+            else
+            {
+                foreach (var gastgezin in duplicateIntake)
+                {
+                    result.AddMessage($@"Duplicate Intake: GastgezinId {gastgezin.Id}, IntakeId {gastgezin.IntakeFormulier.Id}", DatabaseIntegrityLevel.Error);
+                }
+            }
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestMissingGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Missing Gastgezin for Aanmeld Formulier",
+                Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
+            };
+
+            var persoonRespority = new Repository<Persoon>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRespority.GetAll("Contact");
+            var personen = persoonRespority.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
+
+            int totalProblems = 0;
+            foreach (var persoon in personen)
+            {
+                if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
+                
+                totalProblems++;
+                result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
+            }
+
+            if (totalProblems == 0)
+            {
+                result.AddMessage($@"No Gastgezin found without a Persoon", DatabaseIntegrityLevel.Success);
+            }
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestMissingAanmeldForIntakeFormulier()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Missing Aanmeld Formulier for Intake Formulier",
+                Description = "Check if an Intake Formulier (Reactie) is not associated with an Aanmeld Formulier (Reactie)"
+            };
+
+            result.AddMessage("Not implemented yet");
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestCicleReference()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Check Gastgezin and Persoon Circle reference",
+                Description = "Check if Gastgezin with Persoon do not have correct foreign keys to each other. They should both have the same keys towards each other."
+            };
+
+            result.AddMessage("Not implemented yet");
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestCountAllTables()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Count Table Records",
+                Description = "Count all records for all tables in the database"
+            };
+
+            var adresRespority = new Repository<Adres>(_context);
+            var antwoordRepository = new Repository<Antwoord>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+            var persoonRespority = new Repository<Persoon>(_context);
+            var plaatsingRespority = new Repository<Plaatsing>(_context);
+            var plaatsingsInfoRespority = new Repository<PlaatsingsInfo>(_context);
+            var reactiesRespority = new Repository<Reactie>(_context);
+            var usersDetailsRespority = new Repository<UserDetails>(_context);
+
+            result.AddMessage($@"Table Adres: {adresRespority.Count()} records");
+            result.AddMessage($@"Table Antwoord: {antwoordRepository.Count()} records");
+            result.AddMessage($@"Table Gastgezin: {gastgezinRespority.Count()} records");
+            result.AddMessage($@"Table Persoon: {persoonRespority.Count()} records");
+            result.AddMessage($@"Table Plaatsing: {plaatsingRespority.Count()} records");
+            result.AddMessage($@"Table PlaatsingsInfo: {plaatsingsInfoRespority.Count()} records");
+            result.AddMessage($@"Table Reacties: {reactiesRespority.Count()} records");
+            result.AddMessage($@"Table UsersDetails: {usersDetailsRespority.Count()} records");
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestHowManyAanmeldDontHaveIntake()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Number of Aanmeld which do not have an Intake",
+                Description = "Check how many Aanmeld Formulieren do not have an Intake Formulier associated with them"
+            };
+
+            result.AddMessage("Not implemented yet");
+
+            return result;
+        }
     }
 }
 

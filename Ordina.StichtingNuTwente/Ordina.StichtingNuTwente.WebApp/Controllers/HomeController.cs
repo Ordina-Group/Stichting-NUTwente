@@ -317,14 +317,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
                 }
 
-                if (assignVrijwilliger == null && gastgezinItem.Begeleider is not null)
+                if (assignVrijwilliger == null && gastgezinItem.Begeleider != null)
                 {
                     gastgezinItem.Begeleider = null;
                     _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                 }
                 else
                 {
-                    if (gastgezinItem.Begeleider is not null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
+                    if (gastgezinItem.Begeleider != null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
                     {
                         gastgezinItem.Begeleider = assignVrijwilliger;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
@@ -365,14 +365,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
                 }
 
-                if (assignVrijwilliger == null && gastgezinItem.Buddy is not null)
+                if (assignVrijwilliger == null && gastgezinItem.Buddy != null)
                 {
                     gastgezinItem.Buddy = null;
                     _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                 }
                 else
                 {
-                    if (gastgezinItem.Buddy is not null && gastgezinItem.Buddy.Id != assignVrijwilliger.Id)
+                    if (gastgezinItem.Buddy != null && gastgezinItem.Buddy.Id != assignVrijwilliger.Id)
                     {
                         gastgezinItem.Buddy = assignVrijwilliger;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
