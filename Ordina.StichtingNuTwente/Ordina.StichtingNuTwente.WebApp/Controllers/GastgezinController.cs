@@ -218,11 +218,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("/BeschikbareGastgezinnen")]
         [HttpGet]
-        public IActionResult BeschikbareGastgezinnen()
+        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
         {
             _userService.checkIfUserExists(User);
 
-            var mijnGastgezinnen = new MijnGastgezinnenModel();
+            var model = new BeschikbareGastgezinnenModel();
 
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null).ToList();
 
@@ -252,7 +252,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
                 if (gastGezin.Begeleider != null)
                 {
-                    mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                    model.MijnGastgezinnen.Add(new GastGezin
                     {
                         Id = gastGezin.Id,
                         Adres = adresText,
@@ -271,9 +271,52 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     });
                 }
             }
-            mijnGastgezinnen.MijnGastgezinnen = mijnGastgezinnen.MijnGastgezinnen.OrderBy(g => g.Woonplaats).ThenBy(g => g.AanmeldFormulierId).ToList();
-            FillBaseModel(mijnGastgezinnen);
-            return View(mijnGastgezinnen);
+            if(sortOrder == "Ascending")
+            {
+                switch (sortBy)
+                {
+                    case "Woonplaats":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.Woonplaats).ToList();
+                        model.SortDropdownText = "Woonplaats";
+                        break;
+                    case "Naam":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.Naam).ToList();
+                        model.SortDropdownText = "Naam";
+                        break;
+                    case "Geplaatst":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag).ToList();
+                        model.SortDropdownText = "Geplaatst (laag-hoog)";
+                        break;
+                    case "Gereserveerd":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag).ToList();
+                        model.SortDropdownText = "Gereserveerd (laag-hoog)";
+                        break;
+                    case "AanmeldingsId":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.AanmeldFormulierId).ToList();
+                        model.SortDropdownText = "AanmeldingsId (laag-hoog)";
+                        break;
+                }
+            }
+            else if( sortOrder == "Descending")
+            {
+                switch (sortBy)
+                {
+                    case "Geplaatst":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderByDescending(g => g.PlaatsingTag).ToList();
+                        model.SortDropdownText = "Geplaatst (hoog-laag)";
+                        break;
+                    case "Gereserveerd":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderByDescending(g => g.PlaatsingTag).ToList();
+                        model.SortDropdownText = "Gereserveerd (hoog-laag)";
+                        break;
+                    case "AanmeldingsId":
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderByDescending(g => g.AanmeldFormulierId).ToList();
+                        model.SortDropdownText = "AanmeldingsId (hoog-laag)";
+                        break;
+                }
+            }
+            FillBaseModel(model);
+            return View(model);
         }
 
         public void FillBaseModel(BaseModel model)

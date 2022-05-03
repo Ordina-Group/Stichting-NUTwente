@@ -12,6 +12,8 @@
                 <th scope="col">Achternaam</th>
                 <th scope="col">E-mailadres</th>
                 <th scope="col">Telefoonnummer</th>
+                <th scope="col">Rollen</th>
+                <th scope="col">In vrijwilliger lijst?</th>
             </tr>
         </thead>
         <tbody>
@@ -22,8 +24,37 @@
                     <td>@u.LastName</td>
                     <td>@u.Email</td>
                     <td>@u.PhoneNumber</td>
+                    <td>@string.Join( "; ", @u.Roles.ToArray() )</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"")>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <script>
+        $(".dropdown-checkbox").on("change", function(){
+            let checkbox = $(this);
+            let id = checkbox.attr("id");
+            let checked = checkbox.is(":checked");
+            checkbox.prop( "disabled", true );
+            $.ajax({
+            url: "/User/UserUpdate",
+               type: "PUT",
+               dataType: 'text',
+               contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+               data: {"inDropdown":checked, "id":id},
+               success: function() {
+                   checkbox.prop( "disabled", false);
+               },
+               error: function() {
+                   checkbox.prop( "disabled", false);
+                   checkbox.prop( "checked", !checked);
+               }
+            });
+        })
+    </script>
 </body>
