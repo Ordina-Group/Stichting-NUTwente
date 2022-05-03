@@ -31,14 +31,12 @@ public class MailService : IMailService
         Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
 
         return response.IsSuccessStatusCode;
-
-        //Console.WriteLine("Mail sent to: " + mail.MailToAdress + ", with message: " + msg);
-
-        //return true;
     }
 
     public async Task<bool> sendGroupMail(string subject, string message, List<string> mailAdresses)
     {
+        mailAdresses = mailAdresses.Distinct().ToList();
+
         List<EmailAddress> emailAddresses = new List<EmailAddress>();
         foreach(var mail in mailAdresses)
         {
@@ -46,30 +44,13 @@ public class MailService : IMailService
         }
 
         var client = new SendGridClient(ApiKey);
-        /*var msg = new SendGridMessage()
-        {
-            From = new EmailAddress(MailAdressFrom, mail.MailFromName),
-            Subject = subject,
-            PlainTextContent = message,
-            Personalizations = new List<Personalization>
-            {
-                new Personalization
-                {
-               
-                }
-            }
-        }*/
 
-        EmailAddress fromMail = new EmailAddress(this.MailAdressFrom);
+        EmailAddress fromMail = new EmailAddress(this.MailAdressFrom, "Secretariaat NUTwente");
+        var htmlContent = "<p>" + message + "</p>";
 
-        var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, null) ;
+        var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, htmlContent) ;
 
         var response = await client.SendEmailAsync(msg);
-        /*foreach(var mail in mailAdresses)
-        {
-            Console.WriteLine("Mail sent to: " + mail + ", with message: " + msg);
-
-        }*/
 
         Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
         return response.IsSuccessStatusCode;
