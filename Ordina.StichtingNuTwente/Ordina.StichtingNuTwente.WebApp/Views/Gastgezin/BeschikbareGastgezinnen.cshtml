@@ -51,8 +51,8 @@
         {
             Index++;
             <tr class="@(Index%2==0?"dark-row":"")">
-                <td class="text-break">@mijnGastgezin.Woonplaats</td>
-                <td class="text-break">@mijnGastgezin.Adres</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie)? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie)? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
                 <td class="text-break">@mijnGastgezin.Naam</td>
                 <td>@mijnGastgezin.Telefoonnummer</td>
                 <td>
@@ -92,8 +92,8 @@
 @await Html.PartialAsync("../Home/_showItem.cshtml")
 
 <script>
-$('.dropdown-item').on('click', function() {
-    $('#dropdownSortButton').html($(this).html());
-    });
+    $('.dropdown-item').on('click', function() {
+        $('#dropdownSortButton').html($(this).html());
+        });
 </script>
 
