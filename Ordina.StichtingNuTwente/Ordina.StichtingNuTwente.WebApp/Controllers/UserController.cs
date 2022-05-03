@@ -67,7 +67,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             List<string> mailAdressen = emailAdressen.Split(',').ToList();
             _mailService.setApiKey("***REMOVED***");
-            _mailService.setFromMail("niek.nieuwenhuisen@hotmail.com");
+            _mailService.setFromMail("niek.nieuwenhuisen@ordina.nl");
             _mailService.sendGroupMail(onderwerp, bericht, mailAdressen);
 
             return Ok();
