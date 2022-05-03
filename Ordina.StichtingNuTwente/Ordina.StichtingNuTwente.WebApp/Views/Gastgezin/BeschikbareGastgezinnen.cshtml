@@ -5,6 +5,7 @@
 @{
     ViewData["Title"] = "Beschikbare Gastgezinnen";
     var Index = 0;
+    var filters = Context.Request.Query["filters"];
 }
 
 <div class="row row-cols-2">
@@ -30,6 +31,52 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-12"> <h4>Zoeken</h4></div>
+    <div class="col-5">
+        <select class="form-select" aria-label="Default select example">
+            <option value="Belemmering">Belemmering</option>
+            <option value="KleineKinderen">KleineKinderen</option>
+            <option value="VolwassenenGrotereKinderen">VolwassenenGrotereKinderen</option>
+            <option value="SlaapkamerRuimte">SlaapkamerRuimte</option>
+            <option value="Privacy">Privacy</option>
+            <option value="Opbergruimte">Opbergruimte</option>
+            <option value="Faciliteiten">Faciliteiten</option>
+            <option value="ZelfKoken">ZelfKoken</option>
+            <option value="KoelkastRuimte">KoelkastRuimte</option>
+            <option value="DaglichtSlaapkamer">DaglichtSlaapkamer</option>
+            <option value="Roken">Roken</option>
+            <option value="AlchoholEnDrugs">AlchoholEnDrugs</option>
+            <option value="VeiligeOpbergruimte">VeiligeOpbergruimte</option>
+            <option value="HuisdierenAanwezig">HuisdierenAanwezig</option>
+            <option value="HuisdierenMogelijk">HuisdierenMogelijk</option>
+            <option value="Allergieen">Allergieen</option>
+            <option value="VluchtelingOphalen">VluchtelingOphalen</option>
+            <option value="BasisscholenAanwezig">BasisscholenAanwezig</option>
+            <option value="KinderenInDeBuurt">KinderenInDeBuurt</option>
+            <option value="FaciliteitenVoorKinderen">FaciliteitenVoorKinderen</option>
+            <option value="Beperkingen">Beperkingen</option>
+        </select>
+    </div>
+    <div class="col-5">
+        <input type="text" class="form-control" placeholder="Zoek...">
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary"> Zoekterm toevoegen</button>
+    </div>
+</div>
+<div class="row small-row">
+    @foreach (var filter in filters)
+    {
+        <div class="card col-4">
+            <div class="card-body small-card centered">
+                @filter <button class="btn btn-danger">x</button>
+            </div>
+        </div>
+    }
+</div>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -92,8 +139,8 @@
 @await Html.PartialAsync("../Home/_showItem.cshtml")
 
 <script>
-$('.dropdown-item').on('click', function() {
-    $('#dropdownSortButton').html($(this).html());
-    });
+    $('.dropdown-item').on('click', function() {
+        $('#dropdownSortButton').html($(this).html());
+        });
 </script>
 

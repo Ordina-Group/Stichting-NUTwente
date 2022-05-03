@@ -102,6 +102,15 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .centered {
     text-align: center;
 }
+.small-row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.small-card {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
 
 .hidden { 
     display : none;
