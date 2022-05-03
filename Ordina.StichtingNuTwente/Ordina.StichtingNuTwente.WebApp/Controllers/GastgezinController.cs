@@ -328,5 +328,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             model.IsSecretariaat = user.Roles.Contains("group-secretariaat");
             model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
+
+        [Authorize(Policy = "RequireSuperAdminRole")]
+        [Route("{controller=Home}/{action=Index}/{id?}")]
+        [HttpDelete]
+        public IActionResult DeleteGastgezin(int id)
+        {
+            try
+            {
+                _gastgezinService.Delete(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
