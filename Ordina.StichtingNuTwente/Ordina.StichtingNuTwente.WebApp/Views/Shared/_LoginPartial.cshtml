@@ -33,28 +33,28 @@
                     @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form" || Accessor.HttpContext.Request.Path.Value == "/user/Users" || Accessor.HttpContext.Request.Path.Value == "/vluchtelingenOverzicht"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreacties987456list" || Accessor.HttpContext.Request.Path.Value == "/getnutwenteoverheidreactiesspecifiek158436form" || Accessor.HttpContext.Request.Path.Value == "/user/Users" || Accessor.HttpContext.Request.Path.Value == "/vluchtelingenOverzicht" || Accessor.HttpContext.Request.Path.Value == "/AlleGastgezinnen" ? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Overzichten
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/BeschikbareGastgezinnen">Beschikbare Gastgezinnen</a>
+                                <a class="dropdown-item" href="/AlleGastgezinnen">Intakeplanning Gastgezinnen</a>
                                 <a class="dropdown-item" href="/getnutwenteoverheidreacties987456list">Reacties</a>
                                 <a class="dropdown-item" href="/user/Users">Vrijwilligers</a>
-                                <a class="dropdown-item" href="/vluchtelingenOverzicht">Vluchtelingen</a>
-                                <a class="dropdown-item" href="/AlleGastgezinnen">Gastgezinnen</a>
                             </div>
                         </li>
                     }
                     @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties" || Accessor.HttpContext.Request.Path.Value == "/MijnGastgezinnen"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Mijn Overzichten
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/mijnReacties">Reacties</a>
                                 @if (User.HasClaims("groups", "group-vrijwilliger"))
                                 {
-                                    <a class="dropdown-item" href="/MijnGastgezinnen">Gastgezinnen</a>
+                                    <a class="dropdown-item" href="/MijnGastgezinnen?filter=Buddy">Gastgezinnen</a>
                                 }
                             </div>
                         </li>

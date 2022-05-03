@@ -108,7 +108,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
-        public IActionResult MijnGastgezinnen()
+        public IActionResult MijnGastgezinnen(string? filter)
         {
             _userService.checkIfUserExists(User);
 
@@ -116,6 +116,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            if (filter != null)
+            {
+                if (filter == "Buddy")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Buddy == user).ToList();
+                }
+                if (filter == "Intaker")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
+                }
+            }
             _userService.GetUsersByRole("");
 
             foreach (var gastGezin in gastGezinnen)
@@ -228,8 +239,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Telefoonnummer = contact.Telefoonnummer,
                         Woonplaats = woonplaatsText,
                         Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
+                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
@@ -247,8 +258,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Naam = contact.Naam + " " + contact.Achternaam,
                         Telefoonnummer = contact.Telefoonnummer,
                         Woonplaats = woonplaatsText,
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
+                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
