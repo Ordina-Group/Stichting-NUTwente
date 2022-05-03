@@ -39,7 +39,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     return Redirect("MicrosoftIdentity/Account/AccessDenied");
                 }
-            }else if(!User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
+            }
+            else if (!User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
             {
                 return Redirect("MicrosoftIdentity/Account/AccessDenied");
             }
@@ -73,7 +74,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
                 var plaatsingsInfo = new PlaatsingsInfo();
 
-                if(gastGezin.PlaatsingsInfo != null)
+                if (gastGezin.PlaatsingsInfo != null)
                 {
                     plaatsingsInfo = gastGezin.PlaatsingsInfo;
                 }
@@ -203,11 +204,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpPost]
         public IActionResult UpdateOpties(GastgezinStatus Status, bool HasVOG, int GastGezinId)
         {
-            var Gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
-            Gastgezin.Status = Status;
-            Gastgezin.HasVOG = HasVOG;
-            _gastgezinService.UpdateGastgezin(Gastgezin, GastGezinId);
-            return Redirect("/gastgezin?id=" + GastGezinId);
+            var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
+            if (gastgezin != null)
+            {
+                gastgezin.Status = Status;
+                gastgezin.HasVOG = HasVOG;
+                _gastgezinService.UpdateGastgezin(gastgezin, GastGezinId);
+                return Redirect("/gastgezin?id=" + GastGezinId);
+            }
+            else return Redirect("Error");
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
