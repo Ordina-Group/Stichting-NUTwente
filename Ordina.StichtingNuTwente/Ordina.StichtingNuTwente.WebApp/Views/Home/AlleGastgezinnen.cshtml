@@ -11,7 +11,7 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Alle Gastgezinnen</h3>
+                <h3>Intakeplanning Gastgezinnen</h3>
             </div>
         </div>
         <div class="row">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <!-- Twee lijsten: Met intake en zonder intake -->
-        <form method="post" id="intakerForm">
+        <form method="post" id="gastgezinForm">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -108,22 +108,12 @@
                 }
                 </tbody>
             </table>
-        </form>
-        <div class="row">
-            <div class="col-md-12">
-                <button type="submit" id="intakerSubmit" class="btn btn-primary">Opslaan</button>
-                <div id="intakerSpinner" style="display: none;">
-                    Bezig met opslaan...
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Gastgezinnen met Intaker</h5>
                 </div>
             </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen met Intaker</h5>
-            </div>
-        </div>
-        <form method="post" id="noIntakerForm">
             <table class="table fixed-table">
                 <thead>
                     <tr>
@@ -232,26 +222,22 @@
                     }
                 </tbody>
             </table>
-            <button type="submit" id="noIntakerSubmit" class="btn btn-primary">Opslaan</button>
-            <div id="noIntakerSpinner" style="display: none;">
-                Bezig met opslaan...
-            </div>
         </form>
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
-<script type="text/javascript">
-    $("#intakerSubmit").click(function() {
-        $("#intakerSubmit").prop('disabled', true);
-        $("#intakerSpinner").show();
-        $("#intakerForm").submit();
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
+        <div class="col-md-12" style="text-align: center">
+            <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
+            <span id="gastgezinSpinner" style="display: none;">
+                &nbsp;Bezig met opslaan...
+            </span>
+        </div>
+    </nav>
+    <script type="text/javascript">
+    $("#gastgezinSubmit").click(function() {
+       $("#gastgezinSubmit").prop('disabled', true);
+       $("#gastgezinSpinner").show();
+       $("#gastgezinForm").submit();
     });
-    
-    $("#noIntakerSubmit").click(function() {
-        $("#noIntakerSubmit").prop('disabled', true);
-        $("#noIntakerSpinner").show();
-        $("#noIntakerForm").submit();
-    });
-</script>
+    </script>
 </body>
-
-
