@@ -55,7 +55,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             Form questionForm = _formBusiness.createFormFromJson(2, file);
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            questionForm.AllUsers.AddRange(GetAllDropdown());
             FillBaseModel(questionForm);
             return View(questionForm);
         }
@@ -70,7 +70,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             string file = FormHelper.GetFilenameFromId(3);
             Form questionForm = _formBusiness.createFormFromJson(3, file);
             questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            questionForm.AllUsers.AddRange(GetAllDropdown());
             FillBaseModel(questionForm);
             return View(questionForm);
         }
@@ -108,7 +108,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
-        public IActionResult MijnGastgezinnen()
+        public IActionResult MijnGastgezinnen(string? filter)
         {
             _userService.checkIfUserExists(User);
 
@@ -116,7 +116,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var user = GetUser();
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
-            _userService.GetUsersByRole("");
+            if (filter != null)
+            {
+                if (filter == "Buddy")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Buddy == user).ToList();
+                }
+                if (filter == "Intaker")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
+                }
+            }
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -180,7 +190,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var mijnGastgezinnen = new AlleGastgezinnenModel();
 
-            var vrijwilligers = GetAllVrijwilligers();
+            var vrijwilligers = GetAllDropdown();
             foreach (var vrijwilliger in vrijwilligers.OrderBy(e => e.FirstName).ThenBy(e => e.LastName))
             {
                 mijnGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
@@ -236,8 +246,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
                         BegeleiderId = gastGezin.Begeleider.Id,
                         BuddyId = buddyId,
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
+                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
@@ -256,8 +266,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         Telefoonnummer = contact.Telefoonnummer,
                         BuddyId = buddyId,
                         Woonplaats = woonplaatsText,
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
+                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
                         PlaatsingsInfo = gastGezin.PlaatsingsInfo,
                         HasVOG = gastGezin.HasVOG,
                         AanmeldFormulierId = aanmeldFormulierId,
@@ -277,7 +287,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("AlleGastgezinnen")]
         public IActionResult AlleGastgezinnenPost(IFormCollection formCollection)
         {
-            var vrijwilligers = GetAllVrijwilligers();
+            var vrijwilligers = GetAllDropdown();
 
             foreach (var key in formCollection.Keys)
             {
@@ -533,7 +543,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public List<UserDetails> GetAllVrijwilligers()
         {
-            return _userService.GetUsersByRole("group-vrijwilliger").ToList();
+            return _userService.GetUsersByRole("group-vrijwilliger").OrderBy(u => u.FirstName).ToList();
+        }
+
+        public List<UserDetails> GetAllDropdown()
+        {
+            return _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ToList();
         }
 
         public void FillBaseModel(BaseModel model)

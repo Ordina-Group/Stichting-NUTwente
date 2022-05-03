@@ -80,7 +80,7 @@
           "Number": "6",
           "Text": "Tweede telefoonnummer.",
           "Description": "",
-          "InputType": "phoneNumber",
+          "InputType": "optionalPhoneNumber",
           "InputOptions": "",
           "Required": "false",
           "Object": "Persoon",

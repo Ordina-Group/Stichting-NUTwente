@@ -79,4 +79,17 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public List<GastGezin> GastgezinnenZonderBegeleider { get; set; }
         public List<GastGezin> GastgezinnenMetBegeleider { get; set; }
     }
+
+    public class BeschikbareGastgezinnenModel : BaseModel
+    {
+        public BeschikbareGastgezinnenModel()
+        {
+            MijnGastgezinnen = new List<GastGezin>();
+            SortDropdownText = "";
+        }
+
+        public List<GastGezin> MijnGastgezinnen { get; set; }
+        public string SortDropdownText { get; set; }
+    }
+
 }

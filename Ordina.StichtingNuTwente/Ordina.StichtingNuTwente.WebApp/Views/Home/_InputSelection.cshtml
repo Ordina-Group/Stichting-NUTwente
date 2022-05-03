@@ -13,9 +13,9 @@
             {
 
                 <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
- @*               <div class="field-invalid">
+                @*               <div class="field-invalid">
                     Dit veld is verplicht <br />
-                </div>*@
+                    </div>*@
                 <label class="form-check-label" for="question-@q.Id-@cbOption">
                     @cbOption
                 </label>
@@ -62,6 +62,14 @@
     case "phoneNumber":
         {
             <input type="tel" placeholder="+31601234567" id="question-@q.Id" class="form-control question phoneNumber" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
+            <div class="field-invalid-phoneNumber">
+                Voer een geldig telefoonnummer in, bijvoorbeeld: +31601234567 <br />
+            </div>
+            break;
+        }
+    case "optionalPhoneNumber":
+        {
+            <input type="tel" placeholder="+31601234567" id="question-@q.Id" class="form-control question optionalPhoneNumber" value="@q.Answer" name="Antwoord" size="100" @(q.Required?"required":"") />
             <div class="field-invalid-phoneNumber">
                 Voer een geldig telefoonnummer in, bijvoorbeeld: +31601234567 <br />
             </div>

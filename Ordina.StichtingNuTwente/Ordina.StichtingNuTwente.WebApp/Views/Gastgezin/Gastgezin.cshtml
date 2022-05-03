@@ -4,7 +4,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Gastgezin";
+    ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
 }
 
 <div class="row">
@@ -178,6 +178,38 @@
                 </div>
             </div>
         </div>
+        @if (User.HasClaims("groups", "group-superadmin"))
+        {
+            <div class="row">
+                <div class="col g-4">
+                    <div class="card">
+                        <button id="deleteGastgezin" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+             $("#deleteGastgezin").on("click", function (){
+                let id = @Model.GastGezin.Id;
+                if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
+                  $.ajax({
+                        url: "/Gastgezin/DeleteGastgezin/" + id,
+                        type: "DELETE",
+                        dataType: 'text',
+                        success: function(){
+                            if(window.location.href != document.referrer){
+                                window.location = document.referrer;
+                            }else{
+                                window.location = "/";
+                            }
+                        },
+                        error: function() { 
+                            window.location = "/Error";  
+                        } 
+                    });
+                }
+              })
+            </script>
+        }
     </div>
 </div>
 <div class="row">
@@ -204,7 +236,7 @@
                     <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo.Roken</div>
                     <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo.SlaapkamerRuimte</div>
                     <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.VeiligeOpbergruimte</div>
-                    <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen<</div>
+                    <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen</div>
                     <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo.VolwassenenGrotereKinderen </div>
                     <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo.ZelfKoken </div>
                 </div>
