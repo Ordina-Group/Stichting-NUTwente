@@ -162,8 +162,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 return true;
             }
             return false;
+        }
 
-
+        public void Delete(int gastgezinId)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezinInDb = gastgezinRepository.GetById(gastgezinId);
+            gastgezinRepository.Delete(gastgezinInDb);
         }
     }
 }
