@@ -1,5 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
-@model MijnGastgezinnenModel
+@model BeschikbareGastgezinnenModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
@@ -7,9 +7,27 @@
     var Index = 0;
 }
 
-<div class="row">
-    <div class="col-md-12">
+<div class="row row-cols-2">
+    <div class="col">
         <h3>Beschikbare Gastgezinnen</h3>
+    </div>
+    <div class="col">
+        <div class="dropdown float-right">
+            <span>Sorteer op:</span>
+            <button class="btn btn-outline-primary dropdown-toggle" id="dropdownSortButton" href="#" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @Model.SortDropdownText
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownSortButton">
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Woonplaats">Woonplaats</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Naam">Naam</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=AanmeldingsId">AanmeldingsId (laag-hoog)</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=AanmeldingsId&sortOrder=Descending">AanmeldingsId (hoog-laag)</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Geplaatst">Geplaatst (laag-hoog)</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Geplaatst&sortOrder=Descending">Geplaatst (hoog-laag)</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Gereserveerd">Gereserveerd (laag-hoog)</a>
+                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Gereserveerd&sortOrder=Descending">Gereserveerd (hoog-laag)</a>
+            </div>
+        </div>
     </div>
 </div>
 <table class="table">
@@ -73,5 +91,9 @@
 </table>
 @await Html.PartialAsync("../Home/_showItem.cshtml")
 
-
+<script>
+$('.dropdown-item').on('click', function() {
+    $('#dropdownSortButton').html($(this).html());
+    });
+</script>
 
