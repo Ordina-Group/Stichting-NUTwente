@@ -315,6 +315,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         break;
                 }
             }
+            model.TotalPlaatsingTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Plaatsing);
+            model.TotalResTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Reservering);
             FillBaseModel(model);
             return View(model);
         }
