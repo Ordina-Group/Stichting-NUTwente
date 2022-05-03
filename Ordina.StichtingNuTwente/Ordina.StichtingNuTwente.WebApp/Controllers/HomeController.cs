@@ -55,7 +55,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             Form questionForm = _formBusiness.createFormFromJson(2, file);
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            questionForm.AllUsers.AddRange(GetAllDropdown());
             FillBaseModel(questionForm);
             return View(questionForm);
         }
@@ -70,7 +70,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             string file = FormHelper.GetFilenameFromId(3);
             Form questionForm = _formBusiness.createFormFromJson(3, file);
             questionForm.UserDetails = GetUser();
-            questionForm.AllUsers.AddRange(GetAllVrijwilligers());
+            questionForm.AllUsers.AddRange(GetAllDropdown());
             FillBaseModel(questionForm);
             return View(questionForm);
         }
@@ -127,7 +127,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
                 }
             }
-            _userService.GetUsersByRole("");
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -191,7 +190,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var mijnGastgezinnen = new AlleGastgezinnenModel();
 
-            var vrijwilligers = GetAllVrijwilligers();
+            var vrijwilligers = GetAllDropdown();
             foreach (var vrijwilliger in vrijwilligers)
             {
                 mijnGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
@@ -279,7 +278,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [ActionName("AlleGastgezinnen")]
         public IActionResult AlleGastgezinnenPost(IFormCollection formCollection)
         {
-            var vrijwilligers = GetAllVrijwilligers();
+            var vrijwilligers = GetAllDropdown();
 
             Debug.WriteLine("Form:");
             foreach (var key in formCollection.Keys)
@@ -465,7 +464,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public List<UserDetails> GetAllVrijwilligers()
         {
-            return _userService.GetUsersByRole("group-vrijwilliger").ToList();
+            return _userService.GetUsersByRole("group-vrijwilliger").OrderBy(u => u.FirstName).ToList();
+        }
+
+        public List<UserDetails> GetAllDropdown()
+        {
+            return _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ToList();
         }
 
         public void FillBaseModel(BaseModel model)

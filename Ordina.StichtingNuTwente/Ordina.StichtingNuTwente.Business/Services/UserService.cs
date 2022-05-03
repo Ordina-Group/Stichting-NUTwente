@@ -23,6 +23,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userRepository.GetAll().FirstOrDefault(u => u.AADId == id);
         }
 
+        public UserDetails? GetUserById(int id)
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            return userRepository.GetAll().FirstOrDefault(u => u.Id == id);
+        }
+
         public ICollection<UserDetails> GetUsersByRole(string role)
         {
             var userRepository = new Repository<UserDetails>(_context);
@@ -41,6 +47,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var reactions = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
             return reactions;
         }
+        private UserDetails? UpdateUser(UserDetails user, UserDetails userInDB)
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+            userInDB.Roles = user.Roles;
+            userInDB.Email = user.Email;
+            userInDB.FirstName = user.FirstName;
+            userInDB.LastName = user.LastName;
+            userInDB.PhoneNumber = user.PhoneNumber;
+            userInDB.InDropdown = user.InDropdown;
+            userRepository.Update(userInDB);
+            return userInDB;
+        }
 
         public UserDetails? UpdateUser(UserDetails user, string aadId)
         {
@@ -49,14 +67,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 return null;
             }
-            var userRepository = new Repository<UserDetails>(_context);
-            userInDB.Roles = user.Roles;
-            userInDB.Email = user.Email;
-            userInDB.FirstName = user.FirstName;
-            userInDB.LastName = user.LastName;
-            userInDB.PhoneNumber = user.PhoneNumber;
-            userRepository.Update(userInDB);
-            return userInDB;
+            return UpdateUser(user, userInDB);
+        }
+        public UserDetails? UpdateUser(UserDetails user, int id)
+        {
+            var userInDB = GetUserById(id);
+            if (userInDB == null)
+            {
+                return null;
+            }
+            return UpdateUser(user, userInDB);
+
         }
 
         public UserDetails? UpdateUserFromProfileEdit(UserDetails user, string aadId)
@@ -141,6 +162,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var aadId = user.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value;
             var userRepository = new Repository<UserDetails>(_context);
             return userRepository.GetAll().FirstOrDefault(u => u.AADId == aadId);
+        }
+
+        public ICollection<UserDetails> GetAllDropdownUsers()
+        {
+            var userRepository = new Repository<UserDetails>(_context);
+
+            return userRepository.GetAll().Where(u => u.InDropdown).ToList();
         }
     }
 }
