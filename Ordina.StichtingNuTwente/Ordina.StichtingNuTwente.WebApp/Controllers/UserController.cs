@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
+using System.Diagnostics;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -34,15 +35,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new List<UserViewModel>();
-            var users = _userService.GetUsersByRole("group-vrijwilliger");
-            users.Concat(_userService.GetUsersByRole("group-superadmin"));
-            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u)
-            {
-                Email = u.Email,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Roles = u.Roles
-            });
+            var users = _userService.GetAllUsers();
+            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u));
             return View(viewModel);
         }
 
@@ -53,6 +47,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             UserDetails userDetails = _userService.GetUserByAADId(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
             return View(new UserViewModel(userDetails));
+        }
+
+        [Authorize]
+        [HttpPut]
+        public IActionResult UserUpdate(int id, bool inDropdown)
+        {
+            var updatedUser = _userService.GetUserById(id);
+            if (updatedUser != null)
+            {
+                try
+                {
+                    updatedUser.InDropdown = inDropdown;
+                    _userService.UpdateUser(updatedUser, id);
+                    return Ok();
+                }
+                 catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return BadRequest();
         }
     }
 }
