@@ -4,10 +4,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Gastgezin";
-    List<string> test = new List<string>;
-
-    test.
+    ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
 }
 
 <div class="row">
@@ -207,7 +204,7 @@
                     <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo.Roken</div>
                     <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo.SlaapkamerRuimte</div>
                     <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.VeiligeOpbergruimte</div>
-                    <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen<</div>
+                    <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen</div>
                     <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo.VolwassenenGrotereKinderen </div>
                     <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo.ZelfKoken </div>
                 </div>
