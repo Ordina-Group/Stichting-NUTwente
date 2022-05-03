@@ -82,7 +82,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsingRepository = new Repository<Plaatsing>(_context);
             plaatsingRepository.Create(plaatsing);
             var gastgezin = plaatsing.Gastgezin;
-            if (gastgezin.Status == GastgezinStatus.Aangemeld && gastgezin.Status == GastgezinStatus.Bezocht && plaatsing.PlacementType == PlacementType.Plaatsing)
+            if ((gastgezin.Status == GastgezinStatus.Aangemeld || gastgezin.Status == GastgezinStatus.Bezocht) && plaatsing.PlacementType == PlacementType.Plaatsing)
             {
                 gastgezin.Status = GastgezinStatus.Geplaatst;
                 UpdateGastgezin(gastgezin, gastgezin.Id);
