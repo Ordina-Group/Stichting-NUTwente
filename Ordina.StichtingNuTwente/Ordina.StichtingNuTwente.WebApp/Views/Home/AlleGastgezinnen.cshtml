@@ -16,12 +16,115 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h5>Gastgezinnen zonder begeleider</h5>
+                <h5>Gastgezinnen zonder Intaker</h5>
             </div>
         </div>
         <!-- Twee lijsten: Met intake en zonder intake -->
-        <form method="post">
-            <table class="table table-striped fixed-table">
+        <form method="post" id="intakerForm">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Ids</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Adres</th>
+                    <th scope="col">Woonplaats</th>
+                    <th scope="col">Telefoonnummer</th>
+                    <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
+                    <th scope="col">Aanmelding</th>
+                    <th scope="col">Intaker</th>
+                    <th scope="col">Buddy</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
+                {
+                    <tr>
+                        <td>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
+                            @if (mijnGastgezin.IntakeFormulierId > 0)
+                            {
+                                <text>/ </text>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                            }
+                        </td>
+                        <td>@mijnGastgezin.Naam</td>
+                        <td>@mijnGastgezin.Adres</td>
+                        <td>@mijnGastgezin.Woonplaats</td>
+                        <td>@mijnGastgezin.Telefoonnummer</td>
+                        <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
+                        <td>
+                            @if (mijnGastgezin.AanmeldFormulierId != 0)
+                            {
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">Aanmeld Formulier</a>
+                            }
+                        </td>
+                        <td>
+                            <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                @if (mijnGastgezin.BegeleiderId > 0)
+                                {
+                                    <option selected="selected" value=""></option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                                @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                {
+                                    if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
+                                    {
+                                        <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                @if (mijnGastgezin.BuddyId > 0)
+                                {
+                                    <option selected="selected" value=""></option>
+                                }
+                                else
+                                {
+                                    <option value=""></option>
+                                }
+                                @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                {
+                                    if (vrijwilliger.Id == mijnGastgezin.BuddyId)
+                                    {
+                                        <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" id="intakerSubmit" class="btn btn-primary">Opslaan</button>
+                <div id="intakerSpinner" style="display: none;">
+                    Bezig met opslaan...
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Gastgezinnen met Intaker</h5>
+            </div>
+        </div>
+        <form method="post" id="noIntakerForm">
+            <table class="table fixed-table">
                 <thead>
                     <tr>
                         <th scope="col">Ids</th>
@@ -30,104 +133,125 @@
                         <th scope="col">Woonplaats</th>
                         <th scope="col">Telefoonnummer</th>
                         <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
-                        <th scope="col">Toekennen aan begeleider</th>
-                        <th scope="col">Geplaatst</th>
-                        <th scope="col">Gereserveerd</th>
-                        <th scope="col">VOG</th>
+                        <th scope="col">Aanmelding</th>
+                        <th scope="col">Intake</th>
+                        <th scope="col">Intaker</th>
+                        <th scope="col">Buddy</th>
+                        <th scope="col" style="width:32px"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
+                    @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
                     {
-                        <tr>
+                        Index++;
+                        <tr class="@(Index%2==0?"dark-row":"")">
                             <td>
                                 <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
                                 @if (mijnGastgezin.IntakeFormulierId > 0)
                                 {
-                                    <text>/ </text> <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
+                                    <text>/ </text><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
                                 }
                             </td>
                             <td>@mijnGastgezin.Naam</td>
                             <td>@mijnGastgezin.Adres</td>
                             <td>@mijnGastgezin.Woonplaats</td>
                             <td>@mijnGastgezin.Telefoonnummer</td>
+                            <td>                            
+                                @if (mijnGastgezin.AanmeldFormulierId != 0)
+                                {
+                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">Aanmeld Formulier</a>
+                                }
+                            </td>
+                            <td>
+                                @if (mijnGastgezin.IntakeFormulierId > 0)
+                                {
+                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">Intake Formulier</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-secondary" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>
+                                }
+                            </td>
                             <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
                             <td>
                                 <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
-                                    <option value=""></option>
+                                    @if (mijnGastgezin.BegeleiderId > 0)
+                                    {
+                                        <option selected="selected" value=""></option>
+                                    }
+                                    else
+                                    {
+                                        <option value=""></option>
+                                    }
                                     @foreach (var vrijwilliger in Model.Vrijwilligers)
                                     {
-                                        <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
+                                        {
+                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
                                     }
                                 </select>
                             </td>
-                            <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                            <td>@mijnGastgezin.ReserveTag</td>
-                            <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
+                            <td>
+                                <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                    @if (mijnGastgezin.BuddyId > 0)
+                                    {
+                                        <option selected="selected" value=""></option>
+                                    }
+                                    else
+                                    {
+                                        <option value=""></option>
+                                    }
+                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                    {
+                                        if (vrijwilliger.Id == mijnGastgezin.BuddyId)
+                                        {
+                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            @if (mijnGastgezin.PlaatsingsInfo != null)
+                            {
+                                <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                         </tr>
+                        @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, mijnGastgezin.Note))
                     }
                 </tbody>
             </table>
-            <button type="submit" class="btn btn-primary">Opslaan</button>
-        </form>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen met begeleider</h5>
+            <button type="submit" id="noIntakerSubmit" class="btn btn-primary">Opslaan</button>
+            <div id="noIntakerSpinner" style="display: none;">
+                Bezig met opslaan...
             </div>
-        </div>
-        <table class="table fixed-table">
-            <thead>
-                <tr>
-                    <th scope="col">Ids</th>
-                    <th scope="col">Naam</th>
-                    <th scope="col">Adres</th>
-                    <th scope="col">Woonplaats</th>
-                    <th scope="col">Telefoonnummer</th>
-                    <!-- verwijderd (zie issue #171): <th scope="col">E-mail</th> -->
-                    <th scope="col">Begeleider</th>
-                    <th scope="col">Geplaatst</th>
-                    <th scope="col">Gereserveerd</th>
-                    <th scope="col" style="width:32px">VOG</th>
-                    <th scope="col" style="width:32px"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
-                {
-                    Index++;
-                    <tr class="@(Index%2==0?"dark-row":"")">
-                        <td>
-                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">@mijnGastgezin.AanmeldFormulierId</a>
-                            @if (mijnGastgezin.IntakeFormulierId > 0)
-                            {
-                                <text>/ </text><a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">@mijnGastgezin.IntakeFormulierId</a>
-                            }
-                        </td>
-                        <td>@mijnGastgezin.Naam</td>
-                        <td>@mijnGastgezin.Adres</td>
-                        <td>@mijnGastgezin.Woonplaats</td>
-                        <td>@mijnGastgezin.Telefoonnummer</td>
-                        <!-- verwijderd (zie issue #171): <td>@mijnGastgezin.Email</td> -->
-                        <td>@mijnGastgezin.Begeleider</td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                        <td>@mijnGastgezin.ReserveTag</td>
-                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
-                        @if (mijnGastgezin.PlaatsingsInfo != null)
-                        {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, mijnGastgezin.Note))
-                }
-            </tbody>
-        </table>
+        </form>
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
+<script type="text/javascript">
+    $("#intakerSubmit").click(function() {
+        $("#intakerSubmit").prop('disabled', true);
+        $("#intakerSpinner").show();
+        $("#intakerForm").submit();
+    });
+    
+    $("#noIntakerSubmit").click(function() {
+        $("#noIntakerSubmit").prop('disabled', true);
+        $("#noIntakerSpinner").show();
+        $("#noIntakerForm").submit();
+    });
+</script>
 </body>
 
 
