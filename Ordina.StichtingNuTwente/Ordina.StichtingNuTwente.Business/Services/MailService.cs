@@ -18,43 +18,61 @@ public class MailService : IMailService
             mail.MailFromName = "Secretariaat NUTwente";
         }
 
-        //var client = new SendGridClient(ApiKey);
+        var client = new SendGridClient(ApiKey);
         var msg = new SendGridMessage()
         {
             From = new EmailAddress(MailAdressFrom, mail.MailFromName),
             Subject = mail.Subject,
             PlainTextContent = mail.Message
         };
-        //msg.AddTo(new EmailAddress(mail.MailToAdress, mail.MailToName));
-        //var response = await client.SendEmailAsync(msg);
+        msg.AddTo(new EmailAddress(mail.MailToAdress, mail.MailToName));
+        var response = await client.SendEmailAsync(msg);
 
-        //Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
+        Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
 
-        //return response.IsSuccessStatusCode;
+        return response.IsSuccessStatusCode;
 
-        Console.WriteLine("Mail sent to: " + mail.MailToAdress + ", with message: " + msg);
+        //Console.WriteLine("Mail sent to: " + mail.MailToAdress + ", with message: " + msg);
 
-        return true;
+        //return true;
     }
 
     public async Task<bool> sendGroupMail(string subject, string message, List<string> mailAdresses)
     {
-
-        //var client = new SendGridClient(ApiKey);
-        var msg = new SendGridMessage()
-        {
-            Subject = subject,
-            PlainTextContent = message
-        };
-
-        //var response = await client.SendEmailAsync(msg);
+        List<EmailAddress> emailAddresses = new List<EmailAddress>();
         foreach(var mail in mailAdresses)
+        {
+            emailAddresses.Add(new EmailAddress(mail));
+        }
+
+        var client = new SendGridClient(ApiKey);
+        /*var msg = new SendGridMessage()
+        {
+            From = new EmailAddress(MailAdressFrom, mail.MailFromName),
+            Subject = subject,
+            PlainTextContent = message,
+            Personalizations = new List<Personalization>
+            {
+                new Personalization
+                {
+               
+                }
+            }
+        }*/
+
+        EmailAddress fromMail = new EmailAddress(this.MailAdressFrom);
+
+        var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, null) ;
+
+        var response = await client.SendEmailAsync(msg);
+        /*foreach(var mail in mailAdresses)
         {
             Console.WriteLine("Mail sent to: " + mail + ", with message: " + msg);
 
-        }
+        }*/
 
-        return true;
+        Console.WriteLine(response.IsSuccessStatusCode ? "Email queued successfully!" : "Something went wrong!");
+        return response.IsSuccessStatusCode;
     }
 
     public void setFromMail(string mailAdress)
