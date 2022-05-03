@@ -29,6 +29,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Route("/Vrijwilligers")]
         [Authorize(Policy = "RequireSecretariaatRole")]
         public IActionResult Users()
         {
