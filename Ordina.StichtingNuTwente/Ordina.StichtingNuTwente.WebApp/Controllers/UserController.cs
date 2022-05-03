@@ -66,11 +66,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
 
             List<string> mailAdressen = emailAdressen.Split(',').ToList();
-
-            //List<string> mailAdressen = personen.Select(p => p.Email).ToList();
-
-            //List<string> mailAdressen = new List<string> { "Test1@hotmail.com", "Test2@hotmail.com", "Test3@hotmail.com" };
-
+            _mailService.setApiKey("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");
+            _mailService.setFromMail("niek.nieuwenhuisen@hotmail.com");
             _mailService.sendGroupMail(onderwerp, bericht, mailAdressen);
 
             return Ok();
