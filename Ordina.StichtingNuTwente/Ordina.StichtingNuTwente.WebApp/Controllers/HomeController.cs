@@ -313,7 +313,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     vrijwilligerId = Convert.ToInt32(value);
                 }
-                
+
                 var gastgezinId = Convert.ToInt32(key.Substring(13));
 
                 var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
@@ -517,6 +517,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
 
         [Authorize(Policy = "RequireSecretariaatRole")]
         [HttpDelete]
