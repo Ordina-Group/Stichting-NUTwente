@@ -34,6 +34,10 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public string Begeleider { get; set; }
 
+        public int BegeleiderId { get; set; }
+
+        public int BuddyId { get; set; }
+
         public DateTime Intake { get; set; }
 
         public int AanmeldFormulierId { get; set; }
