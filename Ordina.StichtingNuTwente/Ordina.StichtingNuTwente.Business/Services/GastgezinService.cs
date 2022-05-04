@@ -28,7 +28,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
             var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
-            if(gastgezin == null)
+            if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
                 var persoon = persoonRepository.GetAll("Reactie").FirstOrDefault(p => p.Reactie.Id == formID);
@@ -81,6 +81,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var plaatsingRepository = new Repository<Plaatsing>(_context);
             plaatsingRepository.Create(plaatsing);
+            var gastgezin = plaatsing.Gastgezin;
+            if ((gastgezin.Status == GastgezinStatus.Aangemeld || gastgezin.Status == GastgezinStatus.Bezocht) && plaatsing.PlacementType == PlacementType.Plaatsing)
+            {
+                gastgezin.Status = GastgezinStatus.Geplaatst;
+                UpdateGastgezin(gastgezin, gastgezin.Id);
+            }
+            else if (plaatsing.Amount < 0 && gastgezin.Status == GastgezinStatus.Geplaatst)
+            {
+                var plaatsingen = GetPlaatsingen(gastgezin.Id, PlacementType.Plaatsing);
+                var total = plaatsingen.Sum(p => p.Amount);
+                if(total == 0)
+                {
+                    gastgezin.Status = GastgezinStatus.Bezocht;
+                    UpdateGastgezin(gastgezin, gastgezin.Id);
+                }
+            }
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -135,7 +151,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
             var gastgezin = gastgezinRepository.GetById(gastgezinId);
-            if(note == null)
+            if (note == null)
             {
                 note = "";
             }
@@ -156,7 +172,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing)
         {
-            var plaastingen = GetPlaatsingen(gastgezinId,plaatsing.PlacementType,plaatsing.AgeGroup);
+            var plaastingen = GetPlaatsingen(gastgezinId, plaatsing.PlacementType, plaatsing.AgeGroup);
             if (plaastingen.FirstOrDefault(p => p.DateTime == plaatsing.DateTime && p.Amount == plaatsing.Amount) != null)
             {
                 return true;
