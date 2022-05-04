@@ -69,7 +69,7 @@
             let searchField = $("#zoekterm-toevoegen-select").val();
             let url = new URL(window.location.href);
             url.searchParams.append('filters', searchField + "=" + input);
-            window.location.href = url;
+            window.location.href = url.toString().replaceAll("+", "%20");
         });
     </script>
 </div>
@@ -78,7 +78,7 @@
     {
         <div class="card col-6">
             <div class="card-body small-card centered">
-                @filter.Field <b>bevat</b> @filter.SearchQuery <button id="@filter.Field=@filter.SearchQuery"class="btn btn-danger zoekterm-verwijderen">x</button><br />
+                @filter.Field <b>bevat</b> @filter.SearchQuery <button id="@filter.OriginalQuery"class="btn btn-danger zoekterm-verwijderen">x</button><br />
                 <p class="small-text">(@filter.Results) resultaten</p>
             </div>
         </div>
@@ -86,8 +86,9 @@
     <script>
         $(".zoekterm-verwijderen").on("click", function (){
             let searchQuery = $(this).attr("id");
-            let replace = "filters="+searchQuery.replaceAll("=","%3D" )
-            let url = window.location.href.replaceAll("&" + replace, "");
+            let replace = "filters="+searchQuery;
+            let url = decodeURIComponent(window.location.href);
+            url = url.replaceAll("&" + replace, "");
             url = url.replaceAll(replace, "");
             window.location.href = url;
         });

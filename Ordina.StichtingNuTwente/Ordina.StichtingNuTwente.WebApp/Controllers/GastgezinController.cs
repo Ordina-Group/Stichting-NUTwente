@@ -239,7 +239,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         var filterValue = split[1].ToLower();
                         gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
                         var results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
-                        model.SearchQueries.Add(new SearchQueryViewModel() {Field=filterKey, SearchQuery = filterValue, Results = results });
+                        model.SearchQueries.Add(new SearchQueryViewModel() { OriginalQuery = filterParameter, Field = filterKey, SearchQuery = filterValue, Results = results });
                     }
                 }
             }
