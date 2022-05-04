@@ -6,12 +6,18 @@
 @{
     ViewData["Title"] = "Mijn Gastgezinnen";
     var Index = 0;
+    var newGastgezinnen = Model.MijnGastgezinnen.Count(g => !g.HeeftBekeken);
 }
 
 <body>
     <div>
         <nav class="nav nav-tabs d-flex justify-content-between">
-            <h3>Mijn Gastgezinnen</h3>
+            <h3>
+                Mijn Gastgezinnen @if (newGastgezinnen > 0)
+                {
+                    <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
+                }
+            </h3>
             <div class="d-flex">
                 <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["filter"])?"active":"")" href="/MijnGastgezinnen">Alles</a>
                 <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="/MijnGastgezinnen?filter=Buddy">Buddy</a>

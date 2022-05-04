@@ -148,4 +148,5 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 
 .unseen {
     border-right: 4px solid orange;
+    border-left: 4px solid orange;
 }
