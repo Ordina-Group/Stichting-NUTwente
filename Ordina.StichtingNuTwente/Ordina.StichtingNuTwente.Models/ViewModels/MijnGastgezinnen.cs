@@ -55,6 +55,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public bool? HasVOG { get; set; }
 
         public GastgezinStatus? Status { get; set; }
+
+        public bool HeeftBekeken { get; set; }
     }
 
     public class Vrijwilliger

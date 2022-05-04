@@ -158,6 +158,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     intakeFormulierId = gastGezin.IntakeFormulier.Id;
                 }
+                var heeftBekeken = false;
+                if (user.Id == gastGezin.Buddy?.Id)
+                {
+                    heeftBekeken = gastGezin.BekekenDoorBuddy;
+                }
+
+                if (user.Id == gastGezin.Begeleider?.Id)
+                {
+                    heeftBekeken = gastGezin.BekekenDoorIntaker;
+                }
 
                 mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
                 {
@@ -172,7 +182,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
                     ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
                     PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                    HasVOG = gastGezin.HasVOG
+                    HasVOG = gastGezin.HasVOG,
+                    HeeftBekeken = heeftBekeken
                 });
             }
 
@@ -320,6 +331,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (assignVrijwilliger == null && gastgezinItem.Begeleider is not null)
                 {
                     gastgezinItem.Begeleider = null;
+                    gastgezinItem.BekekenDoorIntaker = false;
                     _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                 }
                 else
@@ -327,11 +339,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     if (gastgezinItem.Begeleider is not null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
                     {
                         gastgezinItem.Begeleider = assignVrijwilliger;
+                        gastgezinItem.BekekenDoorIntaker = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                     else if (gastgezinItem.Begeleider is null)
                     {
                         gastgezinItem.Begeleider = assignVrijwilliger;
+                        gastgezinItem.BekekenDoorIntaker = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                 }
@@ -368,6 +382,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (assignVrijwilliger == null && gastgezinItem.Buddy is not null)
                 {
                     gastgezinItem.Buddy = null;
+                    gastgezinItem.BekekenDoorBuddy = false;
                     _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                 }
                 else
@@ -375,11 +390,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     if (gastgezinItem.Buddy is not null && gastgezinItem.Buddy.Id != assignVrijwilliger.Id)
                     {
                         gastgezinItem.Buddy = assignVrijwilliger;
+                        gastgezinItem.BekekenDoorBuddy = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                     else if (gastgezinItem.Buddy is null)
                     {
                         gastgezinItem.Buddy = assignVrijwilliger;
+                        gastgezinItem.BekekenDoorBuddy = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                 }

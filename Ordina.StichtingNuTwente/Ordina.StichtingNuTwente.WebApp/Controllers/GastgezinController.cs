@@ -79,6 +79,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     plaatsingsInfo = gastGezin.PlaatsingsInfo;
                 }
 
+                var user = GetUser();
+                if (!gastGezin.BekekenDoorBuddy && user?.Id == gastGezin.Buddy?.Id)
+                {
+                    gastGezin.BekekenDoorBuddy = true;
+                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                }
+
+                if (!gastGezin.BekekenDoorIntaker &&  user?.Id == gastGezin.Begeleider?.Id)
+                {
+                    gastGezin.BekekenDoorIntaker = true;
+                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                }
+
                 viewModel.GastGezin = new GastGezin()
                 {
                     Id = id,
@@ -365,6 +378,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        public UserDetails? GetUser()
+        {
+            var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+            if (aadID != null)
+            {
+                var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                return userDetails;
+            }
+            return null;
         }
     }
 }
