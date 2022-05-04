@@ -106,6 +106,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Status = gastGezin.Status,
                     HasVOG = gastGezin.HasVOG,
                     PlaatsingsInfo = plaatsingsInfo,
+                    MaxAdults = gastGezin.MaxAdults,
+                    MaxChildren = gastGezin.MaxChildren
                 };
             }
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
@@ -215,13 +217,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(GastgezinStatus Status, bool HasVOG, int GastGezinId)
+        public IActionResult UpdateOpties(int GastGezinId, GastgezinStatus Status, bool HasVOG, int MaxAdults, int MaxChildren)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
             {
                 gastgezin.Status = Status;
                 gastgezin.HasVOG = HasVOG;
+                gastgezin.MaxAdults = MaxAdults;
+                gastgezin.MaxChildren = MaxChildren;
                 _gastgezinService.UpdateGastgezin(gastgezin, GastGezinId);
                 return Redirect("/gastgezin?id=" + GastGezinId);
             }
@@ -301,6 +305,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         AanmeldFormulierId = aanmeldFormulierId,
                         IntakeFormulierId = intakeFormulierId,
                         Note = gastGezin.Note,
+                        MaxAdults = gastGezin.MaxAdults,
+                        MaxChildren = gastGezin.MaxChildren
                     });
                 }
             }
@@ -350,6 +356,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             model.TotalPlaatsingTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Plaatsing);
             model.TotalResTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Reservering);
+            model.TotalMaxAdults = gastGezinnen.Sum(g => g.MaxAdults);
+            model.TotalMaxChildren = gastGezinnen.Sum(g => g.MaxChildren);
             FillBaseModel(model);
             return View(model);
         }
