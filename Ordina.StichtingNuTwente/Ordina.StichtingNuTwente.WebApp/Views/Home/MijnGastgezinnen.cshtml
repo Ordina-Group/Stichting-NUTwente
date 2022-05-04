@@ -38,7 +38,7 @@
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
                     Index++;
-                    <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")">
+                    <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
@@ -79,6 +79,22 @@
         <hr />
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
+    <script>
+        $(".unseen").on("click", function() {
+            console.log("click");
+            let id = $(this).attr("id");
+            $(this).removeClass("unseen");
+            $.ajax({
+                url: "/MarkAsRead/" + id,
+                type: "PUT",
+                dataType: 'text',
+                success: function(){
+                },
+                error: function() {
+                }
+           });
+        })
+    </script>
 </body>
 
 

@@ -398,5 +398,37 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return null;
         }
+
+        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [HttpPut]
+        [Route("MarkAsRead/{gastgezinId}")]
+        public IActionResult MarkAsRead(int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null)
+                {
+                    var user = GetUser();
+                    if (!gastgezin.BekekenDoorIntaker && user?.Id == gastgezin.Begeleider?.Id)
+                    {
+                        gastgezin.BekekenDoorIntaker = true;
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    }
+
+                    if (!gastgezin.BekekenDoorBuddy && user?.Id == gastgezin.Buddy?.Id)
+                    {
+                        gastgezin.BekekenDoorBuddy = true;
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    }
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
