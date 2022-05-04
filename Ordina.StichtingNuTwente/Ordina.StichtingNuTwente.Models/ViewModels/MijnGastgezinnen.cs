@@ -82,9 +82,12 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         {
             MijnGastgezinnen = new List<GastGezin>();
             SortDropdownText = "";
+            SearchQueries = new List<SearchQueryViewModel>();
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
+        public List<SearchQueryViewModel> SearchQueries { get; set; }
+        
         public string SortDropdownText { get; set; }
     }
 

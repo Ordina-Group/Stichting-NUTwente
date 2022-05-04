@@ -136,3 +136,9 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .fixed-table td {
     word-wrap: break-word;
 }
+
+.small-text {
+    font-size: small;
+    margin: 0;
+    padding: 0;
+}

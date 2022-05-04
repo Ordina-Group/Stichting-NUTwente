@@ -5,7 +5,6 @@
 @{
     ViewData["Title"] = "Beschikbare Gastgezinnen";
     var Index = 0;
-    var filters = Context.Request.Query["filters"];
 }
 
 <div class="row row-cols-2">
@@ -34,46 +33,64 @@
 <div class="row">
     <div class="col-12"> <h4>Zoeken</h4></div>
     <div class="col-5">
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" id="zoekterm-toevoegen-select" aria-label="Default select example">
             <option value="Belemmering">Belemmering</option>
-            <option value="KleineKinderen">KleineKinderen</option>
-            <option value="VolwassenenGrotereKinderen">VolwassenenGrotereKinderen</option>
-            <option value="SlaapkamerRuimte">SlaapkamerRuimte</option>
+            <option value="KleineKinderen">Kleine Kinderen</option>
+            <option value="VolwassenenGrotereKinderen">Volwassenen Grotere Kinderen</option>
+            <option value="SlaapkamerRuimte">Slaapkamer Ruimte</option>
             <option value="Privacy">Privacy</option>
             <option value="Opbergruimte">Opbergruimte</option>
             <option value="Faciliteiten">Faciliteiten</option>
-            <option value="ZelfKoken">ZelfKoken</option>
+            <option value="ZelfKoken">Zelf Koken</option>
             <option value="KoelkastRuimte">KoelkastRuimte</option>
-            <option value="DaglichtSlaapkamer">DaglichtSlaapkamer</option>
+            <option value="DaglichtSlaapkamer">Daglicht Slaapkamer</option>
             <option value="Roken">Roken</option>
-            <option value="AlchoholEnDrugs">AlchoholEnDrugs</option>
-            <option value="VeiligeOpbergruimte">VeiligeOpbergruimte</option>
-            <option value="HuisdierenAanwezig">HuisdierenAanwezig</option>
-            <option value="HuisdierenMogelijk">HuisdierenMogelijk</option>
+            <option value="AlchoholEnDrugs">Alchohol En Drugs</option>
+            <option value="VeiligeOpbergruimte">Veilige Opbergruimte</option>
+            <option value="HuisdierenAanwezig">Huisdieren Aanwezig</option>
+            <option value="HuisdierenMogelijk">Huisdieren Mogelijk</option>
             <option value="Allergieen">Allergieen</option>
-            <option value="VluchtelingOphalen">VluchtelingOphalen</option>
-            <option value="BasisscholenAanwezig">BasisscholenAanwezig</option>
-            <option value="KinderenInDeBuurt">KinderenInDeBuurt</option>
-            <option value="FaciliteitenVoorKinderen">FaciliteitenVoorKinderen</option>
+            <option value="VluchtelingOphalen">Vluchteling Ophalen</option>
+            <option value="BasisscholenAanwezig">Basisscholen Aanwezig</option>
+            <option value="KinderenInDeBuurt">Kinderen In De Buurt</option>
+            <option value="FaciliteitenVoorKinderen">Faciliteiten Voor Kinderen</option>
             <option value="Beperkingen">Beperkingen</option>
         </select>
     </div>
     <div class="col-5">
-        <input type="text" class="form-control" placeholder="Zoek...">
+        <input type="text" class="form-control" id="zoekterm-toevoegen-input" placeholder="Zoek...">
     </div>
     <div class="col-2">
-        <button class="btn btn-primary"> Zoekterm toevoegen</button>
+        <button class="btn btn-primary" id="zoekterm-toevoegen">Zoekterm toevoegen</button>
     </div>
+    <script>
+        $("#zoekterm-toevoegen").on("click", function (){
+            let input = $("#zoekterm-toevoegen-input").val();
+            let searchField = $("#zoekterm-toevoegen-select").val();
+            let url = new URL(window.location.href);
+            url.searchParams.append('filters', searchField + "=" + input);
+            window.location.href = url;
+        });
+    </script>
 </div>
 <div class="row small-row">
-    @foreach (var filter in filters)
+    @foreach (var filter in Model.SearchQueries)
     {
-        <div class="card col-4">
+        <div class="card col-6">
             <div class="card-body small-card centered">
-                @filter <button class="btn btn-danger">x</button>
+                @filter.Field <b>bevat</b> @filter.SearchQuery <button id="@filter.Field=@filter.SearchQuery"class="btn btn-danger zoekterm-verwijderen">x</button><br />
+                <p class="small-text">(@filter.Results) resultaten</p>
             </div>
         </div>
     }
+    <script>
+        $(".zoekterm-verwijderen").on("click", function (){
+            let searchQuery = $(this).attr("id");
+            let url = window.location.href.replaceAll("filters="+searchQuery.replaceAll("=","%3D" ), "");
+            url = url.replaceAll("filters="+searchQuery, "");
+            window.location.href = url;
+        });
+    </script>
 </div>
 
 
