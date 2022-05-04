@@ -86,10 +86,14 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         {
             MijnGastgezinnen = new List<GastGezin>();
             SortDropdownText = "";
+            TotalPlaatsingTag = "";
+            TotalResTag = "";
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
         public string SortDropdownText { get; set; }
+        public string TotalPlaatsingTag { get; set; }
+        public string TotalResTag { get; set; }
     }
 
 }

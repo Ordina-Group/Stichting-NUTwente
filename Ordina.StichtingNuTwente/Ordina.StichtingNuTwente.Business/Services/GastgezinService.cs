@@ -147,6 +147,20 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return tag;
         }
 
+        public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType)
+        {
+            string tag = "";
+            var plaatsingen = new List<Plaatsing>();
+
+            gastgezinnen.ForEach(g => plaatsingen.AddRange(g.Plaatsingen));   
+            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
+            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            return tag;
+        }
+
         public void UpdateNote(int gastgezinId, string note)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
