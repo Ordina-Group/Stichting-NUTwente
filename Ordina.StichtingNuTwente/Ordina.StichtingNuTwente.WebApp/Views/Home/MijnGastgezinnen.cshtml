@@ -1,4 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@using System.Diagnostics
 @model MijnGastgezinnenModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
@@ -12,11 +13,12 @@
         <nav class="nav nav-tabs d-flex justify-content-between">
             <h3>Mijn Gastgezinnen</h3>
             <div class="d-flex">
-            <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")"href="/MijnGastgezinnen?filter=Buddy">Buddy</a>
-            <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="/MijnGastgezinnen?filter=Intaker">Intaker</a>
+                <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["filter"])?"active":"")" href="/MijnGastgezinnen">Alles</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="/MijnGastgezinnen?filter=Buddy">Buddy</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="/MijnGastgezinnen?filter=Intaker">Intaker</a>
             </div>
         </nav>
-        <table class="table fixed-table">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">Naam</th>
@@ -36,7 +38,7 @@
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
                     Index++;
-                    <tr class="@(Index%2==0?"dark-row":"")">
+                    <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
@@ -49,28 +51,28 @@
                             }
                         </td>
                         <td>
-                            @if (mijnGastgezin.IntakeFormulierId != 0)
+                            @if (mijnGastgezin.IntakeFormulierId > 0)
                             {
                                 <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">Intake Formulier</a>
                             }
                             else
                             {
-                                <a href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>
+                                <a class="btn btn-secondary" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" target="_blank">Nieuwe Intake</a>
                             }
                         </td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.ReserveTag</a></td>
-                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id))</td>
+                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" /></td>
+                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
                         }
                         else
                         {
                             <td></td>
                         }
                     </tr>
-                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
+                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
                 }
             </tbody>
         </table>

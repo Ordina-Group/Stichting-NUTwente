@@ -123,6 +123,9 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .dark-row {
     background-color: #f2f2f2;
 }
+.light-row {
+    background-color: #ffffff;
+}
 
 
 .fixed-table {
@@ -141,4 +144,8 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
     font-size: small;
     margin: 0;
     padding: 0;
+}
+
+.unseen {
+    border-right: 4px solid green;
 }
