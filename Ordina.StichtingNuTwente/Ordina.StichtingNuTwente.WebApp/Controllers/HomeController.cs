@@ -195,7 +195,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("AlleGastgezinnen")]
         [HttpGet]
         [ActionName("AlleGastgezinnen")]
-        public IActionResult AlleGastgezinnen()
+        public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
         {
             _userService.checkIfUserExists(User);
 
@@ -238,53 +238,88 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (gastGezin.IntakeFormulier != null)
                     intakeFormulierId = gastGezin.IntakeFormulier.Id;
 
+                var begeleiderId = 0;
+                var begeleider = "";
+                if (gastGezin.Begeleider != null)
+                {
+                    begeleiderId = gastGezin.Begeleider.Id;
+                    begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})";
+                }
+
                 var buddyId = 0;
                 if (gastGezin.Buddy != null)
                 {
                     buddyId = gastGezin.Buddy.Id;
                 }
 
-                if (gastGezin.Begeleider != null)
+                mijnGastgezinnen.Gastgezinnen.Add(new GastGezin
                 {
-                    mijnGastgezinnen.GastgezinnenMetBegeleider.Add(new GastGezin
-                    {
-                        Id = gastGezin.Id,
-                        Adres = adresText,
-                        Email = contact.Email,
-                        Naam = contact.Naam + " " + contact.Achternaam,
-                        Telefoonnummer = contact.Telefoonnummer,
-                        Woonplaats = woonplaatsText,
-                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
-                        BegeleiderId = gastGezin.Begeleider.Id,
-                        BuddyId = buddyId,
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
-                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                        HasVOG = gastGezin.HasVOG,
-                        AanmeldFormulierId = aanmeldFormulierId,
-                        IntakeFormulierId = intakeFormulierId,
-                        Note = gastGezin.Note,
-                    });
+                    Id = gastGezin.Id,
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam + " " + contact.Achternaam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText,
+                    Begeleider = begeleider,
+                    BegeleiderId = begeleiderId,
+                    BuddyId = buddyId,
+                    PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
+                    ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
+                    PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                    HasVOG = gastGezin.HasVOG,
+                    AanmeldFormulierId = aanmeldFormulierId,
+                    IntakeFormulierId = intakeFormulierId,
+                    Note = gastGezin.Note,
+                });
+
+            }
+
+            if (sortOrder == "Ascending")
+            {
+                switch (sortBy)
+                {
+                    case "Woonplaats":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Woonplaats";
+                        break;
+                    case "Naam":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Naam).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Naam";
+                        break;
+                    case "Telefoonnummer":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Telefoonnummer).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Telefoonnummer";
+                        break;
+                    case "Intaker":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.BegeleiderId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Intaker (laag-hoog)";
+                        break;
+                    case "Buddy":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.BuddyId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Buddy (laag-hoog)";
+                        break;
+                    case "AanmeldingsId":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "AanmeldingsId (laag-hoog)";
+                        break;
                 }
-                else
+            }
+            else if (sortOrder == "Descending")
+            {
+                switch (sortBy)
                 {
-                    mijnGastgezinnen.GastgezinnenZonderBegeleider.Add(new GastGezin
-                    {
-                        Id = gastGezin.Id,
-                        Adres = adresText,
-                        Email = contact.Email,
-                        Naam = contact.Naam + " " + contact.Achternaam,
-                        Telefoonnummer = contact.Telefoonnummer,
-                        BuddyId = buddyId,
-                        Woonplaats = woonplaatsText,
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
-                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                        HasVOG = gastGezin.HasVOG,
-                        AanmeldFormulierId = aanmeldFormulierId,
-                        IntakeFormulierId = intakeFormulierId,
-                        Note = gastGezin.Note,
-                    });
+                    case "Intaker":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.BegeleiderId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Intaker (hoog-laag)";
+                        break;
+                    case "Buddy":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.BuddyId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "Buddy (hoog-laag)";
+                        break;
+                    case "AanmeldingsId":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "AanmeldingsId (hoog-laag)";
+                        break;
                 }
             }
 
@@ -302,102 +337,94 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             foreach (var key in formCollection.Keys)
             {
-                if (!key.StartsWith("vrijwilliger_"))
+                if (key.StartsWith("vrijwilliger_"))
                 {
-                    continue;
-                }
-
-                var value = formCollection[key];
-                int vrijwilligerId = 0;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    vrijwilligerId = Convert.ToInt32(value);
-                }
-
-                var gastgezinId = Convert.ToInt32(key.Substring(13));
-
-                var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
-                if (gastgezinItem == null)
-                {
-                    continue;
-                }
-
-                UserDetails? assignVrijwilliger = null;
-                if (vrijwilligerId > 0)
-                {
-                    assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
-                }
-
-                if (assignVrijwilliger == null && gastgezinItem.Begeleider is not null)
-                {
-                    gastgezinItem.Begeleider = null;
-                    gastgezinItem.BekekenDoorIntaker = false;
-                    _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
-                }
-                else
-                {
-                    if (gastgezinItem.Begeleider is not null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
+                    var value = formCollection[key];
+                    int vrijwilligerId = 0;
+                    if (!string.IsNullOrWhiteSpace(value))
                     {
-                        gastgezinItem.Begeleider = assignVrijwilliger;
+                        vrijwilligerId = Convert.ToInt32(value);
+                    }
+
+                    var gastgezinId = Convert.ToInt32(key.Substring(13));
+
+                    var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
+                    if (gastgezinItem == null)
+                    {
+                        continue;
+                    }
+
+                    UserDetails? assignVrijwilliger = null;
+                    if (vrijwilligerId > 0)
+                    {
+                        assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
+                    }
+
+                    if (assignVrijwilliger == null && gastgezinItem.Begeleider is not null)
+                    {
+                        gastgezinItem.Begeleider = null;
                         gastgezinItem.BekekenDoorIntaker = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
-                    else if (gastgezinItem.Begeleider is null)
+                    else
                     {
-                        gastgezinItem.Begeleider = assignVrijwilliger;
-                        gastgezinItem.BekekenDoorIntaker = false;
-                        _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        if (gastgezinItem.Begeleider is not null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
+                        {
+                            gastgezinItem.Begeleider = assignVrijwilliger;
+                            gastgezinItem.BekekenDoorIntaker = false;
+                            _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        }
+                        else if (gastgezinItem.Begeleider is null)
+                        {
+                            gastgezinItem.Begeleider = assignVrijwilliger;
+                            gastgezinItem.BekekenDoorIntaker = false;
+                            _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        }
                     }
                 }
-            }
-
-            foreach (var key in formCollection.Keys)
-            {
-                if (!key.StartsWith("buddy_"))
+                if (key.StartsWith("buddy_"))
                 {
-                    continue;
-                }
-
-                var value = formCollection[key];
-                int vrijwilligerId = 0;
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    vrijwilligerId = Convert.ToInt32(value);
-                }
-
-                var gastgezinId = Convert.ToInt32(key.Substring(6));
-
-                var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
-                if (gastgezinItem == null)
-                {
-                    continue;
-                }
-
-                UserDetails? assignVrijwilliger = null;
-                if (vrijwilligerId > 0)
-                {
-                    assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
-                }
-
-                if (assignVrijwilliger == null && gastgezinItem.Buddy is not null)
-                {
-                    gastgezinItem.Buddy = null;
-                    gastgezinItem.BekekenDoorBuddy = false;
-                    _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
-                }
-                else
-                {
-                    if (gastgezinItem.Buddy is not null && gastgezinItem.Buddy.Id != assignVrijwilliger.Id)
+                    var value = formCollection[key];
+                    int vrijwilligerId = 0;
+                    if (!string.IsNullOrWhiteSpace(value))
                     {
-                        gastgezinItem.Buddy = assignVrijwilliger;
+                        vrijwilligerId = Convert.ToInt32(value);
+                    }
+
+                    var gastgezinId = Convert.ToInt32(key.Substring(6));
+
+                    var gastgezinItem = _gastgezinService.GetGastgezin(gastgezinId);
+                    if (gastgezinItem == null)
+                    {
+                        continue;
+                    }
+
+                    UserDetails? assignVrijwilliger = null;
+                    if (vrijwilligerId > 0)
+                    {
+                        assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
+                    }
+
+                    if (assignVrijwilliger == null && gastgezinItem.Buddy is not null)
+                    {
+                        gastgezinItem.Buddy = null;
                         gastgezinItem.BekekenDoorBuddy = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
-                    else if (gastgezinItem.Buddy is null)
+                    else
                     {
-                        gastgezinItem.Buddy = assignVrijwilliger;
-                        gastgezinItem.BekekenDoorBuddy = false;
-                        _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        if (gastgezinItem.Buddy is not null && gastgezinItem.Buddy.Id != assignVrijwilliger.Id)
+                        {
+                            gastgezinItem.Buddy = assignVrijwilliger;
+                            gastgezinItem.BekekenDoorBuddy = false;
+                            _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        }
+                        else if (gastgezinItem.Buddy is null)
+                        {
+                            gastgezinItem.Buddy = assignVrijwilliger;
+                            gastgezinItem.BekekenDoorBuddy = false;
+                            _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
+                        }
                     }
                 }
             }
