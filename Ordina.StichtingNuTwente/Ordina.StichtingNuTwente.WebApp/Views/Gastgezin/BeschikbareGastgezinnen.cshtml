@@ -131,14 +131,7 @@
                     }
                     </td>
                     <td>@mijnGastgezin.Begeleider</td>
-                @if (mijnGastgezin.PlaatsingsInfo != null)
-                {
-                            <td class="text-break"><b>v: </b>@mijnGastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen <b>k: </b>@mijnGastgezin.PlaatsingsInfo.KleineKinderen</td>
-                }
-                else
-                {
-                            <td><b>v: k:</b></td>
-                }
+                    <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
                     <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
                     <td>@mijnGastgezin.ReserveTag</td>
                     <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
@@ -161,8 +154,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td>Totaal:</td>
+            <td><span class="float-right">Totaal:</span></td>
+            <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
             <td> @Model.TotalPlaatsingTag </td>
             <td> @Model.TotalResTag </td>
             <td></td>
