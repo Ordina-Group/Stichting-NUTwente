@@ -30,6 +30,72 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-12"> <h4>Zoeken</h4></div>
+    <div class="col-5">
+        <select class="form-select" id="zoekterm-toevoegen-select" aria-label="Default select example">
+            <option value="AlchoholEnDrugs">Alchohol en Drugs</option>
+            <option value="Allergieen">Allergieen</option>
+            <option value="BasisscholenAanwezig">Basisscholen aanwezig</option>
+            <option value="DaglichtSlaapkamer">Daglicht slaapkamer</option>
+            <option value="Belemmering">Belemmering</option>
+            <option value="Beperkingen">Beperkingen</option>
+            <option value="Faciliteiten">Faciliteiten</option>
+            <option value="FaciliteitenVoorKinderen">Faciliteiten voor kinderen</option>
+            <option value="HuisdierenAanwezig">Huisdieren aanwezig</option>
+            <option value="HuisdierenMogelijk">Huisdieren mogelijk</option>
+            <option value="KinderenInDeBuurt">Kinderen in de buurt</option>
+            <option value="KleineKinderen">Kleine kinderen</option>
+            <option value="KoelkastRuimte">Koelkastruimte</option>
+            <option value="Opbergruimte">Opbergruimte</option>
+            <option value="Privacy">Privacy</option>
+            <option value="Roken">Roken</option>
+            <option value="SlaapkamerRuimte">Slaapkamer ruimte</option>
+            <option value="VeiligeOpbergruimte">Veilige opbergruimte</option>
+            <option value="VluchtelingOphalen">Vluchteling ophalen</option>
+            <option value="VolwassenenGrotereKinderen">Volwassenen grotere kinderen</option>
+            <option value="ZelfKoken">Zelf koken</option>
+        </select>
+    </div>
+    <div class="col-5">
+        <input type="text" class="form-control" id="zoekterm-toevoegen-input" placeholder="Zoek...">
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary" id="zoekterm-toevoegen">Zoekterm toevoegen</button>
+    </div>
+    <script>
+        $("#zoekterm-toevoegen").on("click", function (){
+            let input = $("#zoekterm-toevoegen-input").val();
+            let searchField = $("#zoekterm-toevoegen-select").val();
+            let url = new URL(window.location.href);
+            url.searchParams.append('filters', searchField + "=" + input);
+            window.location.href = url.toString().replaceAll("+", "%20");
+        });
+    </script>
+</div>
+<div class="row small-row">
+    @foreach (var filter in Model.SearchQueries)
+    {
+        <div class="card col-6">
+            <div class="card-body small-card centered">
+                @filter.Field <b>bevat</b> @filter.SearchQuery <button id="@filter.OriginalQuery" class="btn btn-danger zoekterm-verwijderen">x</button><br />
+                <p class="small-text">(@filter.Results) resultaten</p>
+            </div>
+        </div>
+    }
+    <script>
+        $(".zoekterm-verwijderen").on("click", function (){
+            let searchQuery = $(this).attr("id");
+            let replace = "filters="+searchQuery;
+            let url = decodeURIComponent(window.location.href);
+            url = url.replaceAll("&" + replace, "");
+            url = url.replaceAll(replace, "");
+            window.location.href = url;
+        });
+    </script>
+</div>
+
+
 <table class="table">
     <thead>
         <tr>

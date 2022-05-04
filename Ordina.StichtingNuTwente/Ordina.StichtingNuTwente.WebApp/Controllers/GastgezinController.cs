@@ -218,13 +218,33 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("/BeschikbareGastgezinnen")]
         [HttpGet]
-        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
+        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null)
         {
             _userService.checkIfUserExists(User);
 
             var model = new BeschikbareGastgezinnenModel();
 
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null).ToList();
+
+            var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
+            
+            if (filters != null && filters.Length > 0)
+            {
+                var originalQuery = gastgezinQuery;
+                foreach (var filterParameter in filters)
+                {
+                    var split = filterParameter.Split('=');
+                    if (split.Length > 1)
+                    {
+                        var filterKey = split[0];
+                        var filterValue = split[1].ToLower();
+                        gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                        var results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                        model.SearchQueries.Add(new SearchQueryViewModel() { OriginalQuery = filterParameter, Field = filterKey, SearchQuery = filterValue, Results = results });
+                    }
+                }
+            }
+
+            ICollection<Gastgezin> gastGezinnen = gastgezinQuery.ToList();
 
             foreach (var gastGezin in gastGezinnen)
             {
