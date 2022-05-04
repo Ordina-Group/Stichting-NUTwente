@@ -55,6 +55,10 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public bool? HasVOG { get; set; }
 
         public GastgezinStatus? Status { get; set; }
+
+        public int? MaxAdults { get; set; }
+
+        public int? MaxChildren { get; set; }
     }
 
     public class Vrijwilliger
@@ -89,6 +93,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             SearchQueries = new List<SearchQueryViewModel>();
             TotalPlaatsingTag = "";
             TotalResTag = "";
+            TotalMaxAdults = 0;
+            TotalMaxChildren = 0;
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
@@ -97,6 +103,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string SortDropdownText { get; set; }
         public string TotalPlaatsingTag { get; set; }
         public string TotalResTag { get; set; }
+        public int? TotalMaxAdults { get; set; }
+        public int? TotalMaxChildren { get; set; }
     }
 
 }
