@@ -226,8 +226,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
 
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
+            
             if (filters != null && filters.Length > 0)
             {
+                var originalQuery = gastgezinQuery;
                 foreach (var filterParameter in filters)
                 {
                     var split = filterParameter.Split('=');
@@ -235,7 +237,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     {
                         var filterKey = split[0];
                         var filterValue = split[1].ToLower();
-                        gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                        var results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                        model.SearchQueries.Add(new SearchQueryViewModel() {Field=filterKey, SearchQuery = filterValue, Results = results });
                     }
                 }
             }
