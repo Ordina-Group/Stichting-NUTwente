@@ -79,6 +79,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     plaatsingsInfo = gastGezin.PlaatsingsInfo;
                 }
 
+                var user = GetUser();
+                if (!gastGezin.BekekenDoorBuddy && user?.Id == gastGezin.Buddy?.Id)
+                {
+                    gastGezin.BekekenDoorBuddy = true;
+                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                }
+
+                if (!gastGezin.BekekenDoorIntaker &&  user?.Id == gastGezin.Begeleider?.Id)
+                {
+                    gastGezin.BekekenDoorIntaker = true;
+                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                }
+
                 viewModel.GastGezin = new GastGezin()
                 {
                     Id = id,
@@ -372,6 +385,49 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        public UserDetails? GetUser()
+        {
+            var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+            if (aadID != null)
+            {
+                var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                return userDetails;
+            }
+            return null;
+        }
+
+        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [HttpPut]
+        [Route("MarkAsRead/{gastgezinId}")]
+        public IActionResult MarkAsRead(int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null)
+                {
+                    var user = GetUser();
+                    if (!gastgezin.BekekenDoorIntaker && user?.Id == gastgezin.Begeleider?.Id)
+                    {
+                        gastgezin.BekekenDoorIntaker = true;
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    }
+
+                    if (!gastgezin.BekekenDoorBuddy && user?.Id == gastgezin.Buddy?.Id)
+                    {
+                        gastgezin.BekekenDoorBuddy = true;
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    }
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

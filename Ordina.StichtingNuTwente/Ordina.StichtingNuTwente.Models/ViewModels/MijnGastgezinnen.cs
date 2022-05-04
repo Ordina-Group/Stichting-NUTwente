@@ -56,6 +56,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public GastgezinStatus? Status { get; set; }
 
+        public bool HeeftBekeken { get; set; }
+
         public int? MaxAdults { get; set; }
 
         public int? MaxChildren { get; set; }
