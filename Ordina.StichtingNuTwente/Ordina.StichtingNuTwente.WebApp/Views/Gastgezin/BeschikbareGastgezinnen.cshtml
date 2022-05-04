@@ -86,8 +86,9 @@
     <script>
         $(".zoekterm-verwijderen").on("click", function (){
             let searchQuery = $(this).attr("id");
-            let url = window.location.href.replaceAll("filters="+searchQuery.replaceAll("=","%3D" ), "");
-            url = url.replaceAll("filters="+searchQuery, "");
+            let replace = "filters="+searchQuery.replaceAll("=","%3D" )
+            let url = window.location.href.replaceAll("&" + replace, "");
+            url = url.replaceAll(replace, "");
             window.location.href = url;
         });
     </script>
