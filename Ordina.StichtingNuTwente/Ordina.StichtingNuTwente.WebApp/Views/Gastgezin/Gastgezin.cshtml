@@ -101,23 +101,22 @@
         </div>
     </div>
     <div class="col-9">
-        <div class="row row-cols-2">
-            @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
-            {
-                <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+        <div class="row">
 
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Nieuwe Plaatsing</h5>
+
+            <div class="col-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nieuwe Plaatsing</h5>
+                        @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
+                        {
+                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Type</label>
                                 <div class="col">
                                     <select name="PlacementType" id="PlacementType" class="form-select">
-                                        @foreach (var option in Enum.GetValues(typeof(PlacementType)))
-                                        {
-                                            <option value="@option">@option</option>
-                                        }
+                                        <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
+                                        <option value="@PlacementType.Reservering">@PlacementType.Reservering</option>
                                     </select>
                                 </div>
                             </div>
@@ -141,54 +140,16 @@
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Datum</label>
                                 <div class="col">
-                                    <input type="date" class="form-control" id="colFormLabelSm" name="Onbekend" value="@DateTime.Now">
+                                    <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
                                 </div>
                             </div>
                             <div class="card-buttons mt-3">
-                                <input type="submit" value="Update" class="btn btn-primary">
-                                <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="1" class="btn btn-danger" style="float:right">Clear</button>
+                                <input type="submit" value="Plaats" class="btn btn-primary">
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
-            }
-            @using (Html.BeginForm("PostReservering", "Gastgezin", FormMethod.Post))
-            {
-                <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-                <input type="hidden" name="PlacementType" value="0">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Gereserveerd</h5>
-                            <p>Totaal: @(Model.PlaatsingStats.ResKind + Model.PlaatsingStats.ResVolwassen + Model.PlaatsingStats.ResOnbekend) / @(Model.GastGezin.MaxAdults + Model.GastGezin.MaxChildren)</p>
-
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label-sm">Volwassenen (Max @Model.GastGezin.MaxAdults)</label>
-                                <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="rVolwassen" value="@Model.PlaatsingStats.ResVolwassen">
-                                </div>
-                            </div>
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label-sm">Kinderen (Max @Model.GastGezin.MaxChildren)</label>
-                                <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="rKind" value="@Model.PlaatsingStats.ResKind">
-                                </div>
-                            </div>
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label-sm">Onbekend</label>
-                                <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="rOnbekend" value="@Model.PlaatsingStats.ResOnbekend">
-                                </div>
-                            </div>
-                            <div class="card-buttons mt-3">
-                                <input type="submit" value="Update" class="btn btn-primary">
-                                <input type="submit" asp-controller="Gastgezin" asp-action="PlaatsReservering" value="Plaats" class="btn btn-success">
-                                <button asp-controller="Gastgezin" asp-action="Delete" asp-route-GastGezinId="@Model.GastGezin.Id" asp-route-PlacementType="0" class="btn btn-danger" style="float:right">Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
         <div class="row">
             <div class="col g-4">
