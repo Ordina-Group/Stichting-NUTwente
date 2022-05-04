@@ -33,6 +33,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             PlacementType = plaatsing.PlacementType;
             DateTime = plaatsing.DateTime;
             Vrijwilliger = plaatsing.Vrijwilliger;
+            Age = plaatsing.Age;
+            Gender = plaatsing.Gender;
         }
 
         public Gastgezin Gastgezin { get; set; }
@@ -46,6 +48,10 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public DateTime DateTime { get; set; }
 
         public UserDetails Vrijwilliger { get; set; }
+
+        public int Age { get; set; }
+
+        public Gender Gender { get; set; }
     }
 
     public class PlaatsingStats

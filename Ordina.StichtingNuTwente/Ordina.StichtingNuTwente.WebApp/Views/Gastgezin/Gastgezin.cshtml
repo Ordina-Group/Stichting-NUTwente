@@ -105,29 +105,43 @@
             @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
             {
                 <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-                <input type="hidden" name="PlacementType" value="1">
+
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Geplaatst</h5>
-                            <p>Totaal: @(Model.PlaatsingStats.PlaatsKind + Model.PlaatsingStats.PlaatsVolwassen + Model.PlaatsingStats.PlaatsOnbekend) / @(Model.GastGezin.MaxAdults + Model.GastGezin.MaxChildren)</p>
-
+                            <h5 class="card-title">Nieuwe Plaatsing</h5>
                             <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Volwassenen (Max @Model.GastGezin.MaxAdults)</label>
+                                <label for="colFormLabelSm" class="col col-form-label">Type</label>
+                                <div class="col">
+                                    <select name="PlacementType" id="PlacementType" class="form-select">
+                                        @foreach (var option in Enum.GetValues(typeof(PlacementType)))
+                                        {
+                                            <option value="@option">@option</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row justify-content-sm-left">
+                                <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
                                 <div class="col">
                                     <input type="number" class="form-control form-control" id="colFormLabelSm" name="Volwassen" value="@Model.PlaatsingStats.PlaatsVolwassen">
                                 </div>
                             </div>
                             <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Kinderen (Max @Model.GastGezin.MaxChildren)</label>
+                                <label for="colFormLabelSm" class="col col-form-label">Gender</label>
                                 <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="Kind" value="@Model.PlaatsingStats.PlaatsKind">
+                                    <select name="Gender" id="Gender" class="form-select">
+                                        @foreach (var option in Enum.GetValues(typeof(Gender)))
+                                        {
+                                            <option value="@option">@option</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
                             <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Onbekend</label>
+                                <label for="colFormLabelSm" class="col col-form-label">Datum</label>
                                 <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="Onbekend" value="@Model.PlaatsingStats.PlaatsOnbekend">
+                                    <input type="date" class="form-control" id="colFormLabelSm" name="Onbekend" value="@DateTime.Now">
                                 </div>
                             </div>
                             <div class="card-buttons mt-3">
