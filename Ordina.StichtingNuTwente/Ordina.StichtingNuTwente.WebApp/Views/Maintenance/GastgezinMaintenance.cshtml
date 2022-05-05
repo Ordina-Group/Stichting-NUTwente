@@ -1,0 +1,39 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@using Ordina.StichtingNuTwente.Models.Models
+@model GastgezinViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card border-0 bg-transparent shadow-none">
+            <div class="card-body">
+                <h2 class="card-title">
+                    Gastgezin @Model.GastGezin.Naam Maintenance
+                </h2>
+                <h3 style="color:red"> @Context.Request.Query["message"].ToString()</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Fomulier koppeling wijzigen</h5>
+                @using (Html.BeginForm("UpdateFormsForGastgezin", "Maintenance", FormMethod.Post))
+                {
+                    <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
+                    <div class="grow-wrap">
+                        <input type="number" class="form-control" name="AanmeldId" id="AanmeldId" value="@Model.GastGezin.AanmeldFormulierId" />
+                        <input type="number" class="form-control" name="IntakeId" id="IntakeId" value="@Model.GastGezin.IntakeFormulierId" />
+                    </div>
+                    <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
+                }
+            </div>
+        </div>
+    </div>
+</div>
