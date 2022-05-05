@@ -35,7 +35,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             if (gastGezin.Begeleider != null)
             {
-                if (!(gastGezin.Begeleider.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
+                if (!(gastGezin.Begeleider.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
                 {
                     return Redirect("MicrosoftIdentity/Account/AccessDenied");
                 }
@@ -296,28 +296,37 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (gastGezin.IntakeFormulier != null)
                     intakeFormulierId = gastGezin.IntakeFormulier.Id;
 
+                var begeleider = "";
                 if (gastGezin.Begeleider != null)
                 {
-                    model.MijnGastgezinnen.Add(new GastGezin
-                    {
-                        Id = gastGezin.Id,
-                        Adres = adresText,
-                        Email = contact.Email,
-                        Naam = contact.Naam + " " + contact.Achternaam,
-                        Telefoonnummer = contact.Telefoonnummer,
-                        Woonplaats = woonplaatsText,
-                        Begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})",
-                        PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                        ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
-                        PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                        HasVOG = gastGezin.HasVOG,
-                        AanmeldFormulierId = aanmeldFormulierId,
-                        IntakeFormulierId = intakeFormulierId,
-                        Note = gastGezin.Note,
-                        MaxAdults = gastGezin.MaxAdults,
-                        MaxChildren = gastGezin.MaxChildren
-                    });
+                    begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})";
                 }
+                var buddy = "";
+                if (gastGezin.Buddy != null)
+                {
+                    buddy = $"{gastGezin.Buddy.FirstName} {gastGezin.Buddy.LastName} ({gastGezin.Buddy.Email})";
+                }
+
+                model.MijnGastgezinnen.Add(new GastGezin
+                {
+                    Id = gastGezin.Id,
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam + " " + contact.Achternaam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText,
+                    Begeleider = begeleider,
+                    Buddy = buddy,
+                    PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
+                    ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                    PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                    HasVOG = gastGezin.HasVOG,
+                    AanmeldFormulierId = aanmeldFormulierId,
+                    IntakeFormulierId = intakeFormulierId,
+                    Note = gastGezin.Note,
+                    MaxAdults = gastGezin.MaxAdults,
+                    MaxChildren = gastGezin.MaxChildren
+                });
             }
             if (sortOrder == "Ascending")
             {
