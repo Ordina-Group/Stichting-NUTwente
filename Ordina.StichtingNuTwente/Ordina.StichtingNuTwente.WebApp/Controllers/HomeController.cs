@@ -191,6 +191,98 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(mijnGastgezinnen);
         }
 
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("MijnGastgezinnen/{userId}")]
+        [HttpGet]
+        [ActionName("MijnGastgezinnen")]
+        public IActionResult MijnGastgezinnen(string? filter, int userId)
+        {
+            _userService.checkIfUserExists(User);
+
+            var mijnGastgezinnen = new MijnGastgezinnenModel();
+
+            var user = _userService.GetUserById(userId);
+            if(user == null)
+                return Redirect("Error");
+            mijnGastgezinnen.GastgezinnenVan = user.FirstName + " " + user.LastName;
+
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            if (filter != null)
+            {
+                if (filter == "Buddy")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Buddy == user).ToList();
+                }
+                if (filter == "Intaker")
+                {
+                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
+                }
+            }
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                if (gastGezin.Contact == null)
+                {
+                    continue;
+                }
+
+                var contact = gastGezin.Contact;
+                var adres = gastGezin.Contact.Adres;
+                var adresText = "";
+                var woonplaatsText = "";
+
+                if (adres != null)
+                {
+                    adresText = adres.Straat;
+                    woonplaatsText = adres.Woonplaats;
+                }
+
+                int aanmeldFormulierId = 0;
+                int intakeFormulierId = 0;
+
+                if (gastGezin.Contact.Reactie != null)
+                {
+                    aanmeldFormulierId = gastGezin.Contact.Reactie.Id;
+                }
+
+                if (gastGezin.IntakeFormulier != null)
+                {
+                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
+                }
+                var heeftBekeken = false;
+                if (user.Id == gastGezin.Buddy?.Id)
+                {
+                    heeftBekeken = gastGezin.BekekenDoorBuddy;
+                }
+
+                if (user.Id == gastGezin.Begeleider?.Id)
+                {
+                    heeftBekeken = gastGezin.BekekenDoorIntaker;
+                }
+
+                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                {
+                    Id = gastGezin.Id,
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam + " " + contact.Achternaam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText,
+                    AanmeldFormulierId = aanmeldFormulierId,
+                    IntakeFormulierId = intakeFormulierId,
+                    PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
+                    ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
+                    PlaatsingsInfo = gastGezin.PlaatsingsInfo,
+                    HasVOG = gastGezin.HasVOG,
+                    HeeftBekeken = heeftBekeken
+                });
+            }
+
+            FillBaseModel(mijnGastgezinnen);
+            return View(mijnGastgezinnen);
+        }
+
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("AlleGastgezinnen")]
         [HttpGet]

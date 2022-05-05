@@ -13,7 +13,9 @@
     <div>
         <nav class="nav nav-tabs d-flex justify-content-between">
             <h3>
-                Mijn Gastgezinnen @if (newGastgezinnen > 0)
+                Mijn Gastgezinnen @(Model.GastgezinnenVan != null?Model.GastgezinnenVan: "")
+                
+                @if (newGastgezinnen > 0)
                 {
                     <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
                 }
