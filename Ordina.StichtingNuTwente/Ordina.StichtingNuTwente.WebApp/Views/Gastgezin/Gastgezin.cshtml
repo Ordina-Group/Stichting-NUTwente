@@ -200,7 +200,7 @@
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
                                 <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="Volwassen" value="@Model.PlaatsingStats.PlaatsVolwassen">
+                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="Age" value="0">
                                 </div>
                             </div>
                             <div class="row justify-content-sm-left">
@@ -237,21 +237,65 @@
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
-                <h5>Plaatsingen</h5>
-                @foreach (var p in Model.PlaatsingsGeschiedenis)
+                <h5 class="card-title">Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))</h5>
+                @foreach (var p in Model.Plaatsingen)
                 {
                     <div class="card">
-                        <p>@p.Age</p>
-                        <p>@p.DateTime</p>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class=col>
+                                    <p>@p.DateTime.ToShortDateString()</p>
+                                </div>
+                                <div class=col>
+                                    <p>@p.Gender</p>
+                                </div>
+                                <div class=col>
+                                    <p>@p.Age jaar</p>
+                                </div>
+                                <div class=col>
+                                    <a type="button" class="btn-close float-right" aria-label="Close" href="/DeletePlaatsing?PlaatsingId=@p.Id" title="Verwijder Plaatsing"></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>
         </div>
     </div>
     <div class="col g-4">
-         <div class="card">
+        <div class="card">
             <div class="card-body">
-                <h5>Reserveringen</h5>
+                <h5 class="card-title">Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))</h5>
+                @foreach (var p in Model.Reserveringen)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class=col>
+                                    <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                            <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                        </svg>
+                                        </a>
+                                </div>
+                                <div class=col>
+                                    <p>@p.DateTime.ToShortDateString()</p>
+                                </div>
+                                <div class=col>
+                                   <p>@p.Gender</p>
+                                </div>
+                                <div class=col>
+                                    <p>@p.Age jaar</p>
+                                </div>
+                                <div class=col>
+                                    <a type="button" class="btn-close float-right" aria-label="Close" href="/DeletePlaatsing?PlaatsingId=@p.Id" title="Verwijder reservering"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -269,7 +313,9 @@
                             <th scope="col">Datum</th>
                             <th scope="col">Type</th>
                             <th scope="col">Aantal mensen</th>
+                            <th scope="col">Gender</th>
                             <th scope="col">Leeftijdsgroep</th>
+                            <th scope="col">Leeftijd</th>
                             <th scope="col">Uitgevoerd door</th>
                         </tr>
                     </thead>
@@ -280,7 +326,9 @@
                                 <td>@plaatsing.DateTime</td>
                                 <td>@plaatsing.PlacementType</td>
                                 <td>@plaatsing.Amount</td>
+                                <td>@plaatsing.Gender</td>
                                 <td>@plaatsing.AgeGroup</td>
+                                <td>@plaatsing.Age</td>
                                 <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
                             </tr>
                         }
@@ -290,3 +338,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            window.scrollTo(0, scrollpos);
+            sessionStorage.removeItem('scrollpos');
+        }
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+        sessionStorage.setItem('scrollpos', window.scrollY);
+    });
+</script>

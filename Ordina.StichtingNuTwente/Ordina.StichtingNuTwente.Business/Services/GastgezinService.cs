@@ -109,7 +109,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public Plaatsing GetPlaatsing(int id)
         {
-            throw new NotImplementedException();
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            var plaatsing = plaatsingRepository.GetById(id, "Gastgezin");
+            return plaatsing;
         }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)

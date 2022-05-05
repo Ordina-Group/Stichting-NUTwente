@@ -92,6 +92,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
                 }
 
+                int? maxAdults = 0;
+                if (gastGezin.MaxAdults != null)
+                {
+                    maxAdults = gastGezin.MaxAdults;
+                }
+
+                int? maxChildren = 0;
+                if (gastGezin.MaxChildren != null)
+                {
+                    maxChildren = gastGezin.MaxChildren;
+                }
+
                 viewModel.GastGezin = new GastGezin()
                 {
                     Id = id,
@@ -106,10 +118,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Status = gastGezin.Status,
                     HasVOG = gastGezin.HasVOG,
                     PlaatsingsInfo = plaatsingsInfo,
-                    MaxAdults = gastGezin.MaxAdults,
-                    MaxChildren = gastGezin.MaxChildren
+                    MaxAdults = maxAdults,
+                    MaxChildren = maxChildren
                 };
             }
+            var PlacementViewModels = new List<PlaatsingViewModel>();
+            gastGezin.Plaatsingen.ToList().ForEach(p => PlacementViewModels.Add(new PlaatsingViewModel(p)));
+
+            viewModel.Plaatsingen = PlacementViewModels.Where(p => p.PlacementType == PlacementType.Plaatsing && p.Active == true).ToList();
+            viewModel.Plaatsingen.AddRange(PlacementViewModels.Where(p => p.PlacementType == PlacementType.GeplaatsteReservering && p.Active == true).ToList());
+            viewModel.Reserveringen = PlacementViewModels.Where(p => p.PlacementType == PlacementType.Reservering && p.Active == true).ToList();
+
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
             gastGezin.Plaatsingen.ToList().ForEach(p => viewModel.PlaatsingsGeschiedenis.Add(new PlaatsingViewModel(p)));
             viewModel.PlaatsingsGeschiedenis = viewModel.PlaatsingsGeschiedenis.OrderByDescending(p => p.DateTime.Ticks).ToList();
@@ -177,6 +196,55 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult UpdatePlaatsing()
         {
             return View();
+        }
+
+        [Route("DeletePlaatsing")]
+        public IActionResult DeletePlaatsing(int plaatsingId)
+        {
+            var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
+            plaatsing.Active = false;
+            _gastgezinService.UpdatePlaatsing(plaatsing);
+            var placementType = PlacementType.VerwijderdePlaatsing;
+            if(plaatsing.PlacementType == PlacementType.Reservering)
+            {
+                placementType = PlacementType.VerwijderdeReservering;
+            }
+            var deletedPlaatsing = new Plaatsing()
+            {
+                Gastgezin = plaatsing.Gastgezin,
+                Amount = plaatsing.Amount,
+                Age = plaatsing.Age,
+                AgeGroup = plaatsing.AgeGroup,
+                PlacementType = placementType,
+                DateTime = DateTime.Now,
+                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
+                Active = false,
+                Gender = plaatsing.Gender
+            };
+            _gastgezinService.AddPlaatsing(deletedPlaatsing);
+            return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
+        }
+
+        [Route("PlaatsReservering")]
+        public IActionResult PlaatsReservering(int plaatsingId)
+        {
+            var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
+            plaatsing.Active = false;
+            _gastgezinService.UpdatePlaatsing(plaatsing);
+            var NieuwePlaatsing = new Plaatsing()
+            {
+                Gastgezin = plaatsing.Gastgezin,
+                Amount = plaatsing.Amount,
+                Age = plaatsing.Age,
+                AgeGroup = plaatsing.AgeGroup,
+                PlacementType = PlacementType.GeplaatsteReservering,
+                DateTime = DateTime.Now,
+                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
+                Active = true,
+                Gender = plaatsing.Gender
+            };
+            _gastgezinService.AddPlaatsing(NieuwePlaatsing);
+            return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
         }
 
         public IActionResult PostNote(int GastGezinId, string Note)
