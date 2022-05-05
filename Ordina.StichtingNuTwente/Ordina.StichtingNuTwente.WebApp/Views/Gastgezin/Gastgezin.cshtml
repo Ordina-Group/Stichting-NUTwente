@@ -237,6 +237,31 @@
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
+                <h5>Plaatsingen</h5>
+                @foreach (var p in Model.PlaatsingsGeschiedenis)
+                {
+                    <div class="card">
+                        <p>@p.Age</p>
+                        <p>@p.DateTime</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col g-4">
+         <div class="card">
+            <div class="card-body">
+                <h5>Reserveringen</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col g-4">
+        <div class="card">
+            <div class="card-body">
                 <h5 class="card-title">Plaatsingsgeschiedenis</h5>
                 <table class="table table-striped">
                     <thead>
