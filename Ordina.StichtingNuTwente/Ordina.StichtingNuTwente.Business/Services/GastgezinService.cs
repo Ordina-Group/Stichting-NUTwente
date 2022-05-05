@@ -21,13 +21,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
+            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
             if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
@@ -46,11 +46,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezin;
         }
 
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger)
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
+            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
+            var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen);
             return gastgezinnen.ToList();
         }
 
@@ -58,7 +61,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,Plaatsingen");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,Plaatsingen");
             return gastgezinnen.ToList();
         }
 
