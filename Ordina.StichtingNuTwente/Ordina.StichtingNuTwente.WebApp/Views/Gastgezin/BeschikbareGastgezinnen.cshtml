@@ -117,34 +117,43 @@
         @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
         {
             Index++;
-                <tr class="@(Index%2==0?"dark-row":"")">
-                    <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie)? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
-                    <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie)? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
-                    <td class="text-break">@mijnGastgezin.Naam</td>
-                    <td>@mijnGastgezin.Telefoonnummer</td>
-                    <td>
-                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+            <tr class="@(Index%2==0?"dark-row":"")">
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie)? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie)? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
+                <td class="text-break">@mijnGastgezin.Naam</td>
+                <td>@mijnGastgezin.Telefoonnummer</td>
+                <td>
+                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
                     @if (mijnGastgezin.IntakeFormulierId > 0)
                     {
                         <text>/ </text>
 
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
                     }
-                    </td>
-                    <td>@mijnGastgezin.Begeleider</td>
-                    <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
-                    <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
-                    <td>@mijnGastgezin.ReserveTag</td>
-                    <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
+                </td>
+                <td>
+                    @if (mijnGastgezin.Buddy != "")
+                    {
+                        <text>@mijnGastgezin.Buddy</text>
+                    }
+                    else
+                    {
+                        <text>@mijnGastgezin.Begeleider</text>
+                    }
+                </td>
+                <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
+                <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
+                <td>@mijnGastgezin.ReserveTag</td>
+                <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                    <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
                 }
                 else
                 {
-                            <td></td>
+                    <td></td>
                 }
-                </tr>
+            </tr>
             @await Html.PartialAsync("../Home/_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
         }
     </tbody>
