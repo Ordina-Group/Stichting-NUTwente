@@ -114,45 +114,54 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(viewModel);
         }
 
-        //[ActionName("PostPlaatsing")]
-        //[Route("GastgezinController/PostPlaatsing")]
-        //public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, int Age, Gender Gender, string Date)
-        //{
-        //    var plaatsType = (PlacementType)PlacementType;
-        //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Volwassene).Sum(p => p.Amount);
-        //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Kind).Sum(p => p.Amount);
-        //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Onbekend).Sum(p => p.Amount);
+        [ActionName("PostPlaatsing")]
+        [Route("GastgezinController/PostPlaatsing")]
+        public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, int Age, Gender Gender, string Date)
+        {
+            var plaatsType = (PlacementType)PlacementType;
+            var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Volwassene).Sum(p => p.Amount);
+            var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Kind).Sum(p => p.Amount);
+            var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Onbekend).Sum(p => p.Amount);
+
+            var ageGroup = AgeGroup.Onbekend;
+            if(Age >= 18)
+            {
+                ageGroup = AgeGroup.Volwassene;
+            }else if(Age < 18 && Age > 0)
+            {
+                ageGroup = AgeGroup.Kind;
+            }
 
 
-        //        var plaatsing = new Plaatsing()
-        //        {
-        //            Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
-        //            Amount = Volwassen - PrevVolwassen,
-        //            AgeGroup = AgeGroup.Volwassene,
-        //            PlacementType = plaatsType,
-        //            DateTime = DateTime.Now,
-        //            Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-        //        };
-        //        _gastgezinService.AddPlaatsing(plaatsing);
-        //    }
-        //    return Redirect("/gastgezin?id=" + GastGezinId);
-        //}
+            var plaatsing = new Plaatsing()
+            {
+                Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
+                Amount = 1,
+                AgeGroup = AgeGroup.Volwassene,
+                PlacementType = plaatsType,
+                DateTime = DateTime.Now,
+                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+            };
+            _gastgezinService.AddPlaatsing(plaatsing);
+        }
+            return Redirect("/gastgezin?id=" + GastGezinId);
+    }
 
-        //public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
-        //{
-        //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
-        //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
-        //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
-        //    PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
-        //    return Delete(GastGezinId, 0);
-        //}
+    //public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
+    //{
+    //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
+    //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
+    //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
+    //    PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
+    //    return Delete(GastGezinId, 0);
+    //}
 
-        //public IActionResult Delete(int GastGezinId, int PlacementType)
-        //{
-        //    return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
-        //}
+    //public IActionResult Delete(int GastGezinId, int PlacementType)
+    //{
+    //    return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
+    //}
 
-        public IActionResult UpdatePlaatsing()
+    public IActionResult UpdatePlaatsing()
         {
             return View();
         }
