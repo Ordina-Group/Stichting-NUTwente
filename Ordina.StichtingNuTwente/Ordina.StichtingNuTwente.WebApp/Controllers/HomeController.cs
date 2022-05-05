@@ -115,7 +115,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var mijnGastgezinnen = new MijnGastgezinnenModel();
 
             var user = GetUser();
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
             if (filter != null)
             {
                 if (filter == "Buddy")
@@ -207,7 +207,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("Error");
             mijnGastgezinnen.GastgezinnenVan = user.FirstName + " " + user.LastName;
 
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(new Persoon { Id = user.Id });
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
             if (filter != null)
             {
                 if (filter == "Buddy")

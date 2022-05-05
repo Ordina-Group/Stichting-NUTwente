@@ -22,8 +22,8 @@
             </h3>
             <div class="d-flex">
                 <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["filter"])?"active":"")" href="/MijnGastgezinnen">Alles</a>
-                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="/MijnGastgezinnen?filter=Buddy">Buddy</a>
-                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="/MijnGastgezinnen?filter=Intaker">Intaker</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="?filter=Buddy">Buddy</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="?filter=Intaker">Intaker</a>
             </div>
         </nav>
         <table class="table">
