@@ -10,9 +10,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     public class UserController : Controller
     {
         public IUserService _userService { get; }
-        public UserController(IUserService userService)
+        public IGastgezinService _gastgezinService { get; }
+
+        public UserController(IUserService userService, IGastgezinService gastgezinService)
         {
             _userService = userService;
+            _gastgezinService = gastgezinService;
         }
 
         [AllowAnonymous]
@@ -37,7 +40,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new List<UserViewModel>();
             var users = _userService.GetAllUsers();
-            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u));
+            foreach (var u in users)
+            {
+                var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id);
+                var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
+                var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
+                viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes});
+
+            }
             return View(viewModel);
         }
 
@@ -63,7 +73,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     _userService.UpdateUser(updatedUser, id);
                     return Ok();
                 }
-                 catch (Exception ex)
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }

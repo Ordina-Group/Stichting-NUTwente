@@ -38,6 +38,9 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public bool InDropdown{ get; set; }
         public ICollection<string> Roles { get; set; }
 
+        public int AantalBuddies { get; set; }
+        public int AantalIntakes { get; set; }
+
 
     }
 }
