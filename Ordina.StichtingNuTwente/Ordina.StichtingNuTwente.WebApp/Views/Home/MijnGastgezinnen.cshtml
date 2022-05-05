@@ -13,15 +13,17 @@
     <div>
         <nav class="nav nav-tabs d-flex justify-content-between">
             <h3>
-                Mijn Gastgezinnen @if (newGastgezinnen > 0)
+                Mijn Gastgezinnen @(Model.GastgezinnenVan != null?Model.GastgezinnenVan: "")
+                
+                @if (newGastgezinnen > 0)
                 {
                     <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
                 }
             </h3>
             <div class="d-flex">
                 <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["filter"])?"active":"")" href="/MijnGastgezinnen">Alles</a>
-                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="/MijnGastgezinnen?filter=Buddy">Buddy</a>
-                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="/MijnGastgezinnen?filter=Intaker">Intaker</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="?filter=Buddy">Buddy</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="?filter=Intaker">Intaker</a>
             </div>
         </nav>
         <table class="table">
@@ -85,8 +87,10 @@
         <hr />
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
-    <script>
-        $(".unseen").on("click", function() {
+    @if (Model.GastgezinnenVan == null)
+    {
+        <script>
+            $(".unseen").on("click", function() {
             console.log("click");
             let id = $(this).attr("id");
             $(this).removeClass("unseen");
@@ -101,6 +105,7 @@
            });
         })
     </script>
+    }
 </body>
 
 
