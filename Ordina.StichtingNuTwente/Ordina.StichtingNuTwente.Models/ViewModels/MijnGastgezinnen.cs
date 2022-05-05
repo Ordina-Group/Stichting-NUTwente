@@ -16,6 +16,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
+        public string? GastgezinnenVan {  get; set; }
     }
 
     public class GastGezin

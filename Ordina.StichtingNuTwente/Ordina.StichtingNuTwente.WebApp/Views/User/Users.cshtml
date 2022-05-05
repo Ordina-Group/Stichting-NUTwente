@@ -20,7 +20,7 @@
             @foreach (var u in Model)
             {
                 <tr>
-                    <th scope="row">@u.FirstName</th>
+                    <th scope="row"> <a href="/MijnGastgezinnen/@u.Id">@u.FirstName</a></th>
                     <td>@u.LastName</td>
                     <td>@u.Email</td>
                     <td>@u.PhoneNumber</td>
