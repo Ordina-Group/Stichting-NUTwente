@@ -23,5 +23,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public int? MaxChildren { get; set; }
         [ForeignKey("fkPlaatsingsId")]
         public virtual PlaatsingsInfo? PlaatsingsInfo { get; set; }
+
+        public bool BekekenDoorBuddy { get; set; }
+        public bool BekekenDoorIntaker { get; set; }
     }
 }

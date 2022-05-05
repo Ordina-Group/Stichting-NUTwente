@@ -16,6 +16,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
+        public string? GastgezinnenVan {  get; set; }
     }
 
     public class GastGezin
@@ -35,6 +36,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public string Begeleider { get; set; }
 
         public int BegeleiderId { get; set; }
+
+        public string Buddy { get; set; }
 
         public int BuddyId { get; set; }
 
@@ -56,6 +59,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public GastgezinStatus? Status { get; set; }
 
+        public bool HeeftBekeken { get; set; }
+
         public int? MaxAdults { get; set; }
 
         public int? MaxChildren { get; set; }
@@ -73,15 +78,15 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public AlleGastgezinnenModel()
         {
             Vrijwilligers = new List<Vrijwilliger>();
-
-            GastgezinnenZonderBegeleider = new List<GastGezin>();
-            GastgezinnenMetBegeleider = new List<GastGezin>();
+            Gastgezinnen = new List<GastGezin>();
+            SortDropdownText = "";
         }
 
         public List<Vrijwilliger> Vrijwilligers { get; set; }
 
-        public List<GastGezin> GastgezinnenZonderBegeleider { get; set; }
-        public List<GastGezin> GastgezinnenMetBegeleider { get; set; }
+        public List<GastGezin> Gastgezinnen { get; set; }
+
+        public string SortDropdownText { get; set; }
     }
 
     public class BeschikbareGastgezinnenModel : BaseModel
