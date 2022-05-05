@@ -36,6 +36,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public int BegeleiderId { get; set; }
 
+        public string Buddy { get; set; }
+
         public int BuddyId { get; set; }
 
         public DateTime Intake { get; set; }
@@ -75,15 +77,15 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public AlleGastgezinnenModel()
         {
             Vrijwilligers = new List<Vrijwilliger>();
-
-            GastgezinnenZonderBegeleider = new List<GastGezin>();
-            GastgezinnenMetBegeleider = new List<GastGezin>();
+            Gastgezinnen = new List<GastGezin>();
+            SortDropdownText = "";
         }
 
         public List<Vrijwilliger> Vrijwilligers { get; set; }
 
-        public List<GastGezin> GastgezinnenZonderBegeleider { get; set; }
-        public List<GastGezin> GastgezinnenMetBegeleider { get; set; }
+        public List<GastGezin> Gastgezinnen { get; set; }
+
+        public string SortDropdownText { get; set; }
     }
 
     public class BeschikbareGastgezinnenModel : BaseModel
