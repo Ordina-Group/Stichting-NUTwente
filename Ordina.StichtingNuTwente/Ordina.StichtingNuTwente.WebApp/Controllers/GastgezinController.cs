@@ -33,11 +33,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 return Redirect("Error");
             }
-            if (gastGezin.Begeleider != null)
+            if (gastGezin.Begeleider != null || gastGezin.Buddy != null)
             {
-                if (!(gastGezin.Begeleider.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
+                if (!(gastGezin.Begeleider?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
                 {
-                    return Redirect("MicrosoftIdentity/Account/AccessDenied");
+                    return Redirect("MicrosoftIdentity/Account/AccessDenied"); 
                 }
             }
             else if (!User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
