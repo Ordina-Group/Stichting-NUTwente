@@ -15,6 +15,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public UserDetails Vrijwilliger { get; set; }
         public int Age { get; set; }
         public Gender Gender { get; set; }
+        public bool Active { get; set; }
     }
 
     [Flags]
@@ -29,7 +30,10 @@ namespace Ordina.StichtingNuTwente.Models.Models
     public enum PlacementType
     {
         Reservering = 0,
-        Plaatsing = 1
+        Plaatsing = 1,
+        GeplaatsteReservering = 2,
+        VerwijderdePlaatsing = 3,
+        VerwijderdeReservering =4
     }
 
     [Flags]

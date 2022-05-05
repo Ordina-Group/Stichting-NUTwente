@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220505080648_PlaatsingExtension")]
+    partial class PlaatsingExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,12 +92,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.Property<int?>("BegeleiderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("BekekenDoorBuddy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("BekekenDoorIntaker")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("BuddyId")
                         .HasColumnType("int");
