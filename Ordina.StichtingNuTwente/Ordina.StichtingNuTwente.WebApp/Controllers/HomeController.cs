@@ -247,9 +247,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
 
                 var buddyId = 0;
+                var buddy = "";
                 if (gastGezin.Buddy != null)
                 {
                     buddyId = gastGezin.Buddy.Id;
+                    buddy = $"{gastGezin.Buddy.FirstName} {gastGezin.Buddy.LastName} ({gastGezin.Buddy.Email})";
                 }
 
                 mijnGastgezinnen.Gastgezinnen.Add(new GastGezin
@@ -262,6 +264,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Woonplaats = woonplaatsText,
                     Begeleider = begeleider,
                     BegeleiderId = begeleiderId,
+                    Buddy = buddy,
                     BuddyId = buddyId,
                     PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin),
                     ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin),
@@ -291,11 +294,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         mijnGastgezinnen.SortDropdownText = "Telefoonnummer";
                         break;
                     case "Intaker":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.BegeleiderId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "Intaker (laag-hoog)";
                         break;
                     case "Buddy":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.BuddyId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "Buddy (laag-hoog)";
                         break;
                     case "AanmeldingsId":
@@ -309,11 +312,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (sortBy)
                 {
                     case "Intaker":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.BegeleiderId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "Intaker (hoog-laag)";
                         break;
                     case "Buddy":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.BuddyId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "Buddy (hoog-laag)";
                         break;
                     case "AanmeldingsId":
