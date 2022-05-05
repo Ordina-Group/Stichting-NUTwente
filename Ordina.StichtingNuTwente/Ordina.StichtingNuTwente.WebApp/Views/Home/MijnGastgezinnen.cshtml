@@ -87,8 +87,10 @@
         <hr />
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
-    <script>
-        $(".unseen").on("click", function() {
+    @if (Model.GastgezinnenVan == null)
+    {
+        <script>
+            $(".unseen").on("click", function() {
             console.log("click");
             let id = $(this).attr("id");
             $(this).removeClass("unseen");
@@ -103,6 +105,7 @@
            });
         })
     </script>
+    }
 </body>
 
 
