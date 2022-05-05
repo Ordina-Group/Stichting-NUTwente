@@ -118,16 +118,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("GastgezinController/PostPlaatsing")]
         public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, int Age, Gender Gender, string Date)
         {
-            var plaatsType = (PlacementType)PlacementType;
-            var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Volwassene).Sum(p => p.Amount);
-            var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Kind).Sum(p => p.Amount);
-            var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, plaatsType, AgeGroup.Onbekend).Sum(p => p.Amount);
+            var plaatsType = PlacementType;
 
             var ageGroup = AgeGroup.Onbekend;
-            if(Age >= 18)
+            if (Age >= 18)
             {
                 ageGroup = AgeGroup.Volwassene;
-            }else if(Age < 18 && Age > 0)
+            }
+            else if (Age < 18 && Age > 0)
             {
                 ageGroup = AgeGroup.Kind;
             }
@@ -137,31 +135,33 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
                 Amount = 1,
-                AgeGroup = AgeGroup.Volwassene,
+                Age = Age,
+                AgeGroup = ageGroup,
                 PlacementType = plaatsType,
-                DateTime = DateTime.Now,
-                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                DateTime = DateTime.Parse(Date),
+                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
+                Active = true,
+                Gender = Gender
             };
             _gastgezinService.AddPlaatsing(plaatsing);
-        }
             return Redirect("/gastgezin?id=" + GastGezinId);
-    }
+        }
 
-    //public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
-    //{
-    //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
-    //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
-    //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
-    //    PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
-    //    return Delete(GastGezinId, 0);
-    //}
+        //public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
+        //{
+        //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
+        //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
+        //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
+        //    PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
+        //    return Delete(GastGezinId, 0);
+        //}
 
-    //public IActionResult Delete(int GastGezinId, int PlacementType)
-    //{
-    //    return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
-    //}
+        //public IActionResult Delete(int GastGezinId, int PlacementType)
+        //{
+        //    return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
+        //}
 
-    public IActionResult UpdatePlaatsing()
+        public IActionResult UpdatePlaatsing()
         {
             return View();
         }
@@ -206,7 +206,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
 
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
-            
+
             if (filters != null && filters.Length > 0)
             {
                 var originalQuery = gastgezinQuery;
@@ -273,7 +273,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     });
                 }
             }
-            if(sortOrder == "Ascending")
+            if (sortOrder == "Ascending")
             {
                 switch (sortBy)
                 {
@@ -299,7 +299,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         break;
                 }
             }
-            else if( sortOrder == "Descending")
+            else if (sortOrder == "Descending")
             {
                 switch (sortBy)
                 {
