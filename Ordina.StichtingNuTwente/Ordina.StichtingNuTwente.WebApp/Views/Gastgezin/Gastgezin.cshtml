@@ -8,8 +8,8 @@
 }
 
 <div class="row">
-    <div class="col">
-        <div class="card border-0 bg-transparent shadow-none">
+    <div class="col" id="TitleCol">
+        <div class="card border-0 bg-transparent shadow-none" id="TitleCard">
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
@@ -21,10 +21,42 @@
             </div>
         </div>
     </div>
+    @if (User.HasClaims("groups", "group-superadmin"))
+    {
+        <div class="col col-1">
+            <div class="card border-0 bg-transparent shadow-none">
+                <div class=card-body>
+                    <button id="deleteGastgezin" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#deleteGastgezin").on("click", function (){
+               let id = @Model.GastGezin.Id;
+               if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
+                 $.ajax({
+                       url: "/Gastgezin/DeleteGastgezin/" + id,
+                       type: "DELETE",
+                       dataType: 'text',
+                       success: function(){
+                           if(window.location.href != document.referrer){
+                               window.location = document.referrer;
+                           }else{
+                               window.location = "/";
+                           }
+                       },
+                       error: function() {
+                           window.location = "/Error";
+                       }
+                   });
+               }
+             })
+        </script>
+    }
 </div>
 <div class="row">
-    <div class="col-3">
-        <div class="card">
+    <div class="col-3" id="ContactInfoCol">
+        <div class="card" id="ContactInfoCard">
             <div class="card-body">
 
                 <h5 class="card-title">Contact Informatie</h5>
@@ -102,10 +134,55 @@
     </div>
     <div class="col-9">
         <div class="row">
-
-
-            <div class="col-5">
-                <div class="card">
+            <div class="col" id="DetailsCol">
+                <div class="card" id="DetailsCard">
+                    <div class="card-body">
+                        <h5 class="card-title bg-white">Details</h5>
+                        <div class="row row-cols-2">
+                            <div class="col"><b>Alchohol&drugs:</b> @Model.GastGezin.PlaatsingsInfo.AlchoholEnDrugs</div>
+                            <div class="col"><b>Allergien:</b> @Model.GastGezin.PlaatsingsInfo.Allergieen</div>
+                            <div class="col"><b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo.BasisscholenAanwezig</div>
+                            <div class="col"><b>Belemmeringen:</b> @Model.GastGezin.PlaatsingsInfo.Belemmering</div>
+                            <div class="col"><b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo.Beperkingen</div>
+                            <div class="col"><b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo.DaglichtSlaapkamer</div>
+                            <div class="col"><b>Faciliteiten:</b> @Model.GastGezin.PlaatsingsInfo.Faciliteiten</div>
+                            <div class="col"><b>Faciliteiten kinderen:</b> @Model.GastGezin.PlaatsingsInfo.FaciliteitenVoorKinderen</div>
+                            <div class="col"><b>Huisderen aanwezig:</b> @Model.GastGezin.PlaatsingsInfo.HuisdierenAanwezig</div>
+                            <div class="col"><b>Huisderen mogelijk:</b> @Model.GastGezin.PlaatsingsInfo.HuisdierenMogelijk</div>
+                            <div class="col"><b>Kinderen in de buurt:</b> @Model.GastGezin.PlaatsingsInfo.KinderenInDeBuurt</div>
+                            <div class="col"><b>Kleine kinderen:</b> @Model.GastGezin.PlaatsingsInfo.KleineKinderen</div>
+                            <div class="col"><b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo.KoelkastRuimte</div>
+                            <div class="col"><b>Opbergruimte:</b> @Model.GastGezin.PlaatsingsInfo.Opbergruimte</div>
+                            <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.Privacy</div>
+                            <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo.Roken</div>
+                            <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo.SlaapkamerRuimte</div>
+                            <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.VeiligeOpbergruimte</div>
+                            <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen</div>
+                            <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo.VolwassenenGrotereKinderen </div>
+                            <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo.ZelfKoken </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col g-4" id="NotitiesCol">
+                <div class="card" id="NotitiesCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Notities</h5>
+                        @using (Html.BeginForm("PostNote", "Gastgezin", FormMethod.Post))
+                        {
+                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                            <div class="grow-wrap">
+                                <textarea id="Id" rows="3" class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
+                            </div>
+                            <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-5 g-4" id="NieuwePlaatsingCol">
+                <div class="card" id="NieuwePlaatsingCard">
                     <div class="card-body">
                         <h5 class="card-title">Nieuwe Plaatsing</h5>
                         @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
@@ -151,88 +228,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col g-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Notities</h5>
-                        @using (Html.BeginForm("PostNote", "Gastgezin", FormMethod.Post))
-                        {
-                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-                            <div class="grow-wrap">
-                                <textarea id="Id" rows="3" class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
-                            </div>
-                            <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-        @if (User.HasClaims("groups", "group-superadmin"))
-        {
-            <div class="row">
-                <div class="col g-4">
-                    <div class="card">
-                        <button id="deleteGastgezin" class="btn btn-danger">Delete</button>
-                    </div>
-                </div>
-            </div>
-            <script>
-                $("#deleteGastgezin").on("click", function (){
-                   let id = @Model.GastGezin.Id;
-                   if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
-                     $.ajax({
-                           url: "/Gastgezin/DeleteGastgezin/" + id,
-                           type: "DELETE",
-                           dataType: 'text',
-                           success: function(){
-                               if(window.location.href != document.referrer){
-                                   window.location = document.referrer;
-                               }else{
-                                   window.location = "/";
-                               }
-                           },
-                           error: function() {
-                               window.location = "/Error";
-                           }
-                       });
-                   }
-                 })
-            </script>
-        }
     </div>
 </div>
 <div class="row">
-    <div class="col g-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title bg-white">Details</h5>
-                <div class="row row-cols-2">
-                    <div class="col"><b>Alchohol&drugs:</b> @Model.GastGezin.PlaatsingsInfo.AlchoholEnDrugs</div>
-                    <div class="col"><b>Allergien:</b> @Model.GastGezin.PlaatsingsInfo.Allergieen</div>
-                    <div class="col"><b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo.BasisscholenAanwezig</div>
-                    <div class="col"><b>Belemmeringen:</b> @Model.GastGezin.PlaatsingsInfo.Belemmering</div>
-                    <div class="col"><b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo.Beperkingen</div>
-                    <div class="col"><b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo.DaglichtSlaapkamer</div>
-                    <div class="col"><b>Faciliteiten:</b> @Model.GastGezin.PlaatsingsInfo.Faciliteiten</div>
-                    <div class="col"><b>Faciliteiten kinderen:</b> @Model.GastGezin.PlaatsingsInfo.FaciliteitenVoorKinderen</div>
-                    <div class="col"><b>Huisderen aanwezig:</b> @Model.GastGezin.PlaatsingsInfo.HuisdierenAanwezig</div>
-                    <div class="col"><b>Huisderen mogelijk:</b> @Model.GastGezin.PlaatsingsInfo.HuisdierenMogelijk</div>
-                    <div class="col"><b>Kinderen in de buurt:</b> @Model.GastGezin.PlaatsingsInfo.KinderenInDeBuurt</div>
-                    <div class="col"><b>Kleine kinderen:</b> @Model.GastGezin.PlaatsingsInfo.KleineKinderen</div>
-                    <div class="col"><b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo.KoelkastRuimte</div>
-                    <div class="col"><b>Opbergruimte:</b> @Model.GastGezin.PlaatsingsInfo.Opbergruimte</div>
-                    <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.Privacy</div>
-                    <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo.Roken</div>
-                    <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo.SlaapkamerRuimte</div>
-                    <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo.VeiligeOpbergruimte</div>
-                    <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo.VluchtelingOphalen</div>
-                    <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo.VolwassenenGrotereKinderen </div>
-                    <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo.ZelfKoken </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="row">
