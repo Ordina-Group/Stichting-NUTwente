@@ -397,6 +397,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "AanmeldingsId (laag-hoog)";
                         break;
+                    case "IntakeId":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "IntakeId (laag-hoog)";
+                        break;
                 }
             }
             else if (sortOrder == "Descending")
@@ -414,6 +418,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     case "AanmeldingsId":
                         mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
                         mijnGastgezinnen.SortDropdownText = "AanmeldingsId (hoog-laag)";
+                        break;
+                    case "IntakeId":
+                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        mijnGastgezinnen.SortDropdownText = "IntakeId (hoog-laag)";
                         break;
                 }
             }
