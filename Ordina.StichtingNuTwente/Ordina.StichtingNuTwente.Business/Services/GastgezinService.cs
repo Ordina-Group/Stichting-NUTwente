@@ -109,7 +109,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public Plaatsing GetPlaatsing(int id)
         {
-            throw new NotImplementedException();
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            var plaatsing = plaatsingRepository.GetById(id, "Gastgezin");
+            return plaatsing;
         }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
@@ -141,10 +143,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 tag = "ON HOLD";
                 return tag;
             }
-            var plaatsingen = gastgezin.Plaatsingen;
+            var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active == true).ToList(); ;
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
             return tag;
@@ -155,10 +163,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             string tag = "";
             var plaatsingen = new List<Plaatsing>();
 
-            gastgezinnen.ForEach(g => plaatsingen.AddRange(g.Plaatsingen));   
+            gastgezinnen.ForEach(g => plaatsingen.AddRange(g.Plaatsingen));
+            plaatsingen = plaatsingen.Where(p => p.Active == true).ToList();
+
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            if(placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
             return tag;
