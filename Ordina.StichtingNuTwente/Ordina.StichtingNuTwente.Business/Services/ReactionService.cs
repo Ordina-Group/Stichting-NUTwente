@@ -230,6 +230,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     else
                     {
                         plaatsingsInfoRepo.Update(dbPlaatsingsInfo);
+                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier,PlaatsingsInfo");
+                        if(gastgezin.PlaatsingsInfo == null)
+                        {
+                            gastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                            gastgezinRepo.Update(gastgezin);
+                        }
                     }
                 }
             }
