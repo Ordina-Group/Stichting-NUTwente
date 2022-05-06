@@ -179,20 +179,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
-        //public IActionResult PlaatsReservering(int GastGezinId, int rVolwassen, int rKind, int rOnbekend)
-        //{
-        //    var PrevVolwassen = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Volwassene).Sum(p => p.Amount);
-        //    var PrevKind = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Kind).Sum(p => p.Amount);
-        //    var PrevOnbekend = _gastgezinService.GetPlaatsingen(GastGezinId, PlacementType.Plaatsing, AgeGroup.Onbekend).Sum(p => p.Amount);
-        //    PostPlaatsing(GastGezinId, 1, PrevVolwassen + rVolwassen, PrevKind + rKind, PrevOnbekend + rOnbekend);
-        //    return Delete(GastGezinId, 0);
-        //}
-
-        //public IActionResult Delete(int GastGezinId, int PlacementType)
-        //{
-        //    return PostPlaatsing(GastGezinId, PlacementType, 0, 0, 0);
-        //}
-
         public IActionResult UpdatePlaatsing()
         {
             return View();
