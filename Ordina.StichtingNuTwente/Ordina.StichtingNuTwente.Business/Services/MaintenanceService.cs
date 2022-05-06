@@ -767,7 +767,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
             var gastgezinnen = gastgezinRespority.GetAll();
-            var personen = persoonRespority.GetAll();
+            var personen = persoonRespority.GetAll("Reactie");
 
             var errorCount = 0;
             foreach (var gastgezin in gastgezinnen)
@@ -788,7 +788,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
 
-            foreach (var persoon in personen.Where(e => e.Gastgezin == null))
+            foreach (var persoon in personen.Where(e => e.Reactie != null && e.Reactie.Id == 1 && e.Gastgezin == null))
             {
                 result.AddMessage($@"Persoon has no Gastgezin reference: PersoonId {persoon.Id}", DatabaseIntegrityLevel.Error);
                 errorCount++;
