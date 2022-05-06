@@ -254,7 +254,22 @@
                                     <p>@p.Age jaar</p>
                                 </div>
                                 <div class=col>
-                                    <a type="button" class="btn-close float-right" aria-label="Close" href="/DeletePlaatsing?PlaatsingId=@p.Id" title="Verwijder Plaatsing"></a>
+                                    <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                    <script>
+                                        $("#@("deletePlaatsing"+p.Id)").on("click", function (){
+                                           let id = @p.Id;
+                                           if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
+                                             $.ajax({
+                                                   url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                   type: "DELETE",
+                                                   dataType: 'text',
+                                                   success: function(){
+                                                           window.location.reload();
+                                                   },
+                                               });
+                                           }
+                                         })
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -278,19 +293,34 @@
                                             <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
                                             <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
                                         </svg>
-                                        </a>
+                                    </a>
                                 </div>
                                 <div class=col>
                                     <p>@p.DateTime.ToShortDateString()</p>
                                 </div>
                                 <div class=col>
-                                   <p>@p.Gender</p>
+                                    <p>@p.Gender</p>
                                 </div>
                                 <div class=col>
                                     <p>@p.Age jaar</p>
                                 </div>
                                 <div class=col>
-                                    <a type="button" class="btn-close float-right" aria-label="Close" href="/DeletePlaatsing?PlaatsingId=@p.Id" title="Verwijder reservering"></a>
+                                    <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                    <script>
+                                        $("#@("deletePlaatsing"+p.Id)").on("click", function (){
+                                           let id = @p.Id;
+                                           if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
+                                             $.ajax({
+                                                   url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                   type: "DELETE",
+                                                   dataType: 'text',
+                                                   success: function(){
+                                                           window.location.reload();
+                                                   },
+                                               });
+                                           }
+                                         })
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -312,7 +342,6 @@
                         <tr>
                             <th scope="col">Datum</th>
                             <th scope="col">Type</th>
-                            <th scope="col">Aantal mensen</th>
                             <th scope="col">Gender</th>
                             <th scope="col">Leeftijdsgroep</th>
                             <th scope="col">Leeftijd</th>
@@ -323,9 +352,28 @@
                         @foreach (var plaatsing in Model.PlaatsingsGeschiedenis)
                         {
                             <tr>
-                                <td>@plaatsing.DateTime</td>
-                                <td>@plaatsing.PlacementType</td>
-                                <td>@plaatsing.Amount</td>
+                                <td>@plaatsing.DateTime.ToShortDateString()</td>
+                                @switch (plaatsing.PlacementType)
+                                {
+                                    case PlacementType.Plaatsing:
+                                        <td class="text-success">@plaatsing.PlacementType</td>
+                                        break;
+                                    case PlacementType.Reservering:
+                                        <td class="text-warning">@plaatsing.PlacementType</td>
+                                        break;
+                                    case PlacementType.GeplaatsteReservering:
+                                        <td class="text-primary">@plaatsing.PlacementType</td>
+                                        break;
+                                    case PlacementType.VerwijderdePlaatsing:
+                                        <td class="text-danger">@plaatsing.PlacementType</td>
+                                        break;
+                                    case PlacementType.VerwijderdeReservering:
+                                        <td class="text-danger">@plaatsing.PlacementType</td>
+                                        break;
+                                    default:
+                                        <td></td>
+                                        break;
+                                }
                                 <td>@plaatsing.Gender</td>
                                 <td>@plaatsing.AgeGroup</td>
                                 <td>@plaatsing.Age</td>

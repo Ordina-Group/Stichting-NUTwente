@@ -131,7 +131,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             viewModel.PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
             gastGezin.Plaatsingen.ToList().ForEach(p => viewModel.PlaatsingsGeschiedenis.Add(new PlaatsingViewModel(p)));
-            viewModel.PlaatsingsGeschiedenis = viewModel.PlaatsingsGeschiedenis.OrderByDescending(p => p.DateTime.Ticks).ToList();
+            viewModel.PlaatsingsGeschiedenis = viewModel.PlaatsingsGeschiedenis.OrderByDescending(p => p.Id).ToList();
 
             viewModel.PlaatsingDTO = new PlaatsingDTO();
 
