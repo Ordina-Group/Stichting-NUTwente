@@ -29,6 +29,20 @@ namespace Ordina.StichtingNuTwente.Data
             return q.AsEnumerable();
         }
 
+        public IEnumerable<T> GetMany(Expression<Func<T, bool>> where, string includeProperties = null)
+        {
+            IQueryable<T> q = entities;
+            if (includeProperties != null)
+            {
+                foreach (var p in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    q = q.Include(p);
+                }
+            }
+
+            return q.Where(where).AsEnumerable();
+        }
+
         public T Create(T entity)
         {
             if (entity == null)
@@ -109,5 +123,9 @@ namespace Ordina.StichtingNuTwente.Data
             context.SaveChanges();
         }
 
+        public int Count()
+        {
+            return entities.Count();
+        }
     }
 }
