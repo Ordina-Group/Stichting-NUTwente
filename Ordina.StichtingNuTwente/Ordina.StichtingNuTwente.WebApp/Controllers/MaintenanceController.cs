@@ -100,6 +100,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
         }
+
         public IActionResult UpdateAll()
         {
             try
@@ -114,6 +115,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return View("Index", new MaintenanceModel());
             }
 
+        }
+
+        public IActionResult DatabaseIntegrity()
+        {
+            var databaseIntegrityModel = maintenanceService.TestDatabaseIntegrity();
+            return View(databaseIntegrityModel);
         }
 
         [HttpPost]
