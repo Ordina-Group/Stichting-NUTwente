@@ -593,11 +593,42 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             result.Inconsistencies.Add(TestDoubleAanmeldIntakeInGastgezinnen());
             result.Inconsistencies.Add(TestMissingGastgezin());
+            result.Inconsistencies.Add(TestMultiplePersoonGastgezin());
             result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
             result.Inconsistencies.Add(TestCicleReference());
 
             result.Statistics.Add(TestCountAllTables());
             result.Statistics.Add(TestHowManyAanmeldDontHaveIntake());
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestMultiplePersoonGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Duplicate Persoon (Begeleider) for Gastgezin",
+                Description = "Checking all Gastgezin->Begeleider are unique"
+            };
+
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+            var gastgezins = from c in gastgezinRespority.GetMany(e => e.Begeleider != null, "Begeleider")
+                             group c by c.Begeleider into g
+                                      where g.Skip(1).Any()
+                                      from c in g
+                                      select c;
+
+            if (!gastgezins.Any())
+            {
+                result.AddMessage("No duplicate Begeleider for Gastgezin", DatabaseIntegrityLevel.Success);
+            }
+            else
+            {
+                foreach (var gastgezin in gastgezins)
+                {
+                    result.AddMessage($@"Duplicate Persoon: GastgezinId {gastgezin.Id}, PersoonId {gastgezin.Begeleider.Id}", DatabaseIntegrityLevel.Error);
+                }
+            }
 
             return result;
         }
@@ -620,7 +651,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     from c in g
                     select c;
 
-            if (duplicateAanmelding.Count() == 0)
+            if (!duplicateAanmelding.Any())
             {
                 result.AddMessage("No duplicaties for AanmeldFormulier for Gastgezinnen", DatabaseIntegrityLevel.Success);
             }
@@ -706,7 +737,41 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Check if Gastgezin with Persoon do not have correct foreign keys to each other. They should both have the same keys towards each other."
             };
 
-            result.AddMessage("Not implemented yet");
+            var persoonRespority = new Repository<Persoon>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRespority.GetAll();
+            var personen = persoonRespority.GetAll();
+
+            var errorCount = 0;
+            foreach (var gastgezin in gastgezinnen)
+            {
+                if (gastgezin.Begeleider == null)
+                {
+                    continue;
+                }
+
+                var correctPersoonId = gastgezin.Begeleider.Id;
+                foreach (var persoon in personen.Where(e => e.Gastgezin != null && e.Gastgezin.Id == gastgezin.Id))
+                {
+                    if (persoon.Id != correctPersoonId)
+                    {
+                        result.AddMessage($@"Persoon has incorrect Gastgezin reference: PersoonId {persoon.Id} Incorrect GastgezinId {persoon.Gastgezin.Id}. Gastgezin is associated with PersoonId {correctPersoonId}", DatabaseIntegrityLevel.Error);
+                        errorCount++;
+                    }
+                }
+            }
+
+            foreach (var persoon in personen.Where(e => e.Gastgezin == null))
+            {
+                result.AddMessage($@"Persoon has no Gastgezin reference: PersoonId {persoon.Id}", DatabaseIntegrityLevel.Error);
+                errorCount++;
+            }
+
+            if (errorCount == 0)
+            {
+                result.AddMessage($@"No problems found", DatabaseIntegrityLevel.Success);
+            }
 
             return result;
         }

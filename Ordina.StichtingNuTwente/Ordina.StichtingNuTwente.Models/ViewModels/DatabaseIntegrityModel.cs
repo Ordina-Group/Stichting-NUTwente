@@ -55,7 +55,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
                     case DatabaseIntegrityLevel.Error:
                         return "red";
                     case DatabaseIntegrityLevel.Success:
-                        return "green";
+                        return "#88CC00";
                     default:
                         return "black";
                 }
