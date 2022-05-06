@@ -808,7 +808,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var persoonRespority = new Repository<Persoon>(_context);
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRespority.GetAll();
             var personen = persoonRespority.GetAll("Reactie");
 
             var errorCount = 0;
