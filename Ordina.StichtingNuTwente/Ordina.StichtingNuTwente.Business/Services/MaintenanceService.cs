@@ -594,6 +594,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             result.Inconsistencies.Add(TestDoubleAanmeldIntakeInGastgezinnen());
             result.Inconsistencies.Add(TestMissingGastgezin());
             result.Inconsistencies.Add(TestMultiplePersoonGastgezin());
+            result.Inconsistencies.Add(TestPersonHasNoGastgezin());
             result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
             result.Inconsistencies.Add(TestMissingAanmeldForGastgezin());
             result.Inconsistencies.Add(TestCicleReference());
@@ -788,6 +789,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
 
+            if (errorCount == 0)
+            {
+                result.AddMessage($@"No problems found", DatabaseIntegrityLevel.Success);
+            }
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestPersonHasNoGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Check Person has no gastgezin when connected to Aanmeld formulier",
+                Description = "Check if Person->Gastgezin is null and with Person->Reactie->FormulierId is 1 (1 = Aanmeld formulier)."
+            };
+
+            var persoonRespority = new Repository<Persoon>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRespority.GetAll();
+            var personen = persoonRespority.GetAll("Reactie");
+
+            var errorCount = 0;
             foreach (var persoon in personen.Where(e => e.Reactie != null && e.Reactie.Id == 1 && e.Gastgezin == null))
             {
                 result.AddMessage($@"Persoon has no Gastgezin reference: PersoonId {persoon.Id}", DatabaseIntegrityLevel.Error);
