@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220504121224_PlaatsingUpdate")]
+    partial class PlaatsingUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,12 +92,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
 
                     b.Property<int?>("BegeleiderId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("BekekenDoorBuddy")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("BekekenDoorIntaker")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("BuddyId")
                         .HasColumnType("int");
@@ -216,9 +212,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
