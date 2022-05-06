@@ -594,6 +594,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             result.Inconsistencies.Add(TestDoubleAanmeldIntakeInGastgezinnen());
             result.Inconsistencies.Add(TestMissingGastgezin());
             result.Inconsistencies.Add(TestMultiplePersoonGastgezin());
+            result.Inconsistencies.Add(TestPersonHasNoGastgezin());
             result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
             result.Inconsistencies.Add(TestMissingAanmeldForGastgezin());
             result.Inconsistencies.Add(TestCicleReference());
@@ -615,9 +616,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinRespority = new Repository<Gastgezin>(_context);
             var gastgezins = from c in gastgezinRespority.GetMany(e => e.Begeleider != null, "Begeleider")
                              group c by c.Begeleider into g
-                                      where g.Skip(1).Any()
-                                      from c in g
-                                      select c;
+                             where g.Skip(1).Any()
+                             from c in g
+                             select c;
 
             if (!gastgezins.Any())
             {
@@ -647,10 +648,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinnen = gastgezinRespority.GetAll("AanmeldFormulier");
 
             var duplicateAanmelding = from c in gastgezinnen
-                    group c by c.AanmeldFormulier into g
-                    where g.Skip(1).Any()
-                    from c in g
-                    select c;
+                                      group c by c.AanmeldFormulier into g
+                                      where g.Skip(1).Any()
+                                      from c in g
+                                      select c;
 
             if (!duplicateAanmelding.Any())
             {
@@ -665,11 +666,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
 
             var duplicateIntake = from c in gastgezinnen
-                where c.IntakeFormulier != null
-                group c by c.IntakeFormulier into g
-                where g.Skip(1).Any()
-                from c in g
-                select c;
+                                  where c.IntakeFormulier != null
+                                  group c by c.IntakeFormulier into g
+                                  where g.Skip(1).Any()
+                                  from c in g
+                                  select c;
 
             if (duplicateIntake.Count() == 0)
             {
@@ -704,7 +705,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             foreach (var persoon in personen)
             {
                 if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
-                
+
                 totalProblems++;
                 result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
             }
@@ -767,7 +768,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
             var gastgezinnen = gastgezinRespority.GetAll();
-            var personen = persoonRespority.GetAll();
+            var personen = persoonRespority.GetAll("Reactie");
 
             var errorCount = 0;
             foreach (var gastgezin in gastgezinnen)
@@ -788,7 +789,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
 
-            foreach (var persoon in personen.Where(e => e.Gastgezin == null))
+            if (errorCount == 0)
+            {
+                result.AddMessage($@"No problems found", DatabaseIntegrityLevel.Success);
+            }
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestPersonHasNoGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Check Person has no gastgezin when connected to Aanmeld formulier",
+                Description = "Check if Person->Gastgezin is null and with Person->Reactie->FormulierId is 1 (1 = Aanmeld formulier)."
+            };
+
+            var persoonRespority = new Repository<Persoon>(_context);
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+
+            var personen = persoonRespority.GetAll("Reactie");
+
+            var errorCount = 0;
+            foreach (var persoon in personen.Where(e => e.Reactie != null && e.Reactie.Id == 1 && e.Gastgezin == null))
             {
                 result.AddMessage($@"Persoon has no Gastgezin reference: PersoonId {persoon.Id}", DatabaseIntegrityLevel.Error);
                 errorCount++;
@@ -845,4 +868,3 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
     }
 }
-
