@@ -121,7 +121,9 @@
           "Description": "(straatnaam, huisnummer, evt. toevoeging)",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "AdresVanLocatie"
         },
         {
           "Id": "12",
@@ -130,7 +132,9 @@
           "Description": "",
           "InputType": "postcode",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "PostcodeVanLocatie"
         },
         {
           "Id": "13",
@@ -139,7 +143,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "PlaatsnaamVanLocatie"
         },
         {
           "Id": "14",
@@ -148,7 +154,9 @@
           "Description": "Als een vaste telefoon op de plaatsingslocatie aanwezig is, kunt u hier het telefoonnummer invullen. NuTwente gebruikt dit om vluchtelingen te kunnen bereiken als dat niet lukt met een mobiel telefoonnummer.",
           "InputType": "phoneNumber",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "TelefoonnummerVanLocatie"
         }
       ]
     },

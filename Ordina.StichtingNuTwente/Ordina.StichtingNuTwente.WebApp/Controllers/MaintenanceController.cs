@@ -10,12 +10,69 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     {
         private readonly IMaintenanceService maintenanceService;
         private readonly IReactionService _reactionService;
+        private readonly IGastgezinService _gastgezinService;
         private readonly IWebHostEnvironment _environment;
-        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment, IReactionService reactionService)
+        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment, IReactionService reactionService, IGastgezinService gastgezinService)
         {
             this.maintenanceService = maintenanceService;
             _environment = environment;
             _reactionService = reactionService;
+            _gastgezinService = gastgezinService;
+        }
+        [Route("/gastgezin/maintenance")]
+        public IActionResult GastgezinMaintenance(int id)
+        {
+            var gastGezin = _gastgezinService.GetGastgezin(id);
+            if (gastGezin == null)
+            {
+                return Redirect("Error");
+            }
+
+            var viewModel = new GastgezinViewModel() { };
+            if (gastGezin.Contact != null)
+            {
+                var contact = gastGezin.Contact;
+                var adres = gastGezin.Contact.Adres;
+                var adresText = "";
+                var woonplaatsText = "";
+
+                if (adres != null)
+                {
+                    adresText = adres.Straat;
+                    woonplaatsText = adres.Woonplaats;
+                }
+
+                int aanmeldFormulierId = 0;
+                int intakeFormulierId = 0;
+
+                if (gastGezin.AanmeldFormulier != null)
+                {
+                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
+                }
+
+                if (gastGezin.IntakeFormulier != null)
+                {
+                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
+                }
+
+                viewModel.GastGezin = new GastGezin()
+                {
+                    Id = id,
+                    Adres = adresText,
+                    Email = contact.Email,
+                    Naam = contact.Naam,
+                    Telefoonnummer = contact.Telefoonnummer,
+                    Woonplaats = woonplaatsText,
+                    AanmeldFormulierId = aanmeldFormulierId,
+                    IntakeFormulierId = intakeFormulierId,
+                    Note = gastGezin.Note,
+                    Status = gastGezin.Status,
+                    HasVOG = gastGezin.HasVOG,
+                    MaxAdults = gastGezin.MaxAdults,
+                    MaxChildren = gastGezin.MaxChildren
+                };
+            }
+            return View(viewModel);
         }
 
         public IActionResult Index()
@@ -253,5 +310,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UpdateFormsForGastgezin(int gastgezinId, int aanmeldId, int intakeId)
+        {
+            var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+            if(gastgezin == null)
+                return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden");
+            var aanmeld = _reactionService.GetReactieFromId(aanmeldId);
+            var intake = _reactionService.GetReactieFromId(intakeId);
+            if (aanmeld == null || aanmeld.FormulierId != 1)
+                return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Aanmeld%20geen%20aanmeld%20formulier");
+            if (intake != null && intake.FormulierId != 2)
+                return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Intake%20geen%20intake%20formulier");
+
+            gastgezin.AanmeldFormulier = aanmeld;
+            gastgezin.IntakeFormulier = intake;
+            _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+            return Redirect("/gastgezin/maintenance?id=" + gastgezinId);
+        }
     }
 }

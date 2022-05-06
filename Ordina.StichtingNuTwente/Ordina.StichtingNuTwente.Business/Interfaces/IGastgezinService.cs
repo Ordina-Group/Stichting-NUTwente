@@ -12,7 +12,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public bool Save(Gastgezin gastgezin);
         public Gastgezin? GetGastgezinForReaction(int formID);
         public Gastgezin? GetGastgezin(int id);
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger);
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId);
         public ICollection<Gastgezin> GetAllGastgezinnen();
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id);
         public void AddPlaatsing(Plaatsing plaatsing);
@@ -24,5 +24,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void UpdateVOG(bool hasVOG, int gastgezinId);
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing);
         public void Delete(int gastgezinId);
+        public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
     }
 }

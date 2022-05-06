@@ -16,6 +16,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
+        public string? GastgezinnenVan {  get; set; }
     }
 
     public class GastGezin
@@ -36,6 +37,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public int BegeleiderId { get; set; }
 
+        public string Buddy { get; set; }
+
         public int BuddyId { get; set; }
 
         public DateTime Intake { get; set; }
@@ -55,6 +58,12 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public bool? HasVOG { get; set; }
 
         public GastgezinStatus? Status { get; set; }
+
+        public bool HeeftBekeken { get; set; }
+
+        public int? MaxAdults { get; set; }
+
+        public int? MaxChildren { get; set; }
     }
 
     public class Vrijwilliger
@@ -69,15 +78,15 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public AlleGastgezinnenModel()
         {
             Vrijwilligers = new List<Vrijwilliger>();
-
-            GastgezinnenZonderBegeleider = new List<GastGezin>();
-            GastgezinnenMetBegeleider = new List<GastGezin>();
+            Gastgezinnen = new List<GastGezin>();
+            SortDropdownText = "";
         }
 
         public List<Vrijwilliger> Vrijwilligers { get; set; }
 
-        public List<GastGezin> GastgezinnenZonderBegeleider { get; set; }
-        public List<GastGezin> GastgezinnenMetBegeleider { get; set; }
+        public List<GastGezin> Gastgezinnen { get; set; }
+
+        public string SortDropdownText { get; set; }
     }
 
     public class BeschikbareGastgezinnenModel : BaseModel
@@ -86,10 +95,21 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         {
             MijnGastgezinnen = new List<GastGezin>();
             SortDropdownText = "";
+            SearchQueries = new List<SearchQueryViewModel>();
+            TotalPlaatsingTag = "";
+            TotalResTag = "";
+            TotalMaxAdults = 0;
+            TotalMaxChildren = 0;
         }
 
         public List<GastGezin> MijnGastgezinnen { get; set; }
+        public List<SearchQueryViewModel> SearchQueries { get; set; }
+        
         public string SortDropdownText { get; set; }
+        public string TotalPlaatsingTag { get; set; }
+        public string TotalResTag { get; set; }
+        public int? TotalMaxAdults { get; set; }
+        public int? TotalMaxChildren { get; set; }
     }
 
 }

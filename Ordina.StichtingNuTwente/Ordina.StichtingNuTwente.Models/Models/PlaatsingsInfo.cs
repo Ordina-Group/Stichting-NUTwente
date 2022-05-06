@@ -54,7 +54,19 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string? KinderenInDeBuurt { get; set; }
         public string? FaciliteitenVoorKinderen { get; set; }
         public string? Beperkingen { get; set; }
+        public string? AdresVanLocatie { get; set; }
+        public string? PostcodeVanLocatie { get; set; }
+        public string? PlaatsnaamVanLocatie { get; set; }
+        public string? TelefoonnummerVanLocatie { get; set; }
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
+
+        public string? GetValueByFieldString(string fieldname)
+        {
+            var field = GetType()?.GetProperty(fieldname)?.GetValue(this, null);
+            if (field != null)
+                return field.ToString();
+            return null;
+        }
     }
 }

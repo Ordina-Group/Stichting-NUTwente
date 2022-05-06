@@ -21,14 +21,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
-            if(gastgezin == null)
+            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
+            if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
                 var persoon = persoonRepository.GetAll("Reactie").FirstOrDefault(p => p.Reactie.Id == formID);
@@ -46,11 +46,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezin;
         }
 
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger)
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
+            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
+            var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen);
             return gastgezinnen.ToList();
         }
 
@@ -58,7 +61,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,Plaatsingen");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen");
             return gastgezinnen.ToList();
         }
 
@@ -81,6 +84,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var plaatsingRepository = new Repository<Plaatsing>(_context);
             plaatsingRepository.Create(plaatsing);
+            var gastgezin = plaatsing.Gastgezin;
+            if ((gastgezin.Status == GastgezinStatus.Aangemeld || gastgezin.Status == GastgezinStatus.Bezocht) && plaatsing.PlacementType == PlacementType.Plaatsing)
+            {
+                gastgezin.Status = GastgezinStatus.Geplaatst;
+                UpdateGastgezin(gastgezin, gastgezin.Id);
+            }
+            else if (plaatsing.Amount < 0 && gastgezin.Status == GastgezinStatus.Geplaatst)
+            {
+                var plaatsingen = GetPlaatsingen(gastgezin.Id, PlacementType.Plaatsing);
+                var total = plaatsingen.Sum(p => p.Amount);
+                if(total == 0)
+                {
+                    gastgezin.Status = GastgezinStatus.Bezocht;
+                    UpdateGastgezin(gastgezin, gastgezin.Id);
+                }
+            }
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -131,11 +150,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return tag;
         }
 
+        public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType)
+        {
+            string tag = "";
+            var plaatsingen = new List<Plaatsing>();
+
+            gastgezinnen.ForEach(g => plaatsingen.AddRange(g.Plaatsingen));   
+            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
+            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            return tag;
+        }
+
         public void UpdateNote(int gastgezinId, string note)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
             var gastgezin = gastgezinRepository.GetById(gastgezinId);
-            if(note == null)
+            if (note == null)
             {
                 note = "";
             }
@@ -156,7 +189,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing)
         {
-            var plaastingen = GetPlaatsingen(gastgezinId,plaatsing.PlacementType,plaatsing.AgeGroup);
+            var plaastingen = GetPlaatsingen(gastgezinId, plaatsing.PlacementType, plaatsing.AgeGroup);
             if (plaastingen.FirstOrDefault(p => p.DateTime == plaatsing.DateTime && p.Amount == plaatsing.Amount) != null)
             {
                 return true;

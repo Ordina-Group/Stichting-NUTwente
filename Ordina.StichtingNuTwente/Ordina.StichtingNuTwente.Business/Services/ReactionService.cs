@@ -34,6 +34,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (gastgezin != null)
                     {
                         gastgezin.IntakeFormulier = dbmodel;
+                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
+                        {
+                            gastgezin.Status = GastgezinStatus.Bezocht;
+                            var persoonRepository = new Repository<Persoon>(_context);
+                            var persoon = persoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
+                            if (persoon != null)
+                                gastgezin.Contact = persoon;
+                        }
                         gastgezinRepository.Update(gastgezin);
                     }
                 }
@@ -170,15 +178,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                         dbPersoon.Reactie = reactie;
                         PersoonRepo.Create(dbPersoon);
-                        if (form.Id == 2)
-                        {
-                            var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
-                            if (gastgezin != null)
-                            {
-                                gastgezin.Contact = dbPersoon;
-                                gastgezinRepo.Update(gastgezin);
-                            }
-                        }
                     }
                     else
                     {
@@ -195,7 +194,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
             }
-
             //Formulier: Gastgezin aanmelden
             if (form.Id == 1 && id == 0)
             {

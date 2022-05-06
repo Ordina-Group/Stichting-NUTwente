@@ -102,6 +102,15 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 .centered {
     text-align: center;
 }
+.small-row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.small-card {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
 
 .hidden { 
     display : none;
@@ -113,6 +122,9 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 
 .dark-row {
     background-color: #f2f2f2;
+}
+.light-row {
+    background-color: #ffffff;
 }
 
 
@@ -126,4 +138,15 @@ input.invalid-phoneNumber ~ .field-invalid-phoneNumber {
 
 .fixed-table td {
     word-wrap: break-word;
+}
+
+.small-text {
+    font-size: small;
+    margin: 0;
+    padding: 0;
+}
+
+.unseen {
+    border-right: 4px solid orange;
+    border-left: 4px solid orange;
 }
