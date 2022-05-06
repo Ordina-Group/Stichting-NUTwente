@@ -118,8 +118,8 @@
         {
             Index++;
             <tr class="@(Index%2==0?"dark-row":"")">
-                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie)? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
-                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie)? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-")? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie) || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie == "-")? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
                 <td class="text-break">@mijnGastgezin.Naam</td>
                 <td>@mijnGastgezin.Telefoonnummer</td>
                 <td>
