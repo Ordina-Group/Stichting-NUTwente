@@ -62,7 +62,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public IActionResult DatabaseIntegrity()
         {
-            var databaseIntegrityModel = maintenanceService.TestDatabaseIntregity();
+            var databaseIntegrityModel = maintenanceService.TestDatabaseIntegrity();
             return View(databaseIntegrityModel);
         }
 

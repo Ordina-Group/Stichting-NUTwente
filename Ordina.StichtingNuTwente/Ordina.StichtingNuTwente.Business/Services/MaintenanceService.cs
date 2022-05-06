@@ -587,7 +587,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return messages;
         }
 
-        public DatabaseIntegrityModel TestDatabaseIntregity()
+        public DatabaseIntegrityModel TestDatabaseIntegrity()
         {
             var result = new DatabaseIntegrityModel();
 

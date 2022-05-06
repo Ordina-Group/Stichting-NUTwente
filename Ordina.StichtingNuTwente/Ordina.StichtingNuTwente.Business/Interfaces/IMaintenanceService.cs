@@ -17,6 +17,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream);
         public List<MaintenanceMessage> LinkBegeleiderToGastgezin();
         public List<MaintenanceMessage> UpdateAanmeldingFromIntakeId(Stream excelStream);
-        DatabaseIntegrityModel TestDatabaseIntregity();
+        DatabaseIntegrityModel TestDatabaseIntegrity();
     }
 }
