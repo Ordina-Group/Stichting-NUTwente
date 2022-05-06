@@ -595,6 +595,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             result.Inconsistencies.Add(TestMissingGastgezin());
             result.Inconsistencies.Add(TestMultiplePersoonGastgezin());
             result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
+            result.Inconsistencies.Add(TestMissingAanmeldForGastgezin());
             result.Inconsistencies.Add(TestCicleReference());
 
             result.Statistics.Add(TestCountAllTables());
@@ -725,6 +726,31 @@ namespace Ordina.StichtingNuTwente.Business.Services
             };
 
             result.AddMessage("Not implemented yet");
+
+            return result;
+        }
+
+        private DatabaseIntegrityTest TestMissingAanmeldForGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Missing Aanmeld Formulier in Gastgezin Record",
+                Description = "Check if an Gastgezin->AanmeldFormulier is not null"
+            };
+
+            var gastgezinRespority = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRespority.GetMany(e => e.AanmeldFormulier != null, "AanmeldFormulier");
+
+            foreach (var gastgezin in gastgezinnen)
+            {
+                result.AddMessage($@"Gastgezin missing Aanmeld: GastgezinId {gastgezin.Id}", DatabaseIntegrityLevel.Error);
+            }
+
+            if (!gastgezinnen.Any())
+            {
+                result.AddMessage("All Gastgezinnen have an AanmeldFormulierId", DatabaseIntegrityLevel.Success);
+            }
 
             return result;
         }
