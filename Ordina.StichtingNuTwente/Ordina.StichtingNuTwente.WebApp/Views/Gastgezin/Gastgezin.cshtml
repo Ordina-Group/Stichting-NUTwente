@@ -188,6 +188,15 @@
                         @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
                         {
                             <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                            @if (User.HasClaims("groups", "group-superadmin"))
+                            {
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Aantal</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control" id="colFormLabelSm" name="Amount" value="1">
+                                    </div>
+                                </div>
+                            }
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Type</label>
                                 <div class="col">
@@ -197,12 +206,43 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
                                 <div class="col">
-                                    <input type="number" class="form-control form-control" id="colFormLabelSm" name="Age" value="0">
+                                    <input type="number" class="form-control" id="Age" name="Age">
                                 </div>
                             </div>
+
+                            <script>
+                                 $( "#Age" ).change(function() {
+                                    var age = parseInt($(this).val(), 10);
+                                    var ageGroup = "";
+                                    if(age < 0 || !$.isNumeric(age) ){
+                                        ageGroup = "@AgeGroup.Onbekend";
+                                    }
+                                    if(age <= 17 && age >= 0){
+                                        ageGroup = "@AgeGroup.Kind";
+                                    }
+                                    if(age >= 18){
+                                        ageGroup = "@AgeGroup.Volwassene";
+                                    }
+                                    $( "#AgeGroup" ).val(ageGroup);
+                                    console.log("age: " + age + " ageGroup: " + ageGroup);
+                                });
+                            </script>
+
+                            <div class="row justify-content-sm-left">
+                                <label for="colFormLabelSm" class="col col-form-label">Leeftijdsgroep</label>
+                                <div class="col">
+                                    <select name="AgeGroup" id="AgeGroup" class="form-select">
+                                        <option value="@AgeGroup.Onbekend">@AgeGroup.Onbekend</option>
+                                        <option value="@AgeGroup.Volwassene">@AgeGroup.Volwassene</option>
+                                        <option value="@AgeGroup.Kind">@AgeGroup.Kind</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Gender</label>
                                 <div class="col">
@@ -214,12 +254,14 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="row justify-content-sm-left">
                                 <label for="colFormLabelSm" class="col col-form-label">Datum</label>
                                 <div class="col">
                                     <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
                                 </div>
                             </div>
+
                             <div class="card-buttons mt-3">
                                 <input type="submit" value="Plaats" class="btn btn-primary">
                             </div>
@@ -245,29 +287,39 @@
 
                             <div class="row">
                                 <div class=col>
-                                    <p>@p.DateTime.ToShortDateString()</p>
+                                    <p><span class="text-primary">Datum</span><br />@p.DateTime.ToShortDateString()</p>
                                 </div>
                                 <div class=col>
-                                    <p>@p.Gender</p>
+                                    <p><span class="text-primary">Gender</span><br />@p.Gender</p>
                                 </div>
                                 <div class=col>
-                                    <p>@p.Age jaar</p>
+                                    <p>
+                                        <span class="text-primary">Leeftijd</span><br />
+                                        @if (p.Age == -1)
+                                        {
+                                            <text>Onbekend</text>
+                                        }
+                                        else
+                                        {
+                                            <text>@p.Age jaar</text>
+                                        }
+                                    </p>
                                 </div>
                                 <div class=col>
                                     <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
                                     <script>
                                         $("#@("deletePlaatsing"+p.Id)").on("click", function (){
-                                           let id = @p.Id;
-                                           if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
-                                             $.ajax({
-                                                   url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                                   type: "DELETE",
-                                                   dataType: 'text',
-                                                   success: function(){
-                                                           window.location.reload();
-                                                   },
-                                               });
-                                           }
+                                            let id = @p.Id;
+                                            if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
+                                                $.ajax({
+                                                    url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                    type: "DELETE",
+                                                    dataType: 'text',
+                                                    success: function(){
+                                                            window.location.reload();
+                                                    },
+                                                });
+                                            }
                                          })
                                     </script>
                                 </div>
@@ -296,13 +348,23 @@
                                     </a>
                                 </div>
                                 <div class=col>
-                                    <p>@p.DateTime.ToShortDateString()</p>
+                                    <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
                                 </div>
                                 <div class=col>
-                                    <p>@p.Gender</p>
+                                    <p><span class="text-warning">Gender</span><br />@p.Gender</p>
                                 </div>
                                 <div class=col>
-                                    <p>@p.Age jaar</p>
+                                    <p>
+                                        <span class="text-warning">Leeftijd</span><br />
+                                        @if (p.Age == -1)
+                                        {
+                                            <text>Onbekend</text>
+                                        }
+                                        else
+                                        {
+                                            <text>@p.Age jaar</text>
+                                        }
+                                    </p>
                                 </div>
                                 <div class=col>
                                     <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
@@ -376,7 +438,16 @@
                                 }
                                 <td>@plaatsing.Gender</td>
                                 <td>@plaatsing.AgeGroup</td>
-                                <td>@plaatsing.Age</td>
+                                <td>
+                                    @if (plaatsing.Age == -1)
+                                    {
+                                        <text>Onbekend</text>
+                                    }
+                                    else
+                                    {
+                                        @plaatsing.Age
+                                    }
+                                </td>
                                 <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
                             </tr>
                         }
