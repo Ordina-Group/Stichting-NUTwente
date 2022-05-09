@@ -148,19 +148,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
-        public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, Gender Gender, string Date, int Age = -1, int Amount = 1)
+        public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, Gender Gender, AgeGroup AgeGroup, string Date, int Age = -1, int Amount = 1)
         {
             var plaatsType = PlacementType;
-
-            var ageGroup = AgeGroup.Onbekend;
-            if (Age >= 18)
-            {
-                ageGroup = AgeGroup.Volwassene;
-            }
-            else if (Age < 18 && Age > 0)
-            {
-                ageGroup = AgeGroup.Kind;
-            }
 
             for (int i = 0; i<Amount; i++)
             {
@@ -169,7 +159,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
                     Amount = 1,
                     Age = Age,
-                    AgeGroup = ageGroup,
+                    AgeGroup = AgeGroup,
                     PlacementType = plaatsType,
                     DateTime = DateTime.Parse(Date),
                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
