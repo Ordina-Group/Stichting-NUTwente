@@ -367,7 +367,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         model.SortDropdownText = "Geplaatst (laag-hoog)";
                         break;
                     case "Gereserveerd":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.ReserveTag).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.ReserveTag.Contains("HOLD")).ThenBy(g => g.ReserveTag).ToList();
                         model.SortDropdownText = "Gereserveerd (laag-hoog)";
                         break;
                     case "AanmeldingsId":
@@ -389,7 +389,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         model.SortDropdownText = "Geplaatst (hoog-laag)";
                         break;
                     case "Gereserveerd":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenByDescending(g => g.ReserveTag).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.ReserveTag.Contains("HOLD")).ThenByDescending(g => g.ReserveTag).ToList();
                         model.SortDropdownText = "Gereserveerd (hoog-laag)";
                         break;
                     case "AanmeldingsId":
