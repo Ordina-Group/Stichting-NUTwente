@@ -207,114 +207,133 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                     {
                                         if (val.Contains("v"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val[val.IndexOf("v") + 1].ToString());
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = resDate,
-                                                AgeGroup = AgeGroup.Volwassene,
-                                                Amount = int.Parse(val[val.IndexOf("v") + 1].ToString()),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Reservering,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
-                                                _gastgezinService.AddPlaatsing(plaatsing);
-                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = resDate,
+                                                    AgeGroup = AgeGroup.Volwassene,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Reservering,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+
+                                                };
+                                                    _gastgezinService.AddPlaatsing(plaatsing);
+                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                         if (val.Contains("k"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val[val.IndexOf("k") + 1].ToString());
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = resDate,
-                                                AgeGroup = AgeGroup.Kind,
-                                                Amount = int.Parse(val[val.IndexOf("k") + 1].ToString()),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Reservering,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = resDate,
+                                                    AgeGroup = AgeGroup.Kind,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Reservering,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                                };
                                                 _gastgezinService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                         if (!val.Contains("v") && !val.Contains("k"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val);
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = resDate,
-                                                AgeGroup = AgeGroup.Onbekend,
-                                                Amount = int.Parse(val),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Reservering,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = resDate,
+                                                    AgeGroup = AgeGroup.Onbekend,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Reservering,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                                };
                                                 _gastgezinService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                     }
                                     if (plaatsingDate != new DateTime())
                                     {
                                         if (val.Contains("v"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val[val.IndexOf("v") + 1].ToString());
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = plaatsingDate,
-                                                AgeGroup = AgeGroup.Volwassene,
-                                                Amount = int.Parse(val[val.IndexOf("v") + 1].ToString()),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Plaatsing,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = plaatsingDate,
+                                                    AgeGroup = AgeGroup.Volwassene,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Plaatsing,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                                };
                                                 _gastgezinService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                         if (val.Contains("k"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val[val.IndexOf("k") + 1].ToString());
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = plaatsingDate,
-                                                AgeGroup = AgeGroup.Kind,
-                                                Amount = int.Parse(val[val.IndexOf("k") + 1].ToString()),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Plaatsing,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
-                                                _gastgezinService.AddPlaatsing(plaatsing);
-                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = plaatsingDate,
+                                                    AgeGroup = AgeGroup.Kind,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Plaatsing,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                                };
+                                                     _gastgezinService.AddPlaatsing(plaatsing);
+                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                         if (!val.Contains("v") && !val.Contains("k"))
                                         {
-                                            var plaatsing = new Plaatsing()
+                                            var total = int.Parse(val);
+                                            for (int i = 0; i < total; i++)
                                             {
-                                                DateTime = plaatsingDate,
-                                                AgeGroup = AgeGroup.Onbekend,
-                                                Amount = int.Parse(val),
-                                                Gastgezin = gastgezin,
-                                                PlacementType = PlacementType.Plaatsing,
-                                                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
-                                            };
-                                            if (!_gastgezinService.PlaatsingExists(gastgezin.Id, plaatsing))
-                                            {
+                                                var plaatsing = new Plaatsing()
+                                                {
+                                                    DateTime = plaatsingDate,
+                                                    AgeGroup = AgeGroup.Onbekend,
+                                                    Amount = 1,
+                                                    Age = -1,
+                                                    Gender = Gender.Onbekend,
+                                                    Active = true,
+                                                    Gastgezin = gastgezin,
+                                                    PlacementType = PlacementType.Plaatsing,
+                                                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
+                                                };
                                                 _gastgezinService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
-                                            else messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} Already exists for Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Warning));
                                         }
                                     }
                                 }
