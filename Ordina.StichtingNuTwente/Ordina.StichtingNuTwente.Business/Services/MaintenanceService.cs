@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graph;
+using Ordina.StichtingNuTwente.Models.Mappings;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -19,12 +20,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IFormBusiness _formBusiness;
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
-        public MaintenanceService(NuTwenteContext context, IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService)
+        private readonly IReactionService _reactionService;
+
+        public MaintenanceService(NuTwenteContext context, IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService)
         {
             _context = context;
             _formBusiness = formBusiness;
             _gastgezinService = gastgezinService;
             _userService = userService;
+            _reactionService = reactionService;
         }
 
 
@@ -50,8 +54,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return messages;
         }
 
-        public void LoadDataFromExcel(Stream excelStream, int formId)
+        public List<MaintenanceMessage> LoadDataFromExcel(Stream excelStream, int formId)
         {
+            var messages = new List<MaintenanceMessage>();
             using FastExcel.FastExcel fastExcel = new(excelStream);
             var worksheet = fastExcel.Worksheets[0];
             worksheet.Read();
@@ -73,6 +78,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         foreach (var s in questionForm.Sections)
                         {
+                            done = false;
                             foreach (var q in s.Questions)
                             {
                                 if (q.Text == cell.ToString())
@@ -111,11 +117,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                         index++;
                     }
-
-                    var created = reactieRepository.Create(reaction);
+                    var webmodel = ReactieMapping.FromDatabaseToWebModel(reaction);
+                    var created = _reactionService.Save(webmodel, null);
+                    if (created)
+                        messages.Add(new MaintenanceMessage($"Added reactie for row number {row.RowNumber}", MaintenanceMessageType.Success));
+                    else
+                        messages.Add(new MaintenanceMessage($"Was unable to create reactie for row number {row.RowNumber}", MaintenanceMessageType.Error));
                 }
                 rowNum++;
             }
+            return messages;
         }
 
         public List<MaintenanceMessage> LoadPlaatsingDataFromExcel(Stream excelStream, ClaimsPrincipal User)
