@@ -21,37 +21,15 @@
             </div>
         </div>
     </div>
-    @if (User.HasClaims("groups", "group-superadmin"))
+    @if (User.HasClaims("groups", "group-secretariaat"))
     {
         <div class="col col-1">
             <div class="card border-0 bg-transparent shadow-none">
                 <div class=card-body>
-                    <button id="deleteGastgezin" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Delete</button>
                 </div>
             </div>
         </div>
-        <script>
-            $("#deleteGastgezin").on("click", function (){
-               let id = @Model.GastGezin.Id;
-               if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
-                 $.ajax({
-                       url: "/Gastgezin/DeleteGastgezin/" + id,
-                       type: "DELETE",
-                       dataType: 'text',
-                       success: function(){
-                           if(window.location.href != document.referrer){
-                               window.location = document.referrer;
-                           }else{
-                               window.location = "/";
-                           }
-                       },
-                       error: function() {
-                           window.location = "/Error";
-                       }
-                   });
-               }
-             })
-        </script>
     }
 </div>
 <div class="row">
@@ -369,7 +347,7 @@
                                         }
                                     </p>
                                 </div>
-                                 <div class=col>
+                                <div class=col>
                                     <p><span class="text-primary">Leeftijdsgroep</span><br />@p.AgeGroup</p>
                                 </div>
                                 <div class=col>
@@ -463,6 +441,49 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Gastgezin verwijderen</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="deleteForms" checked>
+                    <label class="form-check-label" for="deleteForms">Bijbehorende formulieren verwijderen</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Afsluiten</button>
+                <button type="button" class="btn btn-danger" id="deleteGastgezin">Bevestig verwijdering</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#deleteGastgezin").on("click", function (){
+       let id = @Model.GastGezin.Id;
+       let deleteForms = $("#deleteForms").is(":checked");
+       if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
+         $.ajax({
+               url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}` ,
+               type: "DELETE",
+               dataType: 'text',
+               success: function(){
+                   if(window.location.href != document.referrer){
+                       window.location = document.referrer;
+                   }else{
+                       window.location = "/";
+                   }
+               },
+               error: function() {
+                   window.location = "/Error";
+               }
+           });
+       }
+     })
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
