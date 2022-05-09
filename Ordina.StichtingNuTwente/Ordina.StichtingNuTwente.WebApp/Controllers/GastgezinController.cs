@@ -148,7 +148,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
-        public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, int Age, Gender Gender, string Date)
+        public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, Gender Gender, string Date, int Age = -1, int Amount = 1)
         {
             var plaatsType = PlacementType;
 
@@ -162,20 +162,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 ageGroup = AgeGroup.Kind;
             }
 
-
-            var plaatsing = new Plaatsing()
+            for (int i = 0; i<Amount; i++)
             {
-                Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
-                Amount = 1,
-                Age = Age,
-                AgeGroup = ageGroup,
-                PlacementType = plaatsType,
-                DateTime = DateTime.Parse(Date),
-                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
-                Active = true,
-                Gender = Gender
-            };
-            _gastgezinService.AddPlaatsing(plaatsing);
+                var plaatsing = new Plaatsing()
+                {
+                    Gastgezin = _gastgezinService.GetGastgezin(GastGezinId),
+                    Amount = 1,
+                    Age = Age,
+                    AgeGroup = ageGroup,
+                    PlacementType = plaatsType,
+                    DateTime = DateTime.Parse(Date),
+                    Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
+                    Active = true,
+                    Gender = Gender
+                };
+                _gastgezinService.AddPlaatsing(plaatsing);
+            }
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
