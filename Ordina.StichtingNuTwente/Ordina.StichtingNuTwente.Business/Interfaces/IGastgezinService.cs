@@ -23,7 +23,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void UpdateNote(int gastgezinId, string note);
         public void UpdateVOG(bool hasVOG, int gastgezinId);
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing);
-        public void Delete(int gastgezinId);
+        public void Delete(int gastgezinId, bool deleteForms);
         public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
     }
 }

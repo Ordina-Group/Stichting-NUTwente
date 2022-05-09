@@ -12,9 +12,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
     public class GastgezinService : IGastgezinService
     {
         private readonly NuTwenteContext _context;
-        public GastgezinService(NuTwenteContext context)
+        private readonly IReactionService _reactionService;
+
+        public GastgezinService(NuTwenteContext context, IReactionService reactionService)
         {
             _context = context;
+            _reactionService = reactionService;
         }
 
         public Gastgezin? GetGastgezin(int id)
@@ -94,7 +97,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 var plaatsingen = GetPlaatsingen(gastgezin.Id, PlacementType.Plaatsing);
                 var total = plaatsingen.Sum(p => p.Amount);
-                if(total == 0)
+                if (total == 0)
                 {
                     gastgezin.Status = GastgezinStatus.Bezocht;
                     UpdateGastgezin(gastgezin, gastgezin.Id);
@@ -167,7 +170,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             plaatsingen = plaatsingen.Where(p => p.Active == true).ToList();
 
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
-            if(placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
             if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
@@ -213,11 +216,44 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return false;
         }
 
-        public void Delete(int gastgezinId)
+        public void Delete(int gastgezinId, bool deleteForms)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezinInDb = gastgezinRepository.GetById(gastgezinId);
+
+            var gastgezinInDb = GetGastgezin(gastgezinId);
+            if (gastgezinInDb == null)
+                return;
+
+            if (gastgezinInDb.PlaatsingsInfo != null)
+            {
+                var plaatsingsInfoRepository = new Repository<PlaatsingsInfo>(_context);
+                plaatsingsInfoRepository.Delete(gastgezinInDb.PlaatsingsInfo);
+            }
+            if (gastgezinInDb.Plaatsingen != null && gastgezinInDb.Plaatsingen.Count > 0)
+            {
+                var plaatsingRepository = new Repository<Plaatsing>(_context);
+                foreach (var plaatsing in gastgezinInDb.Plaatsingen)
+                {
+                    plaatsingRepository.Delete(plaatsing);
+                }
+
+            }
             gastgezinRepository.Delete(gastgezinInDb);
+
+            if (deleteForms && gastgezinInDb.IntakeFormulier != null)
+            {
+                if (gastgezinInDb.IntakeFormulier != null)
+                {
+                    var intake = gastgezinInDb.IntakeFormulier.Id;
+                    _reactionService.Delete(intake);
+                }
+                if (gastgezinInDb.AanmeldFormulier != null)
+                {
+                    var aanmeld = gastgezinInDb.AanmeldFormulier.Id;
+
+                    _reactionService.Delete(aanmeld);
+                }
+            }
         }
     }
 }
