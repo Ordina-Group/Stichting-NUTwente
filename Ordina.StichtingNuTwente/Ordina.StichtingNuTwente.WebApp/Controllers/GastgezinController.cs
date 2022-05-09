@@ -420,14 +420,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
 
-        [Authorize(Policy = "RequireSuperAdminRole")]
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
-        public IActionResult DeleteGastgezin(int id)
+        public IActionResult DeleteGastgezin(int id, bool deleteForms = false)
         {
             try
             {
-                _gastgezinService.Delete(id);
+                _gastgezinService.Delete(id, deleteForms);
                 return Ok();
             }
             catch (Exception ex)
