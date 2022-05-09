@@ -240,18 +240,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             gastgezinRepository.Delete(gastgezinInDb);
 
-            if (deleteForms && gastgezinInDb.IntakeFormulier != null)
+            if (deleteForms)
             {
                 if (gastgezinInDb.IntakeFormulier != null)
                 {
-                    var intake = gastgezinInDb.IntakeFormulier.Id;
-                    _reactionService.Delete(intake);
+                    var count = gastgezinRepository.GetAll("IntakeFormulier").Count(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == gastgezinInDb.IntakeFormulier.Id);
+                    if (count == 0)
+                    {
+                        var intake = gastgezinInDb.IntakeFormulier.Id;
+                        _reactionService.Delete(intake);
+                    }
                 }
                 if (gastgezinInDb.AanmeldFormulier != null)
                 {
-                    var aanmeld = gastgezinInDb.AanmeldFormulier.Id;
-
-                    _reactionService.Delete(aanmeld);
+                    var count = gastgezinRepository.GetAll("AanmeldFormulier").Count(g => g.AanmeldFormulier != null && g.AanmeldFormulier.Id == gastgezinInDb.AanmeldFormulier.Id);
+                    if (count == 0)
+                    {
+                        var aanmeld = gastgezinInDb.AanmeldFormulier.Id;
+                        _reactionService.Delete(aanmeld);
+                    }
                 }
             }
         }
