@@ -24,13 +24,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
+            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,Comments").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
             if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
@@ -53,7 +53,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
             var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
             var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
             var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen);
@@ -64,7 +64,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Comments");
             return gastgezinnen.ToList();
         }
 
@@ -237,6 +237,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var plaatsingsInfoRepository = new Repository<PlaatsingsInfo>(_context);
                 plaatsingsInfoRepository.Delete(gastgezinInDb.PlaatsingsInfo);
             }
+            if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
+            {
+                var commentRepository = new Repository<Comment>(_context);
+                foreach (var comment in gastgezinInDb.Comments)
+                {
+                    commentRepository.Delete(comment);
+                }
+            }
             if (gastgezinInDb.Plaatsingen != null && gastgezinInDb.Plaatsingen.Count > 0)
             {
                 var plaatsingRepository = new Repository<Plaatsing>(_context);
@@ -269,6 +277,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
             }
+        }
+
+        public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails)
+        {
+            gastgezin.Buddy = null;
+            if (gastgezin.Comments == null) gastgezin.Comments = new List<Comment>();
+
+            var comment = new Comment(reason, userDetails, CommentType.BUDDY_REJECTION);
+
+            gastgezin.Comments.Add(comment);
+            UpdateGastgezin(gastgezin, gastgezin.Id);
         }
     }
 }
