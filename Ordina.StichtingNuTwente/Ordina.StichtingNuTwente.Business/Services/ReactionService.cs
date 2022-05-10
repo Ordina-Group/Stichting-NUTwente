@@ -54,7 +54,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
         }
 
-        public int? SaveAndGetReactieId(AnswersViewModel viewModel)
+        public Reactie NewReactie(AnswersViewModel viewModel, int? gastgezinId)
         {
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             var reactieRepository = new Repository<Reactie>(_context);
@@ -62,7 +62,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
             UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
             if (dbmodel.Id > 0)
             {
-                return dbmodel.Id;
+                if (gastgezinId != null)
+                {
+                    var gastgezinRepository = new Repository<Gastgezin>(_context);
+                    var gastgezin = gastgezinRepository.GetById(gastgezinId.Value);
+                    if (gastgezin != null)
+                    {
+                        gastgezin.IntakeFormulier = dbmodel;
+                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
+                        {
+                            gastgezin.Status = GastgezinStatus.Bezocht;
+                            var persoonRepository = new Repository<Persoon>(_context);
+                            var persoon = persoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
+                            if (persoon != null)
+                                gastgezin.Contact = persoon;
+                        }
+                        gastgezinRepository.Update(gastgezin);
+                    }
+                }
+
+                return dbmodel;
             }
             else
             {
