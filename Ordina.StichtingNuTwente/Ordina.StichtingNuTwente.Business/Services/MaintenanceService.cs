@@ -896,5 +896,60 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             return result;
         }
+
+        public List<MaintenanceMessage> LoadCapacityFromExcel(Stream excelStream)
+        {
+            var messages = new List<MaintenanceMessage>();
+            using FastExcel.FastExcel fastExcel = new(excelStream);
+            var worksheet = fastExcel.Worksheets[0];
+            worksheet.Read();
+            var rows = worksheet.Rows.ToArray();
+            var rowNum = 0;
+            var gastgezinnen = _gastgezinService.GetAllGastgezinnen();
+            foreach (var row in rows)
+            {
+                if (rowNum > 2)
+                {
+                    var index = 0;
+                    var cells = row.Cells;
+                    var done = false;
+                    var gastgezin = new Gastgezin();
+                    var maxChildren = 0;
+                    var maxAdults = 0;
+
+                    foreach (var cell in cells)
+                    {
+                        if(index == 0)
+                        {
+                            var intakeId = int.Parse(cell.ToString());
+                            gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == intakeId);
+                            if(gastgezin == null)
+                            {
+                                messages.Add(new MaintenanceMessage($@"Gastgezin with intakeform {cell} not found", MaintenanceMessageType.Error));
+                            }
+                        }
+                        if(gastgezin != null)
+                        {
+                            if (index == 1)
+                            {
+                                gastgezin.MaxChildren = int.Parse(cell.ToString());
+                            }
+                            if (index == 2)
+                            {
+                                gastgezin.MaxAdults = int.Parse(cell.ToString());
+                            }
+                        }
+                        index++;
+                    }
+                    if (gastgezin != null)
+                    {
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
+                        messages.Add(new MaintenanceMessage($@"Max capacity updated to {gastgezin.MaxAdults} adults and {gastgezin.MaxChildren} children for Gastgezin with intakeform {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                    }
+                }
+                rowNum++;
+            }
+            return messages;
+        }
     }
 }
