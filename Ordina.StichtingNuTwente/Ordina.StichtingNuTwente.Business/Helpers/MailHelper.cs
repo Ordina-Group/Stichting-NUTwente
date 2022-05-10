@@ -21,7 +21,6 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             DefaultSendAdress = "secretariaat@NUTwente.nl";
             SendName = "Secretariaat Stichting NUTwente";
             _mailService.setApiKey("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");
-            
         }
 
 
@@ -46,7 +45,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         public async Task<bool> bevestiging(Persoon persoon)
         {
-            _mailService.setFromMail(DefaultSendAdress);
+            //_mailService.setApiKey("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");
+            _mailService.setFromMail("niek.nieuwenhuisen@ordina.nl");
+            //_mailService.setFromMail(DefaultSendAdress);
             var mail = new Mail()
             {
                 MailToAdress = persoon.Email,
