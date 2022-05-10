@@ -27,6 +27,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public bool BekekenDoorBuddy { get; set; }
         public bool BekekenDoorIntaker { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }
