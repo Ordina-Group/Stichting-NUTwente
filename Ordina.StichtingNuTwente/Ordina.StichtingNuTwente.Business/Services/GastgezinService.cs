@@ -237,14 +237,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var plaatsingsInfoRepository = new Repository<PlaatsingsInfo>(_context);
                 plaatsingsInfoRepository.Delete(gastgezinInDb.PlaatsingsInfo);
             }
-            if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
-            {
-                var commentRepository = new Repository<Comment>(_context);
-                foreach (var comment in gastgezinInDb.Comments)
-                {
-                    commentRepository.Delete(comment);
-                }
-            }
             if (gastgezinInDb.Plaatsingen != null && gastgezinInDb.Plaatsingen.Count > 0)
             {
                 var plaatsingRepository = new Repository<Plaatsing>(_context);
@@ -255,7 +247,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             }
             gastgezinRepository.Delete(gastgezinInDb);
-
+            if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
+            {
+                var commentRepository = new Repository<Comment>(_context);
+                foreach (var comment in gastgezinInDb.Comments)
+                {
+                    commentRepository.Delete(comment);
+                }
+            }
             if (deleteForms)
             {
                 if (gastgezinInDb.IntakeFormulier != null)
