@@ -53,7 +53,7 @@
                     <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
                         @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
                         {
-                            <td><button class="btn btn-danger" onclick="$('#rejectModal').modal('show');$('#rejectModal').attr('gastgezin',@mijnGastgezin.Id)"><img width="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAuUlEQVRIieXSMQ4BQRTG8R8RkbiBgxD3UOg0GhdxBSfYswg30NM4AQ2K3cSSWbsTsw1f8pI3U3z/970Z/lE7bNs0vReVFFY2reqD6qagF/oqTZMEwTQpEwT1f4BzqV+lHOReU2cVj9yJADTVi2doRTNsMIkwbayxZ9Qr5sV93YrK9aLe23lY6vvIMEo2vnx/WeTEHxOENMC+TQD5Wk5tAmCKS6T5MQYAy0jAOhYACxxwq5l8Lf95P6YHq3yCt+kGH5YAAAAASUVORK5CYII=" /></button></td>
+                            <td><button class="btn btn-danger" onclick="$('#rejectModal').modal('show');$('#rejectModal').attr('gastgezin',@mijnGastgezin.Id)" title="Gastgezin Weigeren"><img width="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAuUlEQVRIieXSMQ4BQRTG8R8RkbiBgxD3UOg0GhdxBSfYswg30NM4AQ2K3cSSWbsTsw1f8pI3U3z/970Z/lE7bNs0vReVFFY2reqD6qagF/oqTZMEwTQpEwT1f4BzqV+lHOReU2cVj9yJADTVi2doRTNsMIkwbayxZ9Qr5sV93YrK9aLe23lY6vvIMEo2vnx/WeTEHxOENMC+TQD5Wk5tAmCKS6T5MQYAy0jAOhYACxxwq5l8Lf95P6YHq3yCt+kGH5YAAAAASUVORK5CYII=" /></button></td>
                         }
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
@@ -98,7 +98,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Gastgezin verwijderen</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Gastgezin Weigeren</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
