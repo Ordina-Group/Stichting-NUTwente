@@ -3,20 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
+using System.Diagnostics;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
     public class UserController : Controller
     {
         public IUserService _userService { get; }
+        public IGastgezinService _gastgezinService { get; }
         public IMailService _mailService { get; }
-        public UserController(IUserService userService, IMailService mailService)
+
+        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService mailService)
         {
             _userService = userService;
+            _gastgezinService = gastgezinService;
             _mailService = mailService;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [Route("Account/SignOut")]
         public IActionResult SignOutCatch()
         {
@@ -31,20 +35,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View();
         }
 
+        [Route("/Vrijwilligers")]
         [Authorize(Policy = "RequireSecretariaatRole")]
         public IActionResult Users()
         {
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new List<UserViewModel>();
-            var users = _userService.GetUsersByRole("group-vrijwilliger");
-            users.Concat(_userService.GetUsersByRole("group-superadmin"));
-            viewModel = users.ToList().ConvertAll(u => new UserViewModel(u)
+            var users = _userService.GetAllUsers();
+            foreach (var u in users)
             {
-                Email = u.Email,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Roles = u.Roles
-            });
+                var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id);
+                var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
+                var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
+                viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes});
+
+            }
             return View(viewModel);
         }
 
@@ -55,6 +60,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             UserDetails userDetails = _userService.GetUserByAADId(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
             return View(new UserViewModel(userDetails));
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [HttpPut]
+        public IActionResult UserUpdate(int id, bool inDropdown)
+        {
+            var updatedUser = _userService.GetUserById(id);
+            if (updatedUser != null)
+            {
+                try
+                {
+                    updatedUser.InDropdown = inDropdown;
+                    _userService.UpdateUser(updatedUser, id);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return BadRequest();
         }
 
         //[Authorize]

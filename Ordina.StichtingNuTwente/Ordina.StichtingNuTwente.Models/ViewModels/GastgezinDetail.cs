@@ -12,12 +12,16 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public GastgezinViewModel()
         {
             GastGezin = new GastGezin();
+            Plaatsingen = new List<PlaatsingViewModel>();
+            Reserveringen = new List<PlaatsingViewModel>();
             PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
             PlaatsingDTO = new PlaatsingDTO();
             PlaatsingStats = new PlaatsingStats();
         }
 
         public GastGezin GastGezin { get; set; }
+        public List<PlaatsingViewModel> Plaatsingen { get; set; }
+        public List<PlaatsingViewModel> Reserveringen { get; set; }
         public List<PlaatsingViewModel> PlaatsingsGeschiedenis { get; set; }
         public PlaatsingDTO PlaatsingDTO { get; set; }
         public PlaatsingStats PlaatsingStats { get; set; }
@@ -33,6 +37,10 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             PlacementType = plaatsing.PlacementType;
             DateTime = plaatsing.DateTime;
             Vrijwilliger = plaatsing.Vrijwilliger;
+            Age = plaatsing.Age;
+            Gender = plaatsing.Gender;
+            Active = plaatsing.Active;
+            Id = plaatsing.Id;
         }
 
         public Gastgezin Gastgezin { get; set; }
@@ -46,6 +54,14 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public DateTime DateTime { get; set; }
 
         public UserDetails Vrijwilliger { get; set; }
+
+        public int Age { get; set; }
+
+        public Gender Gender { get; set; }
+
+        public bool Active { get; set; }
+
+        public int Id { get; set; }
     }
 
     public class PlaatsingStats

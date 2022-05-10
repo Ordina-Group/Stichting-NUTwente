@@ -17,6 +17,10 @@
     }
     <hr/>
 }
+<h2>Database Integrity Check</h2>
+<a href="DatabaseIntegrity" class="btn btn-primary">Test Database Integrity</a>
+<br>
+<hr/>
 <h2>Update Relational Data</h2>
  <a class="btn btn-primary" asp-controller="Maintenance" asp-action="UpdateAll">Update</a>
 <br>
@@ -32,6 +36,7 @@
 }
 <br>
 <hr/>
+<h2>Gastgezin update aanmeld</h2>
 @using (Html.BeginForm("UploadUpdateGastgezin","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <label for="file">Upload Gastgezin update Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
@@ -64,3 +69,47 @@
     <br>
     <br>
 }
+<br>
+<hr/>
+<h2>Upload Gastgezinnen aanmeld from intake</h2>
+@using (Html.BeginForm("UploadGastgezinAanmeldFromIntake","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Gastgezinnen aanmeld from intake Excel:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en verwerk Excel" />
+    <br>
+    <br>
+}
+
+<br>
+<hr/>
+<h2>Upload Update Intake formulieren</h2>
+@using (Html.BeginForm("UploadUpdateIntake","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload  Update Intake formulieren Excel:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en verwerk Excel" />
+    <br>
+    <br>
+}
+<br>
+<hr/>
+<h2>Update Gastgezin begeleider from form</h2>
+ <a class="btn btn-primary" asp-controller="Maintenance" asp-action="LinkBegeleiderToGastgezin">Link</a>
+<br>
+<hr/>
+<h2>Nieuwe intake upload</h2>
+@using (Html.BeginForm("UploadNewIntake","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload intake create Excel. <b>Check eerst goed of dit op develop werkt. Excel bestanden werken niet altijd even goed</b>:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en process Excell" />
+}
+<br>
+<hr/>

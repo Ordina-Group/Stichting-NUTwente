@@ -12,13 +12,18 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public bool Save(Gastgezin gastgezin);
         public Gastgezin? GetGastgezinForReaction(int formID);
         public Gastgezin? GetGastgezin(int id);
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger);
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId);
         public ICollection<Gastgezin> GetAllGastgezinnen();
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id);
         public void AddPlaatsing(Plaatsing plaatsing);
         public void UpdatePlaatsing(Plaatsing plaatsing);
         public Plaatsing GetPlaatsing(int id);
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null);
-        string GetPlaatsingTag(int gastgezinId);
+        public string GetPlaatsingTag(int gastgezinId, PlacementType placementType, Gastgezin? gastgezin = null);
+        public void UpdateNote(int gastgezinId, string note);
+        public void UpdateVOG(bool hasVOG, int gastgezinId);
+        public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing);
+        public void Delete(int gastgezinId, bool deleteForms);
+        public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
     }
 }

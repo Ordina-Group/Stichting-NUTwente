@@ -75,7 +75,7 @@
         <br />
     </div>
     @await Html.PartialAsync("_InputValidation.cshtml")
-    @await Html.PartialAsync("_Submit.cshtml", new SubmitFormPartialViewModel(){UpdateMode = updateMode, FormId = Model.Id})
+    @await Html.PartialAsync("_Submit.cshtml", new SubmitFormPartialViewModel(){UpdateMode = updateMode, FormId = Model.Id, GastgezinId = Model.GastgezinId})
     <script>
 
         $(document).ready(function () {

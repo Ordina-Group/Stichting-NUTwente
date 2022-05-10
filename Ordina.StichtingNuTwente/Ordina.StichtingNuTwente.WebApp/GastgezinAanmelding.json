@@ -1,7 +1,7 @@
 {
   "Id": "1",
   "Title": "Aanmelden Gastgezin in Twente",
-  "Header": "Bedankt voor uw belangstelling. Deze vragenlijst is voor als u zeker weet dat het opvangen van Oekraïense vluchtelingen iets voor u is. <br> Hierna nemen we zo snel mogelijk met u contact op, om nader kennis te maken en de faciliteiten te zien. ",
+  "Header": "Bedankt voor uw belangstelling. Deze vragenlijst is voor als u zeker weet dat het opvangen van Oekraïense vluchtelingen iets voor u is. <br> Hierna nemen we zo snel mogelijk met u contact op, om nader kennis te maken en de faciliteiten te zien. <br> Als u na 2 weken nog niets van ons gehoord heeft, neemt u dan alstublieft contact op met help@nutwente.nl",
   "Sections": [
     {
       "Id": "1",
@@ -80,7 +80,7 @@
           "Number": "6",
           "Text": "Tweede telefoonnummer.",
           "Description": "",
-          "InputType": "phoneNumber",
+          "InputType": "optionalPhoneNumber",
           "InputOptions": "",
           "Required": "false",
           "Object": "Persoon",
