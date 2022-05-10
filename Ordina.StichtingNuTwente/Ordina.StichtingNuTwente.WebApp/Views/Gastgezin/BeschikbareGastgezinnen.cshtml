@@ -160,8 +160,6 @@
                         @if (mijnGastgezin.PlaatsingTag.Contains("HOLD"))
                         {
                             <text>class=link-danger</text>
-                        }else if(mijnGastgezin.PlaatsingTag.Contains("NOOD")){
-                            <text>class=link-warning</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=link-success</text>
                         }else{
@@ -173,8 +171,6 @@
                     @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
                         {
                             <text>class=text-danger</text>
-                        }else if(mijnGastgezin.ReserveTag.Contains("NOOD")){
-                            <text>class=text-warning</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=text-success</text>
                         }else{
