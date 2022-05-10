@@ -1,4 +1,5 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@using Microsoft.AspNetCore.Http.Extensions;
 @model BeschikbareGastgezinnenModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
@@ -18,15 +19,28 @@
                 @Model.SortDropdownText
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownSortButton">
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Woonplaats">Woonplaats</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Naam">Naam</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=AanmeldingsId">AanmeldingsId (laag-hoog)</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=AanmeldingsId&sortOrder=Descending">AanmeldingsId (hoog-laag)</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Geplaatst">Geplaatst (laag-hoog)</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Geplaatst&sortOrder=Descending">Geplaatst (hoog-laag)</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Gereserveerd">Gereserveerd (laag-hoog)</a>
-                <a class="dropdown-item" href="/BeschikbareGastgezinnen?sortBy=Gereserveerd&sortOrder=Descending">Gereserveerd (hoog-laag)</a>
+                <a class="dropdown-item sort" id="Woonplaats,Ascending">Woonplaats</a>
+                <a class="dropdown-item sort" id="Naam,Ascending">Naam</a>
+                <a class="dropdown-item sort" id="AanmeldingsId,Ascending">AanmeldingsId (laag-hoog)</a>
+                <a class="dropdown-item sort" id="AanmeldingsId,Descending">AanmeldingsId (hoog-laag)</a>
+                <a class="dropdown-item sort" id="IntakeId,Ascending">IntakeId (laag-hoog)</a>
+                <a class="dropdown-item sort" id="IntakeId,Descending">IntakeId (hoog-laag)</a>
+                <a class="dropdown-item sort" id="Geplaatst,Ascending">Geplaatst (laag-hoog)</a>
+                <a class="dropdown-item sort" id="Geplaatst,Descending">Geplaatst (hoog-laag)</a>
+                <a class="dropdown-item sort" id="Gereserveerd,Ascending">Gereserveerd (laag-hoog)</a>
+                <a class="dropdown-item sort" id="Gereserveerd,Descending">Gereserveerd (hoog-laag)</a>
             </div>
+            <script>
+        $(".sort").on("click", function (){
+            let input = $(this).attr("id");
+            let inputArr = input.split(',')
+            let url = new URL(window.location.href);
+            console.log(input);
+            url.searchParams.set('sortBy',inputArr[0]);
+            url.searchParams.set('sortOrder',inputArr[1]);
+            window.location.href = url.toString().replaceAll("+", "%20");
+        });
+    </script>
         </div>
     </div>
 </div>
@@ -142,8 +156,27 @@
                     }
                 </td>
                 <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
-                <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
-                <td>@mijnGastgezin.ReserveTag</td>
+                <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
+                        @if (mijnGastgezin.PlaatsingTag.Contains("HOLD"))
+                        {
+                            <text>class=link-danger</text>
+                        }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
+                            <text>class=link-success</text>
+                        }else{
+                            <text>class=link-primary</text>
+                        }
+                        >@mijnGastgezin.PlaatsingTag
+                    </a></td>
+                <td><span
+                    @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
+                        {
+                            <text>class=text-danger</text>
+                        }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
+                            <text>class=text-success</text>
+                        }else{
+                            <text>class=text-primary</text>
+                        }
+                        >@mijnGastgezin.ReserveTag</span></td>
                 <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
