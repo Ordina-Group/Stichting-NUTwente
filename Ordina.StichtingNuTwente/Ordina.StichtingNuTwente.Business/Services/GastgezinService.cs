@@ -139,25 +139,33 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public string GetPlaatsingTag(int gastgezinId, PlacementType placementType, Gastgezin? gastgezin)
         {
-            string tag = "";
+            string status = "";
             if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
             if (gastgezin.Status == GastgezinStatus.OnHold)
             {
-                tag = "ON HOLD";
-                return tag;
+                status = "ON HOLD ";
+            }
+            if (gastgezin.Status == GastgezinStatus.NoodOpvang)
+            {
+                status = "NOOD ";
             }
             var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active == true).ToList(); ;
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsKinderen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
-            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            string calculation = "";
+            if (!(total == 0 && status != ""))
+            {
+                calculation = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            }
+            string tag = status + calculation;
             return tag;
         }
 
