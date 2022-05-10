@@ -45,5 +45,6 @@ namespace Ordina.StichtingNuTwente.Data
 
         public DbSet<Plaatsing> Plaatsingen { get; set; }
         public DbSet<PlaatsingsInfo> PlaatsingsInfos { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

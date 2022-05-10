@@ -14,7 +14,7 @@
         <nav class="nav nav-tabs d-flex justify-content-between">
             <h3>
                 Mijn Gastgezinnen @(Model.GastgezinnenVan != null?Model.GastgezinnenVan: "")
-                
+
                 @if (newGastgezinnen > 0)
                 {
                     <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
@@ -29,6 +29,10 @@
         <table class="table">
             <thead>
                 <tr>
+                    @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
+                    {
+                        <th scope="col"></th>
+                    }
                     <th scope="col">Naam</th>
                     <th scope="col">Adres</th>
                     <th scope="col">Woonplaats</th>
@@ -47,6 +51,10 @@
                 {
                     Index++;
                     <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
+                        @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
+                        {
+                            <td><button class="btn btn-danger" onclick="$('#rejectModal').modal('show');$('#rejectModal').attr('gastgezin',@mijnGastgezin.Id)" title="Gastgezin Weigeren"><img width="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAuUlEQVRIieXSMQ4BQRTG8R8RkbiBgxD3UOg0GhdxBSfYswg30NM4AQ2K3cSSWbsTsw1f8pI3U3z/970Z/lE7bNs0vReVFFY2reqD6qagF/oqTZMEwTQpEwT1f4BzqV+lHOReU2cVj9yJADTVi2doRTNsMIkwbayxZ9Qr5sV93YrK9aLe23lY6vvIMEo2vnx/WeTEHxOENMC+TQD5Wk5tAmCKS6T5MQYAy0jAOhYACxxwq5l8Lf95P6YHq3yCt+kGH5YAAAAASUVORK5CYII=" /></button></td>
+                        }
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
@@ -86,25 +94,64 @@
         </table>
         <hr />
     </div>
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Gastgezin Weigeren</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-check-label" for="rejectionComment">Waarom wil je dit gastgezin weigeren?</label>
+                        <textarea class="form-control" id="rejectionComment" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#rejectModal').modal('hide');">Afsluiten</button>
+                    <button type="button" class="btn btn-danger" id="rejectGastgezin">Bevestig weigering</button>
+                </div>
+            </div>
+        </div>
+    </div>
     @await Html.PartialAsync("_showItem.cshtml")
     @if (Model.GastgezinnenVan == null)
     {
         <script>
-            $(".unseen").on("click", function() {
-            console.log("click");
-            let id = $(this).attr("id");
-            $(this).removeClass("unseen");
-            $.ajax({
-                url: "/MarkAsRead/" + id,
-                type: "PUT",
-                dataType: 'text',
-                success: function(){
-                },
-                error: function() {
-                }
-           });
-        })
-    </script>
+             $(".unseen").on("click", function() {
+                let id = $(this).attr("id");
+                $(this).removeClass("unseen");
+                $.ajax({
+                    url: "/MarkAsRead/" + id,
+                    type: "PUT",
+                    dataType: 'text',
+                    success: function(){
+                    },
+                    error: function() {
+                    }
+               });
+            })
+        </script>
+        <script>
+            $("#rejectGastgezin").on("click", function(){
+                let id = $("#rejectModal").attr("gastgezin");
+                let comment = $("#rejectionComment").val();
+                if(!comment) comment = " ";
+                console.log(id);
+                console.log(comment);
+                if(id && id > 0){
+                    $.ajax({
+                        url: "/RejectBuddy/" + id + "?comment="+comment,
+                        type: "PUT",
+                        dataType: 'text',
+                        success: function(){
+                            location.reload();
+                        },
+                        error: function() {
+                        }
+                    });
+               }
+            })
+        </script>
     }
 </body>
 
