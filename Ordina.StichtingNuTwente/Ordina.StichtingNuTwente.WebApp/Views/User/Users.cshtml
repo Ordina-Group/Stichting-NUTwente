@@ -5,14 +5,6 @@
     List<string> mailAdressen = new List<string>();
     string emailAdressen = "";
 }
-<header>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</header>
-
 <body>
     <h3>@ViewData["Title"]</h3>
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalMail">Mail deze groep</button>
@@ -23,6 +15,10 @@
                 <th scope="col">Achternaam</th>
                 <th scope="col">E-mailadres</th>
                 <th scope="col">Telefoonnummer</th>
+                <th scope="col">Rollen</th>
+                <th scope="col">In vrijwilliger lijst?</th>
+                <th scope="col">Aantal intakes</th>
+                <th scope="col">Aantal buddies</th>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +29,14 @@
                     <td>@u.LastName</td>
                     <td>@u.Email</td>
                     <td>@u.PhoneNumber</td>
+                    <td>@string.Join( "; ", @u.Roles.ToArray() )</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"")>
+                        </div>
+                    </td>
+                    <td><a href="/MijnGastgezinnen/@u.Id?filter=Intaker">@u.AantalIntakes</a></td>
+                    <td><a href="/MijnGastgezinnen/@u.Id?filter=Buddy">@u.AantalBuddies</a></td>
                 </tr>
             }
         </tbody>
@@ -74,4 +78,27 @@
             </div>
         }
     </div>
+
+    <script>
+        $(".dropdown-checkbox").on("change", function(){
+            let checkbox = $(this);
+            let id = checkbox.attr("id");
+            let checked = checkbox.is(":checked");
+            checkbox.prop( "disabled", true );
+            $.ajax({
+            url: "/User/UserUpdate",
+               type: "PUT",
+               dataType: 'text',
+               contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+               data: {"inDropdown":checked, "id":id},
+               success: function() {
+                   checkbox.prop( "disabled", false);
+               },
+               error: function() {
+                   checkbox.prop( "disabled", false);
+                   checkbox.prop( "checked", !checked);
+               }
+            });
+        })
+    </script>
 </body>

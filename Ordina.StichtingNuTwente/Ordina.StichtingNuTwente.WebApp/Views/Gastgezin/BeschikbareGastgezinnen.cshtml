@@ -1,0 +1,197 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@using Microsoft.AspNetCore.Http.Extensions;
+@model BeschikbareGastgezinnenModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Beschikbare Gastgezinnen";
+    var Index = 0;
+}
+
+<div class="row row-cols-2">
+    <div class="col">
+        <h3>Beschikbare Gastgezinnen</h3>
+    </div>
+    <div class="col">
+        <div class="dropdown float-right">
+            <span>Sorteer op:</span>
+            <button class="btn btn-outline-primary dropdown-toggle" id="dropdownSortButton" href="#" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @Model.SortDropdownText
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownSortButton">
+                <a class="dropdown-item sort" id="Woonplaats,Ascending">Woonplaats</a>
+                <a class="dropdown-item sort" id="Naam,Ascending">Naam</a>
+                <a class="dropdown-item sort" id="AanmeldingsId,Ascending">AanmeldingsId (laag-hoog)</a>
+                <a class="dropdown-item sort" id="AanmeldingsId,Descending">AanmeldingsId (hoog-laag)</a>
+                <a class="dropdown-item sort" id="IntakeId,Ascending">IntakeId (laag-hoog)</a>
+                <a class="dropdown-item sort" id="IntakeId,Descending">IntakeId (hoog-laag)</a>
+                <a class="dropdown-item sort" id="Geplaatst,Ascending">Geplaatst (laag-hoog)</a>
+                <a class="dropdown-item sort" id="Geplaatst,Descending">Geplaatst (hoog-laag)</a>
+                <a class="dropdown-item sort" id="Gereserveerd,Ascending">Gereserveerd (laag-hoog)</a>
+                <a class="dropdown-item sort" id="Gereserveerd,Descending">Gereserveerd (hoog-laag)</a>
+            </div>
+            <script>
+        $(".sort").on("click", function (){
+            let input = $(this).attr("id");
+            let inputArr = input.split(',')
+            let url = new URL(window.location.href);
+            console.log(input);
+            url.searchParams.set('sortBy',inputArr[0]);
+            url.searchParams.set('sortOrder',inputArr[1]);
+            window.location.href = url.toString().replaceAll("+", "%20");
+        });
+    </script>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12"> <h4>Zoeken</h4></div>
+    <div class="col-5">
+        <select class="form-select" id="zoekterm-toevoegen-select" aria-label="Default select example">
+            <option value="AlchoholEnDrugs">Alchohol en Drugs</option>
+            <option value="Allergieen">Allergieen</option>
+            <option value="BasisscholenAanwezig">Basisscholen aanwezig</option>
+            <option value="DaglichtSlaapkamer">Daglicht slaapkamer</option>
+            <option value="Belemmering">Belemmering</option>
+            <option value="Beperkingen">Beperkingen</option>
+            <option value="Faciliteiten">Faciliteiten</option>
+            <option value="FaciliteitenVoorKinderen">Faciliteiten voor kinderen</option>
+            <option value="HuisdierenAanwezig">Huisdieren aanwezig</option>
+            <option value="HuisdierenMogelijk">Huisdieren mogelijk</option>
+            <option value="KinderenInDeBuurt">Kinderen in de buurt</option>
+            <option value="KleineKinderen">Kleine kinderen</option>
+            <option value="KoelkastRuimte">Koelkastruimte</option>
+            <option value="Notitie">Notities</option>
+            <option value="Opbergruimte">Opbergruimte</option>
+            <option value="Privacy">Privacy</option>
+            <option value="Roken">Roken</option>
+            <option value="SlaapkamerRuimte">Slaapkamer ruimte</option>
+            <option value="VeiligeOpbergruimte">Veilige opbergruimte</option>
+            <option value="VluchtelingOphalen">Vluchteling ophalen</option>
+            <option value="VolwassenenGrotereKinderen">Volwassenen grotere kinderen</option>
+            <option value="ZelfKoken">Zelf koken</option>
+        </select>
+    </div>
+    <div class="col-5">
+        <input type="text" class="form-control" id="zoekterm-toevoegen-input" placeholder="Zoek...">
+    </div>
+    <div class="col-2">
+        <button class="btn btn-primary" id="zoekterm-toevoegen">Zoekterm toevoegen</button>
+    </div>
+    <script>
+        $("#zoekterm-toevoegen").on("click", function (){
+            let input = $("#zoekterm-toevoegen-input").val();
+            let searchField = $("#zoekterm-toevoegen-select").val();
+            let url = new URL(window.location.href);
+            url.searchParams.append('filters', searchField + "=" + input);
+            window.location.href = url.toString().replaceAll("+", "%20");
+        });
+    </script>
+</div>
+<div class="row small-row">
+    @foreach (var filter in Model.SearchQueries)
+    {
+        <div class="card col-6">
+            <div class="card-body small-card centered">
+                @filter.Field <b>bevat</b> @filter.SearchQuery <button id="@filter.OriginalQuery" class="btn btn-danger zoekterm-verwijderen">x</button><br />
+                <p class="small-text">(@filter.Results) resultaten</p>
+            </div>
+        </div>
+    }
+    <script>
+        $(".zoekterm-verwijderen").on("click", function (){
+            let searchQuery = $(this).attr("id");
+            let replace = "filters="+searchQuery;
+            let url = decodeURIComponent(window.location.href);
+            url = url.replaceAll("&" + replace, "");
+            url = url.replaceAll(replace, "");
+            window.location.href = url;
+        });
+    </script>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Woonplaats</th>
+            <th scope="col">Adres</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Telefoonnummer</th>
+            <th scope="col">Ids</th>
+            <th scope="col">Begeleider</th>
+            <th scope="col">Capaciteit</th>
+            <th scope="col">Geplaatst</th>
+            <th scope="col">Gereserveerd</th>
+            <th scope="col" style="width:32px">VOG</th>
+            <th scope="col" style="width:32px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+        {
+            Index++;
+            <tr class="@(Index%2==0?"dark-row":"")">
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
+                <td class="text-break">@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie) || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
+                <td class="text-break">@mijnGastgezin.Naam</td>
+                <td>@mijnGastgezin.Telefoonnummer</td>
+                <td>
+                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                    @if (mijnGastgezin.IntakeFormulierId > 0)
+                    {
+                        <text>/ </text>
+
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                    }
+                </td>
+                <td>
+                    @if (mijnGastgezin.Buddy != "")
+                    {
+                        <text>@mijnGastgezin.Buddy</text>
+                    }
+                    else
+                    {
+                        <text>@mijnGastgezin.Begeleider</text>
+                    }
+                </td>
+                <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
+                <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
+                <td>@mijnGastgezin.ReserveTag</td>
+                <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
+                @if (mijnGastgezin.PlaatsingsInfo != null)
+                {
+                    <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+            @await Html.PartialAsync("../Home/_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="float-right">Totaal:</span></td>
+            <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
+            <td> @Model.TotalPlaatsingTag </td>
+            <td> @Model.TotalResTag </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+@await Html.PartialAsync("../Home/_showItem.cshtml")
+
+<script>
+    $('.dropdown-item').on('click', function() {
+        $('#dropdownSortButton').html($(this).html());
+        });
+</script>
+

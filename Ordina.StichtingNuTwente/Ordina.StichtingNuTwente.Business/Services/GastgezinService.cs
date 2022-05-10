@@ -12,27 +12,32 @@ namespace Ordina.StichtingNuTwente.Business.Services
     public class GastgezinService : IGastgezinService
     {
         private readonly NuTwenteContext _context;
-        public GastgezinService(NuTwenteContext context)
+        private readonly IReactionService _reactionService;
+
+        public GastgezinService(NuTwenteContext context, IReactionService reactionService)
         {
             _context = context;
+            _reactionService = reactionService;
         }
 
         public Gastgezin? GetGastgezin(int id)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Plaatsingen,Plaatsingen.Vrijwilliger");
+
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
-            if(gastgezin == null)
+            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
+            if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
                 var persoon = persoonRepository.GetAll("Reactie").FirstOrDefault(p => p.Reactie.Id == formID);
                 gastgezin = new Gastgezin()
                 {
+                    AanmeldFormulier = persoon.Reactie,
                     Contact = persoon,
                     Status = GastgezinStatus.Aangemeld
                 };
@@ -44,11 +49,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezin;
         }
 
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(Persoon vrijwilliger)
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie,IntakeFormulier").Where(g => g.Begeleider != null && g.Begeleider.Id == vrijwilliger.Id);
+            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
+            var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen);
             return gastgezinnen.ToList();
         }
 
@@ -56,7 +64,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Contact.Adres,Contact.Reactie");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen");
             return gastgezinnen.ToList();
         }
 
@@ -79,6 +87,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var plaatsingRepository = new Repository<Plaatsing>(_context);
             plaatsingRepository.Create(plaatsing);
+            var gastgezin = plaatsing.Gastgezin;
+            if ((gastgezin.Status == GastgezinStatus.Aangemeld || gastgezin.Status == GastgezinStatus.Bezocht) && plaatsing.PlacementType == PlacementType.Plaatsing)
+            {
+                gastgezin.Status = GastgezinStatus.Geplaatst;
+                UpdateGastgezin(gastgezin, gastgezin.Id);
+            }
+            else if (plaatsing.Amount < 0 && gastgezin.Status == GastgezinStatus.Geplaatst)
+            {
+                var plaatsingen = GetPlaatsingen(gastgezin.Id, PlacementType.Plaatsing);
+                var total = plaatsingen.Sum(p => p.Amount);
+                if (total == 0)
+                {
+                    gastgezin.Status = GastgezinStatus.Bezocht;
+                    UpdateGastgezin(gastgezin, gastgezin.Id);
+                }
+            }
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -88,7 +112,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public Plaatsing GetPlaatsing(int id)
         {
-            throw new NotImplementedException();
+            var plaatsingRepository = new Repository<Plaatsing>(_context);
+            var plaatsing = plaatsingRepository.GetById(id, "Gastgezin");
+            return plaatsing;
         }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
@@ -111,15 +137,130 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return plaatsingen.ToList();
         }
 
-        public string GetPlaatsingTag(int gastgezinId)
+        public string GetPlaatsingTag(int gastgezinId, PlacementType placementType, Gastgezin? gastgezin)
         {
-            var plaatsingen = GetPlaatsingen(gastgezinId);
-            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
-            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
-            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
+            string tag = "";
+            if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
+            if (gastgezin.Status == GastgezinStatus.OnHold)
+            {
+                tag = "ON HOLD";
+                return tag;
+            }
+            var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active == true).ToList(); ;
+            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
+            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
+            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
-            string tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
             return tag;
+        }
+
+        public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType)
+        {
+            string tag = "";
+            var plaatsingen = new List<Plaatsing>();
+
+            gastgezinnen.ForEach(g => plaatsingen.AddRange(g.Plaatsingen));
+            plaatsingen = plaatsingen.Where(p => p.Active == true).ToList();
+
+            int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
+            int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
+            int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
+            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+
+            int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
+            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            return tag;
+        }
+
+        public void UpdateNote(int gastgezinId, string note)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            if (note == null)
+            {
+                note = "";
+            }
+            gastgezin.Note = note;
+            gastgezinRepository.Update(gastgezin);
+        }
+
+        public void UpdateVOG(bool hasVOG, int gastgezinId)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            if (hasVOG == null)
+            {
+                hasVOG = false;
+            }
+            gastgezin.HasVOG = hasVOG;
+            gastgezinRepository.Update(gastgezin);
+        }
+        public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing)
+        {
+            var plaastingen = GetPlaatsingen(gastgezinId, plaatsing.PlacementType, plaatsing.AgeGroup);
+            if (plaastingen.FirstOrDefault(p => p.DateTime == plaatsing.DateTime && p.Amount == plaatsing.Amount) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void Delete(int gastgezinId, bool deleteForms)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+
+            var gastgezinInDb = GetGastgezin(gastgezinId);
+            if (gastgezinInDb == null)
+                return;
+
+            if (gastgezinInDb.PlaatsingsInfo != null)
+            {
+                var plaatsingsInfoRepository = new Repository<PlaatsingsInfo>(_context);
+                plaatsingsInfoRepository.Delete(gastgezinInDb.PlaatsingsInfo);
+            }
+            if (gastgezinInDb.Plaatsingen != null && gastgezinInDb.Plaatsingen.Count > 0)
+            {
+                var plaatsingRepository = new Repository<Plaatsing>(_context);
+                foreach (var plaatsing in gastgezinInDb.Plaatsingen)
+                {
+                    plaatsingRepository.Delete(plaatsing);
+                }
+
+            }
+            gastgezinRepository.Delete(gastgezinInDb);
+
+            if (deleteForms)
+            {
+                if (gastgezinInDb.IntakeFormulier != null)
+                {
+                    var count = gastgezinRepository.GetAll("IntakeFormulier").Count(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == gastgezinInDb.IntakeFormulier.Id);
+                    if (count == 0)
+                    {
+                        var intake = gastgezinInDb.IntakeFormulier.Id;
+                        _reactionService.Delete(intake);
+                    }
+                }
+                if (gastgezinInDb.AanmeldFormulier != null)
+                {
+                    var count = gastgezinRepository.GetAll("AanmeldFormulier").Count(g => g.AanmeldFormulier != null && g.AanmeldFormulier.Id == gastgezinInDb.AanmeldFormulier.Id);
+                    if (count == 0)
+                    {
+                        var aanmeld = gastgezinInDb.AanmeldFormulier.Id;
+                        _reactionService.Delete(aanmeld);
+                    }
+                }
+            }
         }
     }
 }

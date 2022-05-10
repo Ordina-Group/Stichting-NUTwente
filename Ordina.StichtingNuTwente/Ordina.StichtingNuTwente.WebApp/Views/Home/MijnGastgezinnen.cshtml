@@ -1,93 +1,112 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@using System.Diagnostics
 @model MijnGastgezinnenModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
     ViewData["Title"] = "Mijn Gastgezinnen";
+    var Index = 0;
+    var newGastgezinnen = Model.MijnGastgezinnen.Count(g => !g.HeeftBekeken);
 }
 
 <body>
     <div>
-        <ul class="nav nav-tabs ">
-            @if(Model.IsVrijwilliger)
-            {
-                <li class="nav-item">
-                    <a class="nav-link active" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-                </li>
-            }
-            @if(Model.IsSecretariaat)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
-            </li>
-        </ul>
-        <br/>
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Mijn Gastgezinnen</h3>
+        <nav class="nav nav-tabs d-flex justify-content-between">
+            <h3>
+                Mijn Gastgezinnen @(Model.GastgezinnenVan != null?Model.GastgezinnenVan: "")
+                
+                @if (newGastgezinnen > 0)
+                {
+                    <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
+                }
+            </h3>
+            <div class="d-flex">
+                <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["filter"])?"active":"")" href="/MijnGastgezinnen">Alles</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Buddy"?"active":"")" href="?filter=Buddy">Buddy</a>
+                <a class="nav-link @(Context.Request.Query["filter"] == "Intaker"?"active":"")" href="?filter=Intaker">Intaker</a>
             </div>
-        </div>
-
-
-        <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Naam</th>
-                        <th scope="col">Adres</th>
-                        <th scope="col">Woonplaats</th>
-                        <th scope="col">Telefoonnummer</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Aanmelding</th>
-                        <th scope="col">Intake</th>
-                        <th scope="col">Details</th>
-                    </tr>
-                </thead>
-                <tbody>
+        </nav>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Adres</th>
+                    <th scope="col">Woonplaats</th>
+                    <th scope="col">Telefoonnummer</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Aanmelding</th>
+                    <th scope="col">Intake</th>
+                    <th scope="col">Geplaatst</th>
+                    <th scope="col">Gereserveerd</th>
+                    <th scope="col">VOG</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
                 @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
                 {
-                    <tr>
+                    Index++;
+                    <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
                         <td>@mijnGastgezin.Telefoonnummer</td>
                         <td>@mijnGastgezin.Email</td>
-                        <td>@if(mijnGastgezin.AanmeldFormulierId != 0)
+                        <td>
+                            @if (mijnGastgezin.AanmeldFormulierId != 0)
                             {
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId">Aanmeld Formulier</a>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">Aanmeld Formulier</a>
                             }
                         </td>
-                        <td>@if(mijnGastgezin.IntakeFormulierId != 0)
+                        <td>
+                            @if (mijnGastgezin.IntakeFormulierId > 0)
                             {
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId">Intake Formulier</a>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">Intake Formulier</a>
                             }
                             else
                             {
-                                <a href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id">Nieuwe Intake</a>                                
+                                <a class="btn btn-secondary" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" target="_blank">Nieuwe Intake</a>
                             }
                         </td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">Tag: @mijnGastgezin.PlaatsingTag</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.ReserveTag</a></td>
+                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
+                        @if (mijnGastgezin.PlaatsingsInfo != null)
+                        {
+                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     </tr>
+                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
                 }
-                </tbody>
+            </tbody>
         </table>
         <hr />
     </div>
+    @await Html.PartialAsync("_showItem.cshtml")
+    @if (Model.GastgezinnenVan == null)
+    {
+        <script>
+            $(".unseen").on("click", function() {
+            console.log("click");
+            let id = $(this).attr("id");
+            $(this).removeClass("unseen");
+            $.ajax({
+                url: "/MarkAsRead/" + id,
+                type: "PUT",
+                dataType: 'text',
+                success: function(){
+                },
+                error: function() {
+                }
+           });
+        })
+    </script>
+    }
 </body>
+
 
 

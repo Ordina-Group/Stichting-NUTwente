@@ -3,124 +3,146 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Mijn Gastgezinnen";
+    ViewData["Title"] = "Intakeplanning Gastgezinnen";
+    var Index = 0;
 }
 
 <body>
     <div>
-        <ul class="nav nav-tabs ">
-            @if(Model.IsVrijwilliger)
-            {
-                <li class="nav-item">
-                    <a class="nav-link" href="/MijnGastgezinnen">Mijn Gastgezinnen</a>
-                </li>
-            }
-            @if(Model.IsSecretariaat)
-            {
-                <li class="nav-item active">
-                    <a class="nav-link active" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreacties987456list">Alle reacties</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=1">Aanmelding gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=2">Intake gastgezin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=3">Intake vluchteling</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/getnutwenteoverheidreactiesspecifiek158436form?formId=4">Aanmelden vrijwilliger</a>
-            </li>
-        </ul>
-        <br/>
         <div class="row">
-            <div class="col-md-12">
-                <h3>Alle Gastgezinnen</h3>
+            <div class="col">
+                <h3>Intakeplanning Gastgezinnen</h3>
+            </div>
+            <div class="col">
+                <div class="dropdown float-right">
+                    <span>Sorteer op:</span>
+                    <button class="btn btn-outline-primary dropdown-toggle" id="dropdownSortButton" href="#" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Model.SortDropdownText
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownSortButton">
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Woonplaats">Woonplaats</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Naam">Naam</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Telefoonnummer">Telefoonnummer</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=AanmeldingsId">AanmeldingsId (laag-hoog)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=AanmeldingsId&sortOrder=Descending">AanmeldingsId (hoog-laag)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=IntakeId">IntakeId (laag-hoog)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=IntakeId&sortOrder=Descending">IntakeId (hoog-laag)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Intaker&sortOrder=Ascending">Intaker (laag-hoog)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Intaker&sortOrder=Descending">Intaker (hoog-laag)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Buddy&sortOrder=Ascending">Buddy (laag-hoog)</a>
+                        <a class="dropdown-item" href="/AlleGastgezinnen?sortBy=Buddy&sortOrder=Descending">Buddy (hoog-laag)</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen zonder begeleider</h5>
-            </div>
-        </div>
-<!-- Twee lijsten: Met intake en zonder intake -->
-        <form method="post">
-        <table class="table table-striped">
+        <!-- Twee lijsten: Met intake en zonder intake -->
+        <form method="post" id="gastgezinForm">
+            <table class="table">
                 <thead>
                     <tr>
+                        <th scope="col">Ids</th>
                         <th scope="col">Naam</th>
                         <th scope="col">Adres</th>
                         <th scope="col">Woonplaats</th>
                         <th scope="col">Telefoonnummer</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Toekennen aan begeleider</th>
-                        <th scope="col">Geplaatst</th>
+                        <th scope="col">Intaker</th>
+                        <th scope="col">Buddy</th>
+                        <th scope="col" style="width:32px"></th>
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var mijnGastgezin in Model.GastgezinnenZonderBegeleider)
-                {
-                    <tr>
-                        <td>@mijnGastgezin.Naam</td>
-                        <td>@mijnGastgezin.Adres</td>
-                        <td>@mijnGastgezin.Woonplaats</td>
-                        <td>@mijnGastgezin.Telefoonnummer</td>
-                        <td>@mijnGastgezin.Email</td>
-                        <td>
-                            <select name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
-                                <option value=""></option>
-                                @foreach(var vrijwilliger in Model.Vrijwilligers)
+                    @foreach (var mijnGastgezin in Model.Gastgezinnen)
+                    {
+                        Index++;
+                        <tr class="@(Index%2==0?"dark-row":"")">
+                            <td>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                                @if (mijnGastgezin.IntakeFormulierId > 0)
                                 {
-                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                    <text>/ </text>
+                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
                                 }
-                            </select>
-                        </td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                    </tr>
-                }
+                            </td>
+                            <td class="text-break"><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.Naam</a></td>
+                            <td class="text-break">@mijnGastgezin.Adres</td>
+                            <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                            <td>@mijnGastgezin.Telefoonnummer</td>
+                            <td>
+                                <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                    @if (mijnGastgezin.BegeleiderId > 0)
+                                    {
+                                        <option selected="selected" value=""></option>
+                                    }
+                                    else
+                                    {
+                                        <option value=""></option>
+                                    }
+                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                    {
+                                        if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
+                                        {
+                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                    @if (mijnGastgezin.BuddyId > 0)
+                                    {
+                                        <option selected="selected" value=""></option>
+                                    }
+                                    else
+                                    {
+                                        <option value=""></option>
+                                    }
+                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                    {
+                                        if (vrijwilliger.Id == mijnGastgezin.BuddyId)
+                                        {
+                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            @if (mijnGastgezin.PlaatsingsInfo != null)
+                            {
+                                <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
+                    }
                 </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary">Opslaan</button>
+            </table>
+            <hr />
         </form>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <h5>Gastgezinnen met begeleider</h5>
-            </div>
-        </div>
-                <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Naam</th>
-                        <th scope="col">Adres</th>
-                        <th scope="col">Woonplaats</th>
-                        <th scope="col">Telefoonnummer</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Begeleider</th>
-                        <th scope="col">Geplaatst</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach (var mijnGastgezin in Model.GastgezinnenMetBegeleider)
-                {
-                    <tr>
-                        <td>@mijnGastgezin.Naam</td>
-                        <td>@mijnGastgezin.Adres</td>
-                        <td>@mijnGastgezin.Woonplaats</td>
-                        <td>@mijnGastgezin.Telefoonnummer</td>
-                        <td>@mijnGastgezin.Email</td>
-                        <td>@mijnGastgezin.Begeleider</td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id">@mijnGastgezin.PlaatsingTag</a></td>
-                    </tr>
-                }
-                </tbody>
-        </table>
     </div>
+    @await Html.PartialAsync("_showItem.cshtml")
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
+        <div class="col-md-12" style="text-align: center">
+            <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
+            <span id="gastgezinSpinner" style="display: none;">
+                &nbsp;Bezig met opslaan...
+            </span>
+        </div>
+    </nav>
+    <script type="text/javascript">
+        $("#gastgezinSubmit").click(function() {
+           $("#gastgezinSubmit").prop('disabled', true);
+           $("#gastgezinSpinner").show();
+           $("#gastgezinForm").submit();
+        });
+    </script>
 </body>
-
-

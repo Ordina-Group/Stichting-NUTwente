@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Ordina.StichtingNuTwente.Models.ViewModels.DatabaseIntegrityModel
+<h1>Maintenance - Database Integrity Check</h1>
+<br>
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+{
+    <a>@ViewBag.Message</a>
+    <br>
+}
+<a href="Index" class="btn btn-primary">Back</a> 
+<a href="#" class="btn btn-primary" onclick="location.reload();">Refresh</a><br/>
+<br/>
+<h3 style="color: dodgerblue">Inconsistencies</h3>
+@foreach (var test in Model.Inconsistencies)
+{
+    <hr/>
+    <h4>@test.Title</h4>
+    <span style="color: darkgray;">@test.Description</span><br/>
+    <br/>
+    for (var index = 0; index < test.Messages.Count; index++)
+    {
+        <span>@(index + 1):&nbsp;</span>
+        <span style="color: @test.Messages[index].MessageTypeColor">@test.Messages[index].Message</span><br/>
+    }
+}
+<br/>
+<br/>
+<h3 style="color: dodgerblue">Statistics</h3>
+@foreach (var test in Model.Statistics)
+{
+    <hr/>
+    <h4>@test.Title</h4>
+    <span style="color: darkgray;">@test.Description</span><br/>
+    <br/>
+    for (var index = 0; index < test.Messages.Count; index++)
+    {
+        <span>@(index + 1):&nbsp;</span>
+        <span style="color: @test.Messages[index].MessageTypeColor">@test.Messages[index].Message</span><br/>
+    }
+}
+<br/>

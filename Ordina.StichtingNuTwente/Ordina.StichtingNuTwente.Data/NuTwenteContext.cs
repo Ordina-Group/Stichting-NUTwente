@@ -25,6 +25,7 @@ namespace Ordina.StichtingNuTwente.Data
             modelBuilder.Entity<Gastgezin>().HasMany(x => x.Vluchtelingen).WithOne(x => x.Gastgezin);
             modelBuilder.Entity<Gastgezin>().HasOne(g => g.Begeleider);
             modelBuilder.Entity<Gastgezin>().HasOne(g => g.Contact);
+            modelBuilder.Entity<Gastgezin>().HasOne(g => g.PlaatsingsInfo);
             modelBuilder.Entity<UserDetails>().Property(u => u.Roles).HasConversion(
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
@@ -43,5 +44,6 @@ namespace Ordina.StichtingNuTwente.Data
         public DbSet<UserDetails> Users { get; set; }
 
         public DbSet<Plaatsing> Plaatsingen { get; set; }
+        public DbSet<PlaatsingsInfo> PlaatsingsInfos { get; set; }
     }
 }

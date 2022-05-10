@@ -19,5 +19,8 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void checkIfUserExists(ClaimsPrincipal user);
         public void Save(UserDetails user);
         public UserDetails? getUserFromClaimsPrincipal(ClaimsPrincipal user);
+        public UserDetails? GetUserById(int id);
+        public UserDetails? UpdateUser(UserDetails user, int id);
+        public ICollection<UserDetails> GetAllDropdownUsers();
     }
 }
