@@ -291,12 +291,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
 
-            var mijnGastgezinnen = new AlleGastgezinnenModel();
+            var alleGastgezinnen = new AlleGastgezinnenModel();
 
             var vrijwilligers = GetAllDropdown();
             foreach (var vrijwilliger in vrijwilligers.OrderBy(e => e.FirstName).ThenBy(e => e.LastName))
             {
-                mijnGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
+                alleGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
                 {
                     Id = vrijwilliger.Id,
                     Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
@@ -346,7 +346,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     buddy = $"{gastGezin.Buddy.FirstName} {gastGezin.Buddy.LastName} ({gastGezin.Buddy.Email})";
                 }
 
-                mijnGastgezinnen.Gastgezinnen.Add(new GastGezin
+                Comment? rejectionComment = null;
+
+                if(gastGezin.Comments != null && gastGezin.Comments.Count > 0)
+                {
+                    rejectionComment = gastGezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
+                }
+
+                alleGastgezinnen.Gastgezinnen.Add(new GastGezin
                 {
                     Id = gastGezin.Id,
                     Adres = adresText,
@@ -365,6 +372,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     AanmeldFormulierId = aanmeldFormulierId,
                     IntakeFormulierId = intakeFormulierId,
                     Note = gastGezin.Note,
+                    RejectionComment = rejectionComment
                 });
 
             }
@@ -374,32 +382,32 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (sortBy)
                 {
                     case "Woonplaats":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Woonplaats";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Woonplaats";
                         break;
                     case "Naam":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Naam).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Naam";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Naam).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Naam";
                         break;
                     case "Telefoonnummer":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Telefoonnummer).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Telefoonnummer";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Telefoonnummer).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Telefoonnummer";
                         break;
                     case "Intaker":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Intaker (laag-hoog)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Intaker (laag-hoog)";
                         break;
                     case "Buddy":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Buddy (laag-hoog)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Buddy (laag-hoog)";
                         break;
                     case "AanmeldingsId":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "AanmeldingsId (laag-hoog)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "AanmeldingsId (laag-hoog)";
                         break;
                     case "IntakeId":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderBy(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "IntakeId (laag-hoog)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "IntakeId (laag-hoog)";
                         break;
                 }
             }
@@ -408,26 +416,26 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (sortBy)
                 {
                     case "Intaker":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Intaker (hoog-laag)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Intaker (hoog-laag)";
                         break;
                     case "Buddy":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "Buddy (hoog-laag)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Buddy).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "Buddy (hoog-laag)";
                         break;
                     case "AanmeldingsId":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "AanmeldingsId (hoog-laag)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.AanmeldFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "AanmeldingsId (hoog-laag)";
                         break;
                     case "IntakeId":
-                        mijnGastgezinnen.Gastgezinnen = mijnGastgezinnen.Gastgezinnen.OrderByDescending(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
-                        mijnGastgezinnen.SortDropdownText = "IntakeId (hoog-laag)";
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.IntakeFormulierId).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.SortDropdownText = "IntakeId (hoog-laag)";
                         break;
                 }
             }
 
-            FillBaseModel(mijnGastgezinnen);
-            return View(mijnGastgezinnen);
+            FillBaseModel(alleGastgezinnen);
+            return View(alleGastgezinnen);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
@@ -516,6 +524,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     {
                         gastgezinItem.Buddy = null;
                         gastgezinItem.BekekenDoorBuddy = false;
+                        gastgezinItem.Comments?.RemoveAll(c => c.CommentType == CommentType.BUDDY_REJECTION);
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                     else
@@ -524,12 +533,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             gastgezinItem.Buddy = assignVrijwilliger;
                             gastgezinItem.BekekenDoorBuddy = false;
+                            gastgezinItem.Comments?.RemoveAll(c => c.CommentType == CommentType.BUDDY_REJECTION);
                             _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                         }
                         else if (gastgezinItem.Buddy is null)
                         {
                             gastgezinItem.Buddy = assignVrijwilliger;
                             gastgezinItem.BekekenDoorBuddy = false;
+                            gastgezinItem.Comments?.RemoveAll(c => c.CommentType == CommentType.BUDDY_REJECTION);
                             _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                         }
                     }

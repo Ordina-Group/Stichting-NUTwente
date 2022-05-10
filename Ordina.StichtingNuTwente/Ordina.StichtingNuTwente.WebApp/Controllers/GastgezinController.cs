@@ -478,5 +478,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [HttpPut]
+        [Route("RejectBuddy/{gastgezinId}")]
+        public IActionResult RejectBeingBuddy(int gastgezinId, string comment)
+        {
+            try
+            {
+                var user = GetUser();
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null && user != null)
+                {
+                    _gastgezinService.RejectBeingBuddy(gastgezin, comment, user);
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

@@ -64,6 +64,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public int? MaxAdults { get; set; }
 
         public int? MaxChildren { get; set; }
+
+        public Comment? RejectionComment { get; set; }
     }
 
     public class Vrijwilliger
