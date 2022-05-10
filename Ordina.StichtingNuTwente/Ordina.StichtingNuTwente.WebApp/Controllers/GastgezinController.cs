@@ -355,11 +355,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (sortBy)
                 {
                     case "Woonplaats":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.Woonplaats == "").ThenBy(g => g.Woonplaats).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.Woonplaats == "").ThenBy(g => g.Woonplaats).ToList();
                         model.SortDropdownText = "Woonplaats";
                         break;
                     case "Naam":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.Naam == "").ThenBy(g => g.Naam).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.Naam == "").ThenBy(g => g.Naam).ToList();
                         model.SortDropdownText = "Naam";
                         break;
                     case "Geplaatst":
@@ -371,11 +371,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         model.SortDropdownText = "Gereserveerd (laag-hoog)";
                         break;
                     case "AanmeldingsId":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.AanmeldFormulierId == null).ThenBy(g => g.AanmeldFormulierId).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.AanmeldFormulierId == null).ThenBy(g => g.AanmeldFormulierId).ToList();
                         model.SortDropdownText = "AanmeldingsId (laag-hoog)";
                         break;
                     case "IntakeId":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.IntakeFormulierId == null).ThenBy(g => g.IntakeFormulierId).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.IntakeFormulierId == null).ThenBy(g => g.IntakeFormulierId).ToList();
                         model.SortDropdownText = "IntakeId (laag-hoog)";
                         break;
                 }
@@ -389,15 +389,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         model.SortDropdownText = "Geplaatst (hoog-laag)";
                         break;
                     case "Gereserveerd":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.ReserveTag.Contains("HOLD")).ThenByDescending(g => g.ReserveTag).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenByDescending(g => g.ReserveTag).ToList();
                         model.SortDropdownText = "Gereserveerd (hoog-laag)";
                         break;
                     case "AanmeldingsId":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.AanmeldFormulierId == null).ThenByDescending(g => g.AanmeldFormulierId).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.AanmeldFormulierId == null).ThenByDescending(g => g.AanmeldFormulierId).ToList();
                         model.SortDropdownText = "AanmeldingsId (hoog-laag)";
                         break;
                     case "IntakeId":
-                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.IntakeFormulierId == null).ThenByDescending(g => g.IntakeFormulierId).ToList();
+                        model.MijnGastgezinnen = model.MijnGastgezinnen.OrderBy(g => g.PlaatsingTag.Contains("HOLD")).ThenBy(g => g.IntakeFormulierId == null).ThenByDescending(g => g.IntakeFormulierId).ToList();
                         model.SortDropdownText = "IntakeId (hoog-laag)";
                         break;
                 }
