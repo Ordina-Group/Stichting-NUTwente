@@ -59,7 +59,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             var reactieRepository = new Repository<Reactie>(_context);
             dbmodel = reactieRepository.Create(dbmodel);
-            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
+            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel, gastgezinId);
             if (dbmodel.Id > 0)
             {
                 if (gastgezinId != null)
