@@ -216,7 +216,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     if (dbPlaatsingsInfo.Id == 0)
                     {
-                        if (dbGastgezin != null)
+                        if (dbGastgezin != null && dbGastgezin.Id > 0)
                         {
                             dbPlaatsingsInfo.Reactie = reactie;
                             dbPlaatsingsInfo = plaatsingsInfoRepo.Create(dbPlaatsingsInfo);
