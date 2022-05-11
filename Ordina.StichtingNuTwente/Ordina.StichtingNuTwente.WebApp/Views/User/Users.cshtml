@@ -6,8 +6,15 @@
     string emailAdressen = "";
 }
 <body>
-    <h3>@ViewData["Title"]</h3>
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalMail">Mail deze groep</button>
+    <div class="row">
+        <div class="col">
+        <h3>@ViewData["Title"]</h3>
+        </div>
+        <div class="col">
+           @*Email functionaliteit:*@
+       @* <button type="button" class="btn btn-info float-right" data-bs-toggle="modal" data-bs-target="#modalMail">Mail deze groep</button>*@
+        </div>
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -42,38 +49,37 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="modalMail" role="dialog">
+    <div class="modal fade" tabindex="-1" id="modalMail" role="dialog">
         @using (Html.BeginForm("MailGroup", "User", FormMethod.Post))
         {
             <div class="modal-dialog">
-
-
-                @foreach(var u in Model)
-                {
-                     mailAdressen.Add(u.Email);
-                     emailAdressen = string.Join(",", mailAdressen);
-                }
-
-                <input type="hidden" value=@emailAdressen name="emailAdressen">
-
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5>Mail naar deze groep</h5>
+                        <h5 class="modal-title">Mail naar deze groep</h5>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <h6>Onderwerp</h6>
-                            <textarea id="onderwerp" name="onderwerp"></textarea>
-                            
+                            <label for="onderwerp">Onderwerp</label>
+                            <textarea class="form-control" id="onderwerp" name="onderwerp"></textarea>
+
                         </div>
                         <div class="row">
-                            <h6>Bericht:</h6>
-                            <textarea id="bericht" name="bericht" style="height=30px"> </textarea>
-                            
-                        </div>
-                    </div>
+                            <label for="bericht">Bericht</label>
+                            <textarea class="form-control" id="bericht" name="bericht" style="height=30px"> </textarea>
 
-                    <input type="submit" class="btn btn-default" value="Verstuur">
+                        </div>
+                        @foreach (var u in Model)
+                        {
+                            mailAdressen.Add(u.Email);
+                            emailAdressen = string.Join(",", mailAdressen);
+                        }
+
+                        <input type="hidden" value=@emailAdressen name="emailAdressen">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Afsluiten</button>
+                        <input type="submit" class="btn btn-primary" value="Verstuur">
+                    </div>
                 </div>
             </div>
         }

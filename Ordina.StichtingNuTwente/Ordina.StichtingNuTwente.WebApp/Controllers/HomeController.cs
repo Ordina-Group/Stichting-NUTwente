@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Business.Services;
+using Ordina.StichtingNuTwente.Models.Mappings;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -618,7 +619,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 var viewModel = new AnswerModel
                 {
-                    //AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
+                    AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
                 };
                 FillBaseModel(viewModel);
                 return View(viewModel);

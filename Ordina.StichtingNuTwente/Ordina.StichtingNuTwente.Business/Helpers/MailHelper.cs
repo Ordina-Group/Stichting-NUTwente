@@ -45,7 +45,6 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         public async Task<bool> bevestiging(Persoon persoon)
         {
-            //_mailService.setApiKey("***REMOVED***");
             _mailService.setFromMail("niek.nieuwenhuisen@ordina.nl");
             //_mailService.setFromMail(DefaultSendAdress);
             var mail = new Mail()
