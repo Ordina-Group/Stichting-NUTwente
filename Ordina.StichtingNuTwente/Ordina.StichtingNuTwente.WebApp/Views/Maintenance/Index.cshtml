@@ -98,6 +98,21 @@
 }
 <br>
 <hr/>
+
+<h2>Upload Maximale Capaciteit Gastgezinnen</h2>
+@using (Html.BeginForm("UploadGastgezinCapacity","Maintenance",  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload  UMaximale Capaciteit Gastgezinnen Excel:</label><br>
+    <input type="file" name="file" id="file" />
+    <br>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Upload en verwerk Excel" />
+    <br>
+    <br>
+}
+<br>
+<hr/>
+
 <h2>Update Gastgezin begeleider from form</h2>
  <a class="btn btn-primary" asp-controller="Maintenance" asp-action="LinkBegeleiderToGastgezin">Link</a>
 <br>
