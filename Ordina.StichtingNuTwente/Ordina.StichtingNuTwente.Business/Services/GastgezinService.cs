@@ -24,13 +24,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
+            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,Comments").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
             if (gastgezin == null)
             {
                 var persoonRepository = new Repository<Persoon>(_context);
@@ -53,7 +53,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier");
+            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
             var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
             var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
             var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen);
@@ -64,7 +64,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Comments");
             return gastgezinnen.ToList();
         }
 
@@ -139,25 +139,33 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public string GetPlaatsingTag(int gastgezinId, PlacementType placementType, Gastgezin? gastgezin)
         {
-            string tag = "";
+            string status = "";
             if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
             if (gastgezin.Status == GastgezinStatus.OnHold)
             {
-                tag = "ON HOLD";
-                return tag;
+                status = "ON HOLD ";
+            }
+            if (gastgezin.Status == GastgezinStatus.NoodOpvang)
+            {
+                status = "NOOD ";
             }
             var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active == true).ToList(); ;
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsKinderen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
-            tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            string calculation = "";
+            if (!(total == 0 && status != ""))
+            {
+                calculation = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+            }
+            string tag = status + calculation;
             return tag;
         }
 
@@ -239,7 +247,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             }
             gastgezinRepository.Delete(gastgezinInDb);
-
+            if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
+            {
+                var commentRepository = new Repository<Comment>(_context);
+                foreach (var comment in gastgezinInDb.Comments)
+                {
+                    commentRepository.Delete(comment);
+                }
+            }
             if (deleteForms)
             {
                 if (gastgezinInDb.IntakeFormulier != null)
@@ -261,6 +276,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
             }
+        }
+
+        public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails)
+        {
+            gastgezin.Buddy = null;
+            if (gastgezin.Comments == null) gastgezin.Comments = new List<Comment>();
+
+            var comment = new Comment(reason, userDetails, CommentType.BUDDY_REJECTION);
+
+            gastgezin.Comments.Add(comment);
+            UpdateGastgezin(gastgezin, gastgezin.Id);
         }
     }
 }
