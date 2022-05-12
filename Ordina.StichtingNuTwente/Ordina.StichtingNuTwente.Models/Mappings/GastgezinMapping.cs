@@ -51,6 +51,29 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 heeftBekeken = gastgezin.BekekenDoorIntaker;
             }
 
+            Comment? rejectionComment = null;
+
+            if (gastgezin.Comments != null && gastgezin.Comments.Count > 0)
+            {
+                rejectionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
+            }
+
+            var begeleiderId = 0;
+            var begeleider = "";
+            if (gastgezin.Begeleider != null)
+            {
+                begeleiderId = gastgezin.Begeleider.Id;
+                begeleider = $"{gastgezin.Begeleider.FirstName} {gastgezin.Begeleider.LastName} ({gastgezin.Begeleider.Email})";
+            }
+
+            var buddyId = 0;
+            var buddy = "";
+            if (gastgezin.Buddy != null)
+            {
+                buddyId = gastgezin.Buddy.Id;
+                buddy = $"{gastgezin.Buddy.FirstName} {gastgezin.Buddy.LastName} ({gastgezin.Buddy.Email})";
+            }
+
             var gastgezinViewModel = new GastgezinViewModel
             {
                 Id = gastgezin.Id,
@@ -65,7 +88,16 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 ReserveTag = ReserveTag,
                 PlaatsingsInfo = gastgezin.PlaatsingsInfo,
                 HasVOG = gastgezin.HasVOG,
-                HeeftBekeken = heeftBekeken
+                HeeftBekeken = heeftBekeken,
+                RejectionComment = rejectionComment,
+                Buddy = buddy,
+                BuddyId = buddyId,
+                Begeleider = begeleider,
+                BegeleiderId = begeleiderId,
+                Status = gastgezin.Status,
+                MaxAdults = gastgezin.MaxAdults,
+                MaxChildren = gastgezin.MaxChildren,
+                Note = gastgezin.Note,
             };
 
             return gastgezinViewModel;
