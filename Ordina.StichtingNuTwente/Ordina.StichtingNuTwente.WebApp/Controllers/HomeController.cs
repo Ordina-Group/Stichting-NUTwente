@@ -658,7 +658,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     var reactie = _reactionService.NewReactie(answerData, gastgezinId);
                     var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
                     MailHelper mailHelper = new MailHelper(_mailService);
-                    bool success = await mailHelper.bevestiging(persoon);
+                    bool success = await mailHelper.Bevestiging(persoon);
                     if (success) return Ok();
                 }
                 return BadRequest();

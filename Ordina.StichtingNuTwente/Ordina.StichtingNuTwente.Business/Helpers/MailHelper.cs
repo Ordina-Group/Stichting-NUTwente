@@ -20,15 +20,15 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             _mailService = mailService;
             DefaultSendAdress = "secretariaat@NUTwente.nl";
             SendName = "Secretariaat Stichting NUTwente";
-            _mailService.setApiKey("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");
+            _mailService.SetApiKey("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");
         }
 
 
 
-        public async Task<bool> maakIntakeMatch(Gastgezin gastgezin, Persoon persoon)
+        public async Task<bool> MaakIntakeMatch(Gastgezin gastgezin, Persoon persoon)
         {
             Mail mail = new Mail();
-            _mailService.setFromMail(DefaultSendAdress);
+            _mailService.SetFromMail(DefaultSendAdress);
 
             //persoon.Gastgezin = gastgezin;
 
@@ -38,14 +38,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             mail.Subject = "Uw nieuwe intake match met " + gastgezin.Contact.Naam;
             mail.Message = "Beste " + persoon.Naam + ", \n" + "Zojuist bent u toegewezen aan het gastgezin van: " + gastgezin.Contact.Naam + ". U kunt hem/haar bereiken via mail: " + gastgezin.Contact.Email + ", of via telefoon: " + gastgezin.Contact.Mobiel + ", om een afspraak te maken.";
 
-            bool succes = await(_mailService.sendMail(mail));
+            bool succes = await(_mailService.SendMail(mail));
 
             return succes;
         }
 
-        public async Task<bool> bevestiging(Persoon persoon)
+        public async Task<bool> Bevestiging(Persoon persoon)
         {
-            _mailService.setFromMail("niek.nieuwenhuisen@ordina.nl");
+            _mailService.SetFromMail("niek.nieuwenhuisen@ordina.nl");
             //_mailService.setFromMail(DefaultSendAdress);
             var mail = new Mail()
             {
@@ -55,16 +55,16 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 MailFromName = "Stichting NUTwente",
                 Message = "Beste " + persoon.Naam + ", \n" + "Bedankt voor uw inschrijving. Voor meer informatie kunt u terecht op onze website: https://www.nutwente.nl/"
             };
-            bool succes = await (_mailService.sendMail(mail));
+            bool succes = await (_mailService.SendMail(mail));
 
             return succes;
         }
 
-        public async Task<List<Persoon>> sendMailToGroup(List<Persoon> personen, string onderwerp, string bericht)
+        public async Task<List<Persoon>> SendMailToGroup(List<Persoon> personen, string onderwerp, string bericht)
         {
             Mail mail = new Mail();
             List<Persoon> unsendList = new List<Persoon>();
-            _mailService.setFromMail(DefaultSendAdress);
+            _mailService.SetFromMail(DefaultSendAdress);
 
             mail.MailFromName = SendName;
             mail.Subject = onderwerp;
@@ -76,7 +76,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 //mail.MailToAdress = p.Email;
                 mail.MailToAdress = ""; //voor nu even hardcoded om spam en ongelukken bij het testen te voorkomen.
 
-                if(! await (_mailService.sendMail(mail)))
+                if(! await (_mailService.SendMail(mail)))
                 {
                     unsendList.Add(p);
                 }
@@ -85,13 +85,13 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             return unsendList;
         }
 
-        public async Task<List<Persoon>> sendMailToGroup(List<Persoon> personen, string onderwerp, string bericht, UserDetails userDetails)
+        public async Task<List<Persoon>> SendMailToGroup(List<Persoon> personen, string onderwerp, string bericht, UserDetails userDetails)
         {
             Mail mail = new Mail();
             List<Persoon> unsendList = new List<Persoon>();
 
             mail.MailFromName = userDetails.FirstName;
-            _mailService.setFromMail(userDetails.Email);
+            _mailService.SetFromMail(userDetails.Email);
             mail.Subject = onderwerp;
             mail.Message = bericht;
 
@@ -101,7 +101,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 //mail.MailToAdress = p.Email;
                 mail.MailToAdress = ""; //voor nu even hardcoded om spam en ongelukken bij het testen te voorkomen.
 
-                if (!await (_mailService.sendMail(mail)))
+                if (!await (_mailService.SendMail(mail)))
                 {
                     unsendList.Add(p);
                 }
