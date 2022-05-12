@@ -187,7 +187,7 @@
                     <td></td>
                 }
             </tr>
-            @await Html.PartialAsync("../Home/_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
         }
     </tbody>
     <tfoot>
@@ -206,7 +206,7 @@
         </tr>
     </tfoot>
 </table>
-@await Html.PartialAsync("../Home/_showItem.cshtml")
+@await Html.PartialAsync("_showItem.cshtml")
 
 <script>
     $('.dropdown-item').on('click', function() {
