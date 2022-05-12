@@ -24,7 +24,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
+            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Contact.Adres,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
         }
 
         public Gastgezin? GetGastgezinForReaction(int formID)
