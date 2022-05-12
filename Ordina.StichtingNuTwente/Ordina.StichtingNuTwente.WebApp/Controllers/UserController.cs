@@ -11,11 +11,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     {
         public IUserService _userService { get; }
         public IGastgezinService _gastgezinService { get; }
+        public IMailService _mailService { get; }
 
-        public UserController(IUserService userService, IGastgezinService gastgezinService)
+        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService mailService)
         {
             _userService = userService;
             _gastgezinService = gastgezinService;
+            _mailService = mailService;
         }
 
         [AllowAnonymous]
@@ -80,5 +82,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
+
+        //[Authorize]
+        [AllowAnonymous]
+       // [Route("user/MailGroup")]
+        [HttpPost]
+        //[ActionName("MailGroup")]
+        public IActionResult MailGroup(string onderwerp, string bericht, string emailAdressen)
+        {
+
+            List<string> mailAdressen = emailAdressen.Split(',').ToList();
+            _mailService.SetApiKey("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");
+            _mailService.SetFromMail("niek.nieuwenhuisen@ordina.nl");
+            _mailService.SendGroupMail(onderwerp, bericht, mailAdressen);
+
+            return Ok();
+        }
+
     }
 }
