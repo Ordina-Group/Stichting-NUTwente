@@ -24,7 +24,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             var reactieRepository = new Repository<Reactie>(_context);
             dbmodel = reactieRepository.Create(dbmodel);
-            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel);
+            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel, gastgezinId);
             if (dbmodel.Id > 0)
             {
                 if (gastgezinId != null)
@@ -74,7 +74,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
 
             reactieRepository.Update(existingReaction);
-            UpdateDatabaseWithRelationalObjects(viewModel, existingReaction, id);
+            UpdateDatabaseWithRelationalObjects(viewModel, existingReaction, null, id);
         }
 
         public void UpdateAll(int? id = 0)
@@ -90,13 +90,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
                 try
                 {
-                    UpdateDatabaseWithRelationalObjects(viewModel, reactie, reactie.Id);
+                    UpdateDatabaseWithRelationalObjects(viewModel, reactie, null, reactie.Id);
                 }
                 catch (Exception) { }
             }
         }
 
-        public void UpdateDatabaseWithRelationalObjects(AnswersViewModel viewModel, Reactie reactie, int id = 0)
+        public void UpdateDatabaseWithRelationalObjects(AnswersViewModel viewModel, Reactie reactie, int? gastgezinId, int id = 0)
         {
             int formId = 0;
             int.TryParse(viewModel.Id, out formId);
@@ -110,6 +110,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbAdres = new Adres();
             var dbUser = new UserDetails();
             var dbPlaatsingsInfo = new PlaatsingsInfo();
+            var dbGastgezin = gastgezinRepo.GetFirstOrDefault(g => (gastgezinId != null && g.Id == gastgezinId) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id), "IntakeFormulier,AanmeldFormulier,PlaatsingsInfo");
+            dbGastgezin = dbGastgezin ?? new Gastgezin();
             if (id != 0)
             {
                 dbPersoon = PersoonRepo.GetFirstOrDefault(p => p.Reactie != null && p.Reactie.Id == id, "Reactie");
@@ -204,7 +206,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     Status = (int)GastgezinStatus.Aangemeld,
                 };
 
-                gastgezinRepo.Create(gastgezin);
+                dbGastgezin=gastgezinRepo.Create(gastgezin);
             }
 
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "PlaatsingsInfo")))
@@ -214,27 +216,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     if (dbPlaatsingsInfo.Id == 0)
                     {
-
-                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
-                        if (gastgezin != null)
+                        if (dbGastgezin != null && dbGastgezin.Id > 0)
                         {
                             dbPlaatsingsInfo.Reactie = reactie;
                             dbPlaatsingsInfo = plaatsingsInfoRepo.Create(dbPlaatsingsInfo);
+                            dbGastgezin = gastgezinRepo.GetById(dbGastgezin.Id);
                             if (dbPlaatsingsInfo.Id != 0)
                             {
-                                gastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
-                                gastgezinRepo.Update(gastgezin);
+                                dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                                gastgezinRepo.Update(dbGastgezin);
                             }
                         }
                     }
                     else
                     {
                         plaatsingsInfoRepo.Update(dbPlaatsingsInfo);
-                        var gastgezin = gastgezinRepo.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier,PlaatsingsInfo");
-                        if(gastgezin.PlaatsingsInfo == null)
+                        if(dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
                         {
-                            gastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
-                            gastgezinRepo.Update(gastgezin);
+                            dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                            gastgezinRepo.Update(dbGastgezin);
                         }
                     }
                 }
