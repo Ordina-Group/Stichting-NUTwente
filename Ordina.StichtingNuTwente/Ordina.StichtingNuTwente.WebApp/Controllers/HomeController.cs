@@ -7,8 +7,8 @@ using Ordina.StichtingNuTwente.Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Business.Services;
 using Ordina.StichtingNuTwente.Models.Mappings;
-using System.Security.Claims;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -20,14 +20,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IReactionService _reactionService;
         private readonly IUserService _userService;
         private readonly IGastgezinService _gastgezinService;
+        private readonly IPersoonService _persoonService;
+        private readonly IMailService _mailService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IGastgezinService gastgezinService)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IGastgezinService gastgezinService, IPersoonService persoonService, IMailService mailService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
             _reactionService = reactionService;
             _userService = userService;
             _gastgezinService = gastgezinService;
+            _persoonService = persoonService;
+            _mailService = mailService;
         }
 
         [AllowAnonymous]
@@ -643,7 +647,29 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [HttpPost]
+        public async Task<IActionResult> SaveAndSendEmailAsync(string answers, int? gastgezinId)
+        {
+            try
+            {
+                if (answers != null)
+                {
+                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
+                    var reactie = _reactionService.NewReactie(answerData, gastgezinId);
+                    var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
+                    MailHelper mailHelper = new MailHelper(_mailService);
+                    bool success = await mailHelper.Bevestiging(persoon);
+                    if (success) return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {

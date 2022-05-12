@@ -52,11 +52,28 @@
                                 window.location = "/";
                             }
                         },
-                        error: function() { 
-                        window.location = "/Error";  
-                        } 
+                        error: function() {
+                        window.location = "/Error";
+                        }
                     });
-                 } else {
+                 }
+                  //Email functionaliteit:
+                  //else if(@Model.FormId == 1 || @Model.FormId == 4){
+                  //      $.ajax({
+                  //          url: "/Home/SaveAndSendEmail",
+                  //          type: "POST",
+                  //          dataType: 'text',
+                  //          contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                  //          data: {"answers":JSON.stringify(obj), "gastgezinId":"@Model.GastgezinId"},
+                  //          success: function(){
+                  //              window.location = "/Bedankt";
+                  //          },
+                  //          error: function() {
+                  //          window.location = "/Error";
+                  //          }
+                  //      });
+                  //  }
+                 else {
                     $.ajax({
                         url: "/Home/Save",
                         type: "POST",
@@ -66,9 +83,9 @@
                         success: function(){
                             window.location = "/Bedankt";
                         },
-                        error: function() { 
+                        error: function() {
                         window.location = "/Error";
-                        }       
+                        }
                     });
                 }
            } else {
