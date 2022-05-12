@@ -1,28 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ordina.StichtingNuTwente.Models.Models;
 
-namespace Ordina.StichtingNuTwente.Models.ViewModels
+namespace Ordina.StichtingNuTwente.Models.ViewModels;
+
+public class GastgezinViewModel
 {
-    public class GastgezinViewModel
-    {
-        public GastgezinViewModel()
-        {
-            GastGezin = new GastGezin();
-            Plaatsingen = new List<PlaatsingViewModel>();
-            Reserveringen = new List<PlaatsingViewModel>();
-            PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
-            PlaatsingDTO = new PlaatsingDTO();
-            PlaatsingStats = new PlaatsingStats();
-        }
+    public int Id { get; set; }
 
-        public GastGezin GastGezin { get; set; }
-        public List<PlaatsingViewModel> Plaatsingen { get; set; }
-        public List<PlaatsingViewModel> Reserveringen { get; set; }
-        public List<PlaatsingViewModel> PlaatsingsGeschiedenis { get; set; }
-        public PlaatsingDTO PlaatsingDTO { get; set; }
-        public PlaatsingStats PlaatsingStats { get; set; }
-    }
+    public string Naam { get; set; }
+
+    public string Adres { get; set; }
+
+    public string Woonplaats { get; set; }
+
+    public string Telefoonnummer { get; set; }
+
+    public string Email { get; set; }
+
+    public string Begeleider { get; set; }
+
+    public int BegeleiderId { get; set; }
+
+    public string Buddy { get; set; }
+
+    public int BuddyId { get; set; }
+
+    public DateTime Intake { get; set; }
+
+    public int AanmeldFormulierId { get; set; }
+
+    public int IntakeFormulierId { get; set; }
+
+    public string? PlaatsingTag { get; set; }
+
+    public string? ReserveTag { get; set; }
+
+    public string? Note { get; set; }
+
+    public PlaatsingsInfo? PlaatsingsInfo { get; set; }
+
+    public bool? HasVOG { get; set; }
+
+    public GastgezinStatus? Status { get; set; }
+
+    public bool HeeftBekeken { get; set; }
+
+    public int? MaxAdults { get; set; }
+
+    public int? MaxChildren { get; set; }
+
+    public Comment? RejectionComment { get; set; }
 }

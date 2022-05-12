@@ -4,6 +4,7 @@ using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Models.Models;
 using Microsoft.AspNetCore.Authorization;
+using Ordina.StichtingNuTwente.Models.Mappings;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -45,82 +46,88 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("MicrosoftIdentity/Account/AccessDenied");
             }
 
-            var viewModel = new GastgezinViewModel() { };
+            var viewModel = new GastgezinDetailViewModel() { };
             if (gastGezin.Contact != null)
             {
-                var contact = gastGezin.Contact;
-                var adres = gastGezin.Contact.Adres;
-                var adresText = "";
-                var woonplaatsText = "";
-
-                if (adres != null)
-                {
-                    adresText = adres.Straat;
-                    woonplaatsText = adres.Woonplaats;
-                }
-
-                int aanmeldFormulierId = 0;
-                int intakeFormulierId = 0;
-
-                if (gastGezin.AanmeldFormulier != null)
-                {
-                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
-                }
-
-                if (gastGezin.IntakeFormulier != null)
-                {
-                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
-                }
-
-                var plaatsingsInfo = new PlaatsingsInfo();
-
-                if (gastGezin.PlaatsingsInfo != null)
-                {
-                    plaatsingsInfo = gastGezin.PlaatsingsInfo;
-                }
-
                 var user = GetUser();
-                if (!gastGezin.BekekenDoorBuddy && user?.Id == gastGezin.Buddy?.Id)
-                {
-                    gastGezin.BekekenDoorBuddy = true;
-                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
-                }
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
+                viewModel.GastGezin = gastgezinViewModel;
 
-                if (!gastGezin.BekekenDoorIntaker &&  user?.Id == gastGezin.Begeleider?.Id)
-                {
-                    gastGezin.BekekenDoorIntaker = true;
-                    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
-                }
+                //var contact = gastGezin.Contact;
+                //var adres = gastGezin.Contact.Adres;
+                //var adresText = "";
+                //var woonplaatsText = "";
 
-                int? maxAdults = 0;
-                if (gastGezin.MaxAdults != null)
-                {
-                    maxAdults = gastGezin.MaxAdults;
-                }
+                //if (adres != null)
+                //{
+                //    adresText = adres.Straat;
+                //    woonplaatsText = adres.Woonplaats;
+                //}
 
-                int? maxChildren = 0;
-                if (gastGezin.MaxChildren != null)
-                {
-                    maxChildren = gastGezin.MaxChildren;
-                }
+                //int aanmeldFormulierId = 0;
+                //int intakeFormulierId = 0;
 
-                viewModel.GastGezin = new GastGezin()
-                {
-                    Id = id,
-                    Adres = adresText,
-                    Email = contact.Email,
-                    Naam = contact.Naam,
-                    Telefoonnummer = contact.Telefoonnummer,
-                    Woonplaats = woonplaatsText,
-                    AanmeldFormulierId = aanmeldFormulierId,
-                    IntakeFormulierId = intakeFormulierId,
-                    Note = gastGezin.Note,
-                    Status = gastGezin.Status,
-                    HasVOG = gastGezin.HasVOG,
-                    PlaatsingsInfo = plaatsingsInfo,
-                    MaxAdults = maxAdults,
-                    MaxChildren = maxChildren
-                };
+                //if (gastGezin.AanmeldFormulier != null)
+                //{
+                //    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
+                //}
+
+                //if (gastGezin.IntakeFormulier != null)
+                //{
+                //    intakeFormulierId = gastGezin.IntakeFormulier.Id;
+                //}
+
+                //var plaatsingsInfo = new PlaatsingsInfo();
+
+                //if (gastGezin.PlaatsingsInfo != null)
+                //{
+                //    plaatsingsInfo = gastGezin.PlaatsingsInfo;
+                //}
+
+                //var user = GetUser();
+                //if (!gastGezin.BekekenDoorBuddy && user?.Id == gastGezin.Buddy?.Id)
+                //{
+                //    gastGezin.BekekenDoorBuddy = true;
+                //    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                //}
+
+                //if (!gastGezin.BekekenDoorIntaker &&  user?.Id == gastGezin.Begeleider?.Id)
+                //{
+                //    gastGezin.BekekenDoorIntaker = true;
+                //    _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+                //}
+
+                //int? maxAdults = 0;
+                //if (gastGezin.MaxAdults != null)
+                //{
+                //    maxAdults = gastGezin.MaxAdults;
+                //}
+
+                //int? maxChildren = 0;
+                //if (gastGezin.MaxChildren != null)
+                //{
+                //    maxChildren = gastGezin.MaxChildren;
+                //}
+
+                //viewModel.GastGezin = new GastgezinViewModel()
+                //{
+                //    Id = id,
+                //    Adres = adresText,
+                //    Email = contact.Email,
+                //    Naam = contact.Naam,
+                //    Telefoonnummer = contact.Telefoonnummer,
+                //    Woonplaats = woonplaatsText,
+                //    AanmeldFormulierId = aanmeldFormulierId,
+                //    IntakeFormulierId = intakeFormulierId,
+                //    Note = gastGezin.Note,
+                //    Status = gastGezin.Status,
+                //    HasVOG = gastGezin.HasVOG,
+                //    PlaatsingsInfo = plaatsingsInfo,
+                //    MaxAdults = maxAdults,
+                //    MaxChildren = maxChildren
+                //};
             }
             var PlacementViewModels = new List<PlaatsingViewModel>();
             gastGezin.Plaatsingen.ToList().ForEach(p => PlacementViewModels.Add(new PlaatsingViewModel(p)));
@@ -293,62 +300,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             ICollection<Gastgezin> gastGezinnen = gastgezinQuery.ToList();
+            var user = GetUser();
 
             foreach (var gastGezin in gastGezinnen)
             {
-                if (gastGezin.Contact == null)
-                {
-                    continue;
-                }
-
-                var contact = gastGezin.Contact;
-                var adres = gastGezin.Contact.Adres;
-                var adresText = "";
-                var woonplaatsText = "";
-
-                if (adres != null)
-                {
-                    adresText = adres.Straat;
-                    woonplaatsText = adres.Woonplaats;
-                }
-                var aanmeldFormulierId = -1;
-                var intakeFormulierId = -1;
-                if (gastGezin.AanmeldFormulier != null)
-                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
-                if (gastGezin.IntakeFormulier != null)
-                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
-
-                var begeleider = "";
-                if (gastGezin.Begeleider != null)
-                {
-                    begeleider = $"{gastGezin.Begeleider.FirstName} {gastGezin.Begeleider.LastName} ({gastGezin.Begeleider.Email})";
-                }
-                var buddy = "";
-                if (gastGezin.Buddy != null)
-                {
-                    buddy = $"{gastGezin.Buddy.FirstName} {gastGezin.Buddy.LastName} ({gastGezin.Buddy.Email})";
-                }
-
-                model.MijnGastgezinnen.Add(new GastGezin
-                {
-                    Id = gastGezin.Id,
-                    Adres = adresText,
-                    Email = contact.Email,
-                    Naam = contact.Naam + " " + contact.Achternaam,
-                    Telefoonnummer = contact.Telefoonnummer,
-                    Woonplaats = woonplaatsText,
-                    Begeleider = begeleider,
-                    Buddy = buddy,
-                    PlaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing),
-                    ReserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering),
-                    PlaatsingsInfo = gastGezin.PlaatsingsInfo,
-                    HasVOG = gastGezin.HasVOG,
-                    AanmeldFormulierId = aanmeldFormulierId,
-                    IntakeFormulierId = intakeFormulierId,
-                    Note = gastGezin.Note,
-                    MaxAdults = gastGezin.MaxAdults,
-                    MaxChildren = gastGezin.MaxChildren
-                });
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
+                model.MijnGastgezinnen.Add(gastgezinViewModel);
             }
             if (sortOrder == "Ascending")
             {
@@ -566,7 +525,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     heeftBekeken = gastGezin.BekekenDoorIntaker;
                 }
 
-                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                mijnGastgezinnen.MijnGastgezinnen.Add(new GastgezinViewModel
                 {
                     Id = gastGezin.Id,
                     Adres = adresText,
@@ -658,7 +617,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     heeftBekeken = gastGezin.BekekenDoorIntaker;
                 }
 
-                mijnGastgezinnen.MijnGastgezinnen.Add(new GastGezin
+                mijnGastgezinnen.MijnGastgezinnen.Add(new GastgezinViewModel
                 {
                     Id = gastGezin.Id,
                     Adres = adresText,
@@ -750,7 +709,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     rejectionComment = gastGezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
                 }
 
-                alleGastgezinnen.Gastgezinnen.Add(new GastGezin
+                alleGastgezinnen.Gastgezinnen.Add(new GastgezinViewModel
                 {
                     Id = gastGezin.Id,
                     Adres = adresText,
