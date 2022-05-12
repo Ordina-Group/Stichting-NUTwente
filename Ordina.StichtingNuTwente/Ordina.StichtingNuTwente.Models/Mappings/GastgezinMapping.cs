@@ -31,9 +31,9 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             int aanmeldFormulierId = 0;
             int intakeFormulierId = 0;
 
-            if (gastgezin.Contact.Reactie != null)
+            if (gastgezin.AanmeldFormulier != null)
             {
-                aanmeldFormulierId = gastgezin.Contact.Reactie.Id;
+                aanmeldFormulierId = gastgezin.AanmeldFormulier.Id;
             }
 
             if (gastgezin.IntakeFormulier != null)
