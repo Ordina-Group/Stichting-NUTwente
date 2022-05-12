@@ -49,28 +49,37 @@
                 </p>
                 <h5>Adres</h5>
                 <p>
-                    Straat: @Model.GastGezin.Adres</br>
-                    Woonplaats: @Model.GastGezin.Woonplaats</br>
+                    Adres: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo.AdresVanLocatie :  Model.GastGezin.Adres)</br>
+                    Woonplaats: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  Model.GastGezin.Woonplaats)</br>
                     Postcode: 1111AA
                 </p>
                 <h5>Formulieren</h5>
-                <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="link">Aanmeldformulier</a>
-                </br>
-                @if (Model.GastGezin.IntakeFormulierId != 0)
+                <div class="row">
+                    <label class="col">Aanmeldformulier:</label>
+                    <div class="col">
+                <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="badge bg-primary float-right">@Model.GastGezin.AanmeldFormulierId</a>
+                </div>
+                </div>
+                                <div class="row">
+                    <label class="col">Intakeformulier:</label>
+                    <div class="col">
+                         @if (Model.GastGezin.IntakeFormulierId != 0)
                 {
-                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="link">Intakeformulier</a>
+                     <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="badge bg-primary float-right">@Model.GastGezin.IntakeFormulierId</a>
                 }
                 else
                 {
-                    <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3">Begin Intake</a>
+                    <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3 float-right">Begin Intake</a>
                 }
-                </br>
+               
+                </div>
+                </div>
                 <h5 class="mt-3">Opties</h5>
                 @using (Html.BeginForm("UpdateOpties", "Gastgezin", FormMethod.Post))
                 {
                     <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                     <div class="row mt-1">
-                        <label class="col-3">Status:</label>
+                        <label class="col">Status:</label>
                         <div class="col">
                             <select name="Status" id="status" class="form-select">
                                 @foreach (var option in Enum.GetValues(typeof(GastgezinStatus)))
@@ -89,23 +98,23 @@
                         </div>
                     </div>
                     <div class="row mt-1">
-                        <label class="col-3">VOG:</label>
+                        <label class="col">VOG:</label>
                         <div class="col">
-                            <input type="checkbox" class="form-check-input" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"")>
+                            <input type="checkbox" class="form-check-input float-right" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"")>
                         </div>
                     </div>
 
                     <h5 class="mt-3">Maximale Capaciteit</h5>
 
                     <div class="row mt-1 justify-content-between">
-                        <label class="col-5">Volwassenen:</label>
-                        <div class="col-4">
+                        <label class="col">Volwassenen:</label>
+                        <div class="col">
                             <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults">
                         </div>
                     </div>
                     <div class="row mt-1 justify-content-between">
-                        <label class="col-5">Kinderen:</label>
-                        <div class="col-4">
+                        <label class="col">Kinderen:</label>
+                        <div class="col">
                             <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren">
                         </div>
                     </div>
