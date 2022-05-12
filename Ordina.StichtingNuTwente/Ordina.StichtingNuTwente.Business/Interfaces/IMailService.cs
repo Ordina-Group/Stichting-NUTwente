@@ -9,13 +9,13 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
     public interface IMailService
     {
-        public Task<bool> sendMail(Mail mail);
+        public Task<bool> SendMail(Mail mail);
 
-        public void setFromMail(string mailAdress);
+        public void SetFromMail(string mailAdress);
 
-        public Task<bool> sendGroupMail(string subject, string message, List<string> mailAdresses);
+        public Task<bool> SendGroupMail(string subject, string message, List<string> mailAdresses);
 
-        public void setApiKey(string apiKey);
+        public void SetApiKey(string apiKey);
 
     }
 }

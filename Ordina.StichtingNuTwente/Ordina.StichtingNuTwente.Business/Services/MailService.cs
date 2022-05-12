@@ -10,7 +10,7 @@ public class MailService : IMailService
     private string MailAdressFrom { get; set; }
     private string ApiKey { get; set; }
 
-    public async Task<bool> sendMail(Mail mail)
+    public async Task<bool> SendMail(Mail mail)
     {
         //TODO: checks invoeren om te kijken of het correcte mailadressen zijn.
         if (mail.MailFromName == null || mail.MailFromName == "")
@@ -33,7 +33,7 @@ public class MailService : IMailService
         return response.IsSuccessStatusCode;
     }
 
-    public async Task<bool> sendGroupMail(string subject, string message, List<string> mailAdresses)
+    public async Task<bool> SendGroupMail(string subject, string message, List<string> mailAdresses)
     {
         mailAdresses = mailAdresses.Distinct().ToList();
 
@@ -56,12 +56,12 @@ public class MailService : IMailService
         return response.IsSuccessStatusCode;
     }
 
-    public void setFromMail(string mailAdress)
+    public void SetFromMail(string mailAdress)
     {
         MailAdressFrom = mailAdress;
     }
 
-    public void setApiKey(string apiKey)
+    public void SetApiKey(string apiKey)
     {
         ApiKey = apiKey;
     }
