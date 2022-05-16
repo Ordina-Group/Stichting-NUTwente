@@ -12,6 +12,8 @@ public class GastgezinViewModel
 
     public string Woonplaats { get; set; }
 
+    public string Postcode { get; set; }
+
     public string Telefoonnummer { get; set; }
 
     public string Email { get; set; }
@@ -24,7 +26,7 @@ public class GastgezinViewModel
 
     public int BuddyId { get; set; }
 
-    public DateTime Intake { get; set; }
+    public DateTime? Intake { get; set; }
 
     public int AanmeldFormulierId { get; set; }
 
