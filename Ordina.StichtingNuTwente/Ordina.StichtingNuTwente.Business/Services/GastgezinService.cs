@@ -27,28 +27,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Contact.Adres,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
         }
 
-        public Gastgezin? GetGastgezinForReaction(int formID)
-        {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetAll("Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,Comments").FirstOrDefault(g => g.Contact.Reactie.Id == formID);
-            if (gastgezin == null)
-            {
-                var persoonRepository = new Repository<Persoon>(_context);
-                var persoon = persoonRepository.GetAll("Reactie").FirstOrDefault(p => p.Reactie.Id == formID);
-                gastgezin = new Gastgezin()
-                {
-                    AanmeldFormulier = persoon.Reactie,
-                    Contact = persoon,
-                    Status = GastgezinStatus.Aangemeld
-                };
-
-                var success = Save(gastgezin);
-                if (!success)
-                    gastgezin = null;
-            }
-            return gastgezin;
-        }
-
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
@@ -178,13 +156,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
             plaatsingen = plaatsingen.Where(p => p.Active == true).ToList();
 
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
@@ -246,6 +224,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
 
             }
+
+            var persoonRepository = new Repository<Persoon>(_context);
+            var personen = persoonRepository.GetAll("Gastgezin").Where(p => p.Gastgezin != null && (p.Gastgezin.Id == gastgezinInDb.AanmeldFormulier?.Id || p.Gastgezin.Id == gastgezinInDb.IntakeFormulier?.Id));
+            foreach(var persoon in personen)
+            {
+                persoon.Gastgezin = null;
+                persoonRepository.Update(persoon);
+            }
+
             gastgezinRepository.Delete(gastgezinInDb);
             if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
             {
