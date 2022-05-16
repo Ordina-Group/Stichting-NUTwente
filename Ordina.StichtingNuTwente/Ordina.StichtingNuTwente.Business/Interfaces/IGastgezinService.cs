@@ -10,7 +10,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     public interface IGastgezinService
     {
         public bool Save(Gastgezin gastgezin);
-        public Gastgezin? GetGastgezinForReaction(int formID);
         public Gastgezin? GetGastgezin(int id);
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId);
         public ICollection<Gastgezin> GetAllGastgezinnen();

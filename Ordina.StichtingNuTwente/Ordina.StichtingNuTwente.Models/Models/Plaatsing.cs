@@ -17,31 +17,4 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public Gender Gender { get; set; }
         public bool Active { get; set; }
     }
-
-    [Flags]
-    public enum AgeGroup
-    {
-        Volwassene = 0,
-        Kind = 1,
-        Onbekend = 2
-    }
-
-    [Flags]
-    public enum PlacementType
-    {
-        Reservering = 0,
-        Plaatsing = 1,
-        GeplaatsteReservering = 2,
-        VerwijderdePlaatsing = 3,
-        VerwijderdeReservering =4
-    }
-
-    [Flags]
-    public enum Gender
-    {
-        Onbekend = 0,
-        Vrouw = 1,
-        Man = 2,
-        Overig = 3,
-    }
 }

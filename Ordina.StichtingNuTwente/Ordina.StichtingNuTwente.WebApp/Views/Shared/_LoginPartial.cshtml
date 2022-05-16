@@ -5,9 +5,9 @@
 {
     <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm mb-3 justify-content-between">
         <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="/favicon.ico" alt="" width="44" height="44">
-        </a>
+            <a class="navbar-brand" href="/">
+                <img src="/favicon.ico" alt="" width="44" height="44">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-light"></span>
             </button>
@@ -16,20 +16,21 @@
                     <li class="nav-item">
                         <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/" ? "active" : "" )" href="/">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/GastgezinIntake" || Accessor.HttpContext.Request.Path.Value == "/VluchtelingIntake" || Accessor.HttpContext.Request.Path.Value == "/GastgezinAanmelding" || Accessor.HttpContext.Request.Path.Value == "/VrijwilligerAanmelding"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Formulieren
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
-                            {
-                                <a class="dropdown-item" href="/VluchtelingIntake">Vluchteling Intake</a>
-                                <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
-                            }
-                            <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
-                            <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
-                        </div>
-                    </li>
+                    @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties" || Accessor.HttpContext.Request.Path.Value == "/MijnGastgezinnen"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Mijn Overzichten
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (User.HasClaims("groups", "group-vrijwilliger"))
+                                {
+                                    <a class="dropdown-item" href="/MijnGastgezinnen">Mijn gastgezinnen</a>
+                                }
+                                <a class="dropdown-item" href="/mijnReacties">Mijn formulieren</a>
+                            </div>
+                        </li>
+                    }
                     @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item dropdown">
@@ -44,21 +45,20 @@
                             </div>
                         </li>
                     }
-                    @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/mijnReacties" || Accessor.HttpContext.Request.Path.Value == "/MijnGastgezinnen"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Mijn Overzichten
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/mijnReacties">Reacties</a>
-                                @if (User.HasClaims("groups", "group-vrijwilliger"))
-                                {
-                                    <a class="dropdown-item" href="/MijnGastgezinnen?filter=Buddy">Gastgezinnen</a>
-                                }
-                            </div>
-                        </li>
-                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/GastgezinIntake" || Accessor.HttpContext.Request.Path.Value == "/VluchtelingIntake" || Accessor.HttpContext.Request.Path.Value == "/GastgezinAanmelding" || Accessor.HttpContext.Request.Path.Value == "/VrijwilligerAanmelding"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Formulieren
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
+                            {
+                                <a class="dropdown-item" href="/VluchtelingIntake">Vluchteling Intake</a>
+                                <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
+                            }
+                            <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
+                            <a class="dropdown-item" href="/VrijwilligerAanmelding">Vrijwilliger Aanmelding</a>
+                        </div>
+                    </li>
                     @if (User.HasClaims("groups", "group-superadmin"))
                     {
                         <span style="padding-left: 50px;"><a href="/Maintenance/Index" class="btn btn-danger">Maintenance</a></span>
