@@ -4,7 +4,7 @@ public class BeschikbareGastgezinnenModel : BaseModel
 {
     public BeschikbareGastgezinnenModel()
     {
-        MijnGastgezinnen = new List<GastGezin>();
+        MijnGastgezinnen = new List<GastgezinViewModel>();
         SortDropdownText = "";
         SearchQueries = new List<SearchQueryViewModel>();
         TotalPlaatsingTag = "";
@@ -13,7 +13,7 @@ public class BeschikbareGastgezinnenModel : BaseModel
         TotalMaxChildren = 0;
     }
 
-    public List<GastGezin> MijnGastgezinnen { get; set; }
+    public List<GastgezinViewModel> MijnGastgezinnen { get; set; }
     public List<SearchQueryViewModel> SearchQueries { get; set; }
         
     public string SortDropdownText { get; set; }

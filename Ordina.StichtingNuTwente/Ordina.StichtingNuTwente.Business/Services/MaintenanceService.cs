@@ -912,7 +912,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     var index = 0;
                     var cells = row.Cells;
-                    var done = false;
+                    var     done = false;
                     var gastgezin = new Gastgezin();
                     var maxChildren = 0;
                     var maxAdults = 0;
