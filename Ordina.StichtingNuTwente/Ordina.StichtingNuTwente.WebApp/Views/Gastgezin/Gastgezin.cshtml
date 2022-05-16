@@ -51,7 +51,7 @@
                 <p>
                     Adres: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo.AdresVanLocatie :  Model.GastGezin.Adres)</br>
                     Woonplaats: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  Model.GastGezin.Woonplaats)</br>
-                    Postcode: 1111AA
+                    Postcode: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo.PostcodeVanLocatie) || Model.GastGezin.PlaatsingsInfo.PostcodeVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo.PostcodeVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo.PostcodeVanLocatie :  Model.GastGezin.Postcode)
                 </p>
                 <h5>Formulieren</h5>
                 <div class="row">

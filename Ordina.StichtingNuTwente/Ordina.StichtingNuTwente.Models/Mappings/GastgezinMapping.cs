@@ -21,15 +21,18 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             var adres = gastgezin.Contact.Adres;
             var adresText = "";
             var woonplaatsText = "";
+            var postcodeText = "";
 
             if (adres != null)
             {
                 adresText = adres.Straat;
                 woonplaatsText = adres.Woonplaats;
+                postcodeText = adres.Postcode;
             }
 
             int aanmeldFormulierId = 0;
             int intakeFormulierId = 0;
+            DateTime? intakeDateTime = null;
 
             if (gastgezin.AanmeldFormulier != null)
             {
@@ -39,6 +42,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             if (gastgezin.IntakeFormulier != null)
             {
                 intakeFormulierId = gastgezin.IntakeFormulier.Id;
+                intakeDateTime = gastgezin.IntakeFormulier.DatumIngevuld;
             }
             var heeftBekeken = false;
             if (user.Id == gastgezin.Buddy?.Id)
@@ -82,8 +86,10 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Naam = contact.Naam + " " + contact.Achternaam,
                 Telefoonnummer = contact.Telefoonnummer,
                 Woonplaats = woonplaatsText,
+                Postcode = postcodeText,
                 AanmeldFormulierId = aanmeldFormulierId,
                 IntakeFormulierId = intakeFormulierId,
+                Intake = intakeDateTime,
                 PlaatsingTag = plaatsingTag,
                 ReserveTag = ReserveTag,
                 PlaatsingsInfo = gastgezin.PlaatsingsInfo,
