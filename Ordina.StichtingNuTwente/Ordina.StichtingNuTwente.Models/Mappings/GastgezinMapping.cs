@@ -78,6 +78,17 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 buddy = $"{gastgezin.Buddy.FirstName} {gastgezin.Buddy.LastName} ({gastgezin.Buddy.Email})";
             }
 
+            int? maxAdults = 0;
+            int? maxChildren = 0;
+            if (gastgezin.MaxAdults != null)
+            {
+                maxChildren = gastgezin.MaxAdults;
+            }
+            if (gastgezin.MaxChildren != null)
+            {
+                maxChildren = gastgezin.MaxChildren;
+            }
+
             var gastgezinViewModel = new GastgezinViewModel
             {
                 Id = gastgezin.Id,
@@ -101,8 +112,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Begeleider = begeleider,
                 BegeleiderId = begeleiderId,
                 Status = gastgezin.Status,
-                MaxAdults = gastgezin.MaxAdults,
-                MaxChildren = gastgezin.MaxChildren,
+                MaxAdults = maxAdults,
+                MaxChildren = maxChildren,
                 Note = gastgezin.Note,
             };
 
