@@ -156,13 +156,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
             plaatsingen = plaatsingen.Where(p => p.Active == true).ToList();
 
             int? PlaatsVolwassen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsKinderen = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsVolwassen += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? PlaatsOnbekend = plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == placementType).Sum(p => p.Amount);
-            if (placementType == PlacementType.Reservering) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
+            if (placementType == PlacementType.Plaatsing) PlaatsOnbekend += plaatsingen.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount);
 
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             tag = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
