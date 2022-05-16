@@ -26,7 +26,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [Route("gastgezin")]
-        public IActionResult Gastgezin(int id)
+        public IActionResult Gastgezin(int id, bool? EditPlaatsingen = false, bool? EditReserveringen = false)
         {
             _userService.checkIfUserExists(User);
             var gastGezin = _gastgezinService.GetGastgezin(id);
@@ -76,6 +76,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             viewModel.PlaatsingStats.ResKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResOnbekend = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
 
+            if(EditPlaatsingen == true)
+            {
+                viewModel.EditPlaatsingen = true;
+            }
+            if (EditReserveringen == true)
+            {
+                viewModel.EditReserveringen = true;
+            }
+
             return View(viewModel);
         }
 
@@ -104,9 +113,53 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
-        public IActionResult UpdatePlaatsing()
+
+        public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
         {
-            return View();
+            var gastgezinId = 0;
+            List<Plaatsing> plaatsingen = new();
+            var plaatsingsId = 0;
+            Plaatsing plaatsing = new();
+            var age = 0;
+            Gender gender = new();
+            AgeGroup ageGroup = new();
+            DateTime date = new();
+
+            foreach (var key in formCollection.Keys)
+            {
+                if (key.StartsWith("GastgezinId"))
+                {
+                    gastgezinId = int.Parse(formCollection[key]);
+                }
+                if (key.StartsWith("PlaatsingsId"))
+                {
+                    plaatsingsId = int.Parse(formCollection[key]);
+                    plaatsing = _gastgezinService.GetPlaatsing(plaatsingsId);
+                }
+                if (key.StartsWith("Date"))
+                {
+                    date = DateTime.Parse(formCollection[key]);
+                }
+                if (key.StartsWith("Gender"))
+                {
+                    gender = Enum.Parse<Gender>(formCollection[key]);
+                }
+                if (key.StartsWith("Age_"))
+                {
+                    age = int.Parse(formCollection[key]);
+                }
+                if (key.StartsWith("AgeGroup"))
+                {
+                    ageGroup = Enum.Parse<AgeGroup>(formCollection[key]);
+                    
+                    plaatsing.DateTime = date;
+                    plaatsing.Gender = gender;
+                    plaatsing.Age = age;
+                    plaatsing.AgeGroup = ageGroup;
+                    _gastgezinService.UpdatePlaatsing(plaatsing);
+                }
+            }
+            return Redirect("/gastgezin?id=" + gastgezinId);
         }
 
         [Route("DeletePlaatsing")]
@@ -668,6 +721,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             return RedirectToAction("AlleGastgezinnen");
+        }
+
+        public IActionResult EditPlaatsing(int GastgezinId, int PlaatsingsId)
+        {
+            return Redirect("/gastgezin?id=" + GastgezinId);
         }
     }
 }
