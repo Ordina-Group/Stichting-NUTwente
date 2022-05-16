@@ -11,10 +11,10 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
     {
         public MijnGastgezinnenModel()
         {
-            MijnGastgezinnen = new List<GastGezin>();
+            MijnGastgezinnen = new List<GastgezinViewModel>();
         }
 
-        public List<GastGezin> MijnGastgezinnen { get; set; }
+        public List<GastgezinViewModel> MijnGastgezinnen { get; set; }
         public string? GastgezinnenVan {  get; set; }
     }
 }

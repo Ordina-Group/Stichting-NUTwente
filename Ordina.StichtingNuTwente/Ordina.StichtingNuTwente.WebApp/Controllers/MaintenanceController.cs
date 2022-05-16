@@ -28,7 +28,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("Error");
             }
 
-            var viewModel = new GastgezinViewModel() { };
+            var viewModel = new GastgezinDetailViewModel() { };
             if (gastGezin.Contact != null)
             {
                 var contact = gastGezin.Contact;
@@ -55,7 +55,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     intakeFormulierId = gastGezin.IntakeFormulier.Id;
                 }
 
-                viewModel.GastGezin = new GastGezin()
+                viewModel.GastGezin = new GastgezinViewModel()
                 {
                     Id = id,
                     Adres = adresText,
