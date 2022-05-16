@@ -224,6 +224,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
 
             }
+
+            var persoonRepository = new Repository<Persoon>(_context);
+            var personen = persoonRepository.GetAll("Gastgezin").Where(p => p.Gastgezin != null && (p.Gastgezin.Id == gastgezinInDb.AanmeldFormulier?.Id || p.Gastgezin.Id == gastgezinInDb.IntakeFormulier?.Id));
+            foreach(var persoon in personen)
+            {
+                persoon.Gastgezin = null;
+                persoonRepository.Update(persoon);
+            }
+
             gastgezinRepository.Delete(gastgezinInDb);
             if (gastgezinInDb.Comments != null && gastgezinInDb.Comments.Count > 0)
             {
