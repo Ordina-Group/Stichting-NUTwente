@@ -49,7 +49,7 @@
                 </p>
                 <h5>Plaatsingsadres</h5>
                 <p>
-                    Straat: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie :  Model.GastGezin.Adres)</br>
+                    Adres: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie :  Model.GastGezin.Adres)</br>
                     Woonplaats: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie) || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie :  Model.GastGezin.Woonplaats)</br>
                     Postcode: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie) || Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie :  Model.GastGezin.Postcode)
                 </p>
