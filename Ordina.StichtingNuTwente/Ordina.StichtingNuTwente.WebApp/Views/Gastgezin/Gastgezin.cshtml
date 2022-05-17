@@ -41,13 +41,13 @@
         <div class="card" id="ContactInfoCard">
             <div class="card-body">
 
-                <h5 class="card-title">Contact Informatie</h5>
+                <h5 class="card-title">Contactinformatie</h5>
                 <p>
                     Naam: @Model.GastGezin.Naam</br>
                     Telefoonnummer: @Model.GastGezin.Telefoonnummer</br>
                     Email: @Model.GastGezin.Email
                 </p>
-                <h5>Adres</h5>
+                <h5>Plaatsingsadres</h5>
                 <p>
                     Adres: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie :  Model.GastGezin.Adres)</br>
                     Woonplaats: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie) || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie :  Model.GastGezin.Woonplaats)</br>
@@ -57,22 +57,22 @@
                 <div class="row">
                     <label class="col">Aanmeldformulier:</label>
                     <div class="col">
-                <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="badge bg-primary float-right">@Model.GastGezin.AanmeldFormulierId</a>
+                        <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="badge bg-primary float-right">@Model.GastGezin.AanmeldFormulierId</a>
+                    </div>
                 </div>
-                </div>
-                                <div class="row">
+                <div class="row">
                     <label class="col">Intakeformulier:</label>
                     <div class="col">
-                         @if (Model.GastGezin.IntakeFormulierId != 0)
-                {
-                     <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="badge bg-primary float-right">@Model.GastGezin.IntakeFormulierId</a>
-                }
-                else
-                {
-                    <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3 float-right">Begin Intake</a>
-                }
-               
-                </div>
+                        @if (Model.GastGezin.IntakeFormulierId != 0)
+                        {
+                            <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="badge bg-primary float-right">@Model.GastGezin.IntakeFormulierId</a>
+                        }
+                        else
+                        {
+                            <a href="/GastgezinIntake?gastgezinId=@Model.GastGezin.Id" class="btn btn-primary mt-3 float-right">Begin Intake</a>
+                        }
+
+                    </div>
                 </div>
                 <h5 class="mt-3">Opties</h5>
                 @using (Html.BeginForm("UpdateOpties", "Gastgezin", FormMethod.Post))
@@ -130,27 +130,31 @@
                     <div class="card-body">
                         <h5 class="card-title bg-white">Details</h5>
                         <div class="row row-cols-2">
-                            <div class="col"><b>Alchohol&drugs:</b> @Model.GastGezin.PlaatsingsInfo?.AlchoholEnDrugs</div>
-                            <div class="col"><b>Allergien:</b> @Model.GastGezin.PlaatsingsInfo?.Allergieen</div>
-                            <div class="col"><b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo?.BasisscholenAanwezig</div>
-                            <div class="col"><b>Belemmeringen:</b> @Model.GastGezin.PlaatsingsInfo?.Belemmering</div>
-                            <div class="col"><b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen</div>
-                            <div class="col"><b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer</div>
+                        <div class="col">
+                            <div class="col"><b>Kleine kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen</div>
+                            <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.VolwassenenGrotereKinderen </div>
+                            <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo?.SlaapkamerRuimte</div>
+                            <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo?.Privacy</div>
+                            <div class="col"><b>Opbergruimte:</b> @Model.GastGezin.PlaatsingsInfo?.Opbergruimte</div>
                             <div class="col"><b>Faciliteiten:</b> @Model.GastGezin.PlaatsingsInfo?.Faciliteiten</div>
-                            <div class="col"><b>Faciliteiten kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.FaciliteitenVoorKinderen</div>
+                            <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo?.ZelfKoken </div>
+                            <div class="col"><b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer</div>
+                            <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo?.Roken</div>
+                            <div class="col"><b>Alchohol&drugs:</b> @Model.GastGezin.PlaatsingsInfo?.AlchoholEnDrugs</div>
+                            <div class="col"><b>Belemmeringen:</b> @Model.GastGezin.PlaatsingsInfo?.Belemmering</div>
+                        </div>
+                        <div class="col">
+                            <div class="col"><b>Veilige Opbergplaats:</b> @Model.GastGezin.PlaatsingsInfo?.VeiligeOpbergruimte</div>
                             <div class="col"><b>Huisderen aanwezig:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenAanwezig</div>
                             <div class="col"><b>Huisderen mogelijk:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenMogelijk</div>
-                            <div class="col"><b>Kinderen in de buurt:</b> @Model.GastGezin.PlaatsingsInfo?.KinderenInDeBuurt</div>
-                            <div class="col"><b>Kleine kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen</div>
-                            <div class="col"><b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo?.KoelkastRuimte</div>
-                            <div class="col"><b>Opbergruimte:</b> @Model.GastGezin.PlaatsingsInfo?.Opbergruimte</div>
-                            <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo?.Privacy</div>
-                            <div class="col"><b>Roken:</b> @Model.GastGezin.PlaatsingsInfo?.Roken</div>
-                            <div class="col"><b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo?.SlaapkamerRuimte</div>
-                            <div class="col"><b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo?.VeiligeOpbergruimte</div>
+                            <div class="col"><b>Allergien:</b> @Model.GastGezin.PlaatsingsInfo?.Allergieen</div>
                             <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo?.VluchtelingOphalen</div>
-                            <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.VolwassenenGrotereKinderen </div>
-                            <div class="col"><b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo?.ZelfKoken </div>
+                            <div class="col"><b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo?.BasisscholenAanwezig</div>
+                            <div class="col"><b>Kinderen in de buurt:</b> @Model.GastGezin.PlaatsingsInfo?.KinderenInDeBuurt</div>
+                            <div class="col"><b>Faciliteiten kinderen:</b> @Model.GastGezin.PlaatsingsInfo?.FaciliteitenVoorKinderen</div>
+                            <div class="col"><b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo?.KoelkastRuimte</div>
+                            <div class="col"><b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen</div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -266,124 +270,333 @@
 <div class="row">
 </div>
 
-<div class="row">
+<div class="row" id="PlaatsingenRow">
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))</h5>
-                @foreach (var p in Model.Plaatsingen)
-                {
-                    <div class="card">
-                        <div class="card-body">
 
-                            <div class="row">
-                                <div class=col>
-                                    <p><span class="text-primary">Datum</span><br />@p.DateTime.ToShortDateString()</p>
+
+                @if (Model.EditPlaatsingen == true)
+                {
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    {
+                        <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
+                        <div class="row">
+                            <h5 class="card-title">
+                                Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                                <input class="btn btn-primary float-right" type="submit" value="Opslaan">
+                            </h5>
+                        </div>
+                        @foreach (var p in Model.Plaatsingen)
+                        {
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <input type="hidden" name="PlaatsingsId_@p.Id" value="@p.Id" />
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-primary">Datum</span>
+                                                <input type="date" class="form-control" id="colFormLabelSm_@p.Id" name="Date_@p.Id" value="@p.DateTime.ToString("yyyy-MM-dd")">
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-primary">Gender</span>
+                                                <select name="Gender_@p.Id" id="Gender_@p.Id" class="form-select">
+                                                    @foreach (var option in Enum.GetValues(typeof(Gender)))
+                                                    {
+                                                        if ((Gender)option == p.Gender)
+                                                        {
+                                                            <option selected value="@option">@option</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@option">@option</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-primary">Leeftijd</span><br />
+                                                <input type="number" class="form-control" id="Age_@p.Id" name="Age_@p.Id" value="@p.Age">
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-primary">Leeftijdsgroep</span>
+                                                <br />
+                                                <select name="AgeGroup_@p.Id" id="AgeGroup_@p.Id" class="form-select">
+                                                    @foreach (var option in Enum.GetValues(typeof(AgeGroup)))
+                                                    {
+                                                        if ((AgeGroup)option == p.AgeGroup)
+                                                        {
+                                                            <option selected value="@option">@option</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@option">@option</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </p>
+                                        </div>
+
+                                        <script>
+                                            $( "#Age_@p.Id" ).change(function() {
+                                            var age = parseInt($(this).val(), 10);
+                                            var ageGroup = "";
+                                            if(age < 0 || !$.isNumeric(age) ){
+                                            ageGroup = "@AgeGroup.Onbekend";
+                                            }
+                                            if(age <= 17 && age >= 0){
+                                            ageGroup = "@AgeGroup.Kind";
+                                            }
+                                            if(age >= 18){
+                                            ageGroup = "@AgeGroup.Volwassene";
+                                            }
+                                            $( "#AgeGroup_@p.Id" ).val(ageGroup);
+                                            console.log("age: " + age + " ageGroup: " + ageGroup);
+                                            });
+                                        </script>
+
+                                    </div>
+
+
                                 </div>
-                                <div class=col>
-                                    <p><span class="text-primary">Gender</span><br />@p.Gender</p>
-                                </div>
-                                <div class=col>
-                                    <p>
-                                        <span class="text-primary">Leeftijd</span><br />
-                                        @if (p.Age == -1)
-                                        {
-                                            <text>Onbekend</text>
-                                        }
-                                        else
-                                        {
-                                            <text>@p.Age jaar</text>
-                                        }
-                                    </p>
-                                </div>
-                                <div class=col>
-                                    <p><span class="text-primary">Leeftijdsgroep</span><br />@p.AgeGroup</p>
-                                </div>
-                                <div class=col>
-                                    <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
-                                    <script>
-                                        $("#@("deletePlaatsing"+p.Id)").on("click", function (){
+                            </div>
+
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="row">
+                        <h5 class="card-title">
+                            Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                            <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditPlaatsingen="true"></a>
+                        </h5>
+                    </div>
+                    @foreach (var p in Model.Plaatsingen)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class=col>
+                                        <p><span class="text-primary">Datum</span><br />@p.DateTime.ToShortDateString()</p>
+                                    </div>
+                                    <div class=col>
+                                        <p><span class="text-primary">Gender</span><br />@p.Gender</p>
+                                    </div>
+                                    <div class=col>
+                                        <p>
+                                            <span class="text-primary">Leeftijd</span><br />
+                                            @if (p.Age == -1)
+                                            {
+                                                <text>Onbekend</text>
+                                            }
+                                            else
+                                            {
+                                                <text>@p.Age jaar</text>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class=col>
+                                        <p><span class="text-primary">Leeftijdsgroep</span><br />@p.AgeGroup</p>
+                                    </div>
+                                    <div class=col>
+                                        <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        <script>
+                                            $("#@("deletePlaatsing"+p.Id)").on("click", function (){
                                             let id = @p.Id;
                                             if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
-                                                $.ajax({
-                                                    url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                                    type: "DELETE",
-                                                    dataType: 'text',
-                                                    success: function(){
-                                                            window.location.reload();
-                                                    },
-                                                });
+                                            $.ajax({
+                                            url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                            type: "DELETE",
+                                            dataType: 'text',
+                                            success: function(){
+                                            window.location.reload();
+                                            },
+                                            });
                                             }
-                                         })
-                                    </script>
+                                            })
+                                        </script>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
             </div>
         </div>
     </div>
+
+
+
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))</h5>
-                @foreach (var p in Model.Reserveringen)
+
+                @if (Model.EditReserveringen == true)
                 {
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class=col>
-                                    <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-                                            <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                                        </svg>
-                                    </a>
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    {
+                        <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
+                        <div class="row">
+                            <h5 class="card-title">
+                                Reserveringen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                                <input class="btn btn-warning float-right" type="submit" value="Opslaan">
+                            </h5>
+                        </div>
+                        @foreach (var p in Model.Reserveringen)
+                        {
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <input type="hidden" name="PlaatsingsId_@p.Id" value="@p.Id" />
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-warning">Datum</span>
+                                                <input type="date" class="form-control" id="colFormLabelSm_@p.Id" name="Date_@p.Id" value="@p.DateTime.ToString("yyyy-MM-dd")">
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-warning">Gender</span>
+                                                <select name="Gender_@p.Id" id="Gender_@p.Id" class="form-select">
+                                                    @foreach (var option in Enum.GetValues(typeof(Gender)))
+                                                    {
+                                                        if ((Gender)option == p.Gender)
+                                                        {
+                                                            <option selected value="@option">@option</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@option">@option</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-warning">Leeftijd</span><br />
+                                                <input type="number" class="form-control" id="Age_@p.Id" name="Age_@p.Id" value="@p.Age">
+                                            </p>
+                                        </div>
+                                        <div class="col col-3">
+                                            <p>
+                                                <span class="text-warning">Leeftijdsgroep</span>
+                                                <br />
+                                                <select name="AgeGroup_@p.Id" id="AgeGroup_@p.Id" class="form-select">
+                                                    @foreach (var option in Enum.GetValues(typeof(AgeGroup)))
+                                                    {
+                                                        if ((AgeGroup)option == p.AgeGroup)
+                                                        {
+                                                            <option selected value="@option">@option</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@option">@option</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </p>
+                                        </div>
+
+                                        <script>
+                                            $( "#Age_@p.Id" ).change(function() {
+                                            var age = parseInt($(this).val(), 10);
+                                            var ageGroup = "";
+                                            if(age < 0 || !$.isNumeric(age) ){
+                                            ageGroup = "@AgeGroup.Onbekend";
+                                            }
+                                            if(age <= 17 && age >= 0){
+                                            ageGroup = "@AgeGroup.Kind";
+                                            }
+                                            if(age >= 18){
+                                            ageGroup = "@AgeGroup.Volwassene";
+                                            }
+                                            $( "#AgeGroup_@p.Id" ).val(ageGroup);
+                                            console.log("age: " + age + " ageGroup: " + ageGroup);
+                                            });
+                                        </script>
+
+                                    </div>
+
+
                                 </div>
-                                <div class=col>
-                                    <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
-                                </div>
-                                <div class=col>
-                                    <p><span class="text-warning">Gender</span><br />@p.Gender</p>
-                                </div>
-                                <div class=col>
-                                    <p>
-                                        <span class="text-warning">Leeftijd</span><br />
-                                        @if (p.Age == -1)
-                                        {
-                                            <text>Onbekend</text>
-                                        }
-                                        else
-                                        {
-                                            <text>@p.Age jaar</text>
-                                        }
-                                    </p>
-                                </div>
-                                <div class=col>
-                                    <p><span class="text-primary">Leeftijdsgroep</span><br />@p.AgeGroup</p>
-                                </div>
-                                <div class=col>
-                                    <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
-                                    <script>
-                                        $("#@("deletePlaatsing"+p.Id)").on("click", function (){
-                                           let id = @p.Id;
-                                           if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
-                                             $.ajax({
-                                                   url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                                   type: "DELETE",
-                                                   dataType: 'text',
-                                                   success: function(){
-                                                           window.location.reload();
-                                                   },
-                                               });
-                                           }
-                                         })
-                                    </script>
+                            </div>
+
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="row">
+                        <h5 class="card-title">
+                            Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                            <a class="btn btn-warning fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditReserveringen="true"></a>
+                        </h5>
+                    </div>
+                    @foreach (var p in Model.Reserveringen)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class=col>
+                                        <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                                <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class=col>
+                                        <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
+                                    </div>
+                                    <div class=col>
+                                        <p><span class="text-warning">Gender</span><br />@p.Gender</p>
+                                    </div>
+                                    <div class=col>
+                                        <p>
+                                            <span class="text-warning">Leeftijd</span><br />
+                                            @if (p.Age == -1)
+                                            {
+                                                <text>Onbekend</text>
+                                            }
+                                            else
+                                            {
+                                                <text>@p.Age jaar</text>
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class=col>
+                                        <p><span class="text-warning">Leeftijdsgroep</span><br />@p.AgeGroup</p>
+                                    </div>
+                                    <div class=col>
+                                        <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        <script>
+                                            $("#@("deletePlaatsing"+p.Id)").on("click", function (){
+                                               let id = @p.Id;
+                                               if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
+                                                 $.ajax({
+                                                       url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                       type: "DELETE",
+                                                       dataType: 'text',
+                                                       success: function(){
+                                                               window.location.reload();
+                                                       },
+                                                   });
+                                               }
+                                             })
+                                        </script>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
             </div>
         </div>
@@ -391,7 +604,7 @@
 </div>
 
 
-<div class="row">
+<div class="row" id="plaatsingsGeschiedenisRow">
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
