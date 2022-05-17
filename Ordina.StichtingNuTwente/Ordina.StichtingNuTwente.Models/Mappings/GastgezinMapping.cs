@@ -67,7 +67,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             if (gastgezin.Begeleider != null)
             {
                 begeleiderId = gastgezin.Begeleider.Id;
-                begeleider = $"{gastgezin.Begeleider.FirstName} {gastgezin.Begeleider.LastName} ({gastgezin.Begeleider.Email})";
+                begeleider = gastgezin.Begeleider.FirstName;
             }
 
             var buddyId = 0;
@@ -75,7 +75,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             if (gastgezin.Buddy != null)
             {
                 buddyId = gastgezin.Buddy.Id;
-                buddy = $"{gastgezin.Buddy.FirstName} {gastgezin.Buddy.LastName} ({gastgezin.Buddy.Email})";
+                buddy = gastgezin.Buddy.FirstName;
             }
 
             int? maxAdults = 0;
