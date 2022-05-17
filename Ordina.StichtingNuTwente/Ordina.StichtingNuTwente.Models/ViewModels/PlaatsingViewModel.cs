@@ -16,6 +16,7 @@ public class PlaatsingViewModel
         Gender = plaatsing.Gender;
         Active = plaatsing.Active;
         Id = plaatsing.Id;
+        Edit = false;
     }
 
     public Gastgezin Gastgezin { get; set; }
@@ -37,4 +38,6 @@ public class PlaatsingViewModel
     public bool Active { get; set; }
 
     public int Id { get; set; }
+
+    public bool Edit { get; set; }
 }
