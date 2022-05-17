@@ -16,6 +16,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             PlaatsingsGeschiedenis = new List<PlaatsingViewModel>();
             PlaatsingDTO = new PlaatsingDTO();
             PlaatsingStats = new PlaatsingStats();
+            EditPlaatsingen = false;
+            EditReserveringen = false;
         }
 
         public GastgezinViewModel GastGezin { get; set; }
@@ -24,5 +26,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public List<PlaatsingViewModel> PlaatsingsGeschiedenis { get; set; }
         public PlaatsingDTO PlaatsingDTO { get; set; }
         public PlaatsingStats PlaatsingStats { get; set; }
+        public bool EditPlaatsingen { get; set; }
+        public bool EditReserveringen { get; set; }
     }
 }
