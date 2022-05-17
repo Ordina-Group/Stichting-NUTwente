@@ -363,15 +363,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpDelete]
         public IActionResult DeleteGastgezin(int id, bool deleteForms = false)
         {
-            try
-            {
+            //try
+            //{
                 _gastgezinService.Delete(id, deleteForms);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(ex.Message);
+            //}
         }
 
         public UserDetails? GetUser()
