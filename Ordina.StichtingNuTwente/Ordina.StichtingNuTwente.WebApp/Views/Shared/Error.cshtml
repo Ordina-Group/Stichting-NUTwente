@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ErrorViewModel
+@{
     ViewData["Title"] = "Sorry, er ging iets mis";
 }
 <div style="display: flex;
@@ -18,3 +19,10 @@
         }
     </div>
 </div>
+
+@if (Model?.ShowRequestId ?? false)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model?.RequestId</code>
+    </p>
+}
