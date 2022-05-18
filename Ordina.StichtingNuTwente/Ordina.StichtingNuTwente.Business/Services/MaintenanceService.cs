@@ -639,26 +639,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var result = new DatabaseIntegrityTest
             {
-                Title = "Duplicate Persoon (Begeleider) for Gastgezin",
-                Description = "Checking all Gastgezin->Begeleider are unique"
+                Title = "Duplicate Persoon (Contact) for Gastgezin",
+                Description = "Checking all Gastgezin->Contact are unique"
             };
 
             var gastgezinRespority = new Repository<Gastgezin>(_context);
-            var gastgezins = from c in gastgezinRespority.GetMany(e => e.Begeleider != null, "Begeleider")
-                             group c by c.Begeleider into g
+            var gastgezins = from c in gastgezinRespority.GetMany(e => e.Contact != null, "Contact")
+                             group c by c.Contact into g
                              where g.Skip(1).Any()
                              from c in g
                              select c;
 
             if (!gastgezins.Any())
             {
-                result.AddMessage("No duplicate Begeleider for Gastgezin", DatabaseIntegrityLevel.Success);
+                result.AddMessage("No duplicate Contact for Gastgezin", DatabaseIntegrityLevel.Success);
             }
             else
             {
                 foreach (var gastgezin in gastgezins)
                 {
-                    result.AddMessage($@"Duplicate Persoon: GastgezinId {gastgezin.Id}, PersoonId {gastgezin.Begeleider.Id}", DatabaseIntegrityLevel.Error);
+                    result.AddMessage($@"Duplicate Persoon: GastgezinId {gastgezin.Id}, PersoonId {gastgezin.Contact.Id}", DatabaseIntegrityLevel.Error);
                 }
             }
 
@@ -728,7 +728,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var persoonRespority = new Repository<Persoon>(_context);
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRespority.GetAll("Contact");
+            var gastgezinnen = gastgezinRespority.GetAll("Contact,AanmeldFormulier");
             var personen = persoonRespority.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
 
             int totalProblems = 0;
@@ -771,7 +771,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRespority.GetMany(e => e.AanmeldFormulier != null, "AanmeldFormulier");
+            var gastgezinnen = gastgezinRespority.GetMany(e => e.AanmeldFormulier == null, "AanmeldFormulier");
 
             foreach (var gastgezin in gastgezinnen)
             {
@@ -798,17 +798,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var gastgezinRespority = new Repository<Gastgezin>(_context);
 
             var gastgezinnen = gastgezinRespority.GetAll();
-            var personen = persoonRespority.GetAll("Reactie");
+            var personen = persoonRespority.GetAll("Reactie,Gastgezin");
 
             var errorCount = 0;
             foreach (var gastgezin in gastgezinnen)
             {
-                if (gastgezin.Begeleider == null)
+                if (gastgezin.Contact == null)
                 {
                     continue;
                 }
 
-                var correctPersoonId = gastgezin.Begeleider.Id;
+                var correctPersoonId = gastgezin.Contact.Id;
                 foreach (var persoon in personen.Where(e => e.Gastgezin != null && e.Gastgezin.Id == gastgezin.Id))
                 {
                     if (persoon.Id != correctPersoonId)
