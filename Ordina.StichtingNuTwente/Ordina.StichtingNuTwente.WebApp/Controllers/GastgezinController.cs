@@ -249,7 +249,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var model = new BeschikbareGastgezinnenModel();
 
-
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
 
             if (filters != null && filters.Length > 0)
@@ -278,13 +277,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
             }
 
-            ICollection<Gastgezin> gastGezinnen = gastgezinQuery.ToList();
+            var gastGezinnen = gastgezinQuery;
             var user = GetUser();
 
             foreach (var gastGezin in gastGezinnen)
             {
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 model.MijnGastgezinnen.Add(gastgezinViewModel);
             }
