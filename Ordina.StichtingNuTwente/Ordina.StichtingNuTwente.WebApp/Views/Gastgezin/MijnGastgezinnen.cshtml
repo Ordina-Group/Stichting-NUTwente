@@ -81,7 +81,7 @@
                         <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
-                            <td class="hoverable show" id="@Index"><img src="http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png" width="16" /></td>
+                            <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
                         }
                         else
                         {
