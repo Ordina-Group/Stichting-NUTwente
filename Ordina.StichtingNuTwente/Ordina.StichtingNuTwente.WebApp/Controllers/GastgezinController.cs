@@ -249,7 +249,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             var model = new BeschikbareGastgezinnenModel();
 
-
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
 
             if (filters != null && filters.Length > 0)
@@ -278,13 +277,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
             }
 
-            ICollection<Gastgezin> gastGezinnen = gastgezinQuery.ToList();
+            var gastGezinnen = gastgezinQuery;
             var user = GetUser();
 
             foreach (var gastGezin in gastGezinnen)
             {
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 model.MijnGastgezinnen.Add(gastgezinViewModel);
             }
@@ -363,15 +362,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpDelete]
         public IActionResult DeleteGastgezin(int id, bool deleteForms = false)
         {
-            //try
-            //{
+            try
+            {
                 _gastgezinService.Delete(id, deleteForms);
                 return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         public UserDetails? GetUser()
@@ -465,8 +464,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             foreach (var gastGezin in gastGezinnen)
             {
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 mijnGastgezinnen.MijnGastgezinnen.Add(gastgezinViewModel);
             }
@@ -505,8 +504,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             foreach (var gastGezin in gastGezinnen)
             {
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 mijnGastgezinnen.MijnGastgezinnen.Add(gastgezinViewModel);
             }
@@ -544,8 +543,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     continue;
                 }
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
+                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
+                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 alleGastgezinnen.Gastgezinnen.Add(gastgezinViewModel);
             }
