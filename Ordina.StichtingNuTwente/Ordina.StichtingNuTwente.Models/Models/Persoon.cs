@@ -13,8 +13,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
         {
             Naam = "";
             Achternaam = "";
-            GeboorteDatum = "";
-            Geboorteplaats = "";
             Email = "";
             Telefoonnummer = "";
             Telefoonnummer2 = "";
@@ -25,10 +23,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         public string Naam { get; set; }
         public string Achternaam { get; set; }
-
-        public string GeboorteDatum  { get; set; }
-
-        public string Geboorteplaats { get; set; }
 
         public string Email { get; set; }
 
