@@ -27,22 +27,24 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Contact.Adres,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
         }
 
-        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId)
+        public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-
-            var alleGastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments,Plaatsingen,Plaatsingen.Vrijwilliger");
-            var begeleiderGastgezinnen = alleGastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
-            var buddyGastgezinnen = alleGastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
-            var gastgezinnen = begeleiderGastgezinnen.Concat(buddyGastgezinnen).GroupBy(g => g.Id).Select(g => g.First());
-            return gastgezinnen.ToList();
+            if(gastgezinnen == null)
+            {
+                gastgezinnen = GetAllGastgezinnen();
+            }
+            var begeleiderGastgezinnen = gastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
+            var buddyGastgezinnen = gastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnenForVrijwilliger = begeleiderGastgezinnen.Concat(buddyGastgezinnen).GroupBy(g => g.Id).Select(g => g.First());
+            return gastgezinnenForVrijwilliger.ToList();
         }
 
         public ICollection<Gastgezin> GetAllGastgezinnen()
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Vluchtelingen,Begeleider,Buddy,Contact.Adres,Contact.Reactie,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Comments");
+            var gastgezinnen = gastgezinRepository.GetAll("Contact,Contact.Adres,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Plaatsingen.Vrijwilliger,Comments");
             return gastgezinnen.ToList();
         }
 

@@ -42,9 +42,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new List<UserViewModel>();
             var users = _userService.GetAllUsers();
+            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen();
             foreach (var u in users)
             {
-                var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id);
+                var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id, allGastgezinnen);
                 var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
                 var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
                 viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes});
