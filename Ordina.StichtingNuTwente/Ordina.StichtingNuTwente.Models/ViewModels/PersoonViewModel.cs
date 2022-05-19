@@ -12,8 +12,6 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public PersoonViewModel()
         {
             Naam = "";
-            GeboorteDatum = "";
-            Geboorteplaats = "";
             Email = "";
             Telefoonnummer = "";
             Mobiel = "";
@@ -22,8 +20,6 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         }
 
         public string Naam { get; set; }
-        public string GeboorteDatum { get; set; }
-        public string Geboorteplaats { get; set; }
         public string Email { get; set; }
         public string Telefoonnummer { get; set; }
         public string Mobiel { get; set; }
