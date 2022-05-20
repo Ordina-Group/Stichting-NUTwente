@@ -20,11 +20,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
             _reactionService = reactionService;
         }
 
-        public Gastgezin? GetGastgezin(int id)
+        public Gastgezin? GetGastgezin(int id, string includeProperties = "")
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            return gastgezinRepository.GetById(id, "Contact,Contact.Reactie,Contact.Adres,Vluchtelingen,Begeleider,Buddy,Plaatsingen,Plaatsingen.Vrijwilliger,IntakeFormulier,PlaatsingsInfo,AanmeldFormulier,Comments");
+            return gastgezinRepository.GetById(id, includeProperties);
         }
 
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null)
@@ -34,17 +34,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 gastgezinnen = GetAllGastgezinnen();
             }
-            var begeleiderGastgezinnen = gastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId));
-            var buddyGastgezinnen = gastgezinnen.Where(g => (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
-            var gastgezinnenForVrijwilliger = begeleiderGastgezinnen.Concat(buddyGastgezinnen).GroupBy(g => g.Id).Select(g => g.First());
+            var gastgezinnenForVrijwilliger = gastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId) || (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
             return gastgezinnenForVrijwilliger.ToList();
         }
 
-        public ICollection<Gastgezin> GetAllGastgezinnen()
+        public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = "")
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll("Contact,Contact.Adres,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Plaatsingen.Vrijwilliger,Comments");
+            var gastgezinnen = gastgezinRepository.GetAll(includeProperties);
             return gastgezinnen.ToList();
         }
 
