@@ -173,7 +173,9 @@
           "Description": "Alleenstaand, samenwonend, etc.",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "GezinsSamestelling"
         },
         {
           "Id": "16",
@@ -549,7 +551,9 @@
           "Description": "",
           "InputType": "textArea",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "OverigeOpmerkingen"
         },
         {
           "Id": "51",
