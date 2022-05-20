@@ -175,7 +175,7 @@
           "InputOptions": "",
           "Required": "false",
           "Object": "PlaatsingsInfo",
-          "ParameterName": "GezinsSamestelling"
+          "ParameterName": "GezinsSamenstelling"
         },
         {
           "Id": "16",
