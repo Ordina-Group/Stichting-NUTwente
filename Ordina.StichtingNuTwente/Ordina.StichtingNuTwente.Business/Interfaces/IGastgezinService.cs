@@ -9,10 +9,12 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
     public interface IGastgezinService
     {
+        private const string IncludeProperties = "Contact,Contact.Adres,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Plaatsingen.Vrijwilliger,Comments";
+
         public bool Save(Gastgezin gastgezin);
-        public Gastgezin? GetGastgezin(int id);
+        public Gastgezin? GetGastgezin(int id, string includeProperties = IncludeProperties);
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null);
-        public ICollection<Gastgezin> GetAllGastgezinnen();
+        public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = IncludeProperties);
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id);
         public void AddPlaatsing(Plaatsing plaatsing);
         public void UpdatePlaatsing(Plaatsing plaatsing);
@@ -25,5 +27,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void Delete(int gastgezinId, bool deleteForms);
         public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
         public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails);
+        
     }
 }
