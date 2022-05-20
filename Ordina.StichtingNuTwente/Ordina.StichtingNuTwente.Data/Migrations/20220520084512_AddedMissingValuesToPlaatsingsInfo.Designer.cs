@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220520084512_AddedMissingValuesToPlaatsingsInfo")]
+    partial class AddedMissingValuesToPlaatsingsInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,7 +312,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<string>("FaciliteitenVoorKinderen")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GezinsSamenstelling")
+                    b.Property<string>("GezinsSamestelling")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HuisdierenAanwezig")
