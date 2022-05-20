@@ -20,7 +20,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             _reactionService = reactionService;
         }
 
-        public Gastgezin? GetGastgezin(int id, string includeProperties = "")
+        public Gastgezin? GetGastgezin(int id, string includeProperties = IGastgezinService.IncludeProperties)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
@@ -38,7 +38,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezinnenForVrijwilliger.ToList();
         }
 
-        public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = "")
+        public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = IGastgezinService.IncludeProperties)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
