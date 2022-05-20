@@ -59,7 +59,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string? PostcodeVanLocatie { get; set; }
         public string? PlaatsnaamVanLocatie { get; set; }
         public string? OverigeOpmerkingen { get; set; }
-        public string? GezinsSamestelling { get; set;}
+        public string? GezinsSamenstelling { get; set;}
         public string? TelefoonnummerVanLocatie { get; set; }
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
