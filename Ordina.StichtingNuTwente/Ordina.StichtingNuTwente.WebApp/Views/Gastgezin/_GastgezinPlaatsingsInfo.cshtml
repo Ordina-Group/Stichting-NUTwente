@@ -6,29 +6,36 @@
     <tr class="hide hidden @(Model.Index%2==0?"dark-row":"")" id="@Model.Index">
         <td colspan="@Model.Columns">
             <div class="row" style="margin:0px;padding:0px;">
-                <div class="col-6"><p><b>Alchohol&drugs:</b> @Model.PlaatsingsInfo.AlchoholEnDrugs</p></div>
-                <div class="col-6"><p><b>Allergien:</b> @Model.PlaatsingsInfo.Allergieen</p> </div>
-                <div class="col-6"><p><b>Basisscholen:</b> @Model.PlaatsingsInfo.BasisscholenAanwezig</p> </div>
-                <div class="col-6"><p><b>Belemmeringen:</b> @Model.PlaatsingsInfo.Belemmering</p> </div>
-                <div class="col-6"><p><b>Beperkingen:</b> @Model.PlaatsingsInfo.Beperkingen</p> </div>
-                <div class="col-6"><p><b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo.DaglichtSlaapkamer</p> </div>
-                <div class="col-6"><p><b>Faciliteiten:</b> @Model.PlaatsingsInfo.Faciliteiten</p> </div>
-                <div class="col-6"><p><b>Faciliteiten kinderen:</b> @Model.PlaatsingsInfo.FaciliteitenVoorKinderen</p> </div>
-                <div class="col-6"><p><b>Huisderen aanwezig:</b> @Model.PlaatsingsInfo.HuisdierenAanwezig</p> </div>
-                <div class="col-6"><p><b>Huisderen mogelijk:</b> @Model.PlaatsingsInfo.HuisdierenMogelijk</p> </div>
-                <div class="col-6"><p><b>Kinderen in de buurt:</b> @Model.PlaatsingsInfo.KinderenInDeBuurt</p> </div>
-                <div class="col-6"><p><b>Kleine kinderen:</b> @Model.PlaatsingsInfo.KleineKinderen</p> </div>
-                <div class="col-6"><p><b>Koelkast:</b> @Model.PlaatsingsInfo.KoelkastRuimte</p> </div>
-                <div class="col-6"><p><b>Opbergruimte:</b> @Model.PlaatsingsInfo.Opbergruimte</p> </div>
-                <div class="col-6"><p><b>Privacy:</b> @Model.PlaatsingsInfo.Privacy</p> </div>
-                <div class="col-6"><p><b>Roken:</b> @Model.PlaatsingsInfo.Roken</p> </div>
-                <div class="col-6"><p><b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo.SlaapkamerRuimte</p> </div>
-                <div class="col-6"><p><b>Privacy:</b> @Model.PlaatsingsInfo.VeiligeOpbergruimte</p> </div>
-                <div class="col-6"><p><b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo.VluchtelingOphalen</p> </div>
-                <div class="col-6"><p><b>Volwassenen en grotere kinderen:</b> @Model.PlaatsingsInfo.VolwassenenGrotereKinderen</p> </div>
-                <div class="col-6"><p><b>Zelf koken:</b> @Model.PlaatsingsInfo.ZelfKoken</p> </div>
-                <div class="col-6"></div>
-                <div class="col-12"><p><b>Notities:</b> <br/> @Model.Notities</p> </div>
+                <div class="row row-cols-2">
+                    <div class="col">
+                        <div class="col"><b>Kleine kinderen:</b> @Model.PlaatsingsInfo?.KleineKinderen</div>
+                        <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.PlaatsingsInfo?.VolwassenenGrotereKinderen </div>
+                        <div class="col"><b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte</div>
+                        <div class="col"><b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy</div>
+                        <div class="col"><b>Opbergruimte:</b> @Model.PlaatsingsInfo?.Opbergruimte</div>
+                        <div class="col"><b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten</div>
+                        <div class="col"><b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken </div>
+                        <div class="col"><b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer</div>
+                        <div class="col"><b>Roken:</b> @Model.PlaatsingsInfo?.Roken</div>
+                        <div class="col"><b>Alchohol&drugs:</b> @Model.PlaatsingsInfo?.AlchoholEnDrugs</div>
+                        <div class="col"><b>Belemmeringen:</b> @Model.PlaatsingsInfo?.Belemmering</div>
+                    </div>
+                    <div class="col">
+                        <div class="col"><b>Gezinssamestelling</b> @Model.PlaatsingsInfo?.GezinsSamestelling</div>
+                        <div class="col"><b>Veilige Opbergplaats:</b> @Model.PlaatsingsInfo?.VeiligeOpbergruimte</div>
+                        <div class="col"><b>Huisderen aanwezig:</b> @Model.PlaatsingsInfo?.HuisdierenAanwezig</div>
+                        <div class="col"><b>Huisderen mogelijk:</b> @Model.PlaatsingsInfo?.HuisdierenMogelijk</div>
+                        <div class="col"><b>Allergien:</b> @Model.PlaatsingsInfo?.Allergieen</div>
+                        <div class="col"><b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo?.VluchtelingOphalen</div>
+                        <div class="col"><b>Basisscholen:</b> @Model.PlaatsingsInfo?.BasisscholenAanwezig</div>
+                        <div class="col"><b>Kinderen in de buurt:</b> @Model.PlaatsingsInfo?.KinderenInDeBuurt</div>
+                        <div class="col"><b>Faciliteiten kinderen:</b> @Model.PlaatsingsInfo?.FaciliteitenVoorKinderen</div>
+                        <div class="col"><b>Koelkast:</b> @Model.PlaatsingsInfo?.KoelkastRuimte</div>
+                        <div class="col"><b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen</div>
+                    </div>
+                    <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
+                    <div class="col-12"><p><b>Notities:</b> <br /> @Model.Notities</p> </div>
+                </div>
             </div>
         </td>
     </tr>
