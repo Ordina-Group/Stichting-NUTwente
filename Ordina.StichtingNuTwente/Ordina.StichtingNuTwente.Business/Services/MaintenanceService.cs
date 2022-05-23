@@ -234,8 +234,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
 
                                                 };
-                                                    _gastgezinService.AddPlaatsing(plaatsing);
-                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
                                         if (val.Contains("k"))
@@ -321,8 +321,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Plaatsing,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                     _gastgezinService.AddPlaatsing(plaatsing);
-                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
                                         if (!val.Contains("v") && !val.Contains("k"))
@@ -628,9 +628,36 @@ namespace Ordina.StichtingNuTwente.Business.Services
             result.Inconsistencies.Add(TestMissingAanmeldForIntakeFormulier());
             result.Inconsistencies.Add(TestMissingAanmeldForGastgezin());
             result.Inconsistencies.Add(TestCicleReference());
+            result.Inconsistencies.Add(TestIntakeWithNoGastgezin());
 
             result.Statistics.Add(TestCountAllTables());
             result.Statistics.Add(TestHowManyAanmeldDontHaveIntake());
+
+            return result;
+        }
+
+
+        private DatabaseIntegrityTest TestIntakeWithNoGastgezin()
+        {
+            var result = new DatabaseIntegrityTest
+            {
+                Title = "Intake forms with no gastgezin",
+                Description = "Checking all Intake Id for if they are in a Gastgezin"
+            };
+
+            var reactieRepositry = new Repository<Reactie>(_context);
+            var reacties = reactieRepositry.GetAll().Where(r => r.FormulierId == 2);
+            var gastgezinRepositry = new Repository<Gastgezin>(_context);
+            var gastgezinnen = gastgezinRepositry.GetAll("IntakeFormulier");
+
+            foreach (var reactie in reacties)
+            {
+                var gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id);
+                if (gastgezin != null)
+                    result.AddMessage($"{reactie.Id} has gastgezin", DatabaseIntegrityLevel.Success);
+                else
+                    result.AddMessage($"{reactie.Id} has no aanmelding", DatabaseIntegrityLevel.Error);
+            }
 
             return result;
         }
@@ -912,23 +939,23 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     var index = 0;
                     var cells = row.Cells;
-                    var     done = false;
+                    var done = false;
                     var gastgezin = new Gastgezin();
                     var maxChildren = 0;
                     var maxAdults = 0;
 
                     foreach (var cell in cells)
                     {
-                        if(index == 0)
+                        if (index == 0)
                         {
                             var intakeId = int.Parse(cell.ToString());
                             gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == intakeId);
-                            if(gastgezin == null)
+                            if (gastgezin == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"Gastgezin with intakeform {cell} not found", MaintenanceMessageType.Error));
                             }
                         }
-                        if(gastgezin != null)
+                        if (gastgezin != null)
                         {
                             if (index == 1)
                             {
