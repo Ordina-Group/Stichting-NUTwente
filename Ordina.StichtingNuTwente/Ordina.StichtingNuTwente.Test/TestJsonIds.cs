@@ -16,7 +16,8 @@ namespace Ordina.StichtingNuTwente.Test
         {
             var fileName = "GastgezinAanmelding.json";
             var form = GetForm(fileName);
-            Assert.IsTrue(UniqueIds(form), "Duplicate Ids in form: " + form.Title);
+            var duplicateIds = DuplicateIds(form);
+            Assert.IsTrue(duplicateIds.Count == 0, $"Duplicate Ids {string.Join(",", duplicateIds)} in form {form.Title}");
         }
 
         [TestMethod]
@@ -24,7 +25,8 @@ namespace Ordina.StichtingNuTwente.Test
         {
             var fileName = "GastgezinIntake.json";
             var form = GetForm(fileName);
-            Assert.IsTrue(UniqueIds(form), "Duplicate Ids in form: " + form.Title);
+            var duplicateIds = DuplicateIds(form);
+            Assert.IsTrue(duplicateIds.Count == 0, $"Duplicate Ids {string.Join(",", duplicateIds)} in form {form.Title}");
         }
 
         [TestMethod]
@@ -32,7 +34,8 @@ namespace Ordina.StichtingNuTwente.Test
         {
             var fileName = "VrijwilligerAanmelding.json";
             var form = GetForm(fileName);
-            Assert.IsTrue(UniqueIds(form), "Duplicate Ids in form: " + form.Title);
+            var duplicateIds = DuplicateIds(form);
+            Assert.IsTrue(duplicateIds.Count == 0, $"Duplicate Ids {string.Join(",", duplicateIds)} in form {form.Title}");
         }
 
         [TestMethod]
@@ -40,7 +43,8 @@ namespace Ordina.StichtingNuTwente.Test
         {
             var fileName = "VluchtelingIntake.json";
             var form = GetForm(fileName);
-            Assert.IsTrue(UniqueIds(form), "Duplicate Ids in form: " + form.Title);
+            var duplicateIds = DuplicateIds(form);
+            Assert.IsTrue(duplicateIds.Count == 0, $"Duplicate Ids {string.Join(",", duplicateIds)} in form {form.Title}");
         }
 
         private static Form GetForm(string fileName)
@@ -50,7 +54,7 @@ namespace Ordina.StichtingNuTwente.Test
             return form;
         }
 
-        private static bool UniqueIds(Form form)
+        private static List<int> DuplicateIds(Form form)
         {
             var ids = new List<int>();
             foreach (Section section in form.Sections)
@@ -60,7 +64,8 @@ namespace Ordina.StichtingNuTwente.Test
                     ids.Add(question.Id);
                 }
             }
-            return ids.Count == ids.Distinct().Count();
+            var duplicates = ids.GroupBy(x => x).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+            return duplicates;
         }
     }
 }
