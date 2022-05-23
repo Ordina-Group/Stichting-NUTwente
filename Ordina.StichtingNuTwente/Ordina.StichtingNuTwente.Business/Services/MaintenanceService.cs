@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Ordina.StichtingNuTwente.Models.Mappings;
+using OfficeOpenXml;
+using FastExcel;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -234,8 +236,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
 
                                                 };
-                                                    _gastgezinService.AddPlaatsing(plaatsing);
-                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
                                         if (val.Contains("k"))
@@ -321,8 +323,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Plaatsing,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                     _gastgezinService.AddPlaatsing(plaatsing);
-                                                    messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
                                         if (!val.Contains("v") && !val.Contains("k"))
@@ -912,23 +914,23 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     var index = 0;
                     var cells = row.Cells;
-                    var     done = false;
+                    var done = false;
                     var gastgezin = new Gastgezin();
                     var maxChildren = 0;
                     var maxAdults = 0;
 
                     foreach (var cell in cells)
                     {
-                        if(index == 0)
+                        if (index == 0)
                         {
                             var intakeId = int.Parse(cell.ToString());
                             gastgezin = gastgezinnen.FirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == intakeId);
-                            if(gastgezin == null)
+                            if (gastgezin == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"Gastgezin with intakeform {cell} not found", MaintenanceMessageType.Error));
                             }
                         }
-                        if(gastgezin != null)
+                        if (gastgezin != null)
                         {
                             if (index == 1)
                             {
@@ -951,5 +953,40 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             return messages;
         }
+
+
+
+        public byte[] GenerateDataDumpToExcel()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var outputFile = new FileInfo("output.xlsx");
+            var template = new FileInfo("DataDumpTemplate.xlsx");
+            byte[] returnValue = new byte[0];
+            var gastgezinnen = new Repository<Gastgezin>(_context).GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
+
+
+            using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
+            {
+                AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
+            }
+
+            using (var filestream = outputFile.OpenRead())
+            {
+                BinaryReader br = new BinaryReader(filestream);
+                long numBytes = new FileInfo(outputFile.Name).Length;
+                returnValue = br.ReadBytes((int)numBytes);
+            }
+            outputFile.Delete();
+
+            return returnValue;
+        }
+
+        private void AddExcelTab(string tabName, ICollection<Row> data, FastExcel.FastExcel excel)
+        {
+            var worksheet = new Worksheet();
+            worksheet.Rows = data;
+            excel.Write(worksheet, tabName);
+        }
+
     }
 }
