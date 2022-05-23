@@ -123,6 +123,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(databaseIntegrityModel);
         }
 
+        public IActionResult DataDump()
+        {
+            var file = maintenanceService.GenerateDataDumpToExcel();
+
+            MemoryStream stream = new MemoryStream(file);
+            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("Data dump {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> UploadUpdateIntake(IFormFile file)
         {
