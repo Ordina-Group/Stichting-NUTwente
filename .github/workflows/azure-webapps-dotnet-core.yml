@@ -29,6 +29,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
 
+      - name: Test
+        run: dotnet test Ordina.StichtingNuTwente/ --no-restore --verbosity normal
+
       - name: dotnet publish
         run: dotnet publish Ordina.StichtingNuTwente/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
