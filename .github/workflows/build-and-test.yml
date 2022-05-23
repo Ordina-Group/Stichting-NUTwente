@@ -1,0 +1,29 @@
+name: Build and Test
+
+env:
+  AZURE_WEBAPP_NAME: nutwente    # set this to the name of your Azure Web App
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.*'                 # set this to the .NET Core version to use
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+      - name: Restore dependencies
+        run: dotnet restore Ordina.StichtingNuTwente/Ordina.StichtingNuTwente.sln
+      
+      - name: Build with dotnet
+        run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
+
+      - name: Test
+        run: dotnet test Ordina.StichtingNuTwente/ --no-restore --verbosity normal 
