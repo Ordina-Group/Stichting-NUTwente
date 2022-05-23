@@ -26,4 +26,4 @@ jobs:
         run: dotnet build Ordina.StichtingNuTwente/ --configuration Release
 
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test Ordina.StichtingNuTwente/ --no-restore --verbosity normal 
