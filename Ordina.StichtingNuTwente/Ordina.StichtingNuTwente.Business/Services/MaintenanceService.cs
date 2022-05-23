@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Ordina.StichtingNuTwente.Models.Mappings;
+using OfficeOpenXml;
+using FastExcel;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -978,5 +980,40 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             return messages;
         }
+
+
+
+        public byte[] GenerateDataDumpToExcel()
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var outputFile = new FileInfo("output.xlsx");
+            var template = new FileInfo("DataDumpTemplate.xlsx");
+            byte[] returnValue = new byte[0];
+            var gastgezinnen = new Repository<Gastgezin>(_context).GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
+
+
+            using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
+            {
+                AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
+            }
+
+            using (var filestream = outputFile.OpenRead())
+            {
+                BinaryReader br = new BinaryReader(filestream);
+                long numBytes = new FileInfo(outputFile.Name).Length;
+                returnValue = br.ReadBytes((int)numBytes);
+            }
+            outputFile.Delete();
+
+            return returnValue;
+        }
+
+        private void AddExcelTab(string tabName, ICollection<Row> data, FastExcel.FastExcel excel)
+        {
+            var worksheet = new Worksheet();
+            worksheet.Rows = data;
+            excel.Write(worksheet, tabName);
+        }
+
     }
 }
