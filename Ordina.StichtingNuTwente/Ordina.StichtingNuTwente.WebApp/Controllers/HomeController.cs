@@ -106,7 +106,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(questionForm);
         }
 
-        
+
 
         [AllowAnonymous]
         [Route("Bedankt")]
@@ -168,17 +168,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult getMijnReacties()
         {
             _userService.checkIfUserExists(User);
-            var responses = _userService.GetMyReacties(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
-            if (responses != null)
+            var user = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value;
+            var model = new AnswerModel
             {
-                var viewModel = new AnswerModel
-                {
-                    AnswerLists = responses.ToList().ConvertAll(r => ReactieMapping.FromDatabaseToWebListModel(r))
-                };
-                FillBaseModel(viewModel);
-                return View(viewModel);
-            }
-            return View();
+                AnswerLists = _userService.GetMyReacties(user)
+            };
+            FillBaseModel(model);
+            return View(model);
         }
 
         [AllowAnonymous]
