@@ -1,4 +1,5 @@
 ﻿using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public UserDetails? UpdateUserFromProfileEdit(UserDetails user, string aadId);
         public ICollection<UserDetails> GetUsersByRole(string role);
         public ICollection<UserDetails> GetAllUsers();
-        public ICollection<Reactie> GetMyReacties(string aadId);
+        public List<AnswerListModel> GetMyReacties(string aadId);
         public void checkIfUserExists(ClaimsPrincipal user);
         public void Save(UserDetails user);
         public UserDetails? getUserFromClaimsPrincipal(ClaimsPrincipal user);
