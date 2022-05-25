@@ -1,6 +1,8 @@
 ﻿using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Data;
+using Ordina.StichtingNuTwente.Models.Mappings;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,11 +43,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return userRepository.GetAll().ToList();
         }
 
-        public ICollection<Reactie> GetMyReacties(string AADId)
+        public List<AnswerListModel> GetMyReacties(string AADId)
         {
+            List<AnswerListModel> viewModel = new List<AnswerListModel>();
+            var reactieRepository = new Repository<Reactie>(_context);
+            var persoonRepository = new Repository<Persoon>(_context);
             var userRepository = new Repository<UserDetails>(_context);
-            var reactions = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
-            return reactions;
+            var reacties = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
+            var people = persoonRepository.GetAll("Reactie,Adres");
+
+            var t = from reactie in reacties
+                    join add in people
+                    on reactie.Id equals add.Reactie?.Id
+                    into PeopleReaction
+                    from persoon in PeopleReaction.DefaultIfEmpty()
+                    select new { reactie, persoon };
+
+            viewModel = t.OrderByDescending(x => x.reactie.Id).ToList().ConvertAll(p =>
+            {
+                var awnser = ReactieMapping.FromDatabaseToWebListModel(p.reactie);
+                awnser.Persoon = p.persoon;
+                return awnser;
+            });
+            return viewModel;
         }
         private UserDetails? UpdateUser(UserDetails user, UserDetails userInDB)
         {
