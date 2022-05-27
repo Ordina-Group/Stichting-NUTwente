@@ -12,15 +12,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
     {
         private IMailService _mailService { get; set; }
 
-        private string DefaultSendAdress { get; set; }
-        private string SendName { get; set; }
-
         public MailHelper(IMailService mailService)
         {
             _mailService = mailService;
-            DefaultSendAdress = "secretariaat@NUTwente.nl";
-            SendName = "Secretariaat Stichting NUTwente";
-            _mailService.SetApiKey("***REMOVED***");
         }
 
 
@@ -28,13 +22,11 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
         public async Task<bool> MaakIntakeMatch(Gastgezin gastgezin, Persoon persoon)
         {
             Mail mail = new Mail();
-            _mailService.SetFromMail(DefaultSendAdress);
 
             //persoon.Gastgezin = gastgezin;
 
             mail.MailToName = persoon.Naam;
             mail.MailToAdress = ""; //voor nu even hardcoded om spam en ongelukken bij het testen te voorkomen.
-            mail.MailFromName = SendName;
             mail.Subject = "Uw nieuwe intake match met " + gastgezin.Contact.Naam;
             mail.Message = "Beste " + persoon.Naam + ", \n" + "Zojuist bent u toegewezen aan het gastgezin van: " + gastgezin.Contact.Naam + ". U kunt hem/haar bereiken via mail: " + gastgezin.Contact.Email + ", of via telefoon: " + gastgezin.Contact.Mobiel + ", om een afspraak te maken.";
 
@@ -45,15 +37,12 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         public async Task<bool> Bevestiging(Persoon persoon)
         {
-            _mailService.SetFromMail("niek.nieuwenhuisen@ordina.nl");
-            //_mailService.setFromMail(DefaultSendAdress);
             var mail = new Mail()
             {
                 MailToAdress = persoon.Email,
                 MailToName = persoon.Naam,
                 Subject = "Bevestiging van aanmelding",
-                MailFromName = "Stichting NUTwente",
-                Message = "Beste " + persoon.Naam + ", \n" + "Bedankt voor uw inschrijving. Voor meer informatie kunt u terecht op onze website: https://www.nutwente.nl/"
+                Message = $"Beste {persoon.Naam}, \n\n Bedankt voor uw aanmelding. \n Voor meer informatie kunt u terecht op onze website: www.nutwente.nl \n\n Met vriendelijke groet, \n Stichting NuTwente"
             };
             bool succes = await (_mailService.SendMail(mail));
 
@@ -64,9 +53,6 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
         {
             Mail mail = new Mail();
             List<Persoon> unsendList = new List<Persoon>();
-            _mailService.SetFromMail(DefaultSendAdress);
-
-            mail.MailFromName = SendName;
             mail.Subject = onderwerp;
             mail.Message = bericht;
 

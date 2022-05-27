@@ -61,6 +61,9 @@ jobs:
           files: './appsettings.json'
         env:
           Connectionstrings.NuTwente: 'Server=tcp:nutwente-server.database.windows.net,1433;Initial Catalog=nutwente;Authentication=Active Directory Default'
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          SENDGRID_MAILFROM_ADDRESS: ${{ secrets.SENDGRID_MAILFROM_ADDRESS }}
+          SENDGRID_MAILFROM_NAME: ${{ secrets.SENDGRID_MAILFROM_NAME }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
