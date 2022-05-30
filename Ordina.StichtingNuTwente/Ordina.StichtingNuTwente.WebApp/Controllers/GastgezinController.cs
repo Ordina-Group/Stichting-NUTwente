@@ -382,6 +382,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("{controller=Home}/{action=Index}/{id?}")]
+        [HttpPost]
+        public IActionResult RestoreGastgezin(int id)
+        {
+            try
+            {
+                _gastgezinService.Restore(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         public UserDetails? GetUser()
         {
             var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
