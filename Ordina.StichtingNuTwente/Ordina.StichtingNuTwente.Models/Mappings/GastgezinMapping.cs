@@ -115,6 +115,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 MaxAdults = maxAdults,
                 MaxChildren = maxChildren,
                 Note = gastgezin.Note,
+                Deleted = gastgezin.Deleted
             };
 
             return gastgezinViewModel;

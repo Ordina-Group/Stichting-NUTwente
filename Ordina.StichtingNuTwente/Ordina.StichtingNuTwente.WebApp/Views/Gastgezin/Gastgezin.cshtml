@@ -13,6 +13,10 @@
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
+                    @if (Model.GastGezin.Deleted)
+                    {
+                        <span class="badge bg-danger">Verwijderd</span>
+                    }
                     @if (Model.GastGezin.Status == GastgezinStatus.OnHold)
                     {
                         <span class="badge bg-secondary">On Hold</span>
@@ -30,7 +34,7 @@
         <div class="col col-1">
             <div class="card border-0 bg-transparent shadow-none">
                 <div class=card-body>
-                    @* <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Delete</button> *@
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
                 </div>
             </div>
         </div>

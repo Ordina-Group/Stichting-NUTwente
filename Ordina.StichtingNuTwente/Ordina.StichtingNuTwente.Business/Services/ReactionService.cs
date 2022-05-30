@@ -241,7 +241,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     Status = (int)GastgezinStatus.Aangemeld,
                 };
 
-                dbGastgezin=gastgezinRepo.Create(gastgezin);
+                dbGastgezin = gastgezinRepo.Create(gastgezin);
             }
 
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "PlaatsingsInfo")))
@@ -266,7 +266,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     else
                     {
                         plaatsingsInfoRepo.Update(dbPlaatsingsInfo);
-                        if(dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
+                        if (dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
                         {
                             dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
                             gastgezinRepo.Update(dbGastgezin);
@@ -363,6 +363,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var persoonRepository = new Repository<Persoon>(_context);
             var reacties = reactieRepository.GetAll();
             var people = persoonRepository.GetAll("Reactie,Adres");
+            reacties = reacties.Where(r => !r.Deleted);
             if (form != null)
             {
                 reacties = reacties.Where(f => f.FormulierId == form.Value);
@@ -489,12 +490,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public bool Delete(int reactionId)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            var awnserRepository = new Repository<Antwoord>(_context);
-            var personRepository = new Repository<Persoon>(_context);
-            var adresRepository = new Repository<Adres>(_context);
-            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
 
-            foreach (var antwoord in existingReaction.Antwoorden)
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
+            existingReaction.Deleted = true;
+
+            reactieRepository.Update(existingReaction);
+            /*var awnserRepository = new Repository<Antwoord>(_context);
+            var personRepository = new Repository<Persoon>(_context);
+            var adresRepository = new Repository<Adres>(_context);*/
+
+            /*foreach (var antwoord in existingReaction.Antwoorden)
             {
                 awnserRepository.Delete(antwoord);
             }
@@ -507,11 +512,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
             if (adres != null)
-                adresRepository.Delete(adres);
+                adresRepository.Delete(adres);*/
 
-            reactieRepository.Delete(existingReaction);
 
-            return reactieRepository.GetById(reactionId) == null;
+            return true;
         }
     }
 }
