@@ -1,4 +1,5 @@
-﻿using Ordina.StichtingNuTwente.Business.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.Models;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -7,21 +8,31 @@ using System.Threading.Tasks;
 
 public class MailService : IMailService
 {
-    private string MailAdressFrom { get; set; }
-    private string ApiKey { get; set; }
+    private readonly IConfiguration _configuration;
+
+    private string mailAdressFrom { get; set; }
+    private string mailFromName { get; set; }
+    private string apiKey { get; set; }
+
+    public MailService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
+        mailAdressFrom = _configuration.GetSection("SENDGRID_MAILFROM_ADDRESS").Value;
+        mailFromName = _configuration.GetSection("SENDGRID_MAILFROM_NAME").Value;
+    }
 
     public async Task<bool> SendMail(Mail mail)
     {
         //TODO: checks invoeren om te kijken of het correcte mailadressen zijn.
         if (mail.MailFromName == null || mail.MailFromName == "")
         {
-            mail.MailFromName = "Secretariaat NUTwente";
+            mail.MailFromName = mailFromName;
         }
-
-        var client = new SendGridClient(ApiKey);
+        var client = new SendGridClient(apiKey);
         var msg = new SendGridMessage()
         {
-            From = new EmailAddress(MailAdressFrom, mail.MailFromName),
+            From = new EmailAddress(mailAdressFrom, mail.MailFromName),
             Subject = mail.Subject,
             PlainTextContent = mail.Message
         };
@@ -42,10 +53,9 @@ public class MailService : IMailService
         {
             emailAddresses.Add(new EmailAddress(mail));
         }
+        var client = new SendGridClient(apiKey);
 
-        var client = new SendGridClient(ApiKey);
-
-        EmailAddress fromMail = new EmailAddress(this.MailAdressFrom, "Secretariaat NUTwente");
+        EmailAddress fromMail = new EmailAddress(mailAdressFrom, mailFromName);
         var htmlContent = "<p>" + message + "</p>";
 
         var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, htmlContent) ;
@@ -58,11 +68,6 @@ public class MailService : IMailService
 
     public void SetFromMail(string mailAdress)
     {
-        MailAdressFrom = mailAdress;
-    }
-
-    public void SetApiKey(string apiKey)
-    {
-        ApiKey = apiKey;
+        mailAdressFrom = mailAdress;
     }
 }

@@ -93,10 +93,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
 
             List<string> mailAdressen = emailAdressen.Split(',').ToList();
-            _mailService.SetApiKey("***REMOVED***");
-            _mailService.SetFromMail("niek.nieuwenhuisen@ordina.nl");
             _mailService.SendGroupMail(onderwerp, bericht, mailAdressen);
-
             return Ok();
         }
 
