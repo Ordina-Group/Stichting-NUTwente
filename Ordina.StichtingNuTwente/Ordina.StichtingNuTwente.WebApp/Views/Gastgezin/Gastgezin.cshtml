@@ -50,7 +50,8 @@
                 <div class="card-body">
                     <p>
                         Verwijderd door @Model.GastGezin.DeletionComment?.Commenter.FirstName<br>
-                        Reden: @Model.GastGezin.DeletionComment?.Text
+                        Reden: @Model.GastGezin.DeletionComment?.Text<br>
+                        Datum: @Model.GastGezin.DeletionComment?.Created.ToShortDateString()
                     </p>
                 </div>
             </div>
