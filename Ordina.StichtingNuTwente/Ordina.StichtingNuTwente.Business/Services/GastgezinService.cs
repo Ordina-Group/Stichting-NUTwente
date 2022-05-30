@@ -201,6 +201,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return false;
         }
 
+        public void Restore(int gastgezinId)
+        {
+            var gastgezinInDb = GetGastgezin(gastgezinId);
+            if (gastgezinInDb == null)
+                return;
+
+            gastgezinInDb.Deleted = false;
+            UpdateGastgezin(gastgezinInDb, gastgezinId);
+            var reactieRepository = new Repository<Reactie>(_context);
+            var aanmeld = gastgezinInDb.AanmeldFormulier;
+            if (aanmeld != null)
+            {
+                aanmeld.Deleted = false;
+                reactieRepository.Update(aanmeld);
+            }
+            var intake = gastgezinInDb.IntakeFormulier;
+            if (intake != null)
+            {
+                intake.Deleted = false;
+                reactieRepository.Update(intake);
+            }
+        }
+
         public void Delete(int gastgezinId, bool deleteForms, UserDetails user, string comment)
         {
             var gastgezinInDb = GetGastgezin(gastgezinId);

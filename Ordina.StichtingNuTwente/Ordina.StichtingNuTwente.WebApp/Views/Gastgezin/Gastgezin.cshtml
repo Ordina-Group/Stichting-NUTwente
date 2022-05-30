@@ -30,7 +30,13 @@
         <div class="col col-1">
             <div class="card border-0 bg-transparent shadow-none">
                 <div class=card-body>
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+                     @if (Model.GastGezin.Deleted)
+                    {
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
+                    }
+                    else{
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+                        }
                 </div>
             </div>
         </div>
@@ -713,6 +719,19 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="restoreModalLabel">Gastgezin herstellen</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Afsluiten</button>
+                <button type="button" class="btn btn-primary" id="restoreGastgezin">Bevestig herstelling</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $("#deleteGastgezin").on("click", function (){
@@ -723,6 +742,29 @@
          $.ajax({
                url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}&comment=${reasonForDelete}` ,
                type: "DELETE",
+               dataType: 'text',
+               success: function(){
+                   if(window.location.href != document.referrer){
+                       window.location = document.referrer;
+                   }else{
+                       window.location = "/";
+                   }
+               },
+               error: function() {
+                   window.location = "/Error";
+               }
+           });
+       }
+     })
+</script>
+
+<script>
+    $("#restoreGastgezin").on("click", function (){
+       let id = @Model.GastGezin.Id;
+       if (confirm("Weet je zeker dat je dit gastgezin wilt herstellen?")) {
+         $.ajax({
+               url: `/Gastgezin/RestoreGastgezin/${id}` ,
+               type: "POST",
                dataType: 'text',
                success: function(){
                    if(window.location.href != document.referrer){
