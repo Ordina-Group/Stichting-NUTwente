@@ -23,18 +23,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public Gastgezin? GetGastgezin(int id, string includeProperties = IGastgezinService.IncludeProperties)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-
             return gastgezinRepository.GetById(id, includeProperties);
         }
 
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
-            if(gastgezinnen == null)
+            if (gastgezinnen == null)
             {
                 gastgezinnen = GetAllGastgezinnen();
             }
-            var gastgezinnenForVrijwilliger = gastgezinnen.Where(g => (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId) || (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnenForVrijwilliger = gastgezinnen.Where(g => !g.Deleted && (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId) || (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
             return gastgezinnenForVrijwilliger.ToList();
         }
 
@@ -42,7 +41,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRepository.GetAll(includeProperties);
+            var gastgezinnen = gastgezinRepository.GetAll(includeProperties).Where(g => !g.Deleted);
             return gastgezinnen.ToList();
         }
 
@@ -204,12 +203,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public void Delete(int gastgezinId, bool deleteForms)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-
             var gastgezinInDb = GetGastgezin(gastgezinId);
             if (gastgezinInDb == null)
                 return;
 
+            gastgezinInDb.Deleted = true;
+            UpdateGastgezin(gastgezinInDb, gastgezinId);
+            var reactieRepository = new Repository<Reactie>(_context);
+            var aanmeld = gastgezinInDb.AanmeldFormulier;
+            if (aanmeld != null && deleteForms)
+            {
+                aanmeld.Deleted = true;
+                reactieRepository.Update(aanmeld);
+            }
+            var intake = gastgezinInDb.IntakeFormulier;
+            if (intake != null && deleteForms)
+            {
+                intake.Deleted = true;
+                reactieRepository.Update(intake);
+            }
+            /*
             if (gastgezinInDb.PlaatsingsInfo != null)
             {
                 var plaatsingsInfoRepository = new Repository<PlaatsingsInfo>(_context);
@@ -263,6 +276,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
             }
+            */
         }
 
         public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails)
