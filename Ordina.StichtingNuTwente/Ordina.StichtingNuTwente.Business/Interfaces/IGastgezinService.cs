@@ -25,6 +25,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void UpdateVOG(bool hasVOG, int gastgezinId);
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing);
         public void Delete(int gastgezinId, bool deleteForms);
+        public void Restore(int gastgezinId);
         public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
         public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails);
         
