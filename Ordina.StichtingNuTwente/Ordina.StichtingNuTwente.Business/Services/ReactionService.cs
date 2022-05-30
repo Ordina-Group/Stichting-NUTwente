@@ -286,7 +286,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     foreach (var q in s.Questions)
                     {
                         var answer = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == q.Id.ToString());
-                        if (answer != null && !string.IsNullOrEmpty(answer.Antwoord) && q.ParameterName == prop.Name && q.Object == typeObject.Name)
+                        if (answer != null && q.ParameterName == prop.Name && q.Object == typeObject.Name)
                         {
                             PropertyInfo propInfo = typeObject.GetProperty(prop.Name);
                             if (propInfo != null)
