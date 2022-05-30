@@ -28,5 +28,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public bool BekekenDoorIntaker { get; set; }
 
         public List<Comment>? Comments { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }
