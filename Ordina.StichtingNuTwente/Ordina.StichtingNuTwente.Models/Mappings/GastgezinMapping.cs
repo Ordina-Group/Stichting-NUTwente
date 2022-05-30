@@ -62,6 +62,13 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 rejectionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
             }
 
+            Comment? deletionComment = null;
+
+            if (gastgezin.Comments != null && gastgezin.Comments.Count > 0)
+            {
+                deletionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.DELETION);
+            }
+
             var begeleiderId = 0;
             var begeleider = "";
             if (gastgezin.Begeleider != null)
@@ -115,7 +122,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 MaxAdults = maxAdults,
                 MaxChildren = maxChildren,
                 Note = gastgezin.Note,
-                Deleted = gastgezin.Deleted
+                Deleted = gastgezin.Deleted,
+                DeletionComment = deletionComment
             };
 
             return gastgezinViewModel;

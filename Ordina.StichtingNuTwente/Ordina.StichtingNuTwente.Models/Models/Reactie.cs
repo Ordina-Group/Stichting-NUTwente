@@ -21,5 +21,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
         //public string UserId { get; set; }
 
         public bool Deleted { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }
