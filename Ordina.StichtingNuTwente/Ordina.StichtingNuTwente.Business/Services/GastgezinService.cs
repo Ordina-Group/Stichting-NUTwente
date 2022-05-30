@@ -208,18 +208,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 return;
 
             gastgezinInDb.Deleted = false;
+            gastgezinInDb.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
             UpdateGastgezin(gastgezinInDb, gastgezinId);
             var reactieRepository = new Repository<Reactie>(_context);
             var aanmeld = gastgezinInDb.AanmeldFormulier;
             if (aanmeld != null)
             {
                 aanmeld.Deleted = false;
+                aanmeld.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
                 reactieRepository.Update(aanmeld);
             }
             var intake = gastgezinInDb.IntakeFormulier;
             if (intake != null)
             {
                 intake.Deleted = false;
+                intake.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
                 reactieRepository.Update(intake);
             }
         }
