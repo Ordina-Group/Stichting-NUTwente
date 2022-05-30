@@ -487,12 +487,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return retVal;
         }
 
-        public bool Delete(int reactionId)
+        public bool Delete(int reactionId, string comment, UserDetails user)
         {
             var reactieRepository = new Repository<Reactie>(_context);
 
             var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
             existingReaction.Deleted = true;
+            if (existingReaction.Comments == null)
+                existingReaction.Comments = new List<Comment>();
+            existingReaction.Comments.Add(new Comment(comment, user, CommentType.DELETION));
 
             reactieRepository.Update(existingReaction);
             /*var awnserRepository = new Repository<Antwoord>(_context);

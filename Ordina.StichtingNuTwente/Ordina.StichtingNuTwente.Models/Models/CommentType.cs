@@ -3,6 +3,7 @@
     [Flags]
     public enum CommentType
     {
-        BUDDY_REJECTION = 0
+        BUDDY_REJECTION = 0,
+        DELETION = 1
     }
 }

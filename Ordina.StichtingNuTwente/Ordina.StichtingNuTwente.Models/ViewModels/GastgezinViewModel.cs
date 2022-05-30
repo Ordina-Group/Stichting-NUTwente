@@ -53,4 +53,5 @@ public class GastgezinViewModel
     public Comment? RejectionComment { get; set; }
 
     public bool Deleted { get; set; }
+    public Comment? DeletionComment { get; set; }
 }
