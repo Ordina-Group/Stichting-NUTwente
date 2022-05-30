@@ -28,7 +28,6 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 case 4:
                     fileName = "VrijwilligerAanmelding.json";
                     break;
-
             }
             return fileName;
 
