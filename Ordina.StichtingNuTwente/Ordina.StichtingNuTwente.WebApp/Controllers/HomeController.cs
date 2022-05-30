@@ -219,7 +219,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)
         {
