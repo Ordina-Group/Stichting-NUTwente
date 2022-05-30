@@ -14,8 +14,5 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void SetFromMail(string mailAdress);
 
         public Task<bool> SendGroupMail(string subject, string message, List<string> mailAdresses);
-
-        public void SetApiKey(string apiKey);
-
     }
 }
