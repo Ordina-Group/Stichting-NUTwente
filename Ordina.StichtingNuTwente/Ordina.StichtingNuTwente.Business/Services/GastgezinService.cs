@@ -208,41 +208,55 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 return;
 
             gastgezinInDb.Deleted = false;
+            gastgezinInDb.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
             UpdateGastgezin(gastgezinInDb, gastgezinId);
             var reactieRepository = new Repository<Reactie>(_context);
             var aanmeld = gastgezinInDb.AanmeldFormulier;
             if (aanmeld != null)
             {
                 aanmeld.Deleted = false;
+                aanmeld.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
                 reactieRepository.Update(aanmeld);
             }
             var intake = gastgezinInDb.IntakeFormulier;
             if (intake != null)
             {
                 intake.Deleted = false;
+                intake.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
                 reactieRepository.Update(intake);
             }
         }
 
-        public void Delete(int gastgezinId, bool deleteForms)
+        public void Delete(int gastgezinId, bool deleteForms, UserDetails user, string comment)
         {
             var gastgezinInDb = GetGastgezin(gastgezinId);
             if (gastgezinInDb == null)
                 return;
 
             gastgezinInDb.Deleted = true;
+            if (gastgezinInDb.Comments == null)
+                gastgezinInDb.Comments = new List<Comment>();
+            gastgezinInDb.Comments.Add(new Comment(comment, user, CommentType.DELETION));
             UpdateGastgezin(gastgezinInDb, gastgezinId);
+
             var reactieRepository = new Repository<Reactie>(_context);
             var aanmeld = gastgezinInDb.AanmeldFormulier;
             if (aanmeld != null && deleteForms)
             {
                 aanmeld.Deleted = true;
+                if (aanmeld.Comments == null)
+                    aanmeld.Comments = new List<Comment>();
+                aanmeld.Comments.Add(new Comment(comment, user, CommentType.DELETION));
                 reactieRepository.Update(aanmeld);
             }
             var intake = gastgezinInDb.IntakeFormulier;
             if (intake != null && deleteForms)
             {
                 intake.Deleted = true;
+                intake.Deleted = true;
+                if (intake.Comments == null)
+                    intake.Comments = new List<Comment>();
+                intake.Comments.Add(new Comment(comment, user, CommentType.DELETION));
                 reactieRepository.Update(intake);
             }
             /*

@@ -13,10 +13,6 @@
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
-                    @if (Model.GastGezin.Deleted)
-                    {
-                        <span class="badge bg-danger">Verwijderd</span>
-                    }
                     @if (Model.GastGezin.Status == GastgezinStatus.OnHold)
                     {
                         <span class="badge bg-secondary">On Hold</span>
@@ -46,6 +42,22 @@
         </div>
     }
 </div>
+@if (Model.GastGezin.Deleted)
+{
+    <div class="row">
+        <div class="col">
+            <div class="card" id="TitleCard" style="background:#ff9991">
+                <div class="card-body">
+                    <p>
+                        Verwijderd door @Model.GastGezin.DeletionComment?.Commenter.FirstName<br>
+                        Reden: @Model.GastGezin.DeletionComment?.Text<br>
+                        Datum: @Model.GastGezin.DeletionComment?.Created.ToShortDateString()
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <div class="row">
     <div class="col-3" id="ContactInfoCol">
         <div class="card" id="ContactInfoCard">
@@ -691,6 +703,10 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteModalLabel">Gastgezin verwijderen</h5>
             </div>
+            <div class="form-group">
+                <label for="reasonForDelete">Reden voor verwijderen</label>
+                <textarea class="form-control" id="reasonForDelete" rows="3"></textarea>
+            </div>
             <div class="modal-body">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="deleteForms" checked>
@@ -721,10 +737,11 @@
 <script>
     $("#deleteGastgezin").on("click", function (){
        let id = @Model.GastGezin.Id;
+       let reasonForDelete = $("#reasonForDelete").val();
        let deleteForms = $("#deleteForms").is(":checked");
-       if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen? De formulieren blijven bestaan")) {
+       if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen?")) {
          $.ajax({
-               url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}` ,
+               url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}&comment=${reasonForDelete}` ,
                type: "DELETE",
                dataType: 'text',
                success: function(){

@@ -10,6 +10,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
     {
         public string Text { get; set; }
         public UserDetails Commenter { get; set; }
+        public DateTime Created { get; set; }
 
         public CommentType CommentType { get; set; }
 
@@ -18,12 +19,14 @@ namespace Ordina.StichtingNuTwente.Models.Models
             Text = text;
             Commenter = commenter;
             CommentType = commentType;
+            Created = DateTime.Now;
         }
         public Comment()
         {
             Text = "";
             Commenter = new UserDetails();
             CommentType = CommentType.BUDDY_REJECTION;
+            Created = DateTime.Now;
         }
     }
 }

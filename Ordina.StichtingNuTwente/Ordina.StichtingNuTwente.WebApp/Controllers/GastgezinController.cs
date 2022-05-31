@@ -360,12 +360,21 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
-        public IActionResult DeleteGastgezin(int id, bool deleteForms = false)
+        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = false)
         {
             try
             {
-                _gastgezinService.Delete(id, deleteForms);
-                return Ok();
+                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+                if (aadID != null)
+                {
+                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                    if (userDetails != null)
+                    {
+                        _gastgezinService.Delete(id, deleteForms, userDetails, comment);
+                        return Ok();
+                    }
+                }
+                return BadRequest("No user found");
             }
             catch (Exception ex)
             {
