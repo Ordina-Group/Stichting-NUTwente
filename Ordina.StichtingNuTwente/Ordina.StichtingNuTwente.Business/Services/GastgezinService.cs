@@ -45,6 +45,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return gastgezinnen.ToList();
         }
 
+        public ICollection<Gastgezin> GetDeletedGastgezinnen(string includeProperties = IGastgezinService.IncludeProperties)
+        {
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+
+            var gastgezinnen = gastgezinRepository.GetAll(includeProperties).Where(g => g.Deleted);
+            return gastgezinnen.ToList();
+        }
+
         public bool Save(Gastgezin gastgezin)
         {
             var gastgezinRepository = new Repository<Gastgezin>(_context);
