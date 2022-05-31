@@ -751,5 +751,26 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             return Redirect("/gastgezin?id=" + GastgezinId);
         }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("VerwijderdeGastgezinnen")]
+        [HttpGet]
+        [ActionName("VerwijderdeGastgezinnen")]
+        public IActionResult VerwijderdeGastgezinnen()
+        {
+            _userService.checkIfUserExists(User);
+
+            var model = new List<GastgezinViewModel>();
+
+            var user = GetUser();
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetDeletedGastgezinnen();
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user);
+                model.Add(gastgezinViewModel);
+            }
+            return View(model);
+        }
     }
 }

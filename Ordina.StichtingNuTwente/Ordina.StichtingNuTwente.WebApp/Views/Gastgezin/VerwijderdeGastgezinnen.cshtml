@@ -1,0 +1,83 @@
+﻿@using Ordina.StichtingNuTwente.Models.ViewModels;
+@using System.Diagnostics
+@model List<GastgezinViewModel>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
+
+@{
+    ViewData["Title"] = "Verwijderde Gastgezinnen";
+    var Index = 0;
+}
+
+
+<div>
+    <h3>
+        Verwijderde Gastgezinnen
+    </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Ids</th>
+                <th scope="col">Naam</th>
+                <th scope="col">Woonplaats</th>
+                <th scope="col">Reden</th>
+                <th scope="col">Verwijderd door</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Herstel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gastgezin in Model)
+            {
+                Index++;
+                <tr class="@(Index%2==0?"dark-row":"light-row")" id="@gastgezin.Id">
+                    <td>
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.AanmeldFormulierId" target="_blank">@gastgezin.AanmeldFormulierId</a>
+                        @if (gastgezin.IntakeFormulierId > 0)
+                        {
+                            <text>/ </text>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.IntakeFormulierId" target="_blank">@gastgezin.IntakeFormulierId</a>
+                        }
+                    </td>
+                    <td class="text-break"><a href="/gastgezin?id=@gastgezin.Id" target="_blank">@gastgezin.Naam</a></td>
+                    <td>@gastgezin.Woonplaats</td>
+                    @if (gastgezin.DeletionComment != null)
+                    {
+                        <td>@gastgezin.DeletionComment.Text</td>
+                        <td>@gastgezin.DeletionComment.Commenter.FirstName</td>
+                        <td>@gastgezin.DeletionComment.Created.ToShortDateString()</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    }
+                    <td><button type="button" class="btn btn-primary" id="restoreGastgezin" value="@gastgezin.Id">Herstellen</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+</div>
+
+<script>
+    $("#restoreGastgezin").on("click", function() {
+        let id = $(this).val();
+        if (confirm("Weet je zeker dat je dit gastgezin wilt herstellen?")) {
+            $.ajax({
+                url: `/Gastgezin/RestoreGastgezin/${id}`,
+                type: "POST",
+                dataType: 'text',
+                success: function() {
+                    location.reload();
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
+</script>
+
+
+
