@@ -331,7 +331,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var viewModel = new Form();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbModel = reactieRepository.GetById(Id, "Antwoorden");
+            var dbModel = reactieRepository.GetById(Id, "Antwoorden,Comments");
             if (dbModel != null)
             {
                 viewModel = FormHelper.GetFormFromFileId(dbModel.FormulierId);
@@ -346,6 +346,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                     }
                 }
+
+                viewModel.Deleted = dbModel.Deleted;
+                Comment? deletionComment = null;
+
+                if (dbModel.Comments != null && dbModel.Comments.Count > 0)
+                {
+                    deletionComment = dbModel.Comments.LastOrDefault(g => g.CommentType == CommentType.DELETION);
+                }
+                viewModel.DeletionComment = deletionComment;
             }
             return viewModel;
         }
@@ -353,7 +362,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public Reactie GetReactieFromId(int Id)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            return reactieRepository.GetById(Id, "UserDetails");
+            return reactieRepository.GetById(Id, "UserDetails,Comments");
         }
 
         public List<AnswerListModel> GetAllRespones(int? form = null)
@@ -491,7 +500,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var reactieRepository = new Repository<Reactie>(_context);
 
-            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden,Comments");
             existingReaction.Deleted = true;
             if (existingReaction.Comments == null)
                 existingReaction.Comments = new List<Comment>();
@@ -516,9 +525,24 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
             if (adres != null)
                 adresRepository.Delete(adres);*/
-
-
             return true;
+        }
+
+        public bool Restore(int reactionId)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden,Comments");
+            existingReaction.Deleted = false;
+            reactieRepository.Update(existingReaction);
+            return true;
+        }
+
+        public IEnumerable<Reactie> GetDeletedReacties()
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            var reacties = reactieRepository.GetAll("Comments").Where(r => r.Deleted);
+            return reacties;
         }
     }
 }
