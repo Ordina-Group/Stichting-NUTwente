@@ -42,7 +42,6 @@
                     <th scope="col">Intake</th>
                     <th scope="col">Geplaatst</th>
                     <th scope="col">Gereserveerd</th>
-                    <th scope="col">VOG</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -63,22 +62,21 @@
                         <td>
                             @if (mijnGastgezin.AanmeldFormulierId != 0)
                             {
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">Aanmeld Formulier</a>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
                             }
                         </td>
                         <td>
                             @if (mijnGastgezin.IntakeFormulierId > 0)
                             {
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">Intake Formulier</a>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
                             }
                             else
                             {
-                                <a class="btn btn-secondary" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" target="_blank">Nieuwe Intake</a>
+                                <a style="color:orange" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" target="_blank"><i class="fa-solid fa-file-pen centered-icon"></i></a>
                             }
                         </td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
                         <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.ReserveTag</a></td>
-                        <td>@await Html.PartialAsync("../Shared/_VOGCheckbox.cshtml", new VOGCheckboxPartial(@mijnGastgezin.HasVOG,@mijnGastgezin.Id, true))</td>
                         @if (mijnGastgezin.PlaatsingsInfo != null)
                         {
                             <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
@@ -88,7 +86,7 @@
                             <td></td>
                         }
                     </tr>
-                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
+                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
                 }
             </tbody>
         </table>
