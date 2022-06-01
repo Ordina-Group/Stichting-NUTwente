@@ -70,6 +70,5 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             return rows;
         }
-
     }
 }

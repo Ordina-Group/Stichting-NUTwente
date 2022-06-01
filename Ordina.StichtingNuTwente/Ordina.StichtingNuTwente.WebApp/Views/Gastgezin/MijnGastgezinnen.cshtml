@@ -36,8 +36,7 @@
                     <th scope="col">Naam</th>
                     <th scope="col">Adres</th>
                     <th scope="col">Woonplaats</th>
-                    <th scope="col">Telefoonnummer</th>
-                    <th scope="col">E-mail</th>
+                    <th scope="col">Opmerkingen</th>
                     <th scope="col">Aanmelding</th>
                     <th scope="col">Intake</th>
                     <th scope="col">Geplaatst</th>
@@ -57,8 +56,7 @@
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
-                        <td>@mijnGastgezin.Telefoonnummer</td>
-                        <td>@mijnGastgezin.Email</td>
+                        <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;">@mijnGastgezin.VrijwilligerOpmerkingen</td>
                         <td>
                             @if (mijnGastgezin.AanmeldFormulierId != 0)
                             {
@@ -75,18 +73,11 @@
                                 <a style="color:orange" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" target="_blank"><i class="fa-solid fa-file-pen centered-icon"></i></a>
                             }
                         </td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.PlaatsingTag</a></td>
-                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.ReserveTag</a></td>
-                        @if (mijnGastgezin.PlaatsingsInfo != null)
-                        {
-                            <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)</a></td>
+                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.ReserveTag.StartsWith("0")?"0":mijnGastgezin.ReserveTag)</a></td>
+                        <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
                     </tr>
-                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
+                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen))
                 }
             </tbody>
         </table>
