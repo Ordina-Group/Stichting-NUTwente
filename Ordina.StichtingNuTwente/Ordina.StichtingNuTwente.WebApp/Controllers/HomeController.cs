@@ -98,8 +98,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
             Form questionForm = _reactionService.GetAnwersFromId(id);
-            if (questionForm == null || questionForm.Sections == null)
-                return Redirect("Error");
+            if (questionForm == null || questionForm.Sections == null) return Redirect("Error");
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllVrijwilligers());
             FillBaseModel(questionForm);
@@ -254,6 +253,31 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     {
                         var numId = int.Parse(id);
                         _reactionService.Delete(numId, comment, userDetails);
+                        return Ok();
+                    }
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [HttpPost]
+        public IActionResult Restore(string id)
+        {
+            try
+            {
+                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+                if (aadID != null)
+                {
+                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                    if (userDetails != null)
+                    {
+                        var numId = int.Parse(id);
+                        _reactionService.Restore(numId);
                         return Ok();
                     }
                 }

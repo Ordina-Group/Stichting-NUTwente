@@ -49,7 +49,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var reactieRepository = new Repository<Reactie>(_context);
             var persoonRepository = new Repository<Persoon>(_context);
             var userRepository = new Repository<UserDetails>(_context);
-            var reacties = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties;
+            var reacties = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties.Where(r =>!r.Deleted);
             var people = persoonRepository.GetAll("Reactie,Adres");
 
             var t = from reactie in reacties
