@@ -12,14 +12,18 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public PlaatsingsInfo? PlaatsingsInfo { get; set; }
         public int Index { get; set; }
         public string? Notities { get; set; }
+        public int GastgezinId { get; }
+        public string VrijwilligerOpmerking { get; }
         public int Columns { get; set; }
 
-        public GastgezinPlaatsingsInfoPartial(PlaatsingsInfo plaatsingsInfo, int index, int columns, string? notities)
+        public GastgezinPlaatsingsInfoPartial(PlaatsingsInfo plaatsingsInfo, int index, int columns, string? notities, int gastgezinId = -1, string vrijwilligerOpmerking = "")
         {
             Columns = columns;
             PlaatsingsInfo = plaatsingsInfo;
             Index = index;
             Notities = notities;
+            GastgezinId = gastgezinId;
+            VrijwilligerOpmerking = vrijwilligerOpmerking;
         }
 
 

@@ -1,11 +1,11 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
 @model GastgezinPlaatsingsInfoPartial
 
-@if (Model.PlaatsingsInfo != null)
-{
-    <tr class="hide hidden @(Model.Index%2==0?"dark-row":"")" id="@Model.Index">
-        <td colspan="@Model.Columns">
-            <div class="row" style="margin:0px;padding:0px;">
+<tr class="hide hidden @(Model.Index%2==0?"dark-row":"")" id="@Model.Index">
+    <td colspan="@Model.Columns">
+        <div class="row" style="margin:0px;padding:0px;">
+            @if (Model.PlaatsingsInfo != null)
+            {
                 <div class="row row-cols-2">
                     <div class="col">
                         <div class="col"><b>Kleine kinderen:</b> @Model.PlaatsingsInfo?.KleineKinderen</div>
@@ -34,9 +34,38 @@
                         <div class="col"><b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen</div>
                     </div>
                     <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
-                    <div class="col-12"><p><b>Notities:</b> <br /> @Model.Notities</p> </div>
                 </div>
-            </div>
-        </td>
-    </tr>
-}
+            }
+            <div class="col-12"><p><b>Notities:</b> <br /> @Model.Notities</p> </div>
+            @if (Model.GastgezinId > 0)
+            {
+                <div class="form-group col-12">
+                    <label for="comments-@Model.GastgezinId">Opmerkingen</label>
+                    <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3"> @Model.VrijwilligerOpmerking</textarea>
+                </div>
+                <button id="comments-save-@Model.GastgezinId" class="btn btn-primary col-1">Save</button>
+            }
+        </div>
+    </td>
+</tr>
+
+<script>
+    $("#comments-save-@Model.GastgezinId").on("click", function (){
+        let comments = $("#comments-@Model.GastgezinId").val();
+        if(!comments) comments = "";
+        let id = @Model.GastgezinId;
+        $.ajax({
+            url: "/Gastgezin/UpdateCommentVrijwilliger",
+            type: "POST",
+            dataType: 'text',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: {"comments":comments, "gastgezinId":id},
+            success: function(){
+                location.reload();
+            },
+            error: function() {
+                window.location = "/Error";
+            }
+        });
+    })
+</script>

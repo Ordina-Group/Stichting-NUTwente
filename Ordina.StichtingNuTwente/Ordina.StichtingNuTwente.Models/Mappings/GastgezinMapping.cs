@@ -123,7 +123,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 MaxChildren = maxChildren,
                 Note = gastgezin.Note,
                 Deleted = gastgezin.Deleted,
-                DeletionComment = deletionComment
+                DeletionComment = deletionComment,
+                VrijwilligerOpmerkingen = gastgezin.VrijwilligerOpmerkingen
             };
 
             return gastgezinViewModel;
