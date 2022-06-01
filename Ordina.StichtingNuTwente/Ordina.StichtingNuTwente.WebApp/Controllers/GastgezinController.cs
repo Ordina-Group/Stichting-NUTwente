@@ -772,5 +772,24 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        public IActionResult UpdateCommentVrijwilliger(string comments, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null)
+                {
+                    gastgezin.VrijwilligerOpmerkingen = comments == null? "": comments;
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
     }
 }
