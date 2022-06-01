@@ -30,5 +30,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public List<Comment>? Comments { get; set; }
 
         public bool Deleted { get; set; }
+
+        public string VrijwilligerOpmerkingen { get; set; }
     }
 }

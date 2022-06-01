@@ -30,13 +30,14 @@
         <div class="col col-1">
             <div class="card border-0 bg-transparent shadow-none">
                 <div class=card-body>
-                     @if (Model.GastGezin.Deleted)
+                    @if (Model.GastGezin.Deleted)
                     {
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
                     }
-                    else{
+                    else
+                    {
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
-                        }
+                    }
                 </div>
             </div>
         </div>
