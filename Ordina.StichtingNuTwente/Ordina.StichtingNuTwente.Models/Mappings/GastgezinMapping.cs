@@ -86,11 +86,11 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             int? maxAdults = 0;
-            int? maxChildren = 0;
             if (gastgezin.MaxAdults != null)
             {
-                maxChildren = gastgezin.MaxAdults;
+                maxAdults = gastgezin.MaxAdults;
             }
+            int? maxChildren = 0;
             if (gastgezin.MaxChildren != null)
             {
                 maxChildren = gastgezin.MaxChildren;
