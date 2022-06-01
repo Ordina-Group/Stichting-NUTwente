@@ -187,7 +187,7 @@
                     <td></td>
                 }
             </tr>
-            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note))
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
         }
     </tbody>
     <tfoot>
@@ -196,11 +196,11 @@
             <td></td>
             <td></td>
             <td><span class="float-right">Totaal:</span></td>
-            <td>@(Model.MijnGastgezinnen.Count)G</td>
+            <td>@(Model.MijnGastgezinnen.Count) <i class="fa-solid fa-house-chimney-user"></i></td>
             <td></td>
             <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
-            <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0"))G</td>
-            <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0"))G</td>
+            <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0")) <i class="fa-solid fa-house-chimney-user"></i></td>
+            <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0")) <i class="fa-solid fa-house-chimney-user"></i></td>
             <td></td>
         </tr>
     </tfoot>
