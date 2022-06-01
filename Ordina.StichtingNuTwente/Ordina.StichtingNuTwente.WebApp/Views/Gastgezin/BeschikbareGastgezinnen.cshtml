@@ -199,8 +199,8 @@
             <td>@(Model.MijnGastgezinnen.Count) <i class="fa-solid fa-house-chimney-user"></i></td>
             <td></td>
             <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
-            <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0")) <i class="fa-solid fa-house-chimney-user"></i></td>
-            <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0")) <i class="fa-solid fa-house-chimney-user"></i></td>
+            <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0") && !g.PlaatsingTag.StartsWith("N") && !g.PlaatsingTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
+            <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0") && !g.ReserveTag.StartsWith("N") && !g.ReserveTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
             <td></td>
         </tr>
     </tfoot>
