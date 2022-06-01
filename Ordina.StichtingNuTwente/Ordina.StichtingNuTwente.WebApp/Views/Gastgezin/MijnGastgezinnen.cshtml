@@ -56,7 +56,11 @@
                         <td>@mijnGastgezin.Naam</td>
                         <td>@mijnGastgezin.Adres</td>
                         <td>@mijnGastgezin.Woonplaats</td>
-                        <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;">@mijnGastgezin.VrijwilligerOpmerkingen</td>
+                        <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                        class="show" id="@Index"
+                        data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
+                            @mijnGastgezin.VrijwilligerOpmerkingen
+                        </td>
                         <td>
                             @if (mijnGastgezin.AanmeldFormulierId != 0)
                             {
