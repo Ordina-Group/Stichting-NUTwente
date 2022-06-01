@@ -8,6 +8,23 @@
     bool updateMode = !String.IsNullOrEmpty(Context.Request.Query["id"]);
 
 }
+
+@if (Model.Deleted)
+{
+    <div class="row">
+        <div class="col">
+            <div class="card" id="TitleCard" style="background:#ff9991">
+                <div class="card-body">
+                    <p>
+                        Verwijderd door @Model.DeletionComment?.Commenter.FirstName<br>
+                        Reden: @Model.DeletionComment?.Text<br>
+                        Datum: @Model.DeletionComment?.Created.ToShortDateString()
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <div class="card">
     <div class="card-header">
         <h1 class="Title">@Html.Raw(Model.Title)</h1>
@@ -68,7 +85,14 @@
             <br />
 
             <br />
-            @* <button class="btn btn-danger" id="delete">Verwijderen</button> *@
+            @if (Model.Deleted)
+            {
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+            }
         }
         <br />
         <br />
@@ -79,7 +103,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Formulier op andere manier benaderen</h5>
+                        <h5 class="modal-title" id="confirmModalLabel">Formulier op andere manier benaderen</h5>
                     </div>
                     <div class="modal-body">
                         <p> Sinds de nieuwe update van de website ga je het liefst naar deze pagina via Mijn Overzichten -> Mijn Gastgezinnen, anders wordt dit formulier niet automatisch gekoppeld aan een gastgezin. Mocht je (nog) niet gekoppeld zijn, dan kan je gewoon door naar het formulier.</p>
@@ -94,38 +118,99 @@
     }
     @await Html.PartialAsync("_InputValidation.cshtml")
     @await Html.PartialAsync("_Submit.cshtml", new SubmitFormPartialViewModel(){UpdateMode = updateMode, FormId = Model.Id, GastgezinId = Model.GastgezinId})
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Formulier verwijderen</h5>
+                </div>
+                <div class="form-group">
+                    <label for="reasonForDelete">Reden voor verwijderen</label>
+                    <textarea class="form-control" id="reasonForDelete" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Afsluiten</button>
+                    <button type="button" class="btn btn-danger" id="deleteReactie">Bevestig verwijdering</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">Reactie herstellen</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Afsluiten</button>
+                    <button type="button" class="btn btn-primary" id="restoreReactie">Bevestig herstelling</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
 
-        $(document).ready(function () {
-            if($("#confirmModal")){
+        $(document).ready(function() {
+            if ($("#confirmModal")) {
                 $("#confirmModal").modal("show");
             }
-            $(document).keypress(function(e)
-            {
-                if(e.keyCode === 13)
-                {
+            $(document).keypress(function(e) {
+                if (e.keyCode === 13) {
                     e.preventDefault();
                     return false;
                 }
             });
-            $("#delete").click(function (e) {
-                if (confirm("Weet je zeker dat je dit formulier inclusief antwoorden en geassocieerde data permanent wilt verwijderen?") == true) {
-                    $.ajax({
-                        url: "/Home/Delete",
-                        type: "DELETE",
-                        dataType: 'text',
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        data: {"id":"@Context.Request.Query["id"]"},
-                        success: function(){
-                            window.location = "/getnutwenteoverheidreacties987456list";
-                        },
-                        error: function(){
-                            window.location = "/Error";
-                        }
-                    });
-                }
-            });
         });
+    </script>
+
+    <script>
+        $("#deleteReactie").on("click", function() {
+            let id = @Context.Request.Query["id"];
+            let reasonForDelete = $("#reasonForDelete").val();
+            if (confirm("Weet je zeker dat je dit formulier wilt verwijderen?")) {
+                $.ajax({
+                    url: `/Home/Delete/${id}?comment=${reasonForDelete}`,
+                    type: "DELETE",
+                    dataType: 'text',
+                    success: function() {
+                        if (window.location.href != document.referrer) {
+                            window.location = document.referrer;
+                        } else {
+                            window.location = "/";
+                        }
+                    },
+                    error: function() {
+                        window.location = "/Error";
+                    }
+                });
+            }
+        })
+    </script>
+
+    <script>
+        $("#restoreReactie").on("click", function() {
+            let id = @Context.Request.Query["id"];
+            if (confirm("Weet je zeker dat je deze reactie wilt herstellen?")) {
+                $.ajax({
+                    url: `/Home/Restore/${id}`,
+                    type: "POST",
+                    dataType: 'text',
+                    success: function() {
+                        if (window.location.href != document.referrer) {
+                            window.location = document.referrer;
+                        } else {
+                            window.location = "/";
+                        }
+                    },
+                    error: function() {
+                        window.location = "/Error";
+                    }
+                });
+            }
+        })
     </script>
 
 </body>

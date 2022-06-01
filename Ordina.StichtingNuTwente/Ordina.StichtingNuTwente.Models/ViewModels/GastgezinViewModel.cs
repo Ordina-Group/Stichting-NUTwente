@@ -51,4 +51,7 @@ public class GastgezinViewModel
     public int? MaxChildren { get; set; }
 
     public Comment? RejectionComment { get; set; }
+
+    public bool Deleted { get; set; }
+    public Comment? DeletionComment { get; set; }
 }

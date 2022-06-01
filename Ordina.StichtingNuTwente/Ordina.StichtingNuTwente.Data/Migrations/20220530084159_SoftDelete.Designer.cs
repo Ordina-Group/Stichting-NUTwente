@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220530084159_SoftDelete")]
+    partial class SoftDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,13 +93,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<int>("CommenterId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("GastgezinId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReactieId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -109,8 +105,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.HasIndex("CommenterId");
 
                     b.HasIndex("GastgezinId");
-
-                    b.HasIndex("ReactieId");
 
                     b.ToTable("Comments");
                 });
@@ -482,10 +476,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("GastgezinId");
 
-                    b.HasOne("Ordina.StichtingNuTwente.Models.Models.Reactie", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ReactieId");
-
                     b.Navigation("Commenter");
                 });
 
@@ -600,8 +590,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.Reactie", b =>
                 {
                     b.Navigation("Antwoorden");
-
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Ordina.StichtingNuTwente.Models.Models.UserDetails", b =>

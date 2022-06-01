@@ -241,7 +241,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     Status = (int)GastgezinStatus.Aangemeld,
                 };
 
-                dbGastgezin=gastgezinRepo.Create(gastgezin);
+                dbGastgezin = gastgezinRepo.Create(gastgezin);
             }
 
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "PlaatsingsInfo")))
@@ -266,7 +266,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     else
                     {
                         plaatsingsInfoRepo.Update(dbPlaatsingsInfo);
-                        if(dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
+                        if (dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
                         {
                             dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
                             gastgezinRepo.Update(dbGastgezin);
@@ -286,7 +286,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     foreach (var q in s.Questions)
                     {
                         var answer = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == q.Id.ToString());
-                        if (answer != null && !string.IsNullOrEmpty(answer.Antwoord) && q.ParameterName == prop.Name && q.Object == typeObject.Name)
+                        if (answer != null && q.ParameterName == prop.Name && q.Object == typeObject.Name)
                         {
                             PropertyInfo propInfo = typeObject.GetProperty(prop.Name);
                             if (propInfo != null)
@@ -331,7 +331,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var viewModel = new Form();
             var reactieRepository = new Repository<Reactie>(_context);
-            var dbModel = reactieRepository.GetById(Id, "Antwoorden");
+            var dbModel = reactieRepository.GetById(Id, "Antwoorden,Comments");
             if (dbModel != null)
             {
                 viewModel = FormHelper.GetFormFromFileId(dbModel.FormulierId);
@@ -346,6 +346,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                     }
                 }
+
+                viewModel.Deleted = dbModel.Deleted;
+                Comment? deletionComment = null;
+
+                if (dbModel.Comments != null && dbModel.Comments.Count > 0)
+                {
+                    deletionComment = dbModel.Comments.LastOrDefault(g => g.CommentType == CommentType.DELETION);
+                }
+                viewModel.DeletionComment = deletionComment;
             }
             return viewModel;
         }
@@ -353,7 +362,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public Reactie GetReactieFromId(int Id)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            return reactieRepository.GetById(Id, "UserDetails");
+            return reactieRepository.GetById(Id, "UserDetails,Comments");
         }
 
         public List<AnswerListModel> GetAllRespones(int? form = null)
@@ -363,6 +372,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var persoonRepository = new Repository<Persoon>(_context);
             var reacties = reactieRepository.GetAll();
             var people = persoonRepository.GetAll("Reactie,Adres");
+            reacties = reacties.Where(r => !r.Deleted);
             if (form != null)
             {
                 reacties = reacties.Where(f => f.FormulierId == form.Value);
@@ -486,15 +496,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return retVal;
         }
 
-        public bool Delete(int reactionId)
+        public bool Delete(int reactionId, string comment, UserDetails user)
         {
             var reactieRepository = new Repository<Reactie>(_context);
-            var awnserRepository = new Repository<Antwoord>(_context);
-            var personRepository = new Repository<Persoon>(_context);
-            var adresRepository = new Repository<Adres>(_context);
-            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden");
 
-            foreach (var antwoord in existingReaction.Antwoorden)
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden,Comments");
+            existingReaction.Deleted = true;
+            if (existingReaction.Comments == null)
+                existingReaction.Comments = new List<Comment>();
+            existingReaction.Comments.Add(new Comment(comment, user, CommentType.DELETION));
+
+            reactieRepository.Update(existingReaction);
+            /*var awnserRepository = new Repository<Antwoord>(_context);
+            var personRepository = new Repository<Persoon>(_context);
+            var adresRepository = new Repository<Adres>(_context);*/
+
+            /*foreach (var antwoord in existingReaction.Antwoorden)
             {
                 awnserRepository.Delete(antwoord);
             }
@@ -507,11 +524,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
             if (adres != null)
-                adresRepository.Delete(adres);
+                adresRepository.Delete(adres);*/
+            return true;
+        }
 
-            reactieRepository.Delete(existingReaction);
+        public bool Restore(int reactionId)
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
 
-            return reactieRepository.GetById(reactionId) == null;
+            var existingReaction = reactieRepository.GetById(reactionId, "Antwoorden,Comments");
+            existingReaction.Deleted = false;
+            reactieRepository.Update(existingReaction);
+            return true;
+        }
+
+        public IEnumerable<Reactie> GetDeletedReacties()
+        {
+            var reactieRepository = new Repository<Reactie>(_context);
+            var reacties = reactieRepository.GetAll("Comments").Where(r => r.Deleted);
+            return reacties;
         }
     }
 }

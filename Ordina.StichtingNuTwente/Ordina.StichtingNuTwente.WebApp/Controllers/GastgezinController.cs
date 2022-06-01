@@ -360,11 +360,36 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
-        public IActionResult DeleteGastgezin(int id, bool deleteForms = false)
+        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = false)
         {
             try
             {
-                _gastgezinService.Delete(id, deleteForms);
+                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
+                if (aadID != null)
+                {
+                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
+                    if (userDetails != null)
+                    {
+                        _gastgezinService.Delete(id, deleteForms, userDetails, comment);
+                        return Ok();
+                    }
+                }
+                return BadRequest("No user found");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("{controller=Home}/{action=Index}/{id?}")]
+        [HttpPost]
+        public IActionResult RestoreGastgezin(int id)
+        {
+            try
+            {
+                _gastgezinService.Restore(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -725,6 +750,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult EditPlaatsing(int GastgezinId, int PlaatsingsId)
         {
             return Redirect("/gastgezin?id=" + GastgezinId);
+        }
+
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("VerwijderdeGastgezinnen")]
+        [HttpGet]
+        [ActionName("VerwijderdeGastgezinnen")]
+        public IActionResult VerwijderdeGastgezinnen()
+        {
+            _userService.checkIfUserExists(User);
+
+            var model = new List<GastgezinViewModel>();
+
+            var user = GetUser();
+            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetDeletedGastgezinnen();
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user);
+                model.Add(gastgezinViewModel);
+            }
+            return View(model);
         }
     }
 }
