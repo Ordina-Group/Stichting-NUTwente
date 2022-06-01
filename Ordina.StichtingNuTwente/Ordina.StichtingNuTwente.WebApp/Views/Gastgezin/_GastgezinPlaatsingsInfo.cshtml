@@ -13,7 +13,7 @@
                         <div class="col"><b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte</div>
                         <div class="col"><b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy</div>
                         <div class="col"><b>Opbergruimte:</b> @Model.PlaatsingsInfo?.Opbergruimte</div>
-                        <div class="col"><b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten</div>
+                        <div class="col"><b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten?.Replace(",", ", ").Replace(";", ", ")</div>
                         <div class="col"><b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken </div>
                         <div class="col"><b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer</div>
                         <div class="col"><b>Roken:</b> @Model.PlaatsingsInfo?.Roken</div>
