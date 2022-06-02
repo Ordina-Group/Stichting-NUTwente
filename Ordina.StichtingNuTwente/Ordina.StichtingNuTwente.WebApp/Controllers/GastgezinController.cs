@@ -360,7 +360,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
-        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = false)
+        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = true)
         {
             try
             {
@@ -370,7 +370,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     var userDetails = this._userService.GetUserByAADId(aadID.Value);
                     if (userDetails != null)
                     {
-                        _gastgezinService.Delete(id, deleteForms, userDetails, comment);
+                        _gastgezinService.Delete(id, deleteForms, userDetails, comment == null? "": comment);
                         return Ok();
                     }
                 }
