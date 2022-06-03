@@ -86,7 +86,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             var u = GetUser();
             viewModel.CanDelete = false;
-            if (User.HasClaims("groups", "group-secretariaat", "group-coordinator") || gastGezin.Buddy?.Id == user.Id)
+            if (User.HasClaims("groups", "group-secretariaat", "group-coordinator"))
                 viewModel.CanDelete = true;
             return View(viewModel);
         }
@@ -360,7 +360,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
 
-        [Authorize(Policy = "RequireVrijwilligerRole")]
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
         public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = true)
@@ -368,9 +368,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             try
             {
                 var userDetails = GetUser();
-                var gastgezin = _gastgezinService.GetGastgezin(id);
-
-                if (gastgezin != null && userDetails != null && (User.HasClaims("groups", "group-secretariaat", "group-coordinator") || gastgezin.Buddy?.Id == userDetails.Id))
+                if (userDetails != null)
                 {
                     _gastgezinService.Delete(id, deleteForms, userDetails, comment == null ? "" : comment);
                     return Ok();
