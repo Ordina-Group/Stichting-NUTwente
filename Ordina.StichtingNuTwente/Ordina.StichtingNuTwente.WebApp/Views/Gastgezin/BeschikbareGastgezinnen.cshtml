@@ -117,7 +117,8 @@
             <th scope="col">Woonplaats</th>
             <th scope="col">Adres</th>
             <th scope="col">Naam</th>
-            <th scope="col">Telefoon</th>
+            <th scope="col">Status</th>
+            <th scope="col">Opmerkingen</th>
             <th scope="col">Ids</th>
             <th scope="col">Buddy</th>
             <th scope="col">Max</th>
@@ -134,7 +135,31 @@
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie) || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
                 <td>@mijnGastgezin.Naam</td>
-                <td>@mijnGastgezin.Telefoonnummer</td>
+                <td>
+                    @switch (@mijnGastgezin.Status)
+                    {
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                            <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                            <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                            <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                            <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                            break;
+                        default:
+                            <p>-</p>
+                            break;
+                    }
+                </td>
+                <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                class="show" id="@Index"
+                data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
+                    @mijnGastgezin.VrijwilligerOpmerkingen
+                </td>
                 <td>
                     <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
                     @if (mijnGastgezin.IntakeFormulierId > 0)
@@ -165,7 +190,7 @@
                             <text>class=link-primary</text>
                         }
                         >@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)
-                            </a>
+                                    </a>
                 </td>
                 <td>
                     <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
@@ -187,7 +212,7 @@
                     <td></td>
                 }
             </tr>
-            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen))
         }
     </tbody>
     <tfoot>
