@@ -791,5 +791,26 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                var user = GetUser();
+                if (gastgezin != null && user != null)
+                {
+                    gastgezin.ContactLogs.Add(new ContactLog() { Notes = note, DateTime = date, Contacter = user });
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
     }
 }
