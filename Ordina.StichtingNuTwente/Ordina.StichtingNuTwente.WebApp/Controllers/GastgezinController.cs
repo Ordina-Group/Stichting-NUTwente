@@ -38,7 +38,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 if (!(gastGezin.Begeleider?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
                 {
-                    return Redirect("MicrosoftIdentity/Account/AccessDenied"); 
+                    return Redirect("MicrosoftIdentity/Account/AccessDenied");
                 }
             }
             else if (!User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
@@ -47,9 +47,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             var viewModel = new GastgezinDetailViewModel() { };
+            var user = GetUser();
             if (gastGezin.Contact != null)
             {
-                var user = GetUser();
                 var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing);
                 var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering);
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
@@ -76,7 +76,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             viewModel.PlaatsingStats.ResKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResOnbekend = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
 
-            if(EditPlaatsingen == true)
+            if (EditPlaatsingen == true)
             {
                 viewModel.EditPlaatsingen = true;
             }
@@ -84,7 +84,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 viewModel.EditReserveringen = true;
             }
-
+            var u = GetUser();
+            viewModel.CanDelete = false;
+            if (User.HasClaims("groups", "group-secretariaat", "group-coordinator") || gastGezin.Buddy?.Id == user.Id)
+                viewModel.CanDelete = true;
             return View(viewModel);
         }
 
@@ -94,7 +97,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             var plaatsType = PlacementType;
 
-            for (int i = 0; i<Amount; i++)
+            for (int i = 0; i < Amount; i++)
             {
                 var plaatsing = new Plaatsing()
                 {
@@ -151,7 +154,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (key.StartsWith("AgeGroup"))
                 {
                     ageGroup = Enum.Parse<AgeGroup>(formCollection[key]);
-                    
+
                     plaatsing.DateTime = date;
                     plaatsing.Gender = gender;
                     plaatsing.Age = age;
@@ -169,7 +172,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             plaatsing.Active = false;
             _gastgezinService.UpdatePlaatsing(plaatsing);
             var placementType = PlacementType.VerwijderdePlaatsing;
-            if(plaatsing.PlacementType == PlacementType.Reservering)
+            if (plaatsing.PlacementType == PlacementType.Reservering)
             {
                 placementType = PlacementType.VerwijderdeReservering;
             }
@@ -357,22 +360,20 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             model.IsVrijwilliger = user.Roles.Contains("group-vrijwilliger");
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireVrijwilligerRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
         public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = true)
         {
             try
             {
-                var aadID = User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"));
-                if (aadID != null)
+                var userDetails = GetUser();
+                var gastgezin = _gastgezinService.GetGastgezin(id);
+
+                if (gastgezin != null && userDetails != null && (User.HasClaims("groups", "group-secretariaat", "group-coordinator") || gastgezin.Buddy?.Id == userDetails.Id))
                 {
-                    var userDetails = this._userService.GetUserByAADId(aadID.Value);
-                    if (userDetails != null)
-                    {
-                        _gastgezinService.Delete(id, deleteForms, userDetails, comment == null? "": comment);
-                        return Ok();
-                    }
+                    _gastgezinService.Delete(id, deleteForms, userDetails, comment == null ? "" : comment);
+                    return Ok();
                 }
                 return BadRequest("No user found");
             }
@@ -546,7 +547,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
         {
             _userService.checkIfUserExists(User);
-            
+
             var alleGastgezinnen = new AlleGastgezinnenModel();
 
             var vrijwilligers = _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ToList();
@@ -780,7 +781,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
                 if (gastgezin != null)
                 {
-                    gastgezin.VrijwilligerOpmerkingen = comments == null? "": comments;
+                    gastgezin.VrijwilligerOpmerkingen = comments == null ? "" : comments;
                     _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
                     return Ok();
                 }
