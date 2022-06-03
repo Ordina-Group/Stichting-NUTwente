@@ -633,6 +633,53 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col g-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Contactmomenten</h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="ContactLogDate">Datum</label>
+                            <input type="date" class="form-control" id="ContactLogDate" name="ContactLogDate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ContactLogDate">Notitie</label>
+                            <textarea class="form-control" id="ContactLogText" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button style="position:relative;bottom:-70px;" class="btn btn-primary" id="ContactLogSubmit">Opslaan</button>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Datum</th>
+                                    <th scope="col">Persoon</th>
+                                    <th scope="col">Notitie</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var contactLog in Model.GastGezin.ContactLogs)
+                                {
+                                    <tr>
+                                        <td>@contactLog.DateTime.ToShortDateString()</td>
+                                        <td>@contactLog.Contacter.FirstName</td>
+                                        <td>@contactLog.Notes</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="row" id="plaatsingsGeschiedenisRow">
@@ -774,6 +821,28 @@
                    }else{
                        window.location = "/";
                    }
+               },
+               error: function() {
+                   window.location = "/Error";
+               }
+           });
+       }
+     })
+</script>
+
+<script>
+    $("#ContactLogSubmit").on("click", function (){
+       let id = @Model.GastGezin.Id;
+       let date = $("#ContactLogDate").val();
+       let note = $("#ContactLogText").val();
+       if (note && date) {
+         $.ajax({
+               url: `/Gastgezin/AddContactLog` ,
+               type: "POST",
+               dataType: 'text',
+               data: {"date":date, "note":note,"gastgezinId":id},
+               success: function(){
+                   location.reload();
                },
                error: function() {
                    window.location = "/Error";
