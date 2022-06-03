@@ -360,7 +360,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("{controller=Home}/{action=Index}/{id?}")]
         [HttpDelete]
-        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = false)
+        public IActionResult DeleteGastgezin(int id, string comment, bool deleteForms = true)
         {
             try
             {
@@ -370,7 +370,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     var userDetails = this._userService.GetUserByAADId(aadID.Value);
                     if (userDetails != null)
                     {
-                        _gastgezinService.Delete(id, deleteForms, userDetails, comment);
+                        _gastgezinService.Delete(id, deleteForms, userDetails, comment == null? "": comment);
                         return Ok();
                     }
                 }
@@ -781,6 +781,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (gastgezin != null)
                 {
                     gastgezin.VrijwilligerOpmerkingen = comments == null? "": comments;
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                var user = GetUser();
+                if (gastgezin != null && user != null)
+                {
+                    gastgezin.ContactLogs.Add(new ContactLog() { Notes = note, DateTime = date, Contacter = user });
                     _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
                     return Ok();
                 }

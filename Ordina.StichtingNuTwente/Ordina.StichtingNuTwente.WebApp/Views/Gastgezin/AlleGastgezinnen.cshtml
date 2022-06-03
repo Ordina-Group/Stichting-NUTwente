@@ -44,7 +44,7 @@
                         <th scope="col">Naam</th>
                         <th scope="col">Adres</th>
                         <th scope="col">Woonplaats</th>
-                        <th scope="col">Telefoonnummer</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Intaker</th>
                         <th scope="col">Buddy</th>
                         <th scope="col" style="width:32px"></th>
@@ -59,73 +59,98 @@
                             <text>data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.RejectionComment.Commenter.FirstName heeft buddy zijn geweigerd: @mijnGastgezin.RejectionComment.Text"</text>
                         }
                         >
-                                    <td>
-                                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                         <td>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
                                 @if (mijnGastgezin.IntakeFormulierId > 0)
                                 {
                                     <text>/ </text>
-                                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
                                 }
-                                    </td>
-                                    <td class="text-break"><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.Naam</a></td>
-                                    <td class="text-break">@mijnGastgezin.Adres</td>
-                                    <td class="text-break">@mijnGastgezin.Woonplaats</td>
-                                    <td>@mijnGastgezin.Telefoonnummer</td>
-                                    <td>
-                                        <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
-                                    @if (mijnGastgezin.BegeleiderId > 0)
-                                    {
-                                                        <option selected="selected" value=""></option>
-                                    }
-                                    else
-                                    {
-                                                        <option value=""></option>
-                                    }
-                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
-                                    {
-                                        if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
+                                 </td>
+                                 <td class="text-break"><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.Naam</a></td>
+                                 <td class="text-break">@mijnGastgezin.Adres</td>
+                                 <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                                 <td>
+                                @switch (@mijnGastgezin.Status)
+                                {
+                                    case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                                        <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                                        break;
+                                    case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                                        <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                                        break;
+                                    case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                                        <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                                        break;
+                                    case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                                        <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                                        break;
+                                    default:
+                                       <p>-</p>
+                                        break;
+                                }
+                                </td>
+                                <td>
+                                @if (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.BegeleiderId <= 0)
+                                {
+                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                        @if (mijnGastgezin.BegeleiderId > 0)
                                         {
-                                                                    <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                            <option selected="selected" value=""></option>
                                         }
                                         else
                                         {
-                                                                    <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                            <option value=""></option>
                                         }
-                                    }
-                                        </select>
+                                        @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                        {
+                                            if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
+                                            {
+                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            }
+                                        }
+
+                                    </select>
+                                } else {
+                                    <p>@Model.Vrijwilligers.FirstOrDefault(v => v.Id == mijnGastgezin.BegeleiderId)?.Naam</p>
+                                }
                                     </td>
                                     <td>
-                                        <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
                                     @if (mijnGastgezin.BuddyId > 0)
                                     {
-                                                        <option selected="selected" value=""></option>
+                                        <option selected="selected" value=""></option>
                                     }
                                     else
                                     {
-                                                        <option value=""></option>
+                                        <option value=""></option>
                                     }
                                     @foreach (var vrijwilliger in Model.Vrijwilligers)
                                     {
                                         if (vrijwilliger.Id == mijnGastgezin.BuddyId)
                                         {
-                                                                    <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                         }
                                         else
                                         {
-                                                                    <option value="@vrijwilliger.Id">@vrijwilliger.Naam (@vrijwilliger.Email)</option>
+                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                         }
                                     }
-                                        </select>
-                                    </td>
+                                                                </select>
+                                                            </td>
                             @if (mijnGastgezin.PlaatsingsInfo != null)
                             {
-                                                <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
+                                <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
                             }
                             else
                             {
-                                                <td></td>
+                                <td></td>
                             }
-                                </tr>
+                            </tr>
                         @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
                     }
                 </tbody>
