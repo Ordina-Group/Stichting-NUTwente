@@ -125,7 +125,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var viewModel = ReactieMapping.FromDatabaseToWebModel(reactie);
                 try
                 {
-                    UpdateDatabaseWithRelationalObjects(viewModel, reactie, null, reactie.Id);
+                    Update(viewModel, reactie.Id);
                 }
                 catch (Exception) { }
             }
