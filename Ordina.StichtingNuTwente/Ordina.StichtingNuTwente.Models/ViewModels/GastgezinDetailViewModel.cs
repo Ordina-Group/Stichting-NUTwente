@@ -18,6 +18,7 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             PlaatsingStats = new PlaatsingStats();
             EditPlaatsingen = false;
             EditReserveringen = false;
+            CanDelete = false;
         }
 
         public GastgezinViewModel GastGezin { get; set; }
@@ -28,5 +29,6 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public PlaatsingStats PlaatsingStats { get; set; }
         public bool EditPlaatsingen { get; set; }
         public bool EditReserveringen { get; set; }
+        public bool CanDelete { get; set; }
     }
 }
