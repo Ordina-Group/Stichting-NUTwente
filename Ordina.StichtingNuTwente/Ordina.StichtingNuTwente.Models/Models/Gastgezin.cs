@@ -9,6 +9,11 @@ namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class Gastgezin: BaseEntity
     {
+        public Gastgezin()
+        {
+            VrijwilligerOpmerkingen = "";
+            ContactLogs = new List<ContactLog>();
+        }
         public ICollection<Persoon>? Vluchtelingen { get; set; }
         public Persoon Contact { get; set; }
         public UserDetails? Begeleider { get; set; }
