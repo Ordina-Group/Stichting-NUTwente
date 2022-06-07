@@ -42,7 +42,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 MailToAdress = persoon.Email,
                 MailToName = persoon.Naam,
                 Subject = "Bevestiging van aanmelding",
-                Message = $"Beste {persoon.Naam}, \n\n Bedankt voor uw aanmelding. \n Voor meer informatie kunt u terecht op onze website: www.nutwente.nl \n\n Met vriendelijke groet, \n Stichting NuTwente"
+                Message = $"Beste {persoon.Naam},\n\nBedankt voor uw aanmelding.\nVoor meer informatie kunt u terecht op onze website: www.nutwente.nl\n\nMet vriendelijke groet,\nStichting NuTwente"
             };
             bool succes = await (_mailService.SendMail(mail));
 
