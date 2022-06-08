@@ -196,6 +196,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SaveAndSendEmailAsync(string answers, int? gastgezinId)
         {
