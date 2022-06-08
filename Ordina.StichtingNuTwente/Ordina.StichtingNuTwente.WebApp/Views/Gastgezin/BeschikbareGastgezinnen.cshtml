@@ -110,7 +110,14 @@
     </script>
 </div>
 
-
+<nav class="nav nav-tabs d-flex justify-content-between">
+    <div class="d-flex">
+        <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "Alles" ? "active":"")" href="?statusFilter=Alles">Alles</a>
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Beschikbaar"?"active":"")" href="?statusFilter=Beschikbaar">Beschikbaar</a>
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Nood"?"active":"")" href="?statusFilter=Nood">Nood</a>
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "On Hold"?"active":"")" href="?statusFilter=On Hold">On Hold</a>
+    </div>
+</nav>
 <table class="table">
     <thead>
         <tr>
@@ -190,7 +197,7 @@
                             <text>class=link-primary</text>
                         }
                         >@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)
-                                    </a>
+                                        </a>
                 </td>
                 <td>
                     <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))

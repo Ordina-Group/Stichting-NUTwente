@@ -13,11 +13,27 @@
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
-                    @if (Model.GastGezin.Status == GastgezinStatus.OnHold)
+                    <span class="badge bg-secondary">
+                    @switch (Model.GastGezin.Status)
                     {
-                        <span class="badge bg-secondary">On Hold</span>
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                            <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                            <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                            <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                            <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                            break;
+                        default:
+                            <p>-</p>
+                            break;
                     }
-                    @if (Model.GastGezin.Status == GastgezinStatus.NoodOpvang)
+                    </span>
+                    @if (Model.GastGezin.NoodOpvang)
                     {
                         <span class="badge bg-info">Noodopvang</span>
                     }
@@ -68,13 +84,19 @@
                 <p>
                     Naam: @Model.GastGezin.Naam</br>
                     Telefoonnummer: @Model.GastGezin.Telefoonnummer</br>
-                    Email: @Model.GastGezin.Email
+                    Email: @Model.GastGezin.Email</br>
+
                 </p>
                 <h5>Plaatsingsadres</h5>
                 <p>
                     Adres: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie) || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.AdresVanLocatie :  Model.GastGezin.Adres)</br>
                     Woonplaats: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie) || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.PlaatsnaamVanLocatie :  Model.GastGezin.Woonplaats)</br>
                     Postcode: @(Model.GastGezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie) || Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie == "-" || Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie.ToLower() == "idem")? Model.GastGezin.PlaatsingsInfo?.PostcodeVanLocatie :  Model.GastGezin.Postcode)
+                </p>
+                <h5>Vrijwilligers</h5>
+                <p>
+                    Intaker: @Model.GastGezin.Begeleider</br>
+                    Buddy: @Model.GastGezin.Buddy
                 </p>
                 <h5>Formulieren</h5>
                 <div class="row">
@@ -102,22 +124,19 @@
                 {
                     <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                     <div class="row mt-1">
-                        <label class="col">Status:</label>
                         <div class="col">
-                            <select name="Status" id="status" class="form-select">
-                                @foreach (var option in Enum.GetValues(typeof(GastgezinStatus)))
-                                {
-
-                                    if ((GastgezinStatus)option == Model.GastGezin.Status)
-                                    {
-                                        <option selected value="@option">@option</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@option">@option</option>
-                                    }
-                                }
-                            </select>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"")>
+                                <label class="form-check-label" for="OnHold">
+                                    On Hold
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"")>
+                                <label class="form-check-label" for="NoodOpvang">
+                                    Nood Opvang
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-1">
@@ -147,6 +166,7 @@
         </div>
     </div>
     <div class="col-9">
+   
         <div class="row">
             <div class="col" id="DetailsCol">
                 <div class="card" id="DetailsCard">
@@ -169,7 +189,7 @@
                             <div class="col">
                                 <div class="col"><b>Gezinssamenstelling: </b> @Model.GastGezin.PlaatsingsInfo?.GezinsSamenstelling</div>
                                 <div class="col"><b>Veilige opbergplaats:</b> @Model.GastGezin.PlaatsingsInfo?.VeiligeOpbergruimte</div>
-                                <div class="col"><b>Huisderen aanwezig:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenAanwezig</div>
+                                <div class="col"><b>Huisdieren aanwezig:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenAanwezig</div>
                                 <div class="col"><b>Bezwaar tegen huisdieren:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenMogelijk</div>
                                 <div class="col"><b>Allergieën:</b> @Model.GastGezin.PlaatsingsInfo?.Allergieen</div>
                                 <div class="col"><b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo?.VluchtelingOphalen</div>
@@ -235,19 +255,19 @@
                             </div>
 
                             <script>
-                                 $( "#Age" ).change(function() {
+                                $("#Age").change(function() {
                                     var age = parseInt($(this).val(), 10);
                                     var ageGroup = "";
-                                    if(age < 0 || !$.isNumeric(age) ){
+                                    if (age < 0 || !$.isNumeric(age)) {
                                         ageGroup = "@AgeGroup.Onbekend";
                                     }
-                                    if(age <= 17 && age >= 0){
+                                    if (age <= 17 && age >= 0) {
                                         ageGroup = "@AgeGroup.Kind";
                                     }
-                                    if(age >= 18){
+                                    if (age >= 18) {
                                         ageGroup = "@AgeGroup.Volwassene";
                                     }
-                                    $( "#AgeGroup" ).val(ageGroup);
+                                    $("#AgeGroup").val(ageGroup);
                                     console.log("age: " + age + " ageGroup: " + ageGroup);
                                 });
                             </script>
@@ -369,20 +389,20 @@
                                         </div>
 
                                         <script>
-                                            $( "#Age_@p.Id" ).change(function() {
-                                            var age = parseInt($(this).val(), 10);
-                                            var ageGroup = "";
-                                            if(age < 0 || !$.isNumeric(age) ){
-                                            ageGroup = "@AgeGroup.Onbekend";
-                                            }
-                                            if(age <= 17 && age >= 0){
-                                            ageGroup = "@AgeGroup.Kind";
-                                            }
-                                            if(age >= 18){
-                                            ageGroup = "@AgeGroup.Volwassene";
-                                            }
-                                            $( "#AgeGroup_@p.Id" ).val(ageGroup);
-                                            console.log("age: " + age + " ageGroup: " + ageGroup);
+                                            $("#Age_@p.Id").change(function() {
+                                                var age = parseInt($(this).val(), 10);
+                                                var ageGroup = "";
+                                                if (age < 0 || !$.isNumeric(age)) {
+                                                    ageGroup = "@AgeGroup.Onbekend";
+                                                }
+                                                if (age <= 17 && age >= 0) {
+                                                    ageGroup = "@AgeGroup.Kind";
+                                                }
+                                                if (age >= 18) {
+                                                    ageGroup = "@AgeGroup.Volwassene";
+                                                }
+                                                $("#AgeGroup_@p.Id").val(ageGroup);
+                                                console.log("age: " + age + " ageGroup: " + ageGroup);
                                             });
                                         </script>
 
@@ -436,18 +456,18 @@
                                     <div class=col>
                                         <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
                                         <script>
-                                            $("#@("deletePlaatsing"+p.Id)").on("click", function (){
-                                            let id = @p.Id;
-                                            if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
-                                            $.ajax({
-                                            url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                            type: "DELETE",
-                                            dataType: 'text',
-                                            success: function(){
-                                            window.location.reload();
-                                            },
-                                            });
-                                            }
+                                            $("#@("deletePlaatsing"+p.Id)").on("click", function() {
+                                                let id = @p.Id;
+                                                if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
+                                                    $.ajax({
+                                                        url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                        type: "DELETE",
+                                                        dataType: 'text',
+                                                        success: function() {
+                                                            window.location.reload();
+                                                        },
+                                                    });
+                                                }
                                             })
                                         </script>
                                     </div>
@@ -534,20 +554,20 @@
                                         </div>
 
                                         <script>
-                                            $( "#Age_@p.Id" ).change(function() {
-                                            var age = parseInt($(this).val(), 10);
-                                            var ageGroup = "";
-                                            if(age < 0 || !$.isNumeric(age) ){
-                                            ageGroup = "@AgeGroup.Onbekend";
-                                            }
-                                            if(age <= 17 && age >= 0){
-                                            ageGroup = "@AgeGroup.Kind";
-                                            }
-                                            if(age >= 18){
-                                            ageGroup = "@AgeGroup.Volwassene";
-                                            }
-                                            $( "#AgeGroup_@p.Id" ).val(ageGroup);
-                                            console.log("age: " + age + " ageGroup: " + ageGroup);
+                                            $("#Age_@p.Id").change(function() {
+                                                var age = parseInt($(this).val(), 10);
+                                                var ageGroup = "";
+                                                if (age < 0 || !$.isNumeric(age)) {
+                                                    ageGroup = "@AgeGroup.Onbekend";
+                                                }
+                                                if (age <= 17 && age >= 0) {
+                                                    ageGroup = "@AgeGroup.Kind";
+                                                }
+                                                if (age >= 18) {
+                                                    ageGroup = "@AgeGroup.Volwassene";
+                                                }
+                                                $("#AgeGroup_@p.Id").val(ageGroup);
+                                                console.log("age: " + age + " ageGroup: " + ageGroup);
                                             });
                                         </script>
 
@@ -609,19 +629,19 @@
                                     <div class=col>
                                         <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
                                         <script>
-                                            $("#@("deletePlaatsing"+p.Id)").on("click", function (){
-                                               let id = @p.Id;
-                                               if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
-                                                 $.ajax({
-                                                       url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                                       type: "DELETE",
-                                                       dataType: 'text',
-                                                       success: function(){
-                                                               window.location.reload();
-                                                       },
-                                                   });
-                                               }
-                                             })
+                                            $("#@("deletePlaatsing"+p.Id)").on("click", function() {
+                                                let id = @p.Id;
+                                                if (confirm("Weet je zeker dat je deze reservering wilt verwijderen?")) {
+                                                    $.ajax({
+                                                        url: "/DeletePlaatsing?PlaatsingId=@p.Id",
+                                                        type: "DELETE",
+                                                        dataType: 'text',
+                                                        success: function() {
+                                                            window.location.reload();
+                                                        },
+                                                    });
+                                                }
+                                            })
                                         </script>
                                     </div>
                                 </div>
@@ -783,77 +803,77 @@
 </div>
 
 <script>
-    $("#deleteGastgezin").on("click", function (){
-       let id = @Model.GastGezin.Id;
-       let reasonForDelete = $("#reasonForDelete").val();
-       let deleteForms = $("#deleteForms").is(":checked");
-       if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen?")) {
-         $.ajax({
-               url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}&comment=${reasonForDelete}` ,
-               type: "DELETE",
-               dataType: 'text',
-               success: function(){
-                   if(window.location.href != document.referrer){
-                       window.location = document.referrer;
-                   }else{
-                       window.location = "/";
-                   }
-               },
-               error: function() {
-                   window.location = "/Error";
-               }
-           });
-       }
-     })
+    $("#deleteGastgezin").on("click", function() {
+        let id = @Model.GastGezin.Id;
+        let reasonForDelete = $("#reasonForDelete").val();
+        let deleteForms = $("#deleteForms").is(":checked");
+        if (confirm("Weet je zeker dat je dit gastgezin wilt verwijderen?")) {
+            $.ajax({
+                url: `/Gastgezin/DeleteGastgezin/${id}?deleteForms=${deleteForms}&comment=${reasonForDelete}`,
+                type: "DELETE",
+                dataType: 'text',
+                success: function() {
+                    if (window.location.href != document.referrer) {
+                        window.location = document.referrer;
+                    } else {
+                        window.location = "/";
+                    }
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
 </script>
 
 <script>
-    $("#restoreGastgezin").on("click", function (){
-       let id = @Model.GastGezin.Id;
-       if (confirm("Weet je zeker dat je dit gastgezin wilt herstellen?")) {
-         $.ajax({
-               url: `/Gastgezin/RestoreGastgezin/${id}` ,
-               type: "POST",
-               dataType: 'text',
-               success: function(){
-                   if(window.location.href != document.referrer){
-                       window.location = document.referrer;
-                   }else{
-                       window.location = "/";
-                   }
-               },
-               error: function() {
-                   window.location = "/Error";
-               }
-           });
-       }
-     })
+    $("#restoreGastgezin").on("click", function() {
+        let id = @Model.GastGezin.Id;
+        if (confirm("Weet je zeker dat je dit gastgezin wilt herstellen?")) {
+            $.ajax({
+                url: `/Gastgezin/RestoreGastgezin/${id}`,
+                type: "POST",
+                dataType: 'text',
+                success: function() {
+                    if (window.location.href != document.referrer) {
+                        window.location = document.referrer;
+                    } else {
+                        window.location = "/";
+                    }
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
 </script>
 
 <script>
-    $("#ContactLogSubmit").on("click", function (){
-       let id = @Model.GastGezin.Id;
-       let date = $("#ContactLogDate").val();
-       let note = $("#ContactLogText").val();
-       if (note && date) {
-         $.ajax({
-               url: `/Gastgezin/AddContactLog` ,
-               type: "POST",
-               dataType: 'text',
-               data: {"date":date, "note":note,"gastgezinId":id},
-               success: function(){
-                   location.reload();
-               },
-               error: function() {
-                   window.location = "/Error";
-               }
-           });
-       }
-     })
+    $("#ContactLogSubmit").on("click", function() {
+        let id = @Model.GastGezin.Id;
+        let date = $("#ContactLogDate").val();
+        let note = $("#ContactLogText").val();
+        if (note && date) {
+            $.ajax({
+                url: `/Gastgezin/AddContactLog`,
+                type: "POST",
+                dataType: 'text',
+                data: { "date": date, "note": note, "gastgezinId": id },
+                success: function() {
+                    location.reload();
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
+    document.addEventListener("DOMContentLoaded", function(event) {
         var scrollpos = sessionStorage.getItem('scrollpos');
         if (scrollpos) {
             window.scrollTo(0, scrollpos);
@@ -861,7 +881,7 @@
         }
     });
 
-    window.addEventListener("beforeunload", function (e) {
+    window.addEventListener("beforeunload", function(e) {
         sessionStorage.setItem('scrollpos', window.scrollY);
     });
 </script>
