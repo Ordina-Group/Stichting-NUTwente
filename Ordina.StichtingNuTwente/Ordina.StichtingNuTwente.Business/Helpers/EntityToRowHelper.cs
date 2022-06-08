@@ -1,5 +1,6 @@
 ﻿using FastExcel;
 using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             data.Add(new Cell(14, "BekekenDoorBuddy"));
             data.Add(new Cell(15, "VluchtelingIds"));
             data.Add(new Cell(16, "OpmerkingIds"));
-
+            data.Add(new Cell(17, "Verwijderd"));
+            data.Add(new Cell(18, "NoodOpvang"));
+            data.Add(new Cell(19, "OnHold"));
             return data;
         }
 
@@ -66,7 +69,56 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
                 data.Add(new Cell(15, gastgezin.Plaatsingen == null ? "" : String.Join(";", gastgezin.Plaatsingen.Select(v => v.Id.ToString()))));
                 data.Add(new Cell(16, gastgezin.Comments == null ? "" : String.Join(";", gastgezin.Comments.Select(c => c.Id.ToString()))));
+                data.Add(new Cell(17, gastgezin.Deleted));
+                data.Add(new Cell(18, gastgezin.NoodOpvang));
+                data.Add(new Cell(19, gastgezin.OnHold));
                 rows.Add(new Row(number, data));
+            }
+            return rows;
+        }
+
+
+        public static ICollection<Row> ReactiesToDataRows(List<Reactie> reacties, int formId)
+        {
+            var rows = new List<Row>();
+
+            var form = FormHelper.GetFormFromFileId(formId);
+            var header = new List<Cell>();
+            var offset = 4;
+            header.Add(new Cell(1, "Id"));
+            header.Add(new Cell(2, "Datum"));
+            header.Add(new Cell(3, "Verwijderd"));
+            header.Add(new Cell(4, "Comments"));
+            var questions = new List<Question>();
+            foreach (var section in form.Sections)
+            {
+                foreach(var question in section.Questions)
+                {
+                    questions.Add(question);
+                }
+            }
+            questions = questions.OrderBy(x => x.Id).ToList(); 
+            foreach(var question in questions)
+            {
+                header.Add(new Cell(question.Id + offset, question.Text));
+            }
+            rows.Add(new Row(1, header));
+            var number = 2;
+            foreach (var reactie in reacties)
+            {
+                var data = new List<Cell>();
+                data.Add(new Cell(1, reactie.Id.ToString()));
+                data.Add(new Cell(2, reactie.DatumIngevuld.ToString()));
+                data.Add(new Cell(3, reactie.Deleted.ToString()));
+                data.Add(new Cell(4, reactie.Comments == null ? "" : String.Join(";", reactie.Comments.Select(c => c.Id.ToString()))));
+                var antwoorden = reactie.Antwoorden.OrderBy(x => x.IdVanVraag).ToList();
+                foreach (var awnser in antwoorden)
+                {
+                    data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Response));
+
+                }
+                rows.Add(new Row(number, data));
+                number++;
             }
             return rows;
         }
