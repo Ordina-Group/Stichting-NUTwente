@@ -46,7 +46,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         {
             if (OnHold)
                 return GastgezinStatus.OnHold;
-            var plaatsingen = Plaatsingen?.Where(p => p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount) - Plaatsingen?.Where(p => p.PlacementType == PlacementType.VerwijderdePlaatsing).Sum(p => p.Amount);
+            var plaatsingen = Plaatsingen?.Where(p => p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering).Sum(p => p.Amount) - Plaatsingen?.Where(p => p.PlacementType == PlacementType.VerwijderdePlaatsing).Sum(p => p.Amount);
             if(plaatsingen > 0)
                 return GastgezinStatus.Geplaatst;
             if (IntakeFormulier != null)
