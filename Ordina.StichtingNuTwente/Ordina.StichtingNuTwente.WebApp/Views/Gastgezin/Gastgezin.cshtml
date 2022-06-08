@@ -13,10 +13,26 @@
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
-                    @if (Model.GastGezin.OnHold)
+                    <span class="badge bg-secondary">
+                    @switch (Model.GastGezin.Status)
                     {
-                        <span class="badge bg-secondary">On Hold</span>
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                            <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                            <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                            <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                            break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                            <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                            break;
+                        default:
+                            <p>-</p>
+                            break;
                     }
+                    </span>
                     @if (Model.GastGezin.NoodOpvang)
                     {
                         <span class="badge bg-info">Noodopvang</span>
