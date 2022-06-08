@@ -1,10 +1,10 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
 @using Ordina.StichtingNuTwente.Models.Models
-@model GastgezinDetailViewModel
+@model GastgezinMaintenanceViewModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
+    ViewData["Title"] = "Gastgezin " + Model.Gastgezin.Naam;
 }
 
 <div class="row">
@@ -12,7 +12,7 @@
         <div class="card border-0 bg-transparent shadow-none">
             <div class="card-body">
                 <h2 class="card-title">
-                    Gastgezin @Model.GastGezin.Naam Maintenance
+                    Gastgezin @Model.Gastgezin.Naam Maintenance
                 </h2>
                 <h3 style="color:red"> @Context.Request.Query["message"].ToString()</h3>
             </div>
@@ -26,10 +26,41 @@
                 <h5 class="card-title">Fomulier koppeling wijzigen</h5>
                 @using (Html.BeginForm("UpdateFormsForGastgezin", "Maintenance", FormMethod.Post))
                 {
-                    <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
+                    <input type="hidden" name="GastgezinId" value="@Model.Gastgezin.Id">
                     <div class="grow-wrap">
-                        <input type="number" class="form-control" name="AanmeldId" id="AanmeldId" value="@Model.GastGezin.AanmeldFormulierId" />
-                        <input type="number" class="form-control" name="IntakeId" id="IntakeId" value="@Model.GastGezin.IntakeFormulierId" />
+                        <input type="number" class="form-control" name="AanmeldId" id="AanmeldId" value="@Model.Gastgezin.AanmeldFormulierId" />
+                        <input type="number" class="form-control" name="IntakeId" id="IntakeId" value="@Model.Gastgezin.IntakeFormulierId" />
+                    </div>
+                    <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Intaker wjzigen</h5>
+                @using (Html.BeginForm("UpdateIntakerGastgezin", "Maintenance", FormMethod.Post))
+                {
+                    <input type="hidden" name="GastgezinId" value="@Model.Gastgezin.Id">
+                    <div class="grow-wrap">
+                        <select class="width-100 form-select" name="Intaker" id="Intaker">
+                            @foreach (var vrijwilliger in Model.Vrijwilligers)
+                            {
+                                if (vrijwilliger.Id == Model.Gastgezin.BegeleiderId)
+                                {
+                                    <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                }
+                                else
+                                {
+                                    <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                }
+                            }
+
+                        </select>
                     </div>
                     <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
                 }
