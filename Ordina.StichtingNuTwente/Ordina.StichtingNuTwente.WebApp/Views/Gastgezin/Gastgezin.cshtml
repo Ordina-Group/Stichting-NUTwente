@@ -104,14 +104,14 @@
                     <div class="row mt-1">
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="onHold" @(Model.GastGezin.OnHold?"checked":"")>
-                                <label class="form-check-label" for="onHold">
+                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"")>
+                                <label class="form-check-label" for="OnHold">
                                     On Hold
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="noodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"")>
-                                <label class="form-check-label" for="noodOpvang">
+                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"")>
+                                <label class="form-check-label" for="NoodOpvang">
                                     Nood Opvang
                                 </label>
                             </div>
