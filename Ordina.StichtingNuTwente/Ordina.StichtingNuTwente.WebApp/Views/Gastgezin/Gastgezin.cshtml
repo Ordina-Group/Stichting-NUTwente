@@ -13,11 +13,11 @@
             <div class="card-body">
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
-                    @if (Model.GastGezin.Status == GastgezinStatus.OnHold)
+                    @if (Model.GastGezin.OnHold)
                     {
                         <span class="badge bg-secondary">On Hold</span>
                     }
-                    @if (Model.GastGezin.Status == GastgezinStatus.NoodOpvang)
+                    @if (Model.GastGezin.NoodOpvang)
                     {
                         <span class="badge bg-info">Noodopvang</span>
                     }
@@ -102,22 +102,19 @@
                 {
                     <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                     <div class="row mt-1">
-                        <label class="col">Status:</label>
                         <div class="col">
-                            <select name="Status" id="status" class="form-select">
-                                @foreach (var option in Enum.GetValues(typeof(GastgezinStatus)))
-                                {
-
-                                    if ((GastgezinStatus)option == Model.GastGezin.Status)
-                                    {
-                                        <option selected value="@option">@option</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@option">@option</option>
-                                    }
-                                }
-                            </select>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="onHold" @(Model.GastGezin.OnHold?"checked":"")>
+                                <label class="form-check-label" for="onHold">
+                                    On Hold
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="noodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"")>
+                                <label class="form-check-label" for="noodOpvang">
+                                    Nood Opvang
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-1">
