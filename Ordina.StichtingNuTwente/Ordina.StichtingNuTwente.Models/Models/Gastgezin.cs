@@ -38,5 +38,22 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         public string VrijwilligerOpmerkingen { get; set; }
         public List<ContactLog> ContactLogs { get; set; }
+
+        public bool OnHold { get; set; }
+        public bool NoodOpvang { get; set; }
+
+        public GastgezinStatus GetStatus()
+        {
+            if (OnHold)
+                return GastgezinStatus.OnHold;
+            var plaatsingen = Plaatsingen?.Where(p => p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount) - Plaatsingen?.Where(p => p.PlacementType == PlacementType.VerwijderdePlaatsing).Sum(p => p.Amount);
+            if(plaatsingen > 0)
+                return GastgezinStatus.Geplaatst;
+            if (IntakeFormulier != null)
+                return GastgezinStatus.Bezocht;
+
+            return GastgezinStatus.Aangemeld;
+        }
+
     }
 }
