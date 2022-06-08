@@ -34,6 +34,28 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
 
 
+        public List<MaintenanceMessage> UpdateStatus()
+        {
+            var messages = new List<MaintenanceMessage>();
+            var gastgezinRepository = new Repository<Gastgezin>(_context);
+            var gastgezinnen = gastgezinRepository.GetAll();
+            foreach (var gastgezin in gastgezinnen)
+            {
+                var prevStatus = gastgezin.Status;
+                if (gastgezin.Status == GastgezinStatus.NoodOpvang)
+                {
+                    gastgezin.NoodOpvang = true;
+                }
+                else if (gastgezin.Status == GastgezinStatus.OnHold)
+                {
+                    gastgezin.OnHold = true;
+                }
+                gastgezinRepository.Update(gastgezin);
+                messages.Add(new MaintenanceMessage($"Status was {prevStatus} is now {gastgezin.GetStatus()}. OnHold is {gastgezin.OnHold}. Nood is {gastgezin.NoodOpvang}", MaintenanceMessageType.Success));
+            }
+            return messages;
+        }
+
         public List<MaintenanceMessage> LinkBegeleiderToGastgezin()
         {
             var messages = new List<MaintenanceMessage>();

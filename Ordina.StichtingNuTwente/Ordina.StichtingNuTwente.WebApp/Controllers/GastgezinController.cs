@@ -228,12 +228,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(int GastGezinId, GastgezinStatus Status, bool HasVOG, int MaxAdults, int MaxChildren)
+        public IActionResult UpdateOpties(int GastGezinId, bool noodOpvang, bool onHold, bool HasVOG, int MaxAdults, int MaxChildren)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
             {
-                gastgezin.Status = Status;
+                gastgezin.NoodOpvang = noodOpvang;
+                gastgezin.OnHold = onHold;
                 gastgezin.HasVOG = HasVOG;
                 gastgezin.MaxAdults = MaxAdults;
                 gastgezin.MaxChildren = MaxChildren;
@@ -259,13 +260,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.Status != GastgezinStatus.NoodOpvang && g.Status != GastgezinStatus.OnHold);
+                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && !g.OnHold);
                         break;
                     case "Nood":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.NoodOpvang);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.NoodOpvang);
                         break;
                     case "On Hold":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.OnHold);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.OnHold);
                         break;
                 }
             }
