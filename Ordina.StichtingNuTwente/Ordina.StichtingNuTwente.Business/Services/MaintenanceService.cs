@@ -1012,11 +1012,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var template = new FileInfo("DataDumpTemplate.xlsx");
             byte[] returnValue = new byte[0];
             var gastgezinnen = new Repository<Gastgezin>(_context).GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
-
-
+            var reactieRepository = new Repository<Reactie>(_context);
+            var aanmeldFormulieren = reactieRepository.GetAll("Antwoorden").Where(r => r.FormulierId == 1).ToList();
+            var intakeFormulieren = reactieRepository.GetAll("Antwoorden").Where(r => r.FormulierId == 2).ToList();
             using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
             {
                 AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
+                AddExcelTab("AanmeldFormulier", EntityToRowHelper.ReactiesToDataRows(aanmeldFormulieren, 1), fastExcel);
+                AddExcelTab("IntakeFormulier", EntityToRowHelper.ReactiesToDataRows(intakeFormulieren, 2), fastExcel);
             }
 
             using (var filestream = outputFile.OpenRead())
