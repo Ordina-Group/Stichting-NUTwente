@@ -51,7 +51,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(4, gastgezin.Contact != null ? gastgezin.Contact.Id.ToString() : ""));
                 data.Add(new Cell(5, gastgezin.MaxAdults != null ? gastgezin.MaxAdults.ToString() : ""));
                 data.Add(new Cell(6, gastgezin.MaxChildren != null ? gastgezin.MaxChildren.ToString() : ""));
-                data.Add(new Cell(7, gastgezin.Status != null ? gastgezin.Status.ToString() : ""));
+                data.Add(new Cell(7, gastgezin.GetStatus().ToString()));
                 data.Add(new Cell(8, gastgezin.HasVOG != null ? gastgezin.HasVOG.ToString() : ""));
                 data.Add(new Cell(9, gastgezin.Note != null ? gastgezin.Note : ""));
                 data.Add(new Cell(10, gastgezin.PlaatsingsInfo != null ? gastgezin.PlaatsingsInfo.Id.ToString() : ""));

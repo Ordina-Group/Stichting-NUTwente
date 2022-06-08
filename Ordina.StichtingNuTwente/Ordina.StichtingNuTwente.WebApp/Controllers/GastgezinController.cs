@@ -228,12 +228,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(int GastGezinId, GastgezinStatus Status, bool HasVOG, int MaxAdults, int MaxChildren)
+        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxAdults, int MaxChildren)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
             {
-                gastgezin.Status = Status;
+                gastgezin.NoodOpvang = NoodOpvang;
+                gastgezin.OnHold = OnHold;
                 gastgezin.HasVOG = HasVOG;
                 gastgezin.MaxAdults = MaxAdults;
                 gastgezin.MaxChildren = MaxChildren;
@@ -246,13 +247,29 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("/BeschikbareGastgezinnen")]
         [HttpGet]
-        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null)
+        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null, string statusFilter = "")
         {
             _userService.checkIfUserExists(User);
 
             var model = new BeschikbareGastgezinnenModel();
 
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
+
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                switch (statusFilter)
+                {
+                    case "Beschikbaar":
+                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && !g.OnHold);
+                        break;
+                    case "Nood":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.NoodOpvang);
+                        break;
+                    case "On Hold":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.OnHold);
+                        break;
+                }
+            }
 
             if (filters != null && filters.Length > 0)
             {

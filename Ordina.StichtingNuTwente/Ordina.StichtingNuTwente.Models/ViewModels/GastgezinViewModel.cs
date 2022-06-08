@@ -56,4 +56,6 @@ public class GastgezinViewModel
     public Comment? DeletionComment { get; set; }
     public string VrijwilligerOpmerkingen { get; internal set; }
     public List<ContactLog> ContactLogs { get; internal set; }
+    public bool OnHold { get; internal set; }
+    public bool NoodOpvang { get; internal set; }
 }
