@@ -66,7 +66,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     AanmeldFormulierId = aanmeldFormulierId,
                     IntakeFormulierId = intakeFormulierId,
                     Note = gastGezin.Note,
-                    Status = gastGezin.Status,
+                    Status = gastGezin.GetStatus(),
                     HasVOG = gastGezin.HasVOG,
                     MaxAdults = gastGezin.MaxAdults,
                     MaxChildren = gastGezin.MaxChildren
@@ -402,6 +402,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 ViewBag.Message = "File upload failed!!";
                 return View("Index", model);
             }
+        }
+
+        public IActionResult FixStatus()
+        {
+            var model = new MaintenanceModel();
+            var messages = maintenanceService.UpdateStatus();
+            model.Messages = new List<MaintenanceMessage>();
+            model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+            {
+                Message = x.Message,
+                MessageType = (MaintenanceMessageType)x.MessageType
+            }));
+            return View("Index", model);
         }
     }
 }

@@ -34,9 +34,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (gastgezin != null)
                     {
                         gastgezin.IntakeFormulier = dbmodel;
-                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
+                        if (gastgezin.GetStatus() == GastgezinStatus.Aangemeld)
                         {
-                            gastgezin.Status = GastgezinStatus.Bezocht;
                             var persoonRepository = new Repository<Persoon>(_context);
                             var persoon = persoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
                             if (persoon != null)
@@ -69,9 +68,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (gastgezin != null)
                     {
                         gastgezin.IntakeFormulier = dbmodel;
-                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
+                        if (gastgezin.GetStatus() == GastgezinStatus.Aangemeld)
                         {
-                            gastgezin.Status = GastgezinStatus.Bezocht;
                             var persoonRepository = new Repository<Persoon>(_context);
                             var persoon = persoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
                             if (persoon != null)
@@ -238,7 +236,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     AanmeldFormulier = reactie,
                     Contact = dbPersoon,
-                    Status = (int)GastgezinStatus.Aangemeld,
+                    Status = GastgezinStatus.Aangemeld,
                 };
 
                 dbGastgezin = gastgezinRepo.Create(gastgezin);

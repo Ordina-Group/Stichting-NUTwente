@@ -73,21 +73,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsingRepository = new Repository<Plaatsing>(_context);
             plaatsingRepository.Create(plaatsing);
             var gastgezin = plaatsing.Gastgezin;
-            if ((gastgezin.Status == GastgezinStatus.Aangemeld || gastgezin.Status == GastgezinStatus.Bezocht) && plaatsing.PlacementType == PlacementType.Plaatsing)
-            {
-                gastgezin.Status = GastgezinStatus.Geplaatst;
-                UpdateGastgezin(gastgezin, gastgezin.Id);
-            }
-            else if (plaatsing.Amount < 0 && gastgezin.Status == GastgezinStatus.Geplaatst)
-            {
-                var plaatsingen = GetPlaatsingen(gastgezin.Id, PlacementType.Plaatsing);
-                var total = plaatsingen.Sum(p => p.Amount);
-                if (total == 0)
-                {
-                    gastgezin.Status = GastgezinStatus.Bezocht;
-                    UpdateGastgezin(gastgezin, gastgezin.Id);
-                }
-            }
+            var status = gastgezin.GetStatus();
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -126,11 +112,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             string status = "";
             if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
-            if (gastgezin.Status == GastgezinStatus.OnHold)
+            var gastgezinStatus = gastgezin.GetStatus();
+
+            if (gastgezin.OnHold)
             {
-                status = "ON HOLD ";
+                status = "ON HOLD";
             }
-            if (gastgezin.Status == GastgezinStatus.NoodOpvang)
+            if (gastgezin.NoodOpvang)
             {
                 status = "NOOD ";
             }
