@@ -21,8 +21,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IUserService _userService;
         private readonly IPersoonService _persoonService;
         private readonly IMailService _mailService;
+        private readonly IGastgezinService _gastgezinService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService)
+        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService)
         {
             _logger = logger;
             _formBusiness = formBusiness;
@@ -30,6 +31,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService = userService;
             _persoonService = persoonService;
             _mailService = mailService;
+            _gastgezinService = gastgezinService;
         }
 
         [AllowAnonymous]
@@ -58,6 +60,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllDropdown());
+            if(gastgezinId != null)
+            {
+            Gastgezin gastgezin = _gastgezinService.GetGastgezin((int)gastgezinId);
+                var questions = questionForm.Sections[0].Questions;
+                questions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam;
+                questions.FirstOrDefault(q => q.ParameterName == "Straat").Answer = gastgezin.Contact.Adres.Straat;
+                questions.FirstOrDefault(q => q.ParameterName == "Postcode").Answer = gastgezin.Contact.Adres.Postcode;
+                questions.FirstOrDefault(q => q.ParameterName == "Woonplaats").Answer = gastgezin.Contact.Adres.Woonplaats;
+                questions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer").Answer = gastgezin.Contact.Telefoonnummer;
+                questions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer2").Answer = gastgezin.Contact.Telefoonnummer2;
+                questions.FirstOrDefault(q => q.ParameterName == "Email").Answer = gastgezin.Contact.Email;
+            }
             FillBaseModel(questionForm);
             return View(questionForm);
         }
