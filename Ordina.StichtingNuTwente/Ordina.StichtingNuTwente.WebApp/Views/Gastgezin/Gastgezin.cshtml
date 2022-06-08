@@ -41,23 +41,6 @@
             </div>
         </div>
     </div>
-    @if (Model.CanDelete)
-    {
-        <div class="col col-1">
-            <div class="card border-0 bg-transparent shadow-none">
-                <div class=card-body>
-                    @if (Model.GastGezin.Deleted)
-                    {
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
-                    }
-                </div>
-            </div>
-        </div>
-    }
 </div>
 @if (Model.GastGezin.Deleted)
 {
@@ -765,6 +748,23 @@
         </div>
     </div>
 </div>
+@if (Model.CanDelete)
+    {
+        <div class="col col-1">
+            <div class="card border-0 bg-transparent shadow-none">
+                <div class=card-body>
+                    @if (Model.GastGezin.Deleted)
+                    {
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
