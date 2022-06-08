@@ -406,9 +406,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         public IActionResult FixStatus()
         {
-            maintenanceService.UpdateStatus();
-
-            return Ok();
+            var model = new MaintenanceModel();
+            var messages = maintenanceService.UpdateStatus();
+            model.Messages = new List<MaintenanceMessage>();
+            model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
+            {
+                Message = x.Message,
+                MessageType = (MaintenanceMessageType)x.MessageType
+            }));
+            return View("Index", model);
         }
     }
 }
