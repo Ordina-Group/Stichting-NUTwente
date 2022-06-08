@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordina.StichtingNuTwente.Business.Interfaces;
+using Ordina.StichtingNuTwente.Models.Mappings;
+using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
@@ -11,13 +13,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IMaintenanceService maintenanceService;
         private readonly IReactionService _reactionService;
         private readonly IGastgezinService _gastgezinService;
+        private readonly IUserService _userService;
         private readonly IWebHostEnvironment _environment;
-        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment, IReactionService reactionService, IGastgezinService gastgezinService)
+        public MaintenanceController(IMaintenanceService maintenanceService, IWebHostEnvironment environment, IReactionService reactionService, IGastgezinService gastgezinService, IUserService userService)
         {
             this.maintenanceService = maintenanceService;
             _environment = environment;
             _reactionService = reactionService;
             _gastgezinService = gastgezinService;
+            _userService = userService;
         }
         [Route("/gastgezin/maintenance")]
         public IActionResult GastgezinMaintenance(int id)
@@ -28,50 +32,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("Error");
             }
 
-            var viewModel = new GastgezinDetailViewModel() { };
+            var viewModel = new GastgezinMaintenanceViewModel() { };
             if (gastGezin.Contact != null)
             {
-                var contact = gastGezin.Contact;
-                var adres = gastGezin.Contact.Adres;
-                var adresText = "";
-                var woonplaatsText = "";
-
-                if (adres != null)
-                {
-                    adresText = adres.Straat;
-                    woonplaatsText = adres.Woonplaats;
-                }
-
-                int aanmeldFormulierId = 0;
-                int intakeFormulierId = 0;
-
-                if (gastGezin.AanmeldFormulier != null)
-                {
-                    aanmeldFormulierId = gastGezin.AanmeldFormulier.Id;
-                }
-
-                if (gastGezin.IntakeFormulier != null)
-                {
-                    intakeFormulierId = gastGezin.IntakeFormulier.Id;
-                }
-
-                viewModel.GastGezin = new GastgezinViewModel()
-                {
-                    Id = id,
-                    Adres = adresText,
-                    Email = contact.Email,
-                    Naam = contact.Naam,
-                    Telefoonnummer = contact.Telefoonnummer,
-                    Woonplaats = woonplaatsText,
-                    AanmeldFormulierId = aanmeldFormulierId,
-                    IntakeFormulierId = intakeFormulierId,
-                    Note = gastGezin.Note,
-                    Status = gastGezin.GetStatus(),
-                    HasVOG = gastGezin.HasVOG,
-                    MaxAdults = gastGezin.MaxAdults,
-                    MaxChildren = gastGezin.MaxChildren
-                };
+                viewModel.Gastgezin = GastgezinMapping.FromDatabaseToWebModel(gastGezin, new UserDetails());
             }
+            var vrijwilligers =  _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ThenBy(e => e.LastName).ToList();
+            foreach (var vrijwilliger in vrijwilligers)
+            {
+                viewModel.Vrijwilligers.Add(new Vrijwilliger
+                {
+                    Id = vrijwilliger.Id,
+                    Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
+                    Email = vrijwilliger.Email
+                });
+            }
+
             return View(viewModel);
         }
 
@@ -369,6 +345,32 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             gastgezin.IntakeFormulier = intake;
             _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
             return Redirect("/gastgezin/maintenance?id=" + gastgezinId);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateIntakerGastgezin(int gastgezinId, int Intaker)
+        {
+            var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+
+            if(Intaker > 0 && gastgezin != null)
+            {
+                var intaker = _userService.GetUserById(Intaker);
+                gastgezin.Begeleider = intaker;
+                _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                return Redirect($"/gastgezin/maintenance?id={gastgezinId}");
+            }
+            //if (gastgezin == null)
+            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden");
+            //var aanmeld = _reactionService.GetReactieFromId(aanmeldId);
+            //var intake = _reactionService.GetReactieFromId(intakeId);
+            //if (aanmeld == null || aanmeld.FormulierId != 1)
+            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Aanmeld%20geen%20aanmeld%20formulier");
+            //if (intake != null && intake.FormulierId != 2)
+            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Intake%20geen%20intake%20formulier");
+            //
+            //gastgezin.AanmeldFormulier = aanmeld;
+            //_gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+            return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden%20of%20intaker%20incorrect");
         }
 
         [HttpPost]
