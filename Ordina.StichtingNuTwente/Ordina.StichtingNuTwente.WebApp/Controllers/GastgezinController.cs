@@ -246,13 +246,29 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("/BeschikbareGastgezinnen")]
         [HttpGet]
-        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null)
+        public IActionResult BeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null, string statusFilter = "")
         {
             _userService.checkIfUserExists(User);
 
             var model = new BeschikbareGastgezinnenModel();
 
             var gastgezinQuery = _gastgezinService.GetAllGastgezinnen().Where(g => g.IntakeFormulier != null);
+
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                switch (statusFilter)
+                {
+                    case "Beschikbaar":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status != GastgezinStatus.NoodOpvang && g.Status != GastgezinStatus.OnHold);
+                        break;
+                    case "Nood":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.NoodOpvang);
+                        break;
+                    case "On Hold":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.OnHold);
+                        break;
+                }
+            }
 
             if (filters != null && filters.Length > 0)
             {
