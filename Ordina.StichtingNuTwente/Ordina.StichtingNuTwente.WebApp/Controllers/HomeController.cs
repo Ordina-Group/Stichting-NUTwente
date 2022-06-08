@@ -224,11 +224,34 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 if (answers != null)
                 {
+                    bool success;
+                    int ggId;
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     var reactie = _reactionService.NewReactie(answerData, gastgezinId);
                     var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
                     MailHelper mailHelper = new MailHelper(_mailService);
-                    bool success = await mailHelper.Bevestiging(persoon);
+
+                    if (reactie.FormulierId == 1 || reactie.FormulierId == 4)
+                    {
+                        success = await mailHelper.Bevestiging(persoon);
+                    }
+                    else if(reactie.FormulierId == 2)
+                    {
+                        if(gastgezinId != null)
+                        {
+                            ggId = gastgezinId ?? default(int);
+                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
+                            success = await mailHelper.IntakeUitgevoerd(gastgezin, persoon);
+                        }
+                        else
+                        {
+                            success = await mailHelper.Bevestiging(persoon);
+                        }
+                    }
+                    else
+                    {
+                        success = false;
+                    }
                     if (success) return Ok();
                 }
                 return BadRequest();

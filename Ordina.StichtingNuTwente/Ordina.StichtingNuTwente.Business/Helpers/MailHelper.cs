@@ -35,6 +35,22 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             return succes;
         }
 
+        public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin)
+        {
+            Mail mail = new Mail();
+
+            //TODO gastgezin.Begeleider naar een nieuw object hiero. Zodat als begeleider Null is, dan komt er algemene contact info van NuTwente
+
+            mail.MailToName = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
+            mail.MailToAdress = gastgezin.Contact.Email;
+            mail.Subject = "Bevestiging uitvoering intake";
+            mail.Message = "Beste " + gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam + ", \n" + "Op " + gastgezin.IntakeFormulier.DatumIngevuld.ToString() + " heeft " + gastgezin.Begeleider.FirstName + " bij u een intakegesprek uitgevoerd, als voorbereiding op een mogelijke plaatsing van Oekraïense vluchtelingen. De gegevens van deze intake zijn geregistreerd bij Nutwente. Indien u daarin wijzigingen wilt aanbrengen of andere vragen heeft kunt u daarover altijd contact opnemen met uw begeleider" + (gastgezin.Begeleider != null ? ": " + gastgezin.Begeleider.FirstName + " " + gastgezin.Begeleider.LastName + (gastgezin.Begeleider.PhoneNumber != null ? ", tel:" + gastgezin.Begeleider.PhoneNumber : "") + (gastgezin.Begeleider.Email != null ? ", e-mail:" + gastgezin.Begeleider.Email : "") + ". \n\nMet vriendelijke groet,\nNutwente \n(deze e-mail is door een computer geschreven en verstuurd. U hoeft niet te reageren. Mocht u wel antwoorden(reply), dan komt uw bericht aan bij ons secretariaat)" : ".");
+
+            bool succes = await (_mailService.SendMail(mail));
+
+            return succes;
+        }
+
         public async Task<bool> Bevestiging(Persoon persoon)
         {
             var mail = new Mail()
