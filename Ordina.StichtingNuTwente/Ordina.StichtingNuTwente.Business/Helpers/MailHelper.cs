@@ -38,13 +38,36 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
         public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin)
         {
             Mail mail = new Mail();
+            Persoon contactPersoon = new Persoon();
+            string afsluitingBericht;
 
-            //TODO gastgezin.Begeleider naar een nieuw object hiero. Zodat als begeleider Null is, dan komt er algemene contact info van NuTwente
+            if(gastgezin.Buddy != null)
+            {
+                contactPersoon.Naam = gastgezin.Buddy.FirstName;
+                contactPersoon.Achternaam = gastgezin.Buddy.LastName;
+                contactPersoon.Mobiel = gastgezin.Buddy.PhoneNumber;
+                contactPersoon.Email = gastgezin.Buddy.Email;
+                afsluitingBericht = "met uw buddy: ";
+            }
+            else if(gastgezin.Begeleider != null)
+            {
+                contactPersoon.Naam = gastgezin.Begeleider.FirstName;
+                contactPersoon.Achternaam = gastgezin.Begeleider.LastName;
+                contactPersoon.Mobiel = gastgezin.Begeleider.PhoneNumber;
+                contactPersoon.Email = gastgezin.Begeleider.Email;
+                afsluitingBericht = "met uw begeleider: ";
+            }
+            else
+            {
+                contactPersoon.Naam = "Stichting NuTwente";
+                contactPersoon.Email = "help@nutwente.nl";
+                afsluitingBericht = "met: ";
+            }
 
             mail.MailToName = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
             mail.MailToAdress = gastgezin.Contact.Email;
             mail.Subject = "Bevestiging uitvoering intake";
-            mail.Message = "Beste " + gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam + ", \n" + "Op " + gastgezin.IntakeFormulier.DatumIngevuld.ToString() + " heeft " + gastgezin.Begeleider.FirstName + " bij u een intakegesprek uitgevoerd, als voorbereiding op een mogelijke plaatsing van Oekraïense vluchtelingen. De gegevens van deze intake zijn geregistreerd bij Nutwente. Indien u daarin wijzigingen wilt aanbrengen of andere vragen heeft kunt u daarover altijd contact opnemen met uw begeleider" + (gastgezin.Begeleider != null ? ": " + gastgezin.Begeleider.FirstName + " " + gastgezin.Begeleider.LastName + (gastgezin.Begeleider.PhoneNumber != null ? ", tel:" + gastgezin.Begeleider.PhoneNumber : "") + (gastgezin.Begeleider.Email != null ? ", e-mail:" + gastgezin.Begeleider.Email : "") + ". \n\nMet vriendelijke groet,\nNutwente \n(deze e-mail is door een computer geschreven en verstuurd. U hoeft niet te reageren. Mocht u wel antwoorden(reply), dan komt uw bericht aan bij ons secretariaat)" : ".");
+            mail.Message = "Beste " + gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam + ", \n" + "Op " + gastgezin.IntakeFormulier.DatumIngevuld.ToShortDateString() + " heeft " + contactPersoon.Naam + " bij u een intakegesprek uitgevoerd, als voorbereiding op een mogelijke plaatsing van Oekraïense vluchtelingen. De gegevens van deze intake zijn geregistreerd bij Nutwente. Indien u daarin wijzigingen wilt aanbrengen of andere vragen heeft kunt u daarover altijd contact opnemen " + afsluitingBericht + contactPersoon.Naam + (string.IsNullOrEmpty(contactPersoon.Achternaam) ? "" : " " + contactPersoon.Achternaam) + (string.IsNullOrEmpty(contactPersoon.Telefoonnummer) ? "" : (", tel:" + contactPersoon.Telefoonnummer)) + (string.IsNullOrEmpty(contactPersoon.Email)  ? "" : (", e-mail: " + contactPersoon.Email)) + ". \n\nMet vriendelijke groet,\nNuTwente \n(deze e-mail is door een computer geschreven en verstuurd. U hoeft niet te reageren. Mocht u wel antwoorden(reply), dan komt uw bericht aan bij ons secretariaat)";
 
             bool succes = await (_mailService.SendMail(mail));
 
