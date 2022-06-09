@@ -63,14 +63,20 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             if(gastgezinId != null)
             {
             Gastgezin gastgezin = _gastgezinService.GetGastgezin((int)gastgezinId);
-                var questions = questionForm.Sections[0].Questions;
-                questions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam;
-                questions.FirstOrDefault(q => q.ParameterName == "Straat").Answer = gastgezin.Contact.Adres.Straat;
-                questions.FirstOrDefault(q => q.ParameterName == "Postcode").Answer = gastgezin.Contact.Adres.Postcode;
-                questions.FirstOrDefault(q => q.ParameterName == "Woonplaats").Answer = gastgezin.Contact.Adres.Woonplaats;
-                questions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer").Answer = gastgezin.Contact.Telefoonnummer;
-                questions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer2").Answer = gastgezin.Contact.Telefoonnummer2;
-                questions.FirstOrDefault(q => q.ParameterName == "Email").Answer = gastgezin.Contact.Email;
+                var personaliaQuestions = questionForm.Sections[0].Questions;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Straat").Answer = gastgezin.Contact.Adres.Straat;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Postcode").Answer = gastgezin.Contact.Adres.Postcode;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Woonplaats").Answer = gastgezin.Contact.Adres.Woonplaats;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer").Answer = gastgezin.Contact.Telefoonnummer;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Telefoonnummer2").Answer = gastgezin.Contact.Telefoonnummer2;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Email").Answer = gastgezin.Contact.Email;
+
+                var plaatsingsAdresQuestions = questionForm.Sections[1].Questions;
+                plaatsingsAdresQuestions.FirstOrDefault(q => q.ParameterName == "AdresVanLocatie").Answer = gastgezin.Contact.Adres.Straat;
+                plaatsingsAdresQuestions.FirstOrDefault(q => q.ParameterName == "PostcodeVanLocatie").Answer = gastgezin.Contact.Adres.Postcode;
+                plaatsingsAdresQuestions.FirstOrDefault(q => q.ParameterName == "PlaatsnaamVanLocatie").Answer = gastgezin.Contact.Adres.Woonplaats;
+
             }
             FillBaseModel(questionForm);
             return View(questionForm);
