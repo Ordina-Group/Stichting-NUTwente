@@ -1013,13 +1013,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
             byte[] returnValue = new byte[0];
             var gastgezinnen = new Repository<Gastgezin>(_context).GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
             var reactieRepository = new Repository<Reactie>(_context);
-            var aanmeldFormulieren = reactieRepository.GetAll("Antwoorden").Where(r => r.FormulierId == 1).ToList();
-            var intakeFormulieren = reactieRepository.GetAll("Antwoorden").Where(r => r.FormulierId == 2).ToList();
+            var aanmeldFormulieren = reactieRepository.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 1).ToList();
+            var intakeFormulieren = reactieRepository.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 2).ToList();
+            var plaatsingen = new Repository<Plaatsing>(_context).GetAll("Vrijwilliger,Gastgezin").ToList();
+            var userDetails = new Repository<UserDetails>(_context).GetAll("Reacties").ToList();
+            var contactLogs = new Repository<ContactLog>(_context).GetAll("Contacter").ToList();
+            var comments = new Repository<Comment>(_context).GetAll("Commenter").ToList();
             using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
             {
                 AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
                 AddExcelTab("AanmeldFormulier", EntityToRowHelper.ReactiesToDataRows(aanmeldFormulieren, 1), fastExcel);
                 AddExcelTab("IntakeFormulier", EntityToRowHelper.ReactiesToDataRows(intakeFormulieren, 2), fastExcel);
+                AddExcelTab("Plaatsingen", EntityToRowHelper.PlaatsingenToDataRows(plaatsingen), fastExcel);
+                AddExcelTab("Vrijwilligers", EntityToRowHelper.VrijwilligersToDataRows(userDetails), fastExcel);
+                AddExcelTab("ContactLogs", EntityToRowHelper.ContactLogsToDataRows(contactLogs), fastExcel);
+                AddExcelTab("Comments", EntityToRowHelper.CommentsToDataRows(comments), fastExcel);
             }
 
             using (var filestream = outputFile.OpenRead())
