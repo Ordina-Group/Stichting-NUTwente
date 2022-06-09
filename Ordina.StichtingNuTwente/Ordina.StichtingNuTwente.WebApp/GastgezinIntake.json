@@ -112,7 +112,7 @@
       "Id": "2",
       "Number": "2",
       "Title": "Adres van plaatsing",
-      "Header": "Alleen invullen als de plaatsingslocatie verschilt van uw woonadres.",
+      "Header": "Alleen wijzigen als de plaatsingslocatie verschilt van uw woonadres.",
       "Questions": [
         {
           "Id": "11",
