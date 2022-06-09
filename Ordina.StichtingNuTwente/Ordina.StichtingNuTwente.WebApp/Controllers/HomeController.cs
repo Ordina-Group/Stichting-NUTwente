@@ -222,7 +222,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             ggId = gastgezinId ?? default(int);
                             Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
-                            success = await mailHelper.IntakeUitgevoerd(gastgezin, persoon);
+                            success = await mailHelper.IntakeUitgevoerd(gastgezin);
                         }
                         else
                         {
