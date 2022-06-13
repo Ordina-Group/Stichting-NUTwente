@@ -828,5 +828,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetGastgezinInformation()
+        {
+            var amountGastgezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+            var amountGeplaatsteVluchtelingen = _gastgezinService.GetPlaatsingen().Where(p => p.Active && (p.PlacementType == PlacementType.GeplaatsteReservering || p.PlacementType == PlacementType.Plaatsing));
+
+
+            var returnModel = new GastgezinStatsViewModel(amountGeplaatsteVluchtelingen.Count(), amountGastgezinnen.Count());
+
+            return Ok(returnModel);
+        }
     }
 }
