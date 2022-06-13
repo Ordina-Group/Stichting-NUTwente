@@ -14,6 +14,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         Geplaatst = 2,
         Teruggetrokken = 3,
         OnHold = 4,
-        NoodOpvang = 5
+        NoodOpvang = 5,
+        Gereserveerd = 6
     }
 }

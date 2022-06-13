@@ -263,6 +263,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     case "Beschikbaar":
                         gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
                         break;
+                    case "Gereserveerd":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        break;
                     case "Geplaatst":
                         gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
                         break;
