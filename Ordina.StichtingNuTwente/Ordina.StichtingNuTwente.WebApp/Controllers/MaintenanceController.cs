@@ -7,7 +7,6 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
-    [Authorize(Policy = "RequireSuperAdminRole")]
     public class MaintenanceController : Controller
     {
         private readonly IMaintenanceService maintenanceService;
@@ -23,6 +22,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService = gastgezinService;
             _userService = userService;
         }
+
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [Route("/gastgezin/maintenance")]
         public IActionResult GastgezinMaintenance(int id)
         {
@@ -37,7 +38,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 viewModel.Gastgezin = GastgezinMapping.FromDatabaseToWebModel(gastGezin, new UserDetails());
             }
-            var vrijwilligers =  _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ThenBy(e => e.LastName).ToList();
+            var vrijwilligers = _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ThenBy(e => e.LastName).ToList();
             foreach (var vrijwilliger in vrijwilligers)
             {
                 viewModel.Vrijwilligers.Add(new Vrijwilliger
@@ -51,10 +52,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public IActionResult Index()
         {
             return View(new MaintenanceModel());
         }
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public IActionResult LinkBegeleiderToGastgezin()
         {
             try
@@ -77,6 +80,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public IActionResult UpdateAll()
         {
             try
@@ -93,12 +97,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public IActionResult DatabaseIntegrity()
         {
             var databaseIntegrityModel = maintenanceService.TestDatabaseIntegrity();
             return View(databaseIntegrityModel);
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
         public IActionResult DataDump()
         {
             var file = maintenanceService.GenerateDataDumpToExcel();
@@ -107,7 +113,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("Data dump {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
         }
 
-
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadUpdateIntake(IFormFile file)
         {
@@ -141,7 +147,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadFile(IFormFile file)
         {
@@ -169,6 +175,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadNewIntake(IFormFile file)
         {
@@ -202,6 +209,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadPlaatsingFile(IFormFile file)
         {
@@ -225,7 +233,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (fileInfo.Exists) fileInfo.Delete();
                 ViewBag.Message = "File Uploaded Successfully!!";
                 return View("Index", maintenanceModel);
-        }
+            }
             catch
             {
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -233,8 +241,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 ViewBag.Message = "File upload failed!!";
                 return View("Index", new MaintenanceModel());
             }
-}
+        }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadUpdateGastgezin(IFormFile file)
         {
@@ -262,6 +271,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadImportGastgezinnen(IFormFile file)
         {
@@ -278,7 +288,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
                     {
                         Message = x.Message,
-                        MessageType = (MaintenanceMessageType) x.MessageType
+                        MessageType = (MaintenanceMessageType)x.MessageType
                     }));
                 }
                 FileInfo fileInfo = new FileInfo(filePath);
@@ -295,6 +305,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadGastgezinAanmeldFromIntake(IFormFile file)
         {
@@ -328,11 +339,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UpdateFormsForGastgezin(int gastgezinId, int aanmeldId, int intakeId)
         {
             var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
-            if(gastgezin == null)
+            if (gastgezin == null)
                 return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden");
             var aanmeld = _reactionService.GetReactieFromId(aanmeldId);
             var intake = _reactionService.GetReactieFromId(intakeId);
@@ -347,12 +359,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin/maintenance?id=" + gastgezinId);
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UpdateIntakerGastgezin(int gastgezinId, int Intaker)
         {
             var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
 
-            if(Intaker > 0 && gastgezin != null)
+            if (Intaker > 0 && gastgezin != null)
             {
                 var intaker = _userService.GetUserById(Intaker);
                 gastgezin.Begeleider = intaker;
@@ -373,6 +386,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden%20of%20intaker%20incorrect");
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadGastgezinCapacity(IFormFile file)
         {
@@ -406,6 +420,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
+        [Authorize(Policy = "RequireSuperAdminRole")]
         public IActionResult FixStatus()
         {
             var model = new MaintenanceModel();
