@@ -261,7 +261,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && !g.OnHold);
+                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        break;
+                    case "Geplaatst":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
                         break;
                     case "Nood":
                         gastgezinQuery = gastgezinQuery.Where(g => g.NoodOpvang);
@@ -572,7 +575,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 alleGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
                 {
                     Id = vrijwilliger.Id,
-                    Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
+                    Naam = $"{vrijwilliger.FirstName}",
                     Email = vrijwilliger.Email
                 });
             }
