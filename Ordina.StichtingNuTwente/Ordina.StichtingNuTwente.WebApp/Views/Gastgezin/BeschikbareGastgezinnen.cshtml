@@ -31,13 +31,13 @@
                 <a class="dropdown-item sort" id="Gereserveerd,Descending">Gereserveerd (hoog-laag)</a>
             </div>
             <script>
-                $(".sort").on("click", function (){
+                $(".sort").on("click", function() {
                     let input = $(this).attr("id");
                     let inputArr = input.split(',')
                     let url = new URL(window.location.href);
                     console.log(input);
-                    url.searchParams.set('sortBy',inputArr[0]);
-                    url.searchParams.set('sortOrder',inputArr[1]);
+                    url.searchParams.set('sortBy', inputArr[0]);
+                    url.searchParams.set('sortOrder', inputArr[1]);
                     window.location.href = url.toString().replaceAll("+", "%20");
                 });
             </script>
@@ -79,7 +79,7 @@
         <button class="btn btn-primary" id="zoekterm-toevoegen">Zoekterm toevoegen</button>
     </div>
     <script>
-        $("#zoekterm-toevoegen").on("click", function (){
+        $("#zoekterm-toevoegen").on("click", function() {
             let input = $("#zoekterm-toevoegen-input").val();
             let searchField = $("#zoekterm-toevoegen-select").val();
             let url = new URL(window.location.href);
@@ -99,9 +99,9 @@
         </div>
     }
     <script>
-        $(".zoekterm-verwijderen").on("click", function (){
+        $(".zoekterm-verwijderen").on("click", function() {
             let searchQuery = $(this).attr("id");
-            let replace = "filters="+searchQuery;
+            let replace = "filters=" + searchQuery;
             let url = decodeURIComponent(window.location.href);
             url = url.replaceAll("&" + replace, "");
             url = url.replaceAll(replace, "");
@@ -188,27 +188,30 @@
                 <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
                 <td>
                     <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
-                   @if (mijnGastgezin.PlaatsingTag.Contains("HOLD"))
-                   {
+                        @if (mijnGastgezin.PlaatsingTag.Contains("HOLD")){
                             <text>class=link-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=link-success</text>
                         }else{
                             <text>class=link-primary</text>
                         }
-                        >@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)
-                                        </a>
+                    >
+                        @mijnGastgezin.PlaatsingTag
+                    </a>
                 </td>
                 <td>
-                    <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
-                      {
+                    <span 
+                        @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
+                        {
                             <text>class=text-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=text-success</text>
                         }else{
                             <text>class=text-primary</text>
                         }
-                        >@(mijnGastgezin.ReserveTag.StartsWith("0")?"0":mijnGastgezin.ReserveTag)</span>
+                    >
+                        @mijnGastgezin.ReserveTag
+                    </span>
                 </td>
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
@@ -243,6 +246,6 @@
 <script>
     $('.dropdown-item').on('click', function() {
         $('#dropdownSortButton').html($(this).html());
-        });
+    });
 </script>
 
