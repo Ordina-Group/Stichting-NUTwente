@@ -116,7 +116,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             if (gastgezin.OnHold)
             {
-                status = "ON HOLD";
+                status = "ON HOLD ";
             }
             if (gastgezin.NoodOpvang)
             {
@@ -134,9 +134,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             int? total = PlaatsVolwassen + PlaatsKinderen + PlaatsOnbekend;
             string calculation = "";
-            if (!(total == 0 && status != ""))
+            if (total == 0 && status == "")
             {
-                calculation = total + "(" + PlaatsVolwassen + "v " + PlaatsKinderen + "k " + PlaatsOnbekend + "?)";
+                calculation = "0";
+            } else if (total != 0)
+            {
+                calculation = total + "(" + (PlaatsVolwassen != 0?PlaatsVolwassen + "v":"") + (PlaatsKinderen != 0 ? PlaatsKinderen + "k" : "") + (PlaatsOnbekend != 0 ? PlaatsOnbekend + "?" : "") + ")";
             }
             string tag = status + calculation;
             return tag;
