@@ -652,7 +652,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(alleGastgezinnen);
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("AlleGastgezinnen")]
         [HttpPost]
         [ActionName("AlleGastgezinnen")]

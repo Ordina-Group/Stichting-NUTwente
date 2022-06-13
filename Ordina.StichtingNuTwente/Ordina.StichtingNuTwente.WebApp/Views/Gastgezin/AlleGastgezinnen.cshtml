@@ -91,7 +91,7 @@
                                 }
                                 </td>
                                 <td>
-                                @if (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.BegeleiderId <= 0)
+                                @if (User.HasClaims("groups", "group-coordinator", "group-superadmin") && (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.BegeleiderId <= 0))
                                 {
                                     <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                                         @if (mijnGastgezin.BegeleiderId > 0)
@@ -120,28 +120,35 @@
                                 }
                                     </td>
                                     <td>
+                                @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                                {
                                     <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
-                                    @if (mijnGastgezin.BuddyId > 0)
-                                    {
-                                        <option selected="selected" value=""></option>
-                                    }
-                                    else
-                                    {
-                                        <option value=""></option>
-                                    }
-                                    @foreach (var vrijwilliger in Model.Vrijwilligers)
-                                    {
-                                        if (vrijwilliger.Id == mijnGastgezin.BuddyId)
+                                        @if (mijnGastgezin.BuddyId > 0)
                                         {
-                                            <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            <option selected="selected" value=""></option>
                                         }
                                         else
                                         {
-                                            <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            <option value=""></option>
                                         }
-                                    }
-                                                                </select>
-                                                            </td>
+                                        @foreach (var vrijwilliger in Model.Vrijwilligers)
+                                        {
+                                            if (vrijwilliger.Id == mijnGastgezin.BuddyId)
+                                            {
+                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <p>@mijnGastgezin.Buddy</p>
+                                }
+                            </td>
                             @if (mijnGastgezin.PlaatsingsInfo != null)
                             {
                                 <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
@@ -159,14 +166,16 @@
         </form>
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
-    <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
-        <div class="col-md-12" style="text-align: center">
+    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin")) {
+        <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
+            <div class="col-md-12" style="text-align: center">
             <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
             <span id="gastgezinSpinner" style="display: none;">
                 &nbsp;Bezig met opslaan...
             </span>
         </div>
     </nav>
+    }
     <script type="text/javascript">
         $("#gastgezinSubmit").click(function() {
            $("#gastgezinSubmit").prop('disabled', true);
