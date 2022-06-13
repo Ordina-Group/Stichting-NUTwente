@@ -31,7 +31,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             data.Add(new Cell(cell++, "BekekenDoorInaker"));
             data.Add(new Cell(cell++, "Buddy"));
             data.Add(new Cell(cell++, "BekekenDoorBuddy"));
-            data.Add(new Cell(cell++, "VluchtelingIds"));
+            data.Add(new Cell(cell++, "PlaatsingIds"));
             data.Add(new Cell(cell++, "OpmerkingIds"));
             data.Add(new Cell(cell++, "NoodOpvang"));
             data.Add(new Cell(cell++, "OnHold"));
@@ -153,7 +153,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(cell++, plaatsing.Amount));
                 data.Add(new Cell(cell++, plaatsing.AgeGroup));
                 data.Add(new Cell(cell++, plaatsing.PlacementType));
-                data.Add(new Cell(cell++, plaatsing.DateTime));
+                data.Add(new Cell(cell++, plaatsing.DateTime.ToShortDateString()));
                 data.Add(new Cell(cell++, plaatsing.Vrijwilliger.FirstName));
                 data.Add(new Cell(cell++, plaatsing.Age));
                 data.Add(new Cell(cell++, plaatsing.Gender));
@@ -215,7 +215,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 var data = new List<Cell>();
                 cell = 1;
                 data.Add(new Cell(cell++, contactLog.Id));
-                data.Add(new Cell(cell++, contactLog.DateTime));
+                data.Add(new Cell(cell++, contactLog.DateTime.ToShortDateString()));
                 data.Add(new Cell(cell++, contactLog.Contacter.FirstName));
                 data.Add(new Cell(cell++, contactLog.Notes));
                 
@@ -244,7 +244,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(cell++, comment.Id));
                 data.Add(new Cell(cell++, comment.Text));
                 data.Add(new Cell(cell++, comment.Commenter.FirstName));
-                data.Add(new Cell(cell++, comment.Created));
+                data.Add(new Cell(cell++, comment.Created.ToShortDateString()));
                 data.Add(new Cell(cell++, comment.CommentType));
 
                 rows.Add(new Row(row, data));
