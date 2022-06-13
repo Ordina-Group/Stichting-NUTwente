@@ -574,7 +574,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 alleGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
                 {
                     Id = vrijwilliger.Id,
-                    Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
+                    Naam = $"{vrijwilliger.FirstName}",
                     Email = vrijwilliger.Email
                 });
             }
