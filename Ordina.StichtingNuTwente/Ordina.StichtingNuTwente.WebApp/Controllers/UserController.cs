@@ -63,7 +63,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(new UserViewModel(userDetails));
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [HttpPut]
         public IActionResult UserUpdate(int id, bool inDropdown)
         {
