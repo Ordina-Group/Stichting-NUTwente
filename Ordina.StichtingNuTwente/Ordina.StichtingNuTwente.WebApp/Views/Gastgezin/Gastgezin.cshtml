@@ -14,24 +14,27 @@
                 <h2 class="card-title">
                     Gastgezin @Model.GastGezin.Naam
                     <span class="badge bg-secondary">
-                    @switch (Model.GastGezin.Status)
-                    {
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
-                            <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
-                            <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
-                            <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
-                            <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
-                            break;
-                        default:
-                            <p>-</p>
-                            break;
-                    }
+                        @switch (Model.GastGezin.Status)
+                        {
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                                <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                                <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Gereserveerd:
+                                <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                                <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                                <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                                break;
+                            default:
+                                <p>-</p>
+                                break;
+                        }
                     </span>
                     @if (Model.GastGezin.NoodOpvang)
                     {
@@ -149,7 +152,7 @@
         </div>
     </div>
     <div class="col-9">
-   
+
         <div class="row">
             <div class="col" id="DetailsCol">
                 <div class="card" id="DetailsCard">
@@ -204,94 +207,98 @@
                     </div>
                 </div>
             </div>
-            <div class="col-5 g-4" id="NieuwePlaatsingCol">
-                <div class="card" id="NieuwePlaatsingCard">
-                    <div class="card-body">
-                        <h5 class="card-title">Nieuwe Plaatsing</h5>
-                        @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
-                        {
-                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
-                            @if (User.HasClaims("groups", "group-superadmin"))
+            @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+            {
+
+                <div class="col-5 g-4" id="NieuwePlaatsingCol">
+                    <div class="card" id="NieuwePlaatsingCard">
+                        <div class="card-body">
+                            <h5 class="card-title">Nieuwe Plaatsing</h5>
+                            @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
                             {
+                                <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                                @if (User.HasClaims("groups", "group-superadmin"))
+                                {
+                                    <div class="row justify-content-sm-left">
+                                        <label for="colFormLabelSm" class="col col-form-label">Aantal</label>
+                                        <div class="col">
+                                            <input type="number" class="form-control" id="colFormLabelSm" name="Amount" value="1">
+                                        </div>
+                                    </div>
+                                }
                                 <div class="row justify-content-sm-left">
-                                    <label for="colFormLabelSm" class="col col-form-label">Aantal</label>
+                                    <label for="colFormLabelSm" class="col col-form-label">Type</label>
                                     <div class="col">
-                                        <input type="number" class="form-control" id="colFormLabelSm" name="Amount" value="1">
+                                        <select name="PlacementType" id="PlacementType" class="form-select">
+                                            <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
+                                            <option value="@PlacementType.Reservering">@PlacementType.Reservering</option>
+                                        </select>
                                     </div>
                                 </div>
-                            }
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Type</label>
-                                <div class="col">
-                                    <select name="PlacementType" id="PlacementType" class="form-select">
-                                        <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
-                                        <option value="@PlacementType.Reservering">@PlacementType.Reservering</option>
-                                    </select>
+
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
+                                    <div class="col">
+                                        <input type="number" class="form-control" id="Age" name="Age">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
-                                <div class="col">
-                                    <input type="number" class="form-control" id="Age" name="Age">
-                                </div>
-                            </div>
-
-                            <script>
-                                $("#Age").change(function() {
-                                    var age = parseInt($(this).val(), 10);
-                                    var ageGroup = "";
-                                    if (age < 0 || !$.isNumeric(age)) {
-                                        ageGroup = "@AgeGroup.Onbekend";
-                                    }
-                                    if (age <= 17 && age >= 0) {
-                                        ageGroup = "@AgeGroup.Kind";
-                                    }
-                                    if (age >= 18) {
-                                        ageGroup = "@AgeGroup.Volwassene";
-                                    }
-                                    $("#AgeGroup").val(ageGroup);
-                                    console.log("age: " + age + " ageGroup: " + ageGroup);
-                                });
-                            </script>
-
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Leeftijdsgroep</label>
-                                <div class="col">
-                                    <select name="AgeGroup" id="AgeGroup" class="form-select">
-                                        <option value="@AgeGroup.Onbekend">@AgeGroup.Onbekend</option>
-                                        <option value="@AgeGroup.Volwassene">@AgeGroup.Volwassene</option>
-                                        <option value="@AgeGroup.Kind">@AgeGroup.Kind</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Gender</label>
-                                <div class="col">
-                                    <select name="Gender" id="Gender" class="form-select">
-                                        @foreach (var option in Enum.GetValues(typeof(Gender)))
-                                        {
-                                            <option value="@option">@option</option>
+                                <script>
+                                    $("#Age").change(function() {
+                                        var age = parseInt($(this).val(), 10);
+                                        var ageGroup = "";
+                                        if (age < 0 || !$.isNumeric(age)) {
+                                            ageGroup = "@AgeGroup.Onbekend";
                                         }
-                                    </select>
-                                </div>
-                            </div>
+                                        if (age <= 17 && age >= 0) {
+                                            ageGroup = "@AgeGroup.Kind";
+                                        }
+                                        if (age >= 18) {
+                                            ageGroup = "@AgeGroup.Volwassene";
+                                        }
+                                        $("#AgeGroup").val(ageGroup);
+                                        console.log("age: " + age + " ageGroup: " + ageGroup);
+                                    });
+                                </script>
 
-                            <div class="row justify-content-sm-left">
-                                <label for="colFormLabelSm" class="col col-form-label">Datum</label>
-                                <div class="col">
-                                    <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Leeftijdsgroep</label>
+                                    <div class="col">
+                                        <select name="AgeGroup" id="AgeGroup" class="form-select">
+                                            <option value="@AgeGroup.Onbekend">@AgeGroup.Onbekend</option>
+                                            <option value="@AgeGroup.Volwassene">@AgeGroup.Volwassene</option>
+                                            <option value="@AgeGroup.Kind">@AgeGroup.Kind</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="card-buttons mt-3">
-                                <input type="submit" value="Plaats" class="btn btn-primary">
-                            </div>
-                        }
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Gender</label>
+                                    <div class="col">
+                                        <select name="Gender" id="Gender" class="form-select">
+                                            @foreach (var option in Enum.GetValues(typeof(Gender)))
+                                            {
+                                                <option value="@option">@option</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-sm-left">
+                                    <label for="colFormLabelSm" class="col col-form-label">Datum</label>
+                                    <div class="col">
+                                        <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    </div>
+                                </div>
+
+                                <div class="card-buttons mt-3">
+                                    <input type="submit" value="Plaats" class="btn btn-primary">
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -304,7 +311,7 @@
             <div class="card-body">
 
 
-                @if (Model.EditPlaatsingen == true)
+                @if (Model.EditPlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
                     {
@@ -403,7 +410,7 @@
                     <div class="row">
                         <h5 class="card-title">
                             Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
-                            @if (Model.Plaatsingen.Count > 0)
+                            @if (Model.Plaatsingen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
                                 <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditPlaatsingen="true"></a>
                             }
@@ -437,7 +444,10 @@
                                         <p><span class="text-primary">Leeftijdsgroep</span><br />@p.AgeGroup</p>
                                     </div>
                                     <div class=col>
-                                        <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                                        {
+                                            <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        }
                                         <script>
                                             $("#@("deletePlaatsing"+p.Id)").on("click", function() {
                                                 let id = @p.Id;
@@ -469,7 +479,7 @@
         <div class="card">
             <div class="card-body">
 
-                @if (Model.EditReserveringen == true)
+                @if (Model.EditReserveringen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
                     {
@@ -568,7 +578,7 @@
                     <div class="row">
                         <h5 class="card-title">
                             Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
-                            @if (Model.Reserveringen.Count > 0)
+                            @if (Model.Reserveringen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
                                 <a class="btn btn-warning fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditReserveringen="true"></a>
                             }
@@ -579,14 +589,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class=col>
-                                        <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-                                                <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                                            </svg>
-                                        </a>
-                                    </div>
+                                    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                                    {
+                                        <div class=col>
+                                            <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                                    <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    }
                                     <div class=col>
                                         <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
                                     </div>
@@ -610,7 +623,10 @@
                                         <p><span class="text-warning">Leeftijdsgroep</span><br />@p.AgeGroup</p>
                                     </div>
                                     <div class=col>
-                                        <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                                        {
+                                            <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                        }
                                         <script>
                                             $("#@("deletePlaatsing"+p.Id)").on("click", function() {
                                                 let id = @p.Id;
@@ -749,22 +765,22 @@
     </div>
 </div>
 @if (Model.CanDelete)
-    {
-        <div class="col col-1">
-            <div class="card border-0 bg-transparent shadow-none">
-                <div class=card-body>
-                    @if (Model.GastGezin.Deleted)
-                    {
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
-                    }
-                </div>
+{
+    <div class="col col-1">
+        <div class="card border-0 bg-transparent shadow-none">
+            <div class=card-body>
+                @if (Model.GastGezin.Deleted)
+                {
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+                }
             </div>
         </div>
-    }
+    </div>
+}
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

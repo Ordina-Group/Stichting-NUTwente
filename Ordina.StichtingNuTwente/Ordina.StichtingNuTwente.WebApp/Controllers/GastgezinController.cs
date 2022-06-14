@@ -86,11 +86,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             var u = GetUser();
             viewModel.CanDelete = false;
-            if (User.HasClaims("groups", "group-secretariaat", "group-coordinator"))
+            if (User.HasClaims("groups", "group-coordinator"))
                 viewModel.CanDelete = true;
             return View(viewModel);
         }
-
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
         public IActionResult PostPlaatsing(int GastGezinId, PlacementType PlacementType, Gender Gender, AgeGroup AgeGroup, string Date, int Age = -1, int Amount = 1)
@@ -116,7 +116,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
-
+        [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
         {
             var gastgezinId = 0;
@@ -165,6 +165,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + gastgezinId);
         }
 
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("DeletePlaatsing")]
         public IActionResult DeletePlaatsing(int plaatsingId)
         {
@@ -191,7 +192,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.AddPlaatsing(deletedPlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
         }
-
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("PlaatsReservering")]
         public IActionResult PlaatsReservering(int plaatsingId)
         {
@@ -213,20 +214,20 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.AddPlaatsing(NieuwePlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
         }
-
+        
         public IActionResult PostNote(int GastGezinId, string Note)
         {
             _gastgezinService.UpdateNote(GastGezinId, Note);
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
-
+        
         [HttpPost]
         public IActionResult PostVOG(bool HasVOG, int GastGezinId)
         {
             _gastgezinService.UpdateVOG(HasVOG, GastGezinId);
             return Ok();
         }
-
+        
         [HttpPost]
         public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxAdults, int MaxChildren)
         {
@@ -261,6 +262,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 {
                     case "Beschikbaar":
                         gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        break;
+                    case "Gereserveerd":
+                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
                         break;
                     case "Geplaatst":
                         gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
@@ -428,7 +432,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return null;
         }
 
-        [Authorize(Policy = "RequireVrijwilligerRole")]
+        
         [HttpPut]
         [Route("MarkAsRead/{gastgezinId}")]
         public IActionResult MarkAsRead(int gastgezinId)
@@ -460,7 +464,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireVrijwilligerRole")]
+        
         [HttpPut]
         [Route("RejectBuddy/{gastgezinId}")]
         public IActionResult RejectBeingBuddy(int gastgezinId, string comment)
@@ -482,7 +486,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Authorize(Policy = "RequireVrijwilligerRole")]
+        
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
@@ -654,7 +658,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(alleGastgezinnen);
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("AlleGastgezinnen")]
         [HttpPost]
         [ActionName("AlleGastgezinnen")]
@@ -765,7 +769,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             return RedirectToAction("AlleGastgezinnen");
         }
-
+        [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult EditPlaatsing(int GastgezinId, int PlaatsingsId)
         {
             return Redirect("/gastgezin?id=" + GastgezinId);
@@ -791,6 +795,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return View(model);
         }
+        
         [HttpPost]
         public IActionResult UpdateCommentVrijwilliger(string comments, int gastgezinId)
         {
@@ -810,7 +815,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
-
+        
         [HttpPost]
         public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
         {
