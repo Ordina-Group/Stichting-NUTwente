@@ -22,7 +22,10 @@
                 <th scope="col">Reden</th>
                 <th scope="col">Verwijderd door</th>
                 <th scope="col">Datum</th>
-                <th scope="col">Herstel</th>
+                @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                {
+                    <th scope="col">Herstel</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -52,7 +55,10 @@
                         <td></td>
                         <td></td>
                     }
-                    <td><button type="button" class="btn btn-primary" id="restoreGastgezin" value="@gastgezin.Id">Herstellen</button></td>
+                    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                    {
+                        <td><button type="button" class="btn btn-primary" id="restoreGastgezin" value="@gastgezin.Id">Herstellen</button></td>
+                    }
                 </tr>
             }
         </tbody>

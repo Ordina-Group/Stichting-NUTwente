@@ -114,6 +114,7 @@
     <div class="d-flex">
         <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "Alles" ? "active":"")" href="?statusFilter=Alles">Alles</a>
         <a class="nav-link @(Context.Request.Query["statusFilter"] == "Beschikbaar"?"active":"")" href="?statusFilter=Beschikbaar">Beschikbaar</a>
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Gereserveerd"?"active":"")" href="?statusFilter=Gereserveerd">Gereserveerd</a>
         <a class="nav-link @(Context.Request.Query["statusFilter"] == "Geplaatst"?"active":"")" href="?statusFilter=Geplaatst">Geplaatst</a>
         <a class="nav-link @(Context.Request.Query["statusFilter"] == "Nood"?"active":"")" href="?statusFilter=Nood">Nood</a>
         <a class="nav-link @(Context.Request.Query["statusFilter"] == "On Hold"?"active":"")" href="?statusFilter=On Hold">On Hold</a>
@@ -152,6 +153,9 @@
                         case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
                             <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
                             break;
+                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Gereserveerd:
+                            <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
+                            break;
                         case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
                             <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
                             break;
@@ -189,7 +193,7 @@
                 <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
                 <td>
                     <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
-                        @if (mijnGastgezin.PlaatsingTag.Contains("HOLD")){
+                   @if (mijnGastgezin.PlaatsingTag.Contains("HOLD")){
                             <text>class=link-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=link-success</text>
@@ -198,12 +202,11 @@
                         }
                     >
                         @mijnGastgezin.PlaatsingTag
-                    </a>
+                        </a>
                 </td>
                 <td>
-                    <span 
-                        @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
-                        {
+                    <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
+                      {
                             <text>class=text-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
                             <text>class=text-success</text>
@@ -212,7 +215,7 @@
                         }
                     >
                         @mijnGastgezin.ReserveTag
-                    </span>
+                        </span>
                 </td>
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
