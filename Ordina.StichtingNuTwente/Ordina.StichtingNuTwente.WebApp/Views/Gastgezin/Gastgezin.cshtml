@@ -230,8 +230,8 @@
                                     <label for="colFormLabelSm" class="col col-form-label">Type</label>
                                     <div class="col">
                                         <select name="PlacementType" id="PlacementType" class="form-select">
-                                            <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
                                             <option value="@PlacementType.Reservering">@PlacementType.Reservering</option>
+                                            <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
                                         </select>
                                     </div>
                                 </div>
@@ -306,8 +306,8 @@
 </div>
 
 <div class="row" id="PlaatsingenRow">
-    <div class="col g-4">
-        <div class="card">
+    <div class="col g-4" id="PlaatsingenCol">
+        <div class="card" id="PlaatsingenCard">
             <div class="card-body">
 
 
@@ -472,11 +472,8 @@
             </div>
         </div>
     </div>
-
-
-
-    <div class="col g-4">
-        <div class="card">
+    <div class="col g-4" id="ReserveringenCol">
+        <div class="card" id="ReserveringenCard">
             <div class="card-body">
 
                 @if (Model.EditReserveringen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
@@ -591,12 +588,9 @@
                                 <div class="row">
                                     @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                     {
-                                        <div class=col>
+                                        <div class="col col-1">
                                             <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-                                                    <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                                                </svg>
+                                                <i class="fa-solid fa-angle-left fa-lg"></i>
                                             </a>
                                         </div>
                                     }
@@ -687,7 +681,7 @@
                                 {
                                     <tr>
                                         <td>@contactLog.DateTime.ToShortDateString()</td>
-                                        <td>@contactLog.Contacter.FirstName</td>
+                                        <td>@contactLog.Contacter?.FirstName</td>
                                         <td>@contactLog.Notes</td>
                                     </tr>
                                 }
@@ -798,7 +792,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Afsluiten</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Annuleren</button>
                 <button type="button" class="btn btn-danger" id="deleteGastgezin">Bevestig verwijdering</button>
             </div>
         </div>
@@ -811,7 +805,7 @@
                 <h5 class="modal-title" id="restoreModalLabel">Gastgezin herstellen</h5>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Afsluiten</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Annuleren</button>
                 <button type="button" class="btn btn-primary" id="restoreGastgezin">Bevestig herstelling</button>
             </div>
         </div>
