@@ -39,7 +39,7 @@
                     <td>@string.Join( "; ", @u.Roles.ToArray() )</td>
                     <td>
                         <div class="form-check">
-                            <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"")>
+                            <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"") @(!User.HasClaims("groups", "group-coordinator", "group-superadmin")?"disabled":"")>
                         </div>
                     </td>
                     <td><a href="/MijnGastgezinnen/@u.Id?filter=Intaker">@u.AantalIntakes</a></td>
