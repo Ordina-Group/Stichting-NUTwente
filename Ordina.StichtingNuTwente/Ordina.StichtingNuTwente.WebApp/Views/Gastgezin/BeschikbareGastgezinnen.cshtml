@@ -7,7 +7,7 @@
     ViewData["Title"] = "Beschikbare Gastgezinnen";
     var Index = 0;
     var rows = 11;
-    var extraColumns = Model.SearchQueries.Where(s => s.Field != "Opmerkingen");
+    var extraColumns = Model.SearchQueries.Where(s => s.Field != "Opmerkingen").GroupBy(s => s.Field).Select(g => g.First());
 
     if (extraColumns.Count() > 0)
     {
