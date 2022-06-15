@@ -6,6 +6,13 @@
 @{
     ViewData["Title"] = "Beschikbare Gastgezinnen";
     var Index = 0;
+    var rows = 11;
+    var extraColumns = Model.SearchQueries.Where(s => s.Field != "Opmerkingen" && s.Field != "Notitie");
+
+    if (extraColumns.Count() > 0)
+    {
+        rows = 6 + extraColumns.Count();
+    }
 }
 
 <div class="row row-cols-2">
@@ -48,6 +55,7 @@
     <div class="col-12"> <h4>Zoeken</h4></div>
     <div class="col-5">
         <select class="form-select" id="zoekterm-toevoegen-select" aria-label="Default select example">
+            <option value="Opmerkingen">Opmerkingen</option>x
             <option value="AlchoholEnDrugs">Alchohol en Drugs</option>
             <option value="Allergieen">Allergieen</option>
             <option value="BasisscholenAanwezig">Basisscholen aanwezig</option>
@@ -126,13 +134,26 @@
             <th scope="col">Woonplaats</th>
             <th scope="col">Adres</th>
             <th scope="col">Naam</th>
-            <th scope="col">Status</th>
+            @if (extraColumns.Count() == 0)
+            {
+                <th scope="col">Status</th>
+            }
             <th scope="col">Opmerkingen</th>
-            <th scope="col">Ids</th>
-            <th scope="col">Buddy</th>
-            <th scope="col">Max</th>
-            <th scope="col">Geplaatst</th>
-            <th scope="col">Gereserveerd</th>
+            @if (extraColumns.Count() == 0)
+            {
+                <th scope="col">Ids</th>
+                <th scope="col">Buddy</th>
+                <th scope="col">Max</th>
+                <th scope="col">Geplaatst</th>
+                <th scope="col">Gereserveerd</th>
+            }
+            else
+            {
+                @foreach (var filter in extraColumns)
+                {
+                    <th scope="col">@filter.Field</th>
+                }
+            }
             <th scope="col" style="width:32px"></th>
         </tr>
     </thead>
@@ -143,56 +164,65 @@
             <tr class="@(Index%2==0?"dark-row":"")">
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie) || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
-                <td>@mijnGastgezin.Naam</td>
                 <td>
-                    @switch (@mijnGastgezin.Status)
-                    {
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
-                            <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
-                            <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Gereserveerd:
-                            <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
-                            <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
-                            break;
-                        case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
-                            <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
-                            break;
-                        default:
-                            <p>-</p>
-                            break;
-                    }
+                    <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank" class="link-primary">
+                        @mijnGastgezin.Naam
+                    </a>
                 </td>
+                @if (extraColumns.Count() == 0)
+                {
+                    <td>
+                        @switch (@mijnGastgezin.Status)
+                        {
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
+                                <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
+                                <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Gereserveerd:
+                                <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
+                                <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                                break;
+                            case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
+                                <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                                break;
+                            default:
+                                <p>-</p>
+                                break;
+                        }
+                    </td>
+                }
                 <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
                 class="show" id="@Index"
                 data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
                     @mijnGastgezin.VrijwilligerOpmerkingen
                 </td>
-                <td>
-                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
-                    @if (mijnGastgezin.IntakeFormulierId > 0)
-                    {
-                        <text>/ </text>
-                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
-                    }
-                </td>
-                <td>
-                    @if (mijnGastgezin.Buddy != "")
-                    {
-                        <text>@mijnGastgezin.Buddy</text>
-                    }
-                    else
-                    {
-                        <text>@mijnGastgezin.Begeleider</text>
-                    }
-                </td>
-                <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
-                <td>
-                    <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
+                @if (extraColumns.Count() == 0)
+                {
+                    <td>
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                        @if (mijnGastgezin.IntakeFormulierId > 0)
+                        {
+                            <text>/ </text>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                        }
+                    </td>
+                    <td>
+                        @if (mijnGastgezin.Buddy != "")
+                        {
+                            <text>@mijnGastgezin.Buddy</text>
+                        }
+                        else
+                        {
+                            <text>@mijnGastgezin.Begeleider</text>
+                        }
+                    </td>
+                    <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
+                    <td>
+                        <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
                    @if (mijnGastgezin.PlaatsingTag.Contains("HOLD")){
                             <text>class=link-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
@@ -201,11 +231,11 @@
                             <text>class=link-primary</text>
                         }
                     >
-                        @mijnGastgezin.PlaatsingTag
-                        </a>
-                </td>
-                <td>
-                    <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
+                            @mijnGastgezin.PlaatsingTag
+                                                                </a>
+                    </td>
+                    <td>
+                        <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
                       {
                             <text>class=text-danger</text>
                         }else if(mijnGastgezin.PlaatsingTag.StartsWith("0") && mijnGastgezin.ReserveTag.StartsWith("0")){
@@ -214,9 +244,17 @@
                             <text>class=text-primary</text>
                         }
                     >
-                        @mijnGastgezin.ReserveTag
-                        </span>
-                </td>
+                            @mijnGastgezin.ReserveTag
+                                                                    </span>
+                    </td>
+                }
+                else
+                {
+                    @foreach (var filter in extraColumns)
+                    {
+                        <td scope="col">@mijnGastgezin.PlaatsingsInfo?.GetValueByFieldString(filter.Field)</td>
+                    }
+                }
                 @if (mijnGastgezin.PlaatsingsInfo != null)
                 {
                     <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
@@ -226,21 +264,25 @@
                     <td></td>
                 }
             </tr>
-            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 11, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen))
+
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, rows, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen))
         }
     </tbody>
     <tfoot>
         <tr>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
             <td><span class="float-right">Totaal:</span></td>
             <td>@(Model.MijnGastgezinnen.Count) <i class="fa-solid fa-house-chimney-user"></i></td>
             <td></td>
-            <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
-            <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0") && !g.PlaatsingTag.StartsWith("N") && !g.PlaatsingTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
-            <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0") && !g.ReserveTag.StartsWith("N") && !g.ReserveTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
+            <td></td>
+            <td></td>
+            @if (extraColumns.Count() == 0)
+            {
+                <td><b>v:</b>@Model.TotalMaxAdults <b>k:</b>@Model.TotalMaxChildren</td>
+                <td> @Model.TotalPlaatsingTag <br /> @Model.MijnGastgezinnen.Count(g => !g.PlaatsingTag.StartsWith("0") && !g.PlaatsingTag.StartsWith("N") && !g.PlaatsingTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
+                <td> @Model.TotalResTag <br /> @Model.MijnGastgezinnen.Count(g => !g.ReserveTag.StartsWith("0") && !g.ReserveTag.StartsWith("N") && !g.ReserveTag.StartsWith("O")) <i class="fa-solid fa-house-chimney-user"></i></td>
+            }
             <td></td>
         </tr>
     </tfoot>
