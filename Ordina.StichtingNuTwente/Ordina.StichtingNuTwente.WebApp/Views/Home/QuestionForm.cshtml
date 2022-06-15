@@ -6,6 +6,7 @@
     ViewData["Title"] = Model.Title;
 
     bool updateMode = !String.IsNullOrEmpty(Context.Request.Query["id"]);
+    int questionNumber = 1;
 
 }
 
@@ -56,7 +57,7 @@
                                 {
                                     <div class="row" id="Question">
                                         <div class="card-title">
-                                            <p>@Html.Raw(q.Number). @Html.Raw(q.Text)</p>
+                                            <p>@Html.Raw(questionNumber). @Html.Raw(q.Text)</p>
                                             @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
                                             <i style="font-size : 15px">@Html.Raw(q.Description)</i>
                                         </div>
@@ -64,6 +65,7 @@
                                     </div>
 
                                     <br>
+                                    questionNumber++;
                                 }
                             </div>
                         </div>

@@ -26,7 +26,11 @@
                             obj.answer[id] = {"Nummer":id,"Antwoord":value};
                         }
                     } else {
-                        obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                           if(obj.answer[id] !== undefined){
+                               obj.answer[id].Antwoord += ("," + value);
+                           } else {
+                               obj.answer[id] = {"Nummer":id,"Antwoord":value}
+                           }
                     }
                 })
                 let awnsers = obj.answer;
