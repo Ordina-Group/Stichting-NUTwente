@@ -293,8 +293,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             gastgezinQuery = gastgezinQuery.Where(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
                             results = originalQuery.Count(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
+                        } else if (filterKey == "Opmerkingen")
+                        {
+                            gastgezinQuery = gastgezinQuery.Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
+                            results = originalQuery.Count(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
                         }
-                        else
+                        else 
                         {
                             gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
                             results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
