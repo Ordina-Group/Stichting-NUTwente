@@ -30,6 +30,7 @@ builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IPersoonService, PersoonService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IPersoonService, PersoonService>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 
 
