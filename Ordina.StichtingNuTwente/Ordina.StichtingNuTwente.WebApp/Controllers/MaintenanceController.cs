@@ -104,15 +104,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(databaseIntegrityModel);
         }
 
-        [Authorize(Policy = "RequireSecretariaatRole")]
-        public IActionResult DataDump()
-        {
-            var file = maintenanceService.GenerateDataDumpToExcel();
-
-            MemoryStream stream = new MemoryStream(file);
-            return new FileStreamResult(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") { FileDownloadName = string.Format("Data dump {0:dd-MM-yyyy}.xlsx", DateTime.Now) };
-        }
-
         [Authorize(Policy = "RequireSuperAdminRole")]
         [HttpPost]
         public async Task<ActionResult> UploadUpdateIntake(IFormFile file)

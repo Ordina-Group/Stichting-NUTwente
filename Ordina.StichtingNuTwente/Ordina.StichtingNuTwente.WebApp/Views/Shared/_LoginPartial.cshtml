@@ -58,6 +58,7 @@
                     </li>
                     @if (User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/VerwijderdeGastgezinnen"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Archief
@@ -66,7 +67,16 @@
                                 <a class="dropdown-item" href="/VerwijderdeGastgezinnen">Verwijderde gastgezinnen</a>
                             </div>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/Document/Index"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Documenten
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/Document/Index">Documenten</a>
+                            </div>
+                        </li>
                     }
+
                     @if (User.HasClaims("groups", "group-superadmin"))
                     {
                         <span style="padding-left: 50px;"><a href="/Maintenance/Index" class="btn btn-danger">Maintenance</a></span>
