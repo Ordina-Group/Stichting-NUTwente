@@ -5,6 +5,8 @@
 
 @{
     ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
+
+    var canEdit = User.HasClaims("groups", "group-vrijwilliger", "group-coordinator", "group-superadmin");
 }
 
 <div class="row">
@@ -112,13 +114,13 @@
                     <div class="row mt-1">
                         <div class="col">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"")>
+                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"") @(canEdit?"":"disabled")>
                                 <label class="form-check-label" for="OnHold">
                                     On Hold
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"")>
+                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"") @(canEdit?"":"disabled")>
                                 <label class="form-check-label" for="NoodOpvang">
                                     Nood Opvang
                                 </label>
@@ -128,7 +130,7 @@
                     <div class="row mt-1">
                         <label class="col">VOG:</label>
                         <div class="col">
-                            <input type="checkbox" class="form-check-input float-right" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"")>
+                            <input type="checkbox" class="form-check-input float-right" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"") @(canEdit?"":"disabled")>
                         </div>
                     </div>
 
@@ -137,16 +139,19 @@
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Volwassenen:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults">
+                            <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults" @(canEdit?"":"disabled")>
                         </div>
                     </div>
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Kinderen:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren">
+                            <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren" @(canEdit?"":"disabled")>
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-primary mt-3" value=Opslaan>
+                    if (canEdit)
+                    {
+                        <input type="submit" class="btn btn-primary mt-3" value=Opslaan>
+                    }
                 }
             </div>
         </div>
@@ -652,21 +657,24 @@
             <div class="card-body">
                 <h5 class="card-title">Contactmomenten</h5>
                 <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="ContactLogDate">Datum</label>
-                            <input type="date" class="form-control" id="ContactLogDate" name="ContactLogDate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    @if (canEdit)
+                    {
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="ContactLogDate">Datum</label>
+                                <input type="date" class="form-control" id="ContactLogDate" name="ContactLogDate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="ContactLogDate">Notitie</label>
-                            <textarea class="form-control" id="ContactLogText" rows="3"></textarea>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="ContactLogDate">Notitie</label>
+                                <textarea class="form-control" id="ContactLogText" rows="3"></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-2">
-                        <button style="position:relative;bottom:-70px;" class="btn btn-primary" id="ContactLogSubmit">Opslaan</button>
-                    </div>
+                        <div class="col-2">
+                            <button style="position:relative;bottom:-70px;" class="btn btn-primary" id="ContactLogSubmit">Opslaan</button>
+                        </div>
+                    }
                     <div class="col-12">
                         <table class="table table-striped">
                             <thead>
