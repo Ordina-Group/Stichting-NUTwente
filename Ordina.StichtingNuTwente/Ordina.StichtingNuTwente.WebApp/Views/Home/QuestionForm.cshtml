@@ -43,35 +43,38 @@
             @Html.AntiForgeryToken()
             @foreach (Section s in Model.Sections)
             {
-                <div class="row" id="Section">
-                    <div class="" style="">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>@Html.Raw(s.Title)</h3>
-                            </div>
-                            <div class="card-body">
-                                <p>@Html.Raw(s.Header)</p>
+                if(!(s.Title == "Archief" && !updateMode))
+                {
+                    <div class="row" id="Section">
+                        <div class="" style="">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>@Html.Raw(s.Title)</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>@Html.Raw(s.Header)</p>
 
 
-                                @foreach (Question q in s.Questions)
-                                {
-                                    <div class="row" id="Question">
-                                        <div class="card-title">
-                                            <p>@Html.Raw(questionNumber). @Html.Raw(q.Text)</p>
-                                            @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
-                                            <i style="font-size : 15px">@Html.Raw(q.Description)</i>
+                                    @foreach (Question q in s.Questions)
+                                    {
+                                        <div class="row" id="Question">
+                                            <div class="card-title">
+                                                <p>@Html.Raw(questionNumber). @Html.Raw(q.Text)</p>
+                                                @await Html.PartialAsync("_InputSelection.cshtml", new InputPartialViewModel(){Question=q, AllUsers = Model.AllUsers, UserDetails = Model.UserDetails})
+                                                <i style="font-size : 15px">@Html.Raw(q.Description)</i>
+                                            </div>
+
                                         </div>
 
-                                    </div>
-
-                                    <br>
-                                    questionNumber++;
-                                }
-                            </div>
+                                        <br>
+                                        questionNumber++;
+                                    }
+                                </div>
                         </div>
                         <br />
                     </div>
                 </div>
+                }
             }
             @if (updateMode)
             {

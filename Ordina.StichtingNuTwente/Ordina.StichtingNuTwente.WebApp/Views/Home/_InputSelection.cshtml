@@ -9,24 +9,35 @@
 {
     case "checkbox":
         {
+            <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
             @foreach (string cbOption in @q.InputOptions)
             {
-                if (cbOption.ToLower().Contains("anders")||cbOption.ToLower().Contains("namelijk"))
+                if (cbOption.ToLower().Contains("namelijk:"))
                 {
-                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
-                    <label class="form-check-label" for="question-@q.Id-@cbOption">
-                        <input type="text" id="question-@q.Id-@(cbOption)text" class="form-control question" placeholder="@cbOption" value="@((q.Answer != null && q.Answer.Contains(@cbOption))?q.Answer.Split(",").Last():"")" name="Antwoord" @(q.Required?"required":"") />
-                    </label>
-
+                    <div class="form-check">
+                        <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-other" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                        <label class="form-check-label" for="question-@q.Id-other">
+                            @cbOption
+                        </label>
+                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@((q.Answer != null && q.Answer.Contains(@cbOption))?q.Answer.Split("namelijk:,").Last():"")" hidden="@((q.Answer != null && q.Answer.Contains(@cbOption))?false:true)" name="Antwoord" @(q.Required?"required":"") />
+                    </div>
                     <br />
+                    <script>
+                        $("#question-@q.Id-other").change(function() {
+                            if ($(this).is(':checked')) {
+                                $("#question-@q.Id-othertext").removeAttr("hidden");
+                            } else {
+                                $("#question-@q.Id-othertext").attr("hidden", true).val('');
+                            }
+                        });
+                    </script>
                 }
                 else
                 {
-                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                    <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.ToLower().Contains(@cbOption.ToLower())?"checked":"")) @(q.Required?"required":"")>
                     <label class="form-check-label" for="question-@q.Id-@cbOption">
                         @cbOption
                     </label>
-
                     <br />
                 }
             }
@@ -34,24 +45,39 @@
         }
     case "radiobutton":
         {
+            <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
             @foreach (string rbOption in @q.InputOptions)
             {
-                if (rbOption.ToLower().Contains("anders")||rbOption.ToLower().Contains("namelijk"))
+                if (rbOption.ToLower().Contains("namelijk:"))
                 {
                     <div class="form-check">
-                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
-                        <label class="form-check-label" for="question-@q.Id-@rbOption">
-                            <input type="text" id="question-@q.Id-@(rbOption)text" class="form-control question" placeholder="@rbOption" value="@((q.Answer != null && q.Answer.Contains(@rbOption))?q.Answer.Split(",").Last():"")" name="Antwoord" @(q.Required?"required":"") />
+                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-other" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
+                        <label class="form-check-label" for="question-@q.Id-other">
+                            @rbOption
                         </label>
+                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@((q.Answer != null && q.Answer.Contains(@rbOption))?q.Answer.Split("namelijk:,").Last():"")" hidden="@((q.Answer != null && q.Answer.Contains(@rbOption))?false:true)" name="Antwoord" @(q.Required?"required":"") />
                     </div>
+                    <script>
+                        $(document).ready(function() {
+                            $("input[name=question-@q.Id]:radio").change(function() {
+                                if ($("#question-@q.Id-other").is(':checked')) {
+                                    $("#question-@q.Id-othertext").removeAttr("hidden");
+                                    console.log("checked");
+                                } else {
+                                    $("#question-@q.Id-othertext").attr("hidden", true).val('');
+                                    console.log("unchecked");
+                                }
+                            });
+                        });
+                    </script>
                 }
                 else
                 {
                     <div class="form-check">
-                    <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
-                    <label class="form-check-label" for="question-@q.Id-@rbOption">
-                        @rbOption
-                    </label>
+                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-@rbOption" value="@rbOption" @((q.Answer != null && q.Answer.ToLower().Contains(@rbOption.ToLower()))?"checked":"")>
+                        <label class="form-check-label" for="question-@q.Id-@rbOption">
+                            @rbOption
+                        </label>
                     </div>
                 }
             }
@@ -130,7 +156,13 @@
 
     case "number":
         {
-            <input type="number" id="question-@q.Id" class="form-control question" value="@q.Answer" name="Antwoord" @(q.Required?"required":"") />
+            <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
+            <input type="number" id="question-@q.Id" class="form-control question col-auto" value="@q.Answer" name="Antwoord" @(q.Required?"required":"") />
+            break;
+        }
+    case "deleted":
+        {
+            <p style="font-size: 0.8rem;">Orgineel antwoord: @q.Answer</p>
             break;
         }
 
