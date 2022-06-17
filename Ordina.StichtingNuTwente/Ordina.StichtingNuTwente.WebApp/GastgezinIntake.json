@@ -184,15 +184,38 @@
             "Samenwonend met uitwonenden kinderen",
             "Studentenhuis",
             "Bedrijf",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "GezinsSamenstelling"
         },
         {
-          "Id": "16",
+          "Id": "57",
           "Number": "15",
+          "Text": "Uit welke leeftijdsgroepen bestaat uw huishouden?",
+          "Description": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "0 - 2",
+            "3 - 5",
+            "6 - 11",
+            "12 - 17",
+            "18 - 25",
+            "26 - 35",
+            "36 - 45",
+            "46 - 55",
+            "56 - 65",
+            "66 - 75",
+            "> 75"
+          ],
+          "Required": "false" //,
+          //"Object": "PlaatsingsInfo",
+          //"ParameterName": "GezinsSamenstelling"
+        },
+        {
+          "Id": "16",
+          "Number": "16",
           "Text": "Welke hobbies of vrijetijdsbesteding doen u en uw gezinsleden?",
           "Description": "",
           "InputType": "text",
@@ -201,7 +224,7 @@
         },
         {
           "Id": "17",
-          "Number": "16",
+          "Number": "17",
           "Text": "Welke talen spreekt u?",
           "Description": "",
           "InputType": "checkbox",
@@ -212,7 +235,7 @@
             "Russisch",
             "Duits",
             "Frans",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "Persoon",
@@ -230,7 +253,7 @@
           "Id": "19",
           "Number": "18",
           "Text": "voor hoeveel kinderen tot en met 2 jaar heeft u een slaapplaats?",
-          "Description": "(ledikant)",
+          "Description": "(kinderledikantje)",
           "InputType": "number",
           "InputOptions": "",
           "Required": "false",
@@ -249,8 +272,22 @@
           "ParameterName": "VolwassenenGrotereKinderen"
         },
         {
-          "Id": "22",
+          "Id": "56",
           "Number": "20",
+          "Text": "Heeft u opmerkingen over de vorige twee vragen?",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Nee",
+            "Ja, namelijk:"
+          ],
+          "Required": "false" //,
+          //"Object": "PlaatsingsInfo",
+          //"ParameterName": "SlaapplaatsOpmerking"
+        },
+        {
+          "Id": "22",
+          "Number": "21",
           "Text": "Is er voldoende ruimte in de slaapkamers?",
           "Description": "(tenminste 3,5 m2 per persoon)",
           "InputType": "radiobutton",
@@ -264,7 +301,7 @@
         },
         {
           "Id": "23",
-          "Number": "21",
+          "Number": "22",
           "Text": "Is er voldoende privacy voor uw gast(en)?",
           "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
           "InputType": "radiobutton",
@@ -278,7 +315,7 @@
         },
         {
           "Id": "53",
-          "Number": "22",
+          "Number": "23",
           "Text": "Hebben uw gast(en) een eigen toegangsdeur?",
           "Description": "",
           "InputType": "radiobutton",
@@ -286,13 +323,13 @@
             "Ja",
             "Nee"
           ],
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "Toegangsdeur"
+          "Required": "false" //,
+          //"Object": "PlaatsingsInfo",
+          //"ParameterName": "Toegangsdeur"
         },
         {
           "Id": "26",
-          "Number": "23",
+          "Number": "24",
           "Text": "Waar kan/kunnen uw gast(en) gebruik van maken?",
           "Description": "",
           "InputType": "checkbox",
@@ -308,7 +345,7 @@
             "computer",
             "woonkamer",
             "tuin/balkon",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -316,7 +353,7 @@
         },
         {
           "Id": "27",
-          "Number": "24",
+          "Number": "25",
           "Text": "Mogen uw gasten zelfstandig koken?",
           "Description": "",
           "InputType": "radiobutton",
@@ -330,7 +367,7 @@
         },
         {
           "Id": "28",
-          "Number": "25",
+          "Number": "26",
           "Text": "Hoeveel koelkastruimte is beschikbaar voor uw gast(en)?",
           "Description": "",
           "InputType": "radiobutton",
@@ -345,7 +382,7 @@
         },
         {
           "Id": "54",
-          "Number": "26",
+          "Number": "27",
           "Text": "hebben uw gast(en) beschikking over eigen sanitaire voorzieningen?",
           "Description": "",
           "InputType": "checkbox",
@@ -362,7 +399,7 @@
         },
         {
           "Id": "55",
-          "Number": "26",
+          "Number": "28",
           "Text": "Is de woning geschikt voor mensen die slecht ter been zijn?",
           "Description": "De woning telt als gelijkvloers indien er een slaapkamer, keuken en badkamer aanwezig zijn op de begane grond.",
           "InputType": "radiobutton",
@@ -377,7 +414,7 @@
         },
         {
           "Id": "30",
-          "Number": "27",
+          "Number": "29",
           "Text": "Mogen uw gast(en) binnenshuis roken? Buitenshuis?",
           "Description": "",
           "InputType": "radiobutton",
@@ -415,9 +452,8 @@
             "Katten",
             "Honden",
             "Vogels",
-            "Kippen",
             "Boerderijdieren",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -436,7 +472,7 @@
             "Geen honden",
             "Geen vogels",
             "Geen ratten/muizen",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -455,7 +491,7 @@
             "Huisstofmijt allergie",
             "Hooikoorst",
             "Astma",
-            "Anders"
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -494,13 +530,13 @@
     },
     {
       "Id": "7",
-      "Number": "6",
+      "Number": "5",
       "Title": "Toetsing SNF-criteria",
       "Header": "Om vast te kunnen stellen in welke mate de plaatsingslocatie voldoet aan de SNF-criteria stellen we nog een aantal vragen.",
       "Questions": [
         {
           "Id": "45",
-          "Number": "38",
+          "Number": "36",
           "Text": "Is de verlichting en electra in de natte ruimte(s) spatwaterdicht?",
           "Description": "",
           "InputType": "radiobutton",
@@ -512,7 +548,7 @@
         },
         {
           "Id": "46",
-          "Number": "39",
+          "Number": "37",
           "Text": "Is er daglicht in de verblijfsruimte(s)?",
           "Description": "",
           "InputType": "radiobutton",
@@ -524,7 +560,7 @@
         },
         {
           "Id": "47",
-          "Number": "40",
+          "Number": "38",
           "Text": "Is er daglicht in de slaapruimte(s)?",
           "Description": "",
           "InputType": "radiobutton",
@@ -536,7 +572,7 @@
         },
         {
           "Id": "48",
-          "Number": "41",
+          "Number": "39",
           "Text": "Is er op elke verdieping een rookmelding aanwezig?",
           "Description": "",
           "InputType": "radiobutton",
@@ -550,19 +586,19 @@
     },
     {
       "Id": "6",
-      "Number": "7",
+      "Number": "6",
       "Title": "Uw voorbereiding",
       "Header": "Tijdens de intake bespreekt een van onze medewerkers met u welke impact een plaatsing heeft op uw persoonlijke leven. Zaken die u hierover wilt vastleggen kunt u in deze rubriek kwijt.",
       "Questions": [
         {
           "Id": "44",
-          "Number": "43",
+          "Number": "41",
           "Text": "Zijn er bijzonderheden waarmee NuTwente rekening dient te houden bij plaatsing?",
           "Description": "(bijvoorbeeld binnen uw gezin of in de woning)",
           "InputType": "radiobutton",
           "InputOptions": [
             "Nee",
-            "Ja, namelijk"
+            "Ja, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -570,7 +606,7 @@
         },
         {
           "Id": "42",
-          "Number": "44",
+          "Number": "42",
           "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
           "Description": "",
           "InputType": "radiobutton",
@@ -583,7 +619,7 @@
         },
         {
           "Id": "49",
-          "Number": "45",
+          "Number": "43",
           "Text": "Heeft u nog andere vragen of opmerkingen? Die kunt u hier kwijt",
           "Description": "",
           "InputType": "textArea",
@@ -594,11 +630,81 @@
         },
         {
           "Id": "51",
-          "Number": "46",
+          "Number": "44",
           "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
           "Description": "",
           "InputType": "checkbox",
           "InputOptions": [ "Ik ga hiermee akkoord" ],
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "8",
+      "Number": "7",
+      "Title": "Archief",
+      "Header": "Deze vragen komen niet meer terug in het nieuwe intakeformulier.",
+      "Questions": [
+        {
+          "Id": "18",
+          "Number": "0",
+          "Text": "Is er een belemmering in het gezin die kan leiden tot niet-plaatsing?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Belemmering"
+        },
+        {
+          "Id": "31",
+          "Number": "0",
+          "Text": "Hoe staat u tegenover eventueel alcohol- of drugsgebruik van uw gast(en)?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "AlchoholEnDrugs"
+        },
+        {
+          "Id": "32",
+          "Number": "0",
+          "Text": "Heeft u nog spullen nodig?",
+          "Description": "(Nutwente zorgt zelf niet voor spullen, maar heeft wel contacten)",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "40",
+          "Number": "0",
+          "Text": "Wonen er andere kinderen bij u in de buurt? (veel/weinig)",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "KinderenInDeBuurt"
+        },
+        {
+          "Id": "41",
+          "Number": "0",
+          "Text": "Welke faciliteiten voor kinderen zijn er in uw buurt?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "FaciliteitenVoorKinderen"
+        },
+        {
+          "Id": "43",
+          "Number": "0",
+          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
           "Required": "false"
         }
       ]
