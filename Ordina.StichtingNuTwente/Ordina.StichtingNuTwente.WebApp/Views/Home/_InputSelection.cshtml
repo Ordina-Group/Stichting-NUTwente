@@ -12,14 +12,27 @@
             <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
             @foreach (string cbOption in @q.InputOptions)
             {
+
                 if (cbOption.ToLower().Contains("namelijk:"))
                 {
+                    string other = "";
+                    if (@q.Answer != null)
+                    {
+                        var answers = q.Answer.Split(",");
+                        foreach (string a in answers)
+                        {
+                            if (!q.InputOptions.Contains(a, StringComparer.OrdinalIgnoreCase) && !a.ToLower().Contains("namelijk") && !a.ToLower().Contains("anders"))
+                            {
+                                other += (other == "") ? a : $",{a}";
+                            }
+                        }
+                    }
                     <div class="form-check">
-                        <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-other" @((q.Answer != null && q.Answer.Contains(@cbOption))?"checked":"") @(q.Required?"required":"")>
+                        <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-other" @((q.Answer != null && q.Answer.Contains(@cbOption) || @other != "")?"checked":"") @(q.Required?"required":"")>
                         <label class="form-check-label" for="question-@q.Id-other">
                             @cbOption
                         </label>
-                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@((q.Answer != null && q.Answer.Contains(@cbOption))?q.Answer.Split("namelijk:,").Last():"")" hidden="@((q.Answer != null && q.Answer.Contains(@cbOption))?false:true)" name="Antwoord" @(q.Required?"required":"") />
+                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@other" hidden="@((q.Answer != null && q.Answer.Contains(@cbOption) || @other != "")?false:true)" name="Antwoord" @(q.Required?"required":"") />
                     </div>
                     <br />
                     <script>
@@ -50,12 +63,24 @@
             {
                 if (rbOption.ToLower().Contains("namelijk:"))
                 {
+                    string other = "";
+                    if (@q.Answer != null)
+                    {
+                        var answers = q.Answer.Split(",");
+                        foreach (string a in answers)
+                        {
+                            if (!q.InputOptions.Contains(a, StringComparer.OrdinalIgnoreCase) && !a.ToLower().Contains("namelijk") && !a.ToLower().Contains("anders"))
+                            {
+                                other += (other == "") ? a : $",{a}";
+                            }
+                        }
+                    }
                     <div class="form-check">
-                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-other" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption))?"checked":"")>
+                        <input class="form-check-input question" type="radio" name="question-@q.Id" id="question-@q.Id-other" value="@rbOption" @((q.Answer != null && q.Answer.Contains(@rbOption) || @other != "")?"checked":"")>
                         <label class="form-check-label" for="question-@q.Id-other">
                             @rbOption
                         </label>
-                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@((q.Answer != null && q.Answer.Contains(@rbOption))?q.Answer.Split("namelijk:,").Last():"")" hidden="@((q.Answer != null && q.Answer.Contains(@rbOption))?false:true)" name="Antwoord" @(q.Required?"required":"") />
+                        <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@other" hidden="@((q.Answer != null && q.Answer.Contains(@rbOption) || @other != "")?false:true)" name="Antwoord" @(q.Required?"required":"") />
                     </div>
                     <script>
                         $(document).ready(function() {
