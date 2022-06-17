@@ -78,7 +78,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             using (var webClient = new System.Net.WebClient())
             {
-                var json = webClient.DownloadString("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCode);
+                var postCodeFixed = postCode.Trim().Replace(" ", "");
+                var json = webClient.DownloadString("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCodeFixed);
                 var gemeente = JsonConvert.DeserializeObject<LocatieApiResult>(json);
                 var response = gemeente.Response;
                 if (response != null && response.Docs.Count > 0)
