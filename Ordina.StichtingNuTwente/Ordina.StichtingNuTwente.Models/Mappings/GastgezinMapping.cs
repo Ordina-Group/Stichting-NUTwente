@@ -56,18 +56,16 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             Comment? rejectionComment = null;
-
-            if (gastgezin.Comments != null && gastgezin.Comments.Count > 0)
-            {
-                rejectionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
-            }
-
             Comment? deletionComment = null;
+            Comment? intakeCompletedComment = null;
 
             if (gastgezin.Comments != null && gastgezin.Comments.Count > 0)
             {
                 deletionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.DELETION);
+                rejectionComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.BUDDY_REJECTION);
+                intakeCompletedComment = gastgezin.Comments.LastOrDefault(g => g.CommentType == CommentType.INTAKE_COMPLETED);
             }
+
 
             var begeleiderId = 0;
             var begeleider = "";
@@ -127,7 +125,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Deleted = gastgezin.Deleted,
                 DeletionComment = deletionComment,
                 VrijwilligerOpmerkingen = gastgezin.VrijwilligerOpmerkingen,
-                ContactLogs = gastgezin.ContactLogs
+                ContactLogs = gastgezin.ContactLogs,
+                IntakeCompletedComment = intakeCompletedComment
             };
 
             return gastgezinViewModel;
