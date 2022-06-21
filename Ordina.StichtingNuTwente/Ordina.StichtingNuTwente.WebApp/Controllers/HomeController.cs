@@ -231,9 +231,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
                     MailHelper mailHelper = new MailHelper(_mailService);
 
-                    if (reactie.FormulierId == 1 || reactie.FormulierId == 4)
+                    if (reactie.FormulierId == 1)
                     {
-                        success = await mailHelper.Bevestiging(persoon);
+                        if (gastgezinId != null)
+                        {
+                            ggId = gastgezinId ?? default(int);
+                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
+                            success = await mailHelper.AanmeldingGastgezin(gastgezin);
+                        }
+                        else
+                        {
+                            success = false;
+                        }
                     }
                     else if(reactie.FormulierId == 2)
                     {
@@ -247,6 +256,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             success = await mailHelper.Bevestiging(persoon);
                         }
+                    }
+                    else if(reactie.FormulierId == 4)
+                    {
+                        success = await mailHelper.AanmeldingVrijwilliger(persoon);
                     }
                     else
                     {
