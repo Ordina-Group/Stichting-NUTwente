@@ -18,27 +18,41 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class MaintenanceService : IMaintenanceService
     {
-        private readonly NuTwenteContext _context;
         private readonly IFormBusiness _formBusiness;
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
         private readonly IReactionService _reactionService;
 
-        public MaintenanceService(NuTwenteContext context, IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService)
+        private readonly IRepository<Gastgezin> GastgezinRepo;
+        private readonly IRepository<Reactie> ReactionRepo;
+        private readonly IRepository<Plaatsing> PlaatsingsRepo;
+        private readonly IRepository<UserDetails> UserDetailRepo;
+        private readonly IRepository<Persoon> PersoonRepo;
+        private readonly IRepository<Adres> AdresRepo;
+        private readonly IRepository<Antwoord> AntwoordRepo;
+        private readonly IRepository<PlaatsingsInfo> PlaatsingsInfoRepo;
+
+        public MaintenanceService(IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService, IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reactionRepo, IRepository<UserDetails> userDetailRepo, IRepository<Persoon> persoonRepo, IRepository<Adres> adresRepo, IRepository<Antwoord> antwoordRepo, IRepository<PlaatsingsInfo> plaatsingsInfoRepo, IRepository<Plaatsing> plaatsingsRepo)
         {
-            _context = context;
             _formBusiness = formBusiness;
             _gastgezinService = gastgezinService;
             _userService = userService;
             _reactionService = reactionService;
+            GastgezinRepo = gastgezinRepo;
+            ReactionRepo = reactionRepo;
+            UserDetailRepo = userDetailRepo;
+            PersoonRepo = persoonRepo;
+            AdresRepo = adresRepo;
+            AntwoordRepo = antwoordRepo;
+            PlaatsingsInfoRepo = plaatsingsInfoRepo;
+            PlaatsingsRepo = plaatsingsRepo;
         }
 
 
         public List<MaintenanceMessage> UpdateStatus()
         {
             var messages = new List<MaintenanceMessage>();
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezinnen = gastgezinRepository.GetAll();
+            var gastgezinnen = GastgezinRepo.GetAll();
             foreach (var gastgezin in gastgezinnen)
             {
                 var prevStatus = gastgezin.Status;
@@ -50,7 +64,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 {
                     gastgezin.OnHold = true;
                 }
-                gastgezinRepository.Update(gastgezin);
+                GastgezinRepo.Update(gastgezin);
                 messages.Add(new MaintenanceMessage($"Status was {prevStatus} is now {gastgezin.GetStatus()}. OnHold is {gastgezin.OnHold}. Nood is {gastgezin.NoodOpvang}", MaintenanceMessageType.Success));
             }
             return messages;
@@ -59,15 +73,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public List<MaintenanceMessage> LinkBegeleiderToGastgezin()
         {
             var messages = new List<MaintenanceMessage>();
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier.UserDetails,Begeleider");
+            var gastgezinnen = GastgezinRepo.GetAll("IntakeFormulier.UserDetails,Begeleider");
             foreach (var gastgezin in gastgezinnen)
             {
                 if (gastgezin.IntakeFormulier != null && gastgezin.IntakeFormulier.UserDetails != null && gastgezin.Begeleider == null)
                 {
                     var userDetails = gastgezin.IntakeFormulier.UserDetails;
                     gastgezin.Begeleider = userDetails;
-                    gastgezinRepository.Update(gastgezin);
+                    GastgezinRepo.Update(gastgezin);
                     messages.Add(new MaintenanceMessage($@"Gastgezin with id {gastgezin.Id} got linked with {userDetails.FirstName} {userDetails.LastName}", MaintenanceMessageType.Success));
                 }
                 else
@@ -86,7 +99,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             worksheet.Read();
             var rows = worksheet.Rows.ToArray();
             var rowNum = 0;
-            var reactieRepository = new Repository<Reactie>(_context);
             string file = FormHelper.GetFilenameFromId(formId);
             Form questionForm = _formBusiness.createFormFromJson(1, file);
             var colomnIndexToQuestionID = new Dictionary<int, int>();
@@ -161,8 +173,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             worksheet.Read();
             var rows = worksheet.Rows.ToArray();
             var rowNum = 0;
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezinnen = gastgezinRepository.GetAll("IntakeFormulier");
+            var gastgezinnen = GastgezinRepo.GetAll("IntakeFormulier");
             foreach (var row in rows)
             {
                 if (rowNum > 0)
@@ -393,7 +404,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             worksheet.Read();
             var rows = worksheet.Rows.ToArray();
             var rowNum = 0;
-            var reactieRepository = new Repository<Reactie>(_context);
             string file = FormHelper.GetFilenameFromId(formId);
             Form questionForm = _formBusiness.createFormFromJson(formId, file);
             var colomnIndexToQuestionID = new Dictionary<int, int>();
@@ -437,7 +447,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         if (index == 0)
                         {
                             var id = int.Parse(cell.ToString());
-                            reaction = reactieRepository.GetById(id, "Antwoorden");
+                            reaction = ReactionRepo.GetById(id, "Antwoorden");
                             if (reaction == null)
                             {
                                 messages.Add(new MaintenanceMessage($@"From with Id {id} was not found", MaintenanceMessageType.Warning));
@@ -458,7 +468,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                     if (reaction != null)
                     {
-                        reactieRepository.Update(reaction);
+                        ReactionRepo.Update(reaction);
                         messages.Add(new MaintenanceMessage($@"From with Id {reaction.Id} was updated", MaintenanceMessageType.Success));
                     }
                 }
@@ -471,11 +481,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public List<MaintenanceMessage> ImportGastgezinnen(Stream excelStream)
         {
             var messages = new List<MaintenanceMessage>();
-
-            var reactieRepository = new Repository<Reactie>(_context);
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-            var persoonRepository = new Repository<Persoon>(_context);
-
             using FastExcel.FastExcel fastExcel = new(excelStream);
             var worksheet = fastExcel.Worksheets[0];
             worksheet.Read();
@@ -518,7 +523,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                     }
 
-                    var persoon = persoonRepository.Get(e => e.Reactie.Id == aanmeldId, "Gastgezin");
+                    var persoon = PersoonRepo.Get(e => e.Reactie.Id == aanmeldId, "Gastgezin");
                     if (persoon == null)
                     {
                         messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Er is geen persoon met Reactie Id = Aanmeld Id", MaintenanceMessageType.Error));
@@ -540,7 +545,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
                     if (intakeId.HasValue)
                     {
-                        gastgezin.IntakeFormulier = reactieRepository.GetById((intakeId.Value));
+                        gastgezin.IntakeFormulier = ReactionRepo.GetById((intakeId.Value));
 
                         if (gastgezin.IntakeFormulier == null)
                         {
@@ -549,10 +554,10 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                     }
 
-                    gastgezinRespority.Create(gastgezin);
+                    GastgezinRepo.Create(gastgezin);
 
                     persoon.Gastgezin = gastgezin;
-                    persoonRepository.Update(persoon);
+                    PersoonRepo.Update(persoon);
 
                     messages.Add(new MaintenanceMessage($@"Aanmeld Id: {aanmeldId} Intake Id: {intakeId} - Gastgezin toegevoegd", MaintenanceMessageType.Success));
                 }
@@ -566,7 +571,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
 
-            messages.Add(new MaintenanceMessage($@"Gastgezinnen total in database: {gastgezinRespority.GetAll().Count()}", MaintenanceMessageType.Error));
+            messages.Add(new MaintenanceMessage($@"Gastgezinnen total in database: {GastgezinRepo.GetAll().Count()}", MaintenanceMessageType.Error));
 
             return messages;
         }
@@ -574,10 +579,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var messages = new List<MaintenanceMessage>();
 
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-            var reactieRespority = new Repository<Reactie>(_context);
-
-            var gastgezinnen = gastgezinRespority.GetAll("AanmeldFormulier,Contact.Reactie");
+            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier,Contact.Reactie");
             foreach (var gastgezin in gastgezinnen)
             {
                 if (gastgezin.AanmeldFormulier == null)
@@ -613,14 +615,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     {
                         messages.Add(new MaintenanceMessage($@"Could not parse {intakeIdText} or {aanmeldIdText}", MaintenanceMessageType.Error));
                     }
-                    var gastgezin = gastgezinRespority.GetFirstOrDefault(x => x.IntakeFormulier != null && x.IntakeFormulier.Id == intakeId, "IntakeFormulier,AanmeldFormulier");
+                    var gastgezin = GastgezinRepo.GetFirstOrDefault(x => x.IntakeFormulier != null && x.IntakeFormulier.Id == intakeId, "IntakeFormulier,AanmeldFormulier");
                     if (gastgezin == null)
                     {
                         messages.Add(new MaintenanceMessage($@"no gastgezin found with intake id {intakeId}", MaintenanceMessageType.Error));
                         continue;
                     }
 
-                    var aanmeldFormulier = reactieRespority.GetFirstOrDefault(x => x.Id == aanmeldId);
+                    var aanmeldFormulier = ReactionRepo.GetFirstOrDefault(x => x.Id == aanmeldId);
                     if (aanmeldFormulier == null)
                     {
                         messages.Add(new MaintenanceMessage($@"no form found with aanmeld id {aanmeldId}", MaintenanceMessageType.Error));
@@ -628,7 +630,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
 
                     gastgezin.AanmeldFormulier = aanmeldFormulier;
-                    gastgezinRespority.Update(gastgezin);
+                    GastgezinRepo.Update(gastgezin);
                     messages.Add(new MaintenanceMessage($@"Coupled {aanmeldId} to {intakeId}", MaintenanceMessageType.Success));
                 }
                 else
@@ -669,10 +671,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Checking all Intake Id for if they are in a Gastgezin"
             };
 
-            var reactieRepositry = new Repository<Reactie>(_context);
-            var reacties = reactieRepositry.GetAll().Where(r => r.FormulierId == 2);
-            var gastgezinRepositry = new Repository<Gastgezin>(_context);
-            var gastgezinnen = gastgezinRepositry.GetAll("IntakeFormulier");
+            var reacties = ReactionRepo.GetAll().Where(r => r.FormulierId == 2);
+            var gastgezinnen = GastgezinRepo.GetAll("IntakeFormulier");
 
             foreach (var reactie in reacties)
             {
@@ -694,8 +694,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Checking all Gastgezin->Contact are unique"
             };
 
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-            var gastgezins = from c in gastgezinRespority.GetMany(e => e.Contact != null, "Contact")
+            var gastgezins = from c in GastgezinRepo.GetMany(e => e.Contact != null, "Contact")
                              group c by c.Contact into g
                              where g.Skip(1).Any()
                              from c in g
@@ -724,9 +723,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Checking all Gastgezin->Persoon->Reacties duplicates (Aanmeld formulier) and all Gastgezinnen->IntakeFormulierId (Intake formulier)"
             };
 
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
 
-            var gastgezinnen = gastgezinRespority.GetAll("AanmeldFormulier");
+            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier");
 
             var duplicateAanmelding = from c in gastgezinnen
                                       group c by c.AanmeldFormulier into g
@@ -776,11 +774,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
             };
 
-            var persoonRespority = new Repository<Persoon>(_context);
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-
-            var gastgezinnen = gastgezinRespority.GetAll("Contact,AanmeldFormulier");
-            var personen = persoonRespority.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
+            var gastgezinnen = GastgezinRepo.GetAll("Contact,AanmeldFormulier");
+            var personen = PersoonRepo.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
 
             int totalProblems = 0;
             foreach (var persoon in personen)
@@ -820,9 +815,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Check if an Gastgezin->AanmeldFormulier is not null"
             };
 
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-
-            var gastgezinnen = gastgezinRespority.GetMany(e => e.AanmeldFormulier == null, "AanmeldFormulier");
+            var gastgezinnen = GastgezinRepo.GetMany(e => e.AanmeldFormulier == null, "AanmeldFormulier");
 
             foreach (var gastgezin in gastgezinnen)
             {
@@ -845,11 +838,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Check if Gastgezin with Persoon do not have correct foreign keys to each other. They should both have the same keys towards each other."
             };
 
-            var persoonRespority = new Repository<Persoon>(_context);
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-
-            var gastgezinnen = gastgezinRespority.GetAll();
-            var personen = persoonRespority.GetAll("Reactie,Gastgezin");
+            var gastgezinnen = GastgezinRepo.GetAll();
+            var personen = PersoonRepo.GetAll("Reactie,Gastgezin");
 
             var errorCount = 0;
             foreach (var gastgezin in gastgezinnen)
@@ -886,10 +876,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Check if Person->Gastgezin is null and with Person->Reactie->FormulierId is 1 (1 = Aanmeld formulier)."
             };
 
-            var persoonRespority = new Repository<Persoon>(_context);
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-
-            var personen = persoonRespority.GetAll("Reactie");
+            var personen = PersoonRepo.GetAll("Reactie");
 
             var errorCount = 0;
             foreach (var persoon in personen.Where(e => e.Reactie != null && e.Reactie.Id == 1 && e.Gastgezin == null))
@@ -914,23 +901,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 Description = "Count all records for all tables in the database"
             };
 
-            var adresRespority = new Repository<Adres>(_context);
-            var antwoordRepository = new Repository<Antwoord>(_context);
-            var gastgezinRespority = new Repository<Gastgezin>(_context);
-            var persoonRespority = new Repository<Persoon>(_context);
-            var plaatsingRespority = new Repository<Plaatsing>(_context);
-            var plaatsingsInfoRespority = new Repository<PlaatsingsInfo>(_context);
-            var reactiesRespority = new Repository<Reactie>(_context);
-            var usersDetailsRespority = new Repository<UserDetails>(_context);
-
-            result.AddMessage($@"Table Adres: {adresRespority.Count()} records");
-            result.AddMessage($@"Table Antwoord: {antwoordRepository.Count()} records");
-            result.AddMessage($@"Table Gastgezin: {gastgezinRespority.Count()} records");
-            result.AddMessage($@"Table Persoon: {persoonRespority.Count()} records");
-            result.AddMessage($@"Table Plaatsing: {plaatsingRespority.Count()} records");
-            result.AddMessage($@"Table PlaatsingsInfo: {plaatsingsInfoRespority.Count()} records");
-            result.AddMessage($@"Table Reacties: {reactiesRespority.Count()} records");
-            result.AddMessage($@"Table UsersDetails: {usersDetailsRespority.Count()} records");
+            result.AddMessage($@"Table Adres: {AdresRepo.Count()} records");
+            result.AddMessage($@"Table Antwoord: {AntwoordRepo.Count()} records");
+            result.AddMessage($@"Table Gastgezin: {GastgezinRepo.Count()} records");
+            result.AddMessage($@"Table Persoon: {PersoonRepo.Count()} records");
+            result.AddMessage($@"Table Plaatsing: {PlaatsingsRepo.Count()} records");
+            result.AddMessage($@"Table PlaatsingsInfo: {PlaatsingsInfoRepo.Count()} records");
+            result.AddMessage($@"Table Reacties: {ReactionRepo.Count()} records");
+            result.AddMessage($@"Table UsersDetails: {UserDetailRepo.Count()} records");
 
             return result;
         }
