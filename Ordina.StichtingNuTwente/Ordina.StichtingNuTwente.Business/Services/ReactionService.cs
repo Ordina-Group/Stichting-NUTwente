@@ -33,14 +33,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     var gastgezin = gastgezinRepository.GetById(gastgezinId.Value);
                     if (gastgezin != null)
                     {
-                        gastgezin.IntakeFormulier = dbmodel;
                         if (gastgezin.GetStatus() == GastgezinStatus.Aangemeld)
                         {
                             var persoonRepository = new Repository<Persoon>(_context);
                             var persoon = persoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
                             if (persoon != null)
                                 gastgezin.Contact = persoon;
+
+                            if (gastgezin.Comments == null)
+                                gastgezin.Comments = new List<Comment>();
+                            if (gastgezin.Begeleider != null)
+                                gastgezin.Comments.Add(new Comment("Intake uitgevoerd", gastgezin.Begeleider, CommentType.INTAKE_COMPLETED));
                         }
+                        gastgezin.IntakeFormulier = dbmodel;
                         gastgezinRepository.Update(gastgezin);
                     }
                 }

@@ -435,8 +435,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return null;
         }
-
         
+        [HttpPut]
+        [Route("MarkNewAsSeen/{gastgezinId}")]
+        public IActionResult MarkNewAsSeen(int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null && gastgezin.Comments != null)
+                {
+                    gastgezin.Comments.RemoveAll(c => c.CommentType == CommentType.INTAKE_COMPLETED);
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         [HttpPut]
         [Route("MarkAsRead/{gastgezinId}")]
         public IActionResult MarkAsRead(int gastgezinId)
