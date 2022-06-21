@@ -74,6 +74,16 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             return succes;
         }
 
+       /* public async Task<bool> BevestigPlaatsing(Gastgezin gastgezin, string afspraken)
+        {
+            Mail mail = new Mail();
+
+            mail.MailToName = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
+            mail.MailToAdress = gastgezin.Contact.Email;
+            mail.Subject = "Plaatsing bij uw gastgezin";
+            mail.Message = "Beste " + gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam + ", \n" + "Zojuist is er in overleg met u een plaatsing gedaan bij uw gastgezin. Hierbij zijn de volgende afspraken gemaakt:\n" + afspraken + "\n"
+        }*/
+
         public async Task<bool> Bevestiging(Persoon persoon)
         {
             var mail = new Mail()
@@ -82,6 +92,44 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 MailToName = persoon.Naam,
                 Subject = "Bevestiging van aanmelding",
                 Message = $"Beste {persoon.Naam},\n\nBedankt voor uw aanmelding.\nVoor meer informatie kunt u terecht op onze website: www.nutwente.nl\n\nMet vriendelijke groet,\nStichting NuTwente"
+            };
+            bool succes = await (_mailService.SendMail(mail));
+
+            return succes;
+        }
+
+        public async Task<bool> AanmeldingVrijwilliger(Persoon persoon)
+        {
+            if (persoon == null)
+            {
+                return false; 
+            }
+
+            var mail = new Mail()
+            {
+                MailToAdress = persoon.Email,
+                MailToName = persoon.Naam,
+                Subject = "Bevestiging van aanmelding",
+                Message = $"Beste {persoon.Naam},\n\nBedankt dat u zich heeft aangemeld als vrijwilliger bij NuTwente. Wij trachten binnen twee weken contact met u op te nemen voor een telefonisch kennismakingsgesprek. In dit gesprek kunt u aangeven wat uw wensen en verwachtingen zijn en overleggen we over de mogelijkheden. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl t.a.v. R. Legtenberg."
+            };
+            bool succes = await (_mailService.SendMail(mail));
+
+            return succes;
+        }
+
+        public async Task<bool> AanmeldingGastgezin(Gastgezin gastgezin)
+        {
+            if (gastgezin == null)
+            {
+                return false;
+            }
+
+            var mail = new Mail()
+            {
+                MailToAdress = gastgezin.Contact.Email,
+                MailToName = gastgezin.Contact.Naam,
+                Subject = "Bevestiging van aanmelding",
+                Message = $"Beste {gastgezin.Contact.Naam},\n\nOp {DateTime.Now.Date.ToString()} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht"
             };
             bool succes = await (_mailService.SendMail(mail));
 
