@@ -646,9 +646,7 @@
           "Description": "",
           "InputType": "deleted",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "Belemmering"
+          "Required": "false"
         },
         {
           "Id": "31",
@@ -657,9 +655,7 @@
           "Description": "",
           "InputType": "deleted",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "AlchoholEnDrugs"
+          "Required": "false"
         },
         {
           "Id": "32",
@@ -677,9 +673,7 @@
           "Description": "",
           "InputType": "deleted",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "KinderenInDeBuurt"
+          "Required": "false"
         },
         {
           "Id": "41",
@@ -688,9 +682,7 @@
           "Description": "",
           "InputType": "deleted",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "FaciliteitenVoorKinderen"
+          "Required": "false"
         },
         {
           "Id": "43",
