@@ -18,12 +18,14 @@
                     string other = "";
                     if (@q.Answer != null)
                     {
-                        var answers = q.Answer.Split(",");
+                        var answers = q.Answer.Split(";");
+                        if(answers.Length <=1 ) answers = q.Answer.Split(",");
                         foreach (string a in answers)
                         {
-                            if (!q.InputOptions.Contains(a, StringComparer.OrdinalIgnoreCase) && !a.ToLower().Contains("namelijk") && !a.ToLower().Contains("anders"))
+                            var answer = a.Trim();
+                            if (!q.InputOptions.Contains(answer, StringComparer.OrdinalIgnoreCase) && !answer.ToLower().Contains("ja, namelijk:") && !answer.ToLower().Contains("anders, namelijk:") && !answer.ToLower().Contains("opmerking, namelijk:"))
                             {
-                                other += (other == "") ? a : $",{a}";
+                                other += (other == "") ? answer : $", {answer}";
                             }
                         }
                     }
@@ -66,10 +68,11 @@
                     string other = "";
                     if (@q.Answer != null)
                     {
-                        var answers = q.Answer.Split(",");
+                        var answers = q.Answer.Split(";");
+                        if(answers.Length <=1 ) answers = q.Answer.Split(",");
                         foreach (string a in answers)
                         {
-                            if (!q.InputOptions.Contains(a, StringComparer.OrdinalIgnoreCase) && !a.ToLower().Contains("namelijk") && !a.ToLower().Contains("anders"))
+                            if (!q.InputOptions.Contains(a, StringComparer.OrdinalIgnoreCase) && !a.ToLower().Contains("ja, namelijk:") && !a.ToLower().Contains("anders, namelijk:"))
                             {
                                 other += (other == "") ? a : $",{a}";
                             }
