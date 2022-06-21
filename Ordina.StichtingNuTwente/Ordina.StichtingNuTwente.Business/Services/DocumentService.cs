@@ -13,19 +13,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class DocumentService : IDocumentService
     {
-        public NuTwenteContext _context { get; }
-        HttpClient client = new HttpClient();
-        public DocumentService(NuTwenteContext context)
+        private readonly IRepository<Gastgezin> GastgezinRepo;
+        private readonly IRepository<Reactie> ReationRepo;
+        private readonly IRepository<Plaatsing> PlaatsingsRepo;
+        private readonly IRepository<UserDetails> UserDetailRepo;
+        private readonly IRepository<ContactLog> ContactLogRepo;
+        private readonly IRepository<Comment> CommentRepo;
+        public DocumentService(IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reationRepo, IRepository<Plaatsing> plaatsingsRepo, IRepository<UserDetails> userDetailRepo, IRepository<ContactLog> contactLogRepo, IRepository<Comment> commentRepo)
         {
-            _context = context;
+            GastgezinRepo = gastgezinRepo;
+            ReationRepo = reationRepo;
+            PlaatsingsRepo = plaatsingsRepo;
+            UserDetailRepo = userDetailRepo;
+            ContactLogRepo = contactLogRepo;
+            CommentRepo = commentRepo;
         }
 
 
         public byte[] GenerateGastgezinnenPerGemeente()
         {
-            var gastgezinRepo = new Repository<Gastgezin>(_context);
-
-            var allGastgezinnen = gastgezinRepo.GetAll(IGastgezinService.IncludeProperties).Where(g => !g.Deleted).ToList();
+            var allGastgezinnen = GastgezinRepo.GetAll(IGastgezinService.IncludeProperties).Where(g => !g.Deleted).ToList();
             var gastgezinnenMetVluchtelingen = allGastgezinnen.Where(g => g.Plaatsingen != null && g.Plaatsingen.Where(p => p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering)).Count() > 0);
             var gastgezinnenPerGemeente = new Dictionary<string, List<Gastgezin>>();
             foreach (var gastgezin in gastgezinnenMetVluchtelingen)
@@ -99,14 +106,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var outputFile = new FileInfo("output.xlsx");
             var template = new FileInfo("DataDumpTemplate.xlsx");
             byte[] returnValue = new byte[0];
-            var gastgezinnen = new Repository<Gastgezin>(_context).GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
-            var reactieRepository = new Repository<Reactie>(_context);
-            var aanmeldFormulieren = reactieRepository.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 1).ToList();
-            var intakeFormulieren = reactieRepository.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 2).ToList();
-            var plaatsingen = new Repository<Plaatsing>(_context).GetAll("Vrijwilliger,Gastgezin").ToList();
-            var userDetails = new Repository<UserDetails>(_context).GetAll("Reacties").ToList();
-            var contactLogs = new Repository<ContactLog>(_context).GetAll("Contacter").ToList();
-            var comments = new Repository<Comment>(_context).GetAll("Commenter").ToList();
+            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
+            var aanmeldFormulieren = ReationRepo.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 1).ToList();
+            var intakeFormulieren = ReationRepo.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 2).ToList();
+            var plaatsingen = PlaatsingsRepo.GetAll("Vrijwilliger,Gastgezin").ToList();
+            var userDetails = UserDetailRepo.GetAll("Reacties").ToList();
+            var contactLogs = ContactLogRepo.GetAll("Contacter").ToList();
+            var comments = CommentRepo.GetAll("Commenter").ToList();
             using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
             {
                 AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
