@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220621090739_ExtendPlaatsingsInfo")]
+    partial class ExtendPlaatsingsInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,10 +339,16 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<string>("AdresVanLocatie")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AlchoholEnDrugs")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Allergieen")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BasisscholenAanwezig")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Belemmering")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Beperkingen")
@@ -355,6 +363,9 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<string>("Faciliteiten")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FaciliteitenVoorKinderen")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("GezinsLeeftijden")
                         .HasColumnType("nvarchar(max)");
 
@@ -365,6 +376,9 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HuisdierenMogelijk")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("KinderenInDeBuurt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KleineKinderen")
