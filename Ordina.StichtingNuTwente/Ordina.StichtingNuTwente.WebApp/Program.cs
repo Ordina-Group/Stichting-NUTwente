@@ -6,6 +6,7 @@ using Ordina.StichtingNuTwente.Business;
 using Ordina.StichtingNuTwente.Business.DataLayer;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Business.Services;
+using Ordina.StichtingNuTwente.Data;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IPersoonService, PersoonService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IPersoonService, PersoonService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 

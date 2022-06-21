@@ -14,43 +14,38 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class UserService : IUserService
     {
-        private readonly NuTwenteContext _context;
-        public UserService(NuTwenteContext context)
+        private readonly IRepository<UserDetails> UserDetailRepository;
+        private readonly IRepository<Persoon> PersoonRepository;
+        public UserService(IRepository<UserDetails> userDetailRepository, IRepository<Persoon> persoonRepository)
         {
-            _context = context;
+            UserDetailRepository = userDetailRepository;
+            PersoonRepository = persoonRepository;
         }
         public UserDetails? GetUserByAADId(string id)
         {
-            var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().FirstOrDefault(u => u.AADId == id);
+            return UserDetailRepository.GetAll().FirstOrDefault(u => u.AADId == id);
         }
 
         public UserDetails? GetUserById(int id)
         {
-            var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().FirstOrDefault(u => u.Id == id);
+            return UserDetailRepository.GetAll().FirstOrDefault(u => u.Id == id);
         }
 
         public ICollection<UserDetails> GetUsersByRole(string role)
         {
-            var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().Where(u => u.Roles.Contains(role)).ToList();
+            return UserDetailRepository.GetAll().Where(u => u.Roles.Contains(role)).ToList();
         }
 
         public ICollection<UserDetails> GetAllUsers()
         {
-            var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().ToList();
+            return UserDetailRepository.GetAll().ToList();
         }
 
         public List<AnswerListModel> GetMyReacties(string AADId)
         {
             List<AnswerListModel> viewModel = new List<AnswerListModel>();
-            var reactieRepository = new Repository<Reactie>(_context);
-            var persoonRepository = new Repository<Persoon>(_context);
-            var userRepository = new Repository<UserDetails>(_context);
-            var reacties = userRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties.Where(r =>!r.Deleted);
-            var people = persoonRepository.GetAll("Reactie,Adres");
+            var reacties = UserDetailRepository.GetAll("Reacties").FirstOrDefault(u => u.AADId == AADId).Reacties.Where(r => !r.Deleted);
+            var people = PersoonRepository.GetAll("Reactie,Adres");
 
             var t = from reactie in reacties
                     join add in people
@@ -69,14 +64,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
         private UserDetails? UpdateUser(UserDetails user, UserDetails userInDB)
         {
-            var userRepository = new Repository<UserDetails>(_context);
             userInDB.Roles = user.Roles;
             userInDB.Email = user.Email;
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
             userInDB.PhoneNumber = user.PhoneNumber;
             userInDB.InDropdown = user.InDropdown;
-            userRepository.Update(userInDB);
+            UserDetailRepository.Update(userInDB);
             return userInDB;
         }
 
@@ -107,18 +101,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 return null;
             }
-            var userRepository = new Repository<UserDetails>(_context);
             userInDB.FirstName = user.FirstName;
             userInDB.LastName = user.LastName;
             userInDB.PhoneNumber = user.PhoneNumber;
-            userRepository.Update(userInDB);
+            UserDetailRepository.Update(userInDB);
             return userInDB;
         }
 
         public void Save(UserDetails user)
         {
-            var userRepository = new Repository<UserDetails>(_context);
-            var dbModel = userRepository.Create(user);
+            var dbModel = UserDetailRepository.Create(user);
         }
 
         public void checkIfUserExists(ClaimsPrincipal user)
@@ -180,15 +172,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public UserDetails? getUserFromClaimsPrincipal(ClaimsPrincipal user)
         {
             var aadId = user.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value;
-            var userRepository = new Repository<UserDetails>(_context);
-            return userRepository.GetAll().FirstOrDefault(u => u.AADId == aadId);
+            return UserDetailRepository.GetAll().FirstOrDefault(u => u.AADId == aadId);
         }
 
         public ICollection<UserDetails> GetAllDropdownUsers()
         {
-            var userRepository = new Repository<UserDetails>(_context);
-
-            return userRepository.GetAll().Where(u => u.InDropdown).ToList();
+            return UserDetailRepository.GetAll().Where(u => u.InDropdown).ToList();
         }
     }
 }

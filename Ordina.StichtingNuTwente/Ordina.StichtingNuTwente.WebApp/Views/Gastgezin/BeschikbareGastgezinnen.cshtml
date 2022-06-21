@@ -13,11 +13,23 @@
     {
         rows = 6 + extraColumns.Count();
     }
+
+    var newGastgezinnen = 0;
+    newGastgezinnen = Model.MijnGastgezinnen.Count(g => g.IntakeCompletedComment != null);
+
+
 }
 
 <div class="row row-cols-2">
     <div class="col">
-        <h3>Beschikbare Gastgezinnen</h3>
+        <h3>
+            Beschikbare Gastgezinnen
+
+            @if (newGastgezinnen > 0)
+            {
+                <span class="badge bg-secondary">@newGastgezinnen Nieuw</span>
+            }
+        </h3>
     </div>
     <div class="col">
         <div class="dropdown float-right">
@@ -170,7 +182,7 @@
         @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
         {
             Index++;
-            <tr class="@(Index%2==0?"dark-row":"")">
+            <tr class="@(Index%2==0?"dark-row":"") @(mijnGastgezin.IntakeCompletedComment == null?"":"unseen")" id="@mijnGastgezin.Id">
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie) || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie :  mijnGastgezin.Woonplaats)</td>
                 <td>@(mijnGastgezin.PlaatsingsInfo != null && !(string.IsNullOrEmpty(mijnGastgezin.PlaatsingsInfo.AdresVanLocatie) || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie == "-" || mijnGastgezin.PlaatsingsInfo.AdresVanLocatie.ToLower() == "idem")? mijnGastgezin.PlaatsingsInfo.AdresVanLocatie :  mijnGastgezin.Adres)</td>
                 <td>
@@ -241,7 +253,7 @@
                         }
                     >
                             @mijnGastgezin.PlaatsingTag
-                                                                        </a>
+                                                                                        </a>
                     </td>
                     <td>
                         <span @if (mijnGastgezin.ReserveTag.Contains("HOLD"))
@@ -254,7 +266,7 @@
                         }
                     >
                             @mijnGastgezin.ReserveTag
-                                                                            </span>
+                                                                                            </span>
                     </td>
                 }
                 else
@@ -309,5 +321,21 @@
     $('.dropdown-item').on('click', function() {
         $('#dropdownSortButton').html($(this).html());
     });
+</script>
+
+<script>
+     $(".unseen").on("click", function() {
+        let id = $(this).attr("id");
+        $(this).removeClass("unseen");
+        $.ajax({
+            url: "/MarkNewAsSeen/" + id,
+            type: "PUT",
+            dataType: 'text',
+            success: function(){
+            },
+            error: function() {
+            }
+       });
+    })
 </script>
 
