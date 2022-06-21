@@ -6,35 +6,34 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class PersoonService: IPersoonService
     {
-        private readonly NuTwenteContext _context;
-        public PersoonService(NuTwenteContext context)
+        private readonly IRepository<Persoon> PersoonRepository;
+
+        public PersoonService(IRepository<Persoon> persoonRepository)
         {
-            _context = context;
+            PersoonRepository = persoonRepository;
+        }
+
+        public PersoonService()
+        {
         }
 
         public Persoon? GetPersoon(int id)
         {
-            var persoonRepository = new Repository<Persoon>(_context);
-            return persoonRepository.GetById(id);
+            return PersoonRepository.GetById(id);
         }
 
         public Persoon? GetPersoonByReactieId(int? reactieId)
         {
-            var persoonRepository = new Repository<Persoon>(_context);
-            return persoonRepository.GetFirstOrDefault(p => p.Reactie.Id == reactieId);
+            return PersoonRepository.GetFirstOrDefault(p => p.Reactie.Id == reactieId);
         }
         public ICollection<Persoon> GetAllPersonen()
         {
-            var persoonRepository = new Repository<Persoon>(_context);
-
-            var personen = persoonRepository.GetAll("Reactie");
+            var personen = PersoonRepository.GetAll("Reactie");
             return personen.ToList();
         }
         public ICollection<Persoon> GetAllVluchtelingen()
         {
-            var persoonRepository = new Repository<Persoon>(_context);
-
-            var vluchtelingen = persoonRepository.GetAll("Reactie").Where(v => v.Reactie != null && v.Reactie.FormulierId == 3);
+            var vluchtelingen = PersoonRepository.GetAll("Reactie").Where(v => v.Reactie != null && v.Reactie.FormulierId == 3);
             return vluchtelingen.ToList();
         }
     }
