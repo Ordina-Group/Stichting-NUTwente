@@ -110,26 +110,26 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 MailToAdress = persoon.Email,
                 MailToName = persoon.Naam,
                 Subject = "Bevestiging van aanmelding",
-                Message = $"Beste {persoon.Naam},\n\nBedankt dat u zich heeft aangemeld als vrijwilliger bij NuTwente. Wij trachten binnen twee weken contact met u op te nemen voor een telefonisch kennismakingsgesprek. In dit gesprek kunt u aangeven wat uw wensen en verwachtingen zijn en overleggen we over de mogelijkheden. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl t.a.v. R. Legtenberg."
+                Message = $"Beste {persoon.Naam},\n\nBedankt dat u zich heeft aangemeld als vrijwilliger bij NuTwente. Wij trachten binnen twee weken contact met u op te nemen voor een telefonisch kennismakingsgesprek. In dit gesprek kunt u aangeven wat uw wensen en verwachtingen zijn en overleggen we over de mogelijkheden. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl t.a.v. R. Legtenberg.\n\nVriendelijke groet,\n\nTeam Vrijwilligers NuTwente\n\n\nDit is een automatisch gegenereerd bericht"
             };
             bool succes = await (_mailService.SendMail(mail));
 
             return succes;
         }
 
-        public async Task<bool> AanmeldingGastgezin(Gastgezin gastgezin)
+        public async Task<bool> AanmeldingGastgezin(Persoon persoon)
         {
-            if (gastgezin == null)
+            if (persoon == null)
             {
                 return false;
             }
 
             var mail = new Mail()
             {
-                MailToAdress = gastgezin.Contact.Email,
-                MailToName = gastgezin.Contact.Naam,
+                MailToAdress = persoon.Email,
+                MailToName = persoon.Naam,
                 Subject = "Bevestiging van aanmelding",
-                Message = $"Beste {gastgezin.Contact.Naam},\n\nOp {DateTime.Now.Date.ToString()} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht"
+                Message = $"Beste {persoon.Naam},\n\nOp {DateTime.Now.Date.ToShortDateString()} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht"
             };
             bool succes = await (_mailService.SendMail(mail));
 
