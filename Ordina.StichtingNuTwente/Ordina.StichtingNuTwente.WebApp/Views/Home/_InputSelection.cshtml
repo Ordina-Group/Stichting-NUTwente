@@ -34,7 +34,6 @@
                         </label>
                         <input type="text" id="question-@q.Id-othertext" class="form-control question" value="@other" hidden="@((q.Answer != null && q.Answer.Contains(@cbOption) || @other != "")?false:true)" name="Antwoord" @(q.Required?"required":"") />
                     </div>
-                    <br />
                     <script>
                         $("#question-@q.Id-other").change(function() {
                             if ($(this).is(':checked')) {
@@ -47,11 +46,12 @@
                 }
                 else
                 {
+                    <div class="form-check">
                     <input class="form-check-input question" type="checkbox" value="@cbOption" id="question-@q.Id-@cbOption" @((q.Answer != null && q.Answer.ToLower().Contains(@cbOption.ToLower())?"checked":"")) @(q.Required?"required":"")>
                     <label class="form-check-label" for="question-@q.Id-@cbOption">
                         @cbOption
                     </label>
-                    <br />
+                    </div>
                 }
             }
             break;

@@ -14,8 +14,8 @@ namespace Ordina.StichtingNuTwente.Data
 
         public NuTwenteContext(DbContextOptions<NuTwenteContext> options) : base(options)
         {
-            this.Database.EnsureCreated();
-            this.Database.Migrate();
+            //this.Database.EnsureCreated();
+            //this.Database.Migrate();
         }
 
 

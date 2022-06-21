@@ -61,6 +61,11 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string? OverigeOpmerkingen { get; set; }
         public string? GezinsSamenstelling { get; set;}
         public string? TelefoonnummerVanLocatie { get; set; }
+        public string? GezinsLeeftijden { get; set; }
+        public string? SlaapplaatsOpmerking { get; set; }
+        public string? EigenToegangsdeur {get; set; }
+
+
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
 
