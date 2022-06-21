@@ -233,16 +233,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
                     if (reactie.FormulierId == 1)
                     {
-                        if (gastgezinId != null)
-                        {
-                            ggId = gastgezinId ?? default(int);
-                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
-                            success = await mailHelper.AanmeldingGastgezin(gastgezin);
-                        }
-                        else
-                        {
-                            success = false;
-                        }
+                        success = await mailHelper.AanmeldingGastgezin(persoon);
                     }
                     else if(reactie.FormulierId == 2)
                     {
