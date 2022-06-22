@@ -221,7 +221,9 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Hobbys"
         },
         {
           "Id": "17",
@@ -239,7 +241,7 @@
             "Anders, namelijk:"
           ],
           "Required": "false",
-          "Object": "Persoon",
+          "Object": "PlaatsingsInfo",
           "ParameterName": "Talen"
         }
       ]
@@ -306,8 +308,7 @@
           "Text": "Hoeveel privé-verblijfsvertrekken hebben uw gasten tot hun beschikking?",
           "Description": "(woonkamer, slaapkamer, zitkamer)",
           "InputType": "number",
-          "InputOptions": [
-          ],
+          "InputOptions": "",
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "Privacy"
@@ -324,7 +325,7 @@
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
-          "ParameterName": "Toegangsdeur"
+          "ParameterName": "EigenToegangsdeur"
         },
         {
           "Id": "26",
@@ -383,9 +384,10 @@
           "Id": "54",
           "Number": "27",
           "Text": "Hebben uw gast(en) beschikking over eigen sanitaire voorzieningen?",
-          "Description": "",
+          "Description": "Sanitaire voorzieningen waar verder niemand anders gebruik van maakt.",
           "InputType": "checkbox",
           "InputOptions": [
+            "Nee",
             "Toilet",
             "Wastafel",
             "Douche",
@@ -537,9 +539,11 @@
           "InputType": "radiobutton",
           "InputOptions": [
             "Ja",
-            "Nee",
+            "Nee"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "ElektraSpatwaterdicht"
         },
         {
           "Id": "46",
@@ -551,7 +555,9 @@
             "Ja",
             "Nee"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "DaglichtVerblijfsruimte"
         },
         {
           "Id": "47",
@@ -563,7 +569,9 @@
             "Ja",
             "Nee"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "DaglichtSlaapkamer"
         },
         {
           "Id": "48",
@@ -575,7 +583,9 @@
             "Ja",
             "Nee"
           ],
-          "Required": "false"
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "RookmelderAanwezig"
         }
       ]
     },
@@ -645,6 +655,15 @@
           "Number": "0",
           "Text": "Is er een belemmering in het gezin die kan leiden tot niet-plaatsing?",
           "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "24",
+          "Number": "0",
+          "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
+          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
           "InputType": "deleted",
           "InputOptions": "",
           "Required": "false"

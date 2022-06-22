@@ -15,7 +15,7 @@
                     if($(this).attr('type') === "checkbox"){
                         if($(this).is(':checked')){
                             if(obj.answer[id] !== undefined){
-                                obj.answer[id].Antwoord += (";" + value);
+                                obj.answer[id].Antwoord += ("; " + value);
                             } else {
                                 obj.answer[id] = {"Nummer":id,"Antwoord":value}
                             }
@@ -28,7 +28,7 @@
                     } else {
                            if(obj.answer[id] !== undefined){
                                if (value != "") {
-                                   obj.answer[id].Antwoord += (";" + value);
+                                   obj.answer[id].Antwoord += ("; " + value);
                                }
                            } else {
                                obj.answer[id] = {"Nummer":id,"Antwoord":value}
