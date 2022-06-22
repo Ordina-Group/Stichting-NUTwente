@@ -204,9 +204,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "Belemmering"
+          "Required": "false"
         }
       ]
     },
@@ -346,9 +344,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "AlchoholEnDrugs"
+          "Required": "false"
         },
         {
           "Id": "32",
@@ -444,9 +440,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "KinderenInDeBuurt"
+          "Required": "false"
         },
         {
           "Id": "41",
@@ -455,9 +449,7 @@
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
-          "Required": "false",
-          "Object": "PlaatsingsInfo",
-          "ParameterName": "FaciliteitenVoorKinderen"
+          "Required": "false"
         }
       ]
     },
