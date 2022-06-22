@@ -11,24 +11,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class GastgezinService : IGastgezinService
     {
-        private readonly NuTwenteContext _context;
         private readonly IReactionService _reactionService;
+        private readonly IRepository<Gastgezin> GastgezinRepository;
+        private readonly IRepository<Plaatsing> PlaatsingsRepository;
+        private readonly IRepository<Reactie> ReactieRepository;
 
-        public GastgezinService(NuTwenteContext context, IReactionService reactionService)
+        public GastgezinService(IReactionService reactionService, IRepository<Gastgezin> gastgezinRepository, IRepository<Plaatsing> plaatsingsRepository, IRepository<Reactie> reactieRepository)
         {
-            _context = context;
             _reactionService = reactionService;
+            GastgezinRepository = gastgezinRepository;
+            this.PlaatsingsRepository = plaatsingsRepository;
+            ReactieRepository = reactieRepository;
         }
 
         public Gastgezin? GetGastgezin(int id, string includeProperties = IGastgezinService.IncludeProperties)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            return gastgezinRepository.GetById(id, includeProperties);
+            return GastgezinRepository.GetById(id, includeProperties);
         }
 
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
             if (gastgezinnen == null)
             {
                 gastgezinnen = GetAllGastgezinnen();
@@ -39,59 +41,49 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = IGastgezinService.IncludeProperties)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-
-            var gastgezinnen = gastgezinRepository.GetAll(includeProperties).Where(g => !g.Deleted);
+            var gastgezinnen = GastgezinRepository.GetAll(includeProperties).Where(g => !g.Deleted);
             return gastgezinnen.ToList();
         }
 
         public ICollection<Gastgezin> GetDeletedGastgezinnen(string includeProperties = IGastgezinService.IncludeProperties)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-
-            var gastgezinnen = gastgezinRepository.GetAll(includeProperties).Where(g => g.Deleted);
+            var gastgezinnen = GastgezinRepository.GetAll(includeProperties).Where(g => g.Deleted);
             return gastgezinnen.ToList();
         }
 
         public bool Save(Gastgezin gastgezin)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
             gastgezin.Id = -1;
-            var dbModel = gastgezinRepository.Create(gastgezin);
+            var dbModel = GastgezinRepository.Create(gastgezin);
             return dbModel.Id > 0;
         }
 
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            gastgezinRepository.Update(gastgezin);
+            GastgezinRepository.Update(gastgezin);
             return gastgezin;
         }
 
         public void AddPlaatsing(Plaatsing plaatsing)
         {
-            var plaatsingRepository = new Repository<Plaatsing>(_context);
-            plaatsingRepository.Create(plaatsing);
+            PlaatsingsRepository.Create(plaatsing);
             var gastgezin = plaatsing.Gastgezin;
             var status = gastgezin.GetStatus();
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
-            var plaatsingRepository = new Repository<Plaatsing>(_context);
-            plaatsingRepository.Update(plaatsing);
+            PlaatsingsRepository.Update(plaatsing);
         }
 
         public Plaatsing GetPlaatsing(int id)
         {
-            var plaatsingRepository = new Repository<Plaatsing>(_context);
-            var plaatsing = plaatsingRepository.GetById(id, "Gastgezin");
+            var plaatsing = PlaatsingsRepository.GetById(id, "Gastgezin");
             return plaatsing;
         }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
         {
-            var plaatsingRepository = new Repository<Plaatsing>(_context);
-            var plaatsingen = plaatsingRepository.GetAll("Gastgezin");
+            var plaatsingen = PlaatsingsRepository.GetAll("Gastgezin");
             if (gastGezinId != null)
             {
                 plaatsingen = plaatsingen.Where(p => p.Gastgezin.Id == gastGezinId);
@@ -151,26 +143,24 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public void UpdateNote(int gastgezinId, string note)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            var gastgezin = GastgezinRepository.GetById(gastgezinId);
             if (note == null)
             {
                 note = "";
             }
             gastgezin.Note = note;
-            gastgezinRepository.Update(gastgezin);
+            GastgezinRepository.Update(gastgezin);
         }
 
         public void UpdateVOG(bool hasVOG, int gastgezinId)
         {
-            var gastgezinRepository = new Repository<Gastgezin>(_context);
-            var gastgezin = gastgezinRepository.GetById(gastgezinId);
+            var gastgezin = GastgezinRepository.GetById(gastgezinId);
             if (hasVOG == null)
             {
                 hasVOG = false;
             }
             gastgezin.HasVOG = hasVOG;
-            gastgezinRepository.Update(gastgezin);
+            GastgezinRepository.Update(gastgezin);
         }
         public bool PlaatsingExists(int gastgezinId, Plaatsing plaatsing)
         {
@@ -191,20 +181,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
             gastgezinInDb.Deleted = false;
             gastgezinInDb.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
             UpdateGastgezin(gastgezinInDb, gastgezinId);
-            var reactieRepository = new Repository<Reactie>(_context);
             var aanmeld = gastgezinInDb.AanmeldFormulier;
             if (aanmeld != null)
             {
                 aanmeld.Deleted = false;
                 aanmeld.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
-                reactieRepository.Update(aanmeld);
+                ReactieRepository.Update(aanmeld);
             }
             var intake = gastgezinInDb.IntakeFormulier;
             if (intake != null)
             {
                 intake.Deleted = false;
                 intake.Comments?.RemoveAll(c => c.CommentType == CommentType.DELETION);
-                reactieRepository.Update(intake);
+                ReactieRepository.Update(intake);
             }
         }
 
@@ -220,7 +209,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             gastgezinInDb.Comments.Add(new Comment(comment, user, CommentType.DELETION));
             UpdateGastgezin(gastgezinInDb, gastgezinId);
 
-            var reactieRepository = new Repository<Reactie>(_context);
             var aanmeld = gastgezinInDb.AanmeldFormulier;
             if (aanmeld != null && deleteForms)
             {
@@ -228,7 +216,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 if (aanmeld.Comments == null)
                     aanmeld.Comments = new List<Comment>();
                 aanmeld.Comments.Add(new Comment(comment, user, CommentType.DELETION));
-                reactieRepository.Update(aanmeld);
+                ReactieRepository.Update(aanmeld);
             }
             var intake = gastgezinInDb.IntakeFormulier;
             if (intake != null && deleteForms)
@@ -238,7 +226,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 if (intake.Comments == null)
                     intake.Comments = new List<Comment>();
                 intake.Comments.Add(new Comment(comment, user, CommentType.DELETION));
-                reactieRepository.Update(intake);
+                ReactieRepository.Update(intake);
             }
             /*
             if (gastgezinInDb.PlaatsingsInfo != null)
