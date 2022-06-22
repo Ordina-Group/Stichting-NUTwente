@@ -5,6 +5,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Models.Mappings;
+using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -13,11 +14,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     {
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
+        private readonly IMailService _mailService;
+        private MailHelper mailHelper;
 
-        public GastgezinController(IGastgezinService gastgezinService, IUserService userService)
+        public GastgezinController(IGastgezinService gastgezinService, IUserService userService, IMailService mailService)
         {
             _gastgezinService = gastgezinService;
             _userService = userService;
+            _mailService = mailService;
+
+            mailHelper = new MailHelper(_mailService);
         }
 
         public IActionResult Overview()
@@ -113,6 +119,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 };
                 _gastgezinService.AddPlaatsing(plaatsing);
             }
+
+
+            //TODO: zorgen dat er niet per losse plaatsing een mail wordt verstuurd
+            //mailHelper.PlaatsingVluchteling(plaatsing);
+
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
