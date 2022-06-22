@@ -51,6 +51,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                             if (gastgezin.Begeleider != null)
                                 gastgezin.Comments.Add(new Comment("Intake uitgevoerd", gastgezin.Begeleider, CommentType.INTAKE_COMPLETED));
                         }
+                        gastgezin.IntakeFormulier = dbmodel;
                         GastgezinRepository.Update(gastgezin);
                     }
                 }
