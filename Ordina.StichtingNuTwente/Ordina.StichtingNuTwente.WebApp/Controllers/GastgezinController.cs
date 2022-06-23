@@ -590,7 +590,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("AlleGastgezinnen")]
         [HttpGet]
         [ActionName("AlleGastgezinnen")]
-        public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
+        public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string statusFilter = "")
         {
             _userService.checkIfUserExists(User);
 
@@ -607,7 +607,35 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 });
             }
             var user = GetUser();
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
+            IEnumerable<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
+
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                switch (statusFilter)
+                {
+                    case "Beschikbaar":
+                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        break;
+                    case "Gereserveerd":
+                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        break;
+                    case "Geplaatst":
+                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        break;
+                    case "Nood":
+                        gastGezinnen = gastGezinnen.Where(g => g.NoodOpvang);
+                        break;
+                    case "On Hold":
+                        gastGezinnen = gastGezinnen.Where(g => g.OnHold);
+                        break;
+                    case "Geen Intaker":
+                        gastGezinnen = gastGezinnen.Where(g => g.Begeleider == null);
+                        break;
+                    case "Geen Buddy":
+                        gastGezinnen = gastGezinnen.Where(g => g.Buddy == null);
+                        break;
+                }
+            }
 
             foreach (var gastGezin in gastGezinnen)
             {

@@ -35,6 +35,27 @@
                 </div>
             </div>
         </div>
+        <nav class="nav nav-tabs d-flex justify-content-between">
+            <div class="d-flex">
+                <a class="nav-link status-filter @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "Alles" ? "active":"")" id="Alles">Alles</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Intaker"?"active":"")" id="Geen Intaker">Geen Intaker</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Buddy"?"active":"")" id="Geen Buddy">Geen Buddy</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Beschikbaar"?"active":"")" id="Beschikbaar">Beschikbaar</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Gereserveerd"?"active":"")" id="Gereserveerd">Gereserveerd</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geplaatst"?"active":"")" id="Geplaatst">Geplaatst</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "On Hold"?"active":"")" id="On Hold">On Hold</a>
+                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Nood"?"active":"")" id="Nood">Nood</a>
+            </div>
+        </nav>
+        <script>
+            $(".status-filter").on("click", function() {
+                let input = $(this).attr("id");
+                let url = new URL(window.location.href);
+                console.log(input);
+                url.searchParams.set('statusFilter', input);
+                window.location.href = url.toString().replaceAll("+", "%20");
+            });
+        </script>
         <!-- Twee lijsten: Met intake en zonder intake -->
         <form method="post" id="gastgezinForm">
             <table class="table">
@@ -59,44 +80,44 @@
                             <text>data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.RejectionComment.Commenter.FirstName heeft buddy zijn geweigerd: @mijnGastgezin.RejectionComment.Text"</text>
                         }
                         >
-                         <td>
-                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                             <td>
+                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
                                 @if (mijnGastgezin.IntakeFormulierId > 0)
                                 {
                                     <text>/ </text>
-                                    <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
                                 }
-                                 </td>
-                                 <td class="text-break"><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.Naam</a></td>
-                                 <td class="text-break">@mijnGastgezin.Adres</td>
-                                 <td class="text-break">@mijnGastgezin.Woonplaats</td>
-                                 <td>
+                                     </td>
+                                     <td class="text-break"><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@mijnGastgezin.Naam</a></td>
+                                     <td class="text-break">@mijnGastgezin.Adres</td>
+                                     <td class="text-break">@mijnGastgezin.Woonplaats</td>
+                                     <td>
                                 @switch (@mijnGastgezin.Status)
                                 {
                                     case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Aangemeld:
-                                        <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
+                                                    <i class="fa-solid fa-file-pen centered-icon" data-toggle="tooltip" data-placement="bottom" title="Aangemeld"></i>
                                         break;
                                     case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Bezocht:
-                                        <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
+                                                    <i class="fa-solid fa-house centered-icon" data-toggle="tooltip" data-placement="bottom" title="Bezocht"></i>
                                         break;
                                     case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Gereserveerd:
-                                        <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
+                                                    <i class="fa-solid fa-car-side centered-icon" data-toggle="tooltip" data-placement="bottom" title="Gereserveerd"></i>
                                         break;
                                     case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.Geplaatst:
-                                        <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
+                                                    <i class="fa-solid fa-house-chimney-user centered-icon" data-toggle="tooltip" data-placement="bottom" title="Geplaatst"></i>
                                         break;
                                     case Ordina.StichtingNuTwente.Models.Models.GastgezinStatus.OnHold:
-                                        <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
+                                                    <i class="fa-solid fa-pause centered-icon" data-toggle="tooltip" data-placement="bottom" title="On hold"></i>
                                         break;
                                     default:
-                                       <p>-</p>
+                                                   <p>-</p>
                                         break;
                                 }
-                                </td>
-                                <td>
+                                    </td>
+                                    <td>
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin") && (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.BegeleiderId <= 0))
                                 {
-                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                            <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                                         @if (mijnGastgezin.BegeleiderId > 0)
                                         {
                                             <option selected="selected" value="-"></option>
@@ -109,23 +130,25 @@
                                         {
                                             if (vrijwilliger.Id == mijnGastgezin.BegeleiderId)
                                             {
-                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                             }
                                             else
                                             {
-                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                             }
                                         }
 
-                                    </select>
-                                } else {
-                                    <p>@mijnGastgezin.Begeleider</p>
+                                            </select>
                                 }
-                                    </td>
-                                    <td>
+                                else
+                                {
+                                            <p>@mijnGastgezin.Begeleider</p>
+                                }
+                                        </td>
+                                        <td>
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                 {
-                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                            <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
                                         @if (mijnGastgezin.BuddyId > 0)
                                         {
                                             <option selected="selected" value="-"></option>
@@ -138,29 +161,29 @@
                                         {
                                             if (vrijwilliger.Id == mijnGastgezin.BuddyId)
                                             {
-                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                                                <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                             }
                                             else
                                             {
-                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
+                                                                <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                             }
                                         }
-                                    </select>
+                                            </select>
                                 }
                                 else
                                 {
-                                    <p>@mijnGastgezin.Buddy</p>
+                                            <p>@mijnGastgezin.Buddy</p>
                                 }
-                            </td>
+                                </td>
                             @if (mijnGastgezin.PlaatsingsInfo != null)
                             {
-                                <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
+                                        <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
                             }
                             else
                             {
-                                <td></td>
+                                        <td></td>
                             }
-                            </tr>
+                                </tr>
                         @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
                     }
                 </tbody>
@@ -169,15 +192,16 @@
         </form>
     </div>
     @await Html.PartialAsync("_showItem.cshtml")
-    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin")) {
+    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+    {
         <nav class="navbar fixed-bottom navbar-expand-sm navbar-light bg-light">
             <div class="col-md-12" style="text-align: center">
-            <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
-            <span id="gastgezinSpinner" style="display: none;">
-                &nbsp;Bezig met opslaan...
-            </span>
-        </div>
-    </nav>
+                <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
+                <span id="gastgezinSpinner" style="display: none;">
+                    &nbsp;Bezig met opslaan...
+                </span>
+            </div>
+        </nav>
     }
     <script type="text/javascript">
         let changedGastgezinnen = new Set();
