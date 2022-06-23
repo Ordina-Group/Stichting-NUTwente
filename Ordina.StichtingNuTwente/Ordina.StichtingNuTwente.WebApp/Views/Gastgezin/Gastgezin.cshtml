@@ -206,9 +206,9 @@
                         {
                             <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                             <div class="grow-wrap">
-                                <textarea id="Id" rows="3" class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
+                                <textarea id="Id" rows="3" @(canEdit?"":"disabled") class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
                             </div>
-                            <input type="submit" class="btn btn-primary mt-3" value="Opslaan">
+                            <input type="submit" @(canEdit?"":"hidden") class="btn btn-primary mt-3" value="Opslaan">
                         }
                     </div>
                 </div>
