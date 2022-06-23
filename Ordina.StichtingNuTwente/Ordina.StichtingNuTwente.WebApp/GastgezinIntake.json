@@ -79,16 +79,19 @@
           "Id": "8",
           "Number": "7",
           "Text": "Wilt u deelnemen aan een WhatsApp groep?",
-          "Description": "Hiervoor gebruiken wij het hierboven genoemde telefoonnummer",
-          "InputType": "text",
-          "InputOptions": "",
+          "Description": "Hiervoor gebruiken wij het eerstgenoemde genoemde telefoonnummer.",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
           "Required": "false"
         },
         {
           "Id": "9",
           "Number": "8",
-          "Text": "e-mail",
-          "Description": "NuTwente gebruikt dit e-mail adres om u te informeren of contact met u op te nemen als er geen haast bij is. Als de situatie dat vereist geven wij dit e-mail adres door aan andere hulpverlenende instanties, zodat zij contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit e-mail adres niet.",
+          "Text": "E-mail",
+          "Description": "NuTwente gebruikt dit E-mailadres om u te informeren of contact met u op te nemen als er geen haast bij is. Als de situatie dat vereist geven wij dit E-mailadres door aan andere hulpverlenende instanties, zodat zij contact kunnen opnemen. Voor andere doeleinden gebruiken wij dit E-mailadres niet.",
           "InputType": "email",
           "InputOptions": "",
           "Required": "false",
@@ -99,7 +102,7 @@
           "Id": "10",
           "Number": "9",
           "Text": "Intake is uitgevoerd door",
-          "Description": "(naam van de medewerker van NuTwente met wie u de intake heeft gedaan)",
+          "Description": "",
           "InputType": "vrijwilliger",
           "InputOptions": "",
           "Required": "true",
@@ -164,47 +167,82 @@
       "Id": "3",
       "Number": "3",
       "Title": "Gezin",
-      "Header": "Wij  vragen naar uw gezinssituatie om uw gast(en) om bij plaatsing rekening te kunnen houden met deze situatie. Uiteraard voor zover dat mogelijk is.",
+      "Header": "Wij vragen naar uw gezinssituatie om een zo goed mogelijke match te maken.",
       "Questions": [
         {
           "Id": "15",
           "Number": "14",
           "Text": "Hoe is uw gezin samengesteld?",
-          "Description": "Alleenstaand, samenwonend, etc.",
-          "InputType": "text",
-          "InputOptions": "",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Alleenstaand",
+            "Alleenstaand met inwonende kinderen",
+            "Alleenstaand met uitwonende kinderen",
+            "Samenwonend",
+            "Samenwonend met inwonende kinderen",
+            "Samenwonend met uitwonende kinderen",
+            "Studentenhuis",
+            "Bedrijf",
+            "Anders, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "GezinsSamenstelling"
         },
         {
-          "Id": "16",
+          "Id": "57",
           "Number": "15",
-          "Text": "Welke hobbies of vrijetijdsbesteding doen u en uw gezinsleden?",
+          "Text": "Uit welke leeftijdsgroepen bestaat uw huishouden?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
+          "InputType": "checkbox",
+          "InputOptions": [
+            "0 - 2",
+            "3 - 5",
+            "6 - 11",
+            "12 - 17",
+            "18 - 25",
+            "26 - 35",
+            "36 - 45",
+            "46 - 55",
+            "56 - 65",
+            "66 - 75",
+            "> 75",
+            "Onbekend"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "GezinsLeeftijden"
         },
         {
-          "Id": "17",
+          "Id": "16",
           "Number": "16",
-          "Text": "Welke talen spreekt u?",
+          "Text": "Welke hobby's of vrijetijdsbesteding beoefenen u en uw gezinsleden?",
           "Description": "",
           "InputType": "text",
           "InputOptions": "",
           "Required": "false",
-          "Object": "Persoon",
-          "ParameterName": "Talen"
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Hobbys"
         },
         {
-          "Id": "18",
+          "Id": "17",
           "Number": "17",
-          "Text": "Is er een belemmering in het gezin die kan leiden tot niet-plaatsing?",
+          "Text": "Welke talen spreekt u?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Nederlands",
+            "Engels",
+            "Oekraïens",
+            "Russisch",
+            "Duits",
+            "Frans",
+            "Anders, namelijk:"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Talen"
         }
       ]
     },
@@ -212,14 +250,14 @@
       "Id": "4",
       "Number": "4",
       "Title": "Praktische zaken",
-      "Header": "Wij vragen naar de faciliteiten die u voor vluchtelingen beschikbaar heeft. NuTwente kan daar dan rekening mee houden bij het plaatsen van vluchtelingen.",
+      "Header": "Wij vragen naar de faciliteiten die u voor gasten beschikbaar heeft. NuTwente kan daar dan rekening mee houden bij een eventuele plaatsing.",
       "Questions": [
         {
           "Id": "19",
           "Number": "18",
-          "Text": "Voor hoeveel kleine kinderen heeft u een slaapplaats?",
-          "Description": "(bijv. kinderbedje, ledikant, wieg)",
-          "InputType": "text",
+          "Text": "Voor hoeveel kinderen tot en met 2 jaar heeft u een slaapplaats?",
+          "Description": "(babyledikantje)",
+          "InputType": "number",
           "InputOptions": "",
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -228,66 +266,86 @@
         {
           "Id": "50",
           "Number": "19",
-          "Text": "Voor hoeveel volwassenen en grotere kinderen heeft u een slaapplaats?",
+          "Text": "Voor hoeveel personen vanaf 3 jaar heeft u een slaapplaats?",
           "Description": "",
-          "InputType": "integer",
+          "InputType": "number",
           "InputOptions": "",
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "VolwassenenGrotereKinderen"
         },
         {
-          "Id": "22",
+          "Id": "56",
           "Number": "20",
+          "Text": "Heeft u opmerkingen over de vorige twee vragen?",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Nee",
+            "Ja, namelijk:"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "SlaapplaatsOpmerking"
+        },
+        {
+          "Id": "22",
+          "Number": "21",
           "Text": "Is er voldoende ruimte in de slaapkamers?",
           "Description": "(tenminste 3,5 m2 per persoon)",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "SlaapkamerRuimte"
         },
         {
           "Id": "23",
-          "Number": "21",
-          "Text": "Is er voldoende privacy voor uw gast(en)?",
-          "Description": "Er is tenminste één woon- of slaapvertrek waarin uw gast zich kan terugtrekken zonder gestoord te worden.",
-          "InputType": "text",
+          "Number": "22",
+          "Text": "Hoeveel privé-verblijfsvertrekken hebben uw gasten tot hun beschikking?",
+          "Description": "(woonkamer, slaapkamer, zitkamer)",
+          "InputType": "number",
           "InputOptions": "",
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "Privacy"
         },
         {
-          "Id": "24",
-          "Number": "22",
-          "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
-          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
-          "InputType": "text",
-          "InputOptions": "",
+          "Id": "53",
+          "Number": "23",
+          "Text": "Hebben uw gast(en) een eigen toegangsdeur?",
+          "Description": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
-          "ParameterName": "Opbergruimte"
+          "ParameterName": "EigenToegangsdeur"
         },
         {
           "Id": "26",
-          "Number": "23",
+          "Number": "24",
           "Text": "Waar kan/kunnen uw gast(en) gebruik van maken?",
           "Description": "",
           "InputType": "checkbox",
           "InputOptions": [
-            "toilet",
-            "wastafel",
-            "douche/bad",
-            "wasmachine",
-            "wasdroger",
-            "koelkast",
-            "keuken",
-            "televisie",
-            "computer",
-            "woonkamer",
-            "tuin/balkon",
-            "Andere"
+            "Toilet",
+            "Wastafel",
+            "Douche/bad",
+            "Wasmachine",
+            "Wasdroger",
+            "Koelkast",
+            "Keuken",
+            "Televisie",
+            "Computer",
+            "Woonkamer",
+            "Tuin/balkon",
+            "Anders, namelijk:"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
@@ -295,73 +353,91 @@
         },
         {
           "Id": "27",
-          "Number": "24",
+          "Number": "25",
           "Text": "Mogen uw gasten zelfstandig koken?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "ZelfKoken"
         },
         {
           "Id": "28",
-          "Number": "25",
-          "Text": "Hoeveel koelkastruimte is beschikbaar voor uw gast(en)? Is dat gedeelde koelkastruimte of een aparte koelkast?",
+          "Number": "26",
+          "Text": "Hoeveel koelkastruimte is beschikbaar voor uw gast(en)?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Gedeelde koelkastruimte",
+            "Aparte koelkast",
+            "Geen"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "KoelkastRuimte"
         },
         {
-          "Id": "29",
-          "Number": "26",
-          "Text": "Is er daglicht in de slaapruimte?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "Id": "54",
+          "Number": "27",
+          "Text": "Hebben uw gast(en) beschikking over eigen sanitaire voorzieningen?",
+          "Description": "Sanitaire voorzieningen waar verder niemand anders gebruik van maakt.",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Nee",
+            "Toilet",
+            "Wastafel",
+            "Douche",
+            "Bad",
+            "Anders, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
-          "ParameterName": "DaglichtSlaapkamer"
+          "ParameterName": "Sanitair"
+        },
+        {
+          "Id": "55",
+          "Number": "28",
+          "Text": "Is de woning geschikt voor mensen die slecht ter been zijn?",
+          "Description": "De woning telt als gelijkvloers indien er een slaapkamer, keuken en badkamer aanwezig zijn op de begane grond.",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja, de woning is gelijkvloers",
+            "Ja, er is een (trap)lift aanwezig",
+            "Nee"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Toegankelijkheid"
         },
         {
           "Id": "30",
-          "Number": "27",
+          "Number": "29",
           "Text": "Mogen uw gast(en) binnenshuis roken? Buitenshuis?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Er mag binnen gerookt worden",
+            "Er mag alleen buiten gerookt worden",
+            "Er mag zowel binnen als buiten niet gerookt worden"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "Roken"
         },
         {
-          "Id": "31",
-          "Number": "28",
-          "Text": "Hoe staat u tegenover eventueel alcohol- of drugsgebruik van uw gast(en)?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "32",
-          "Number": "29",
-          "Text": "Heeft u nog spullen nodig?",
-          "Description": "(Nutwente zorgt zelf niet voor spullen, maar heeft wel contacten)",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
           "Id": "34",
           "Number": "30",
-          "Text": "Kunnen uw gasten hun paspoort of andere belangrijke zaken veilig opbergen??",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "Text": "Kunnen uw gasten hun paspoort of andere belangrijke zaken veilig opbergen?",
+          "Description": "(Mag ook een kamer zijn die op slot kan)",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "VeiligeOpbergruimte"
@@ -371,8 +447,15 @@
           "Number": "31",
           "Text": "Heeft u huisdieren? Welke?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Nee",
+            "Katten",
+            "Honden",
+            "Vogels",
+            "Boerderijdieren",
+            "Anders, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "HuisdierenAanwezig"
@@ -382,8 +465,16 @@
           "Number": "32",
           "Text": "Heeft u bezwaar tegen huisdieren van uw gast(en)?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Nee",
+            "Ja, geen huisdieren toegestaan",
+            "Ja, geen katten",
+            "Ja, geen honden",
+            "Ja, geen vogels",
+            "Ja, geen ratten/muizen",
+            "Anders, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "HuisdierenMogelijk"
@@ -393,8 +484,11 @@
           "Number": "33",
           "Text": "Heeft u allergieën die voor plaatsing van belang kunnen zijn?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Nee",
+            "Ja, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "Allergieen"
@@ -404,142 +498,134 @@
           "Number": "34",
           "Text": "Bent u in in staat om uw vluchtelingen op te halen?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "InputType": "checkbox",
+          "InputOptions": [
+            "Ja",
+            "Nee",
+            "Opmerking, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "VluchtelingOphalen"
-        }
-      ]
-    },
-    {
-      "Id": "5",
-      "Number": "5",
-      "Title": "Kinderen",
-      "Header": "Alleen invullen als u ook bereid bent kinderen op te vangen.",
-      "Questions": [
+        },
         {
           "Id": "39",
           "Number": "35",
-          "Text": "Zijn er basisscholen zijn bij u in de buurt?",
+          "Text": "Is er een basisschool op loopafstand?",
           "Description": "",
           "InputType": "radiobutton",
           "InputOptions": [
             "Ja",
             "Nee",
-            "Weet niet"
+            "Weet ik niet"
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "BasisscholenAanwezig"
-        },
-        {
-          "Id": "40",
-          "Number": "36",
-          "Text": "Wonen er andere kinderen bij u in de buurt? (veel/weinig)",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
-          "Id": "41",
-          "Number": "37",
-          "Text": "Welke faciliteiten voor kinderen zijn er in uw buurt?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
         }
       ]
     },
     {
       "Id": "7",
-      "Number": "6",
+      "Number": "5",
       "Title": "Toetsing SNF-criteria",
       "Header": "Om vast te kunnen stellen in welke mate de plaatsingslocatie voldoet aan de SNF-criteria stellen we nog een aantal vragen.",
       "Questions": [
         {
           "Id": "45",
-          "Number": "38",
-          "Text": "Is de verlichting en electra in de natte ruimte(s) spatwaterdicht?",
+          "Number": "36",
+          "Text": "Is de verlichting en elektra in de natte ruimte(s) spatwaterdicht?",
           "Description": "",
-          "InputType": "stars",
-          "InputOptions": [ "5" ],
-          "Required": "false"
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "ElektraSpatwaterdicht"
         },
         {
           "Id": "46",
-          "Number": "39",
+          "Number": "37",
           "Text": "Is er daglicht in de verblijfsruimte(s)?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "DaglichtVerblijfsruimte"
         },
         {
           "Id": "47",
-          "Number": "40",
+          "Number": "38",
           "Text": "Is er daglicht in de slaapruimte(s)?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "DaglichtSlaapkamer"
         },
         {
           "Id": "48",
-          "Number": "41",
-          "Text": "In welke ruimtes zijn werkende rookmelders en/of CO2 melders?",
+          "Number": "39",
+          "Text": "Is er op elke verdieping een rookmelder aanwezig?",
           "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Ja",
+            "Nee"
+          ],
+          "Required": "false",
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "RookmelderAanwezig"
         }
       ]
     },
     {
       "Id": "6",
-      "Number": "7",
+      "Number": "6",
       "Title": "Uw voorbereiding",
       "Header": "Tijdens de intake bespreekt een van onze medewerkers met u welke impact een plaatsing heeft op uw persoonlijke leven. Zaken die u hierover wilt vastleggen kunt u in deze rubriek kwijt.",
       "Questions": [
         {
-          "Id": "43",
-          "Number": "42",
-          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
-          "Required": "false"
-        },
-        {
           "Id": "44",
-          "Number": "43",
-          "Text": "Zijn er beperkingen waarmee NuTwente rekening dient te houden bij plaatsing?",
-          "Description": "",
-          "InputType": "text",
-          "InputOptions": "",
+          "Number": "41",
+          "Text": "Zijn er bijzonderheden waarmee NuTwente rekening dient te houden bij plaatsing?",
+          "Description": "(bijvoorbeeld een bijzonderheid of beperking binnen uw gezin of in de woning)",
+          "InputType": "radiobutton",
+          "InputOptions": [
+            "Nee",
+            "Ja, namelijk:"
+          ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
           "ParameterName": "Beperkingen"
         },
         {
           "Id": "42",
-          "Number": "44",
+          "Number": "42",
           "Text": "Heeft onze medewerker de impact op uw leven voldoende met u doorgesproken?",
           "Description": "",
           "InputType": "radiobutton",
           "InputOptions": [
-            "onvoldoende",
-            "voldoende",
-            "goed"
+            "Onvoldoende",
+            "Voldoende",
+            "Goed"
           ],
           "Required": "false"
         },
         {
           "Id": "49",
-          "Number": "45",
-          "Text": "Heeft u nog andere vragen op opmerkingen? Die kunt u hier kwijt",
+          "Number": "43",
+          "Text": "Heeft u nog andere vragen of opmerkingen? Die kunt u hier kwijt.",
           "Description": "",
           "InputType": "textArea",
           "InputOptions": "",
@@ -549,12 +635,83 @@
         },
         {
           "Id": "51",
-          "Number": "46",
+          "Number": "44",
           "Text": "NUTwente is niet verantwoordelijk voor informatie die tegenstrijdig is (geweest) of later incorrect blijkt door veranderende omstandigheden.",
           "Description": "",
           "InputType": "checkbox",
           "InputOptions": [ "Ik ga hiermee akkoord" ],
-          "Required": "true"
+          "Required": "false"
+        }
+      ]
+    },
+    {
+      "Id": "8",
+      "Number": "7",
+      "Title": "Archief",
+      "Header": "Deze vragen komen niet meer terug in het nieuwe intakeformulier.",
+      "Questions": [
+        {
+          "Id": "18",
+          "Number": "0",
+          "Text": "Is er een belemmering in het gezin die kan leiden tot niet-plaatsing?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "24",
+          "Number": "0",
+          "Text": "Is er voldoende opbergruimte voor uw gast(en)?",
+          "Description": "(tenminste 0,36 m3, ofwel één grote staande kast per persoon)",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "31",
+          "Number": "0",
+          "Text": "Hoe staat u tegenover eventueel alcohol- of drugsgebruik van uw gast(en)?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "32",
+          "Number": "0",
+          "Text": "Heeft u nog spullen nodig?",
+          "Description": "(Nutwente zorgt zelf niet voor spullen, maar heeft wel contacten)",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "40",
+          "Number": "0",
+          "Text": "Wonen er andere kinderen bij u in de buurt? (veel/weinig)",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "41",
+          "Number": "0",
+          "Text": "Welke faciliteiten voor kinderen zijn er in uw buurt?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
+        },
+        {
+          "Id": "43",
+          "Number": "0",
+          "Text": "Zijn er zaken die u van ons verwacht? Welke?",
+          "Description": "",
+          "InputType": "deleted",
+          "InputOptions": "",
+          "Required": "false"
         }
       ]
     }

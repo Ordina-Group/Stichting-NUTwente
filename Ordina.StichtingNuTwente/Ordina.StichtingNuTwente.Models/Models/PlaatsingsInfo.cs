@@ -11,7 +11,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
     {
         public PlaatsingsInfo()
         {
-            KleineKinderen  = "";
+            KleineKinderen = "";
             VolwassenenGrotereKinderen = "";
             SlaapkamerRuimte = "";
             Privacy = "";
@@ -37,13 +37,20 @@ namespace Ordina.StichtingNuTwente.Models.Models
             GezinsLeeftijden = "";
             SlaapplaatsOpmerking = "";
             EigenToegangsdeur = "";
+            Sanitair = "";
+            Toegankelijkheid = "";
+            ElektraSpatwaterdicht = "";
+            DaglichtVerblijfsruimte = "";
+            RookmelderAanwezig = "";
+            Hobbys = "";
+            Talen = "";
         }
 
         public string? KleineKinderen { get; set; }
         public string? VolwassenenGrotereKinderen { get; set; }
         public string? SlaapkamerRuimte { get; set; }
         public string? Privacy { get; set; }
-        public string? Opbergruimte { get; set; }
+        public string? Opbergruimte { get; set; } //todo: remove
         public string? Faciliteiten { get; set; }
         public string? ZelfKoken { get; set; }
         public string? KoelkastRuimte { get; set; }
@@ -65,6 +72,14 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string? GezinsLeeftijden { get; set; }
         public string? SlaapplaatsOpmerking { get; set; }
         public string? EigenToegangsdeur {get; set; }
+        public string? Sanitair { get; set; }
+        public string? Toegankelijkheid { get; set; }
+        public string? ElektraSpatwaterdicht { get; set; } //new
+        public string? DaglichtVerblijfsruimte { get; set; } //new
+        public string? RookmelderAanwezig { get; set; } //new
+        public string? Hobbys { get; set; } //new
+        public string? Talen { get; set; } //new
+
 
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
