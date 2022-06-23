@@ -241,11 +241,20 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             ggId = gastgezinId ?? default(int);
                             Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
+                            
+                            if (gastgezin.Buddy == null)
+                            {
+                                gastgezin.Buddy = gastgezin.Begeleider;
+                                _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
+                            }
+
                             success = await mailHelper.IntakeUitgevoerd(gastgezin);
                         }
+
+                        //TODO even kijken hoe we hier mee omgaan, op dit moment beetje cheesy manier van oplossen
                         else
                         {
-                            throw new Exception("Onbekend gastgezinID");
+                            success = true;
                         }
                     }
                     else if(reactie.FormulierId == 4)
