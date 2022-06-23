@@ -120,11 +120,11 @@
                                             <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
                                         @if (mijnGastgezin.BegeleiderId > 0)
                                         {
-                                                        <option selected="selected" value=""></option>
+                                            <option selected="selected" value="-"></option>
                                         }
                                         else
                                         {
-                                                        <option value=""></option>
+                                            <option value="-"></option>
                                         }
                                         @foreach (var vrijwilliger in Model.Vrijwilligers)
                                         {
@@ -151,11 +151,11 @@
                                             <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
                                         @if (mijnGastgezin.BuddyId > 0)
                                         {
-                                                        <option selected="selected" value=""></option>
+                                            <option selected="selected" value="-"></option>
                                         }
                                         else
                                         {
-                                                        <option value=""></option>
+                                            <option value="-"></option>
                                         }
                                         @foreach (var vrijwilliger in Model.Vrijwilligers)
                                         {
@@ -204,10 +204,45 @@
         </nav>
     }
     <script type="text/javascript">
+        let changedGastgezinnen = new Set();
         $("#gastgezinSubmit").click(function() {
            $("#gastgezinSubmit").prop('disabled', true);
            $("#gastgezinSpinner").show();
-           $("#gastgezinForm").submit();
+           //$("#gastgezinForm").submit(); Old form
+           let changedBuddyOrIntakerList = [];
+           changedGastgezinnen.forEach((gastgezinId)=>{
+               let intakerId = $("#vrijwilliger_" + gastgezinId).val();
+               let buddyId = $("#buddy_" + gastgezinId).val();
+
+               let changedBuddyOrIntaker = {
+                   id:gastgezinId,
+                   intakerId:intakerId,
+                   buddyId:buddyId
+               }
+               changedBuddyOrIntakerList.push(changedBuddyOrIntaker);
+           })
+           console.log(changedBuddyOrIntakerList);
+           $.ajax({
+                url: "/Gastgezin/IntakerOrBuddyChange",
+                type: "POST",
+                dataType: 'text',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: {"intakerOrBuddyChangeModels":changedBuddyOrIntakerList},
+                success: function(){
+                    window.location.reload();
+                },
+                error: function() {
+                window.location = "/Error";
+                }
+          });
         });
+        $("[id^='buddy_'], [id^='vrijwilliger_']").change(function(){
+            let id = $(this).attr("id");
+            let splitId = id.split("_")
+            if(splitId.length > 1){
+                changedGastgezinnen.add(splitId[1]);
+            }
+        })
+
     </script>
 </body>
