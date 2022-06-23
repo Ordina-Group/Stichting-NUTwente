@@ -6,31 +6,36 @@
         <div class="row" style="margin:0px;padding:0px;">
             @if (Model.PlaatsingsInfo != null)
             {
-                <div class="row row-cols-2">
-                    <div class="col">
-                        <div class="col"><b>Kleine kinderen:</b> @Model.PlaatsingsInfo?.KleineKinderen</div>
-                        <div class="col"><b>Volwassenen en grotere kinderen:</b> @Model.PlaatsingsInfo?.VolwassenenGrotereKinderen </div>
-                        <div class="col"><b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte</div>
-                        <div class="col"><b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy</div>
-                        <div class="col"><b>Opbergruimte:</b> @Model.PlaatsingsInfo?.Opbergruimte</div>
-                        <div class="col"><b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten?.Replace(",", ", ").Replace(";", ", ")</div>
-                        <div class="col"><b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken </div>
-                        <div class="col"><b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer</div>
-                        <div class="col"><b>Roken:</b> @Model.PlaatsingsInfo?.Roken</div>
-                    </div>
-                    <div class="col">
-                        <div class="col"><b>Gezinssamenstelling</b> @Model.PlaatsingsInfo?.GezinsSamenstelling</div>
-                        <div class="col"><b>Veilige opbergplaats:</b> @Model.PlaatsingsInfo?.VeiligeOpbergruimte</div>
-                        <div class="col"><b>Huisdieren aanwezig:</b> @Model.PlaatsingsInfo?.HuisdierenAanwezig</div>
-                        <div class="col"><b>Bezwaar tegen huisdieren:</b> @Model.PlaatsingsInfo?.HuisdierenMogelijk</div>
-                        <div class="col"><b>Allergieën:</b> @Model.PlaatsingsInfo?.Allergieen</div>
-                        <div class="col"><b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo?.VluchtelingOphalen</div>
-                        <div class="col"><b>Basisscholen:</b> @Model.PlaatsingsInfo?.BasisscholenAanwezig</div>
-                        <div class="col"><b>Koelkast:</b> @Model.PlaatsingsInfo?.KoelkastRuimte</div>
-                        <div class="col"><b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen</div>
-                    </div>
-                    <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
-                </div>
+                <div style="column-count: 2;">
+                                    <b>Gezinssamenstelling: </b> @Model.PlaatsingsInfo?.GezinsSamenstelling?.Replace(":;",": ")<br>
+                                    <b>Leeftijdsgroepen:</b> @Model.PlaatsingsInfo?.GezinsLeeftijden<br>
+                                    <b>Hobby's:</b> @Model.PlaatsingsInfo?.Hobbys<br>
+                                    <b>Talen:</b> @Model.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
+                                    <b>Slaapplaatsen tot 2 jaar:</b> @Model.PlaatsingsInfo?.KleineKinderen<br>
+                                    <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
+                                    <b>Slaapplaatsen Opmerking</b> @Model.PlaatsingsInfo?.SlaapplaatsOpmerking?.Replace(":;",": ")<br>
+                                    <b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte<br>
+                                    <b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy<br>
+                                    <b>Eigen toegangsdeur:</b> @Model.PlaatsingsInfo?.EigenToegangsdeur<br>
+                                    <b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten?.Replace(":;",": ")<br>
+                                    <b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken<br>
+                                    <b>Koelkast:</b> @Model.PlaatsingsInfo?.KoelkastRuimte<br>
+                                    <b>Eigen Sanitair:</b> @Model.PlaatsingsInfo?.Sanitair?.Replace(":;",": ")<br>
+                                    <b>Toegankelijk: </b> @Model.PlaatsingsInfo?.Toegankelijkheid<br>
+                                    <b>Roken:</b> @Model.PlaatsingsInfo?.Roken<br>
+                                    <b>Veilige opbergplaats:</b> @Model.PlaatsingsInfo?.VeiligeOpbergruimte<br>
+                                    <b>Huisdieren aanwezig:</b> @Model.PlaatsingsInfo?.HuisdierenAanwezig?.Replace(":;",": ")<br>
+                                    <b>Bezwaar tegen huisdieren:</b> @Model.PlaatsingsInfo?.HuisdierenMogelijk?.Replace(":;",": ")<br>
+                                    <b>Allergieën:</b> @Model.PlaatsingsInfo?.Allergieen?.Replace(":;",": ")<br>
+                                    <b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo?.VluchtelingOphalen?.Replace(":;",": ")<br>
+                                    <b>Basisscholen:</b> @Model.PlaatsingsInfo?.BasisscholenAanwezig<br>
+                                    <b>Elektra spatwaterdicht: </b> @Model.PlaatsingsInfo?.ElektraSpatwaterdicht<br>
+                                    <b>Daglicht verblijfsruimtes: </b> @Model.PlaatsingsInfo?.DaglichtVerblijfsruimte<br>
+                                    <b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer<br>
+                                    <b>Rookmelder(s) aanwezig: </b> @Model.PlaatsingsInfo?.RookmelderAanwezig<br>
+                                    <b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
+                                </div>
+                            <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
             }
             <div class="col-12"><p><b>Notities:</b> <br /> @Model.Notities</p> </div>
             @if (Model.GastgezinId > 0)
