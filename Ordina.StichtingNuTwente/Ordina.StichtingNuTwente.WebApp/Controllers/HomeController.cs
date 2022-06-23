@@ -224,11 +224,47 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 if (answers != null)
                 {
+                    bool success;
+                    int ggId;
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     var reactie = _reactionService.NewReactie(answerData, gastgezinId);
                     var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
                     MailHelper mailHelper = new MailHelper(_mailService);
-                    bool success = await mailHelper.Bevestiging(persoon);
+
+                    if (reactie.FormulierId == 1)
+                    {
+                        success = await mailHelper.AanmeldingGastgezin(persoon);
+                    }
+                    else if(reactie.FormulierId == 2)
+                    {
+                        if(gastgezinId != null)
+                        {
+                            ggId = gastgezinId ?? default(int);
+                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
+                            
+                            if (gastgezin.Buddy == null)
+                            {
+                                gastgezin.Buddy = gastgezin.Begeleider;
+                                _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
+                            }
+
+                            success = await mailHelper.IntakeUitgevoerd(gastgezin);
+                        }
+
+                        //TODO even kijken hoe we hier mee omgaan, op dit moment beetje cheesy manier van oplossen
+                        else
+                        {
+                            success = true;
+                        }
+                    }
+                    else if(reactie.FormulierId == 4)
+                    {
+                        success = await mailHelper.AanmeldingVrijwilliger(persoon);
+                    }
+                    else
+                    {
+                        success = false;
+                    }
                     if (success) return Ok();
                 }
                 return BadRequest();
