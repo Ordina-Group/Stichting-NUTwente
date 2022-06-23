@@ -245,7 +245,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         }
                         else
                         {
-                            success = await mailHelper.Bevestiging(persoon);
+                            throw new Exception("Onbekend gastgezinID");
                         }
                     }
                     else if(reactie.FormulierId == 4)

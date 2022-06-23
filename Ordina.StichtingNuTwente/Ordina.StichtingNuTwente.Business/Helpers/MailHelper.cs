@@ -42,7 +42,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             else
             {
-                throw new Exception("Expexted buddy or begeleider not to be null"); 
+                throw new Exception("Expected buddy or begeleider not to be null"); 
             }
 
             return contactPersoon; 
@@ -66,8 +66,10 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin)
         {
-            Persoon contactPersoon = getContactPersoon(gastgezin);
-            string afsluitingBericht;
+            if(gastgezin == null)
+            {
+                return false;
+            }
 
             var mail = new Mail()
             {
