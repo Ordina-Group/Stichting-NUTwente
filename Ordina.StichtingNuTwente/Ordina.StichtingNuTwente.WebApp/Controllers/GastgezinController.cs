@@ -736,7 +736,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             if (int.TryParse(intakerOrBuddyChange.BuddyId, out buddyId))
                             {
                                 var buddy = vrijwilligers.FirstOrDefault(v => v.Id == buddyId);
-                                if (buddy != null && buddy.Id != gastgezin.Begeleider?.Id)
+                                if (buddy != null && buddy.Id != gastgezin.Buddy?.Id)
                                 {
                                     gastgezin.BekekenDoorBuddy = false;
                                     gastgezin.Buddy = buddy;
