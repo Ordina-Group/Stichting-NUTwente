@@ -64,7 +64,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
             Gastgezin gastgezin = _gastgezinService.GetGastgezin((int)gastgezinId);
                 var personaliaQuestions = questionForm.Sections[0].Questions;
-                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam;
+                personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
                 personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Straat").Answer = gastgezin.Contact.Adres.Straat;
                 personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Postcode").Answer = gastgezin.Contact.Adres.Postcode;
                 personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Woonplaats").Answer = gastgezin.Contact.Adres.Woonplaats;

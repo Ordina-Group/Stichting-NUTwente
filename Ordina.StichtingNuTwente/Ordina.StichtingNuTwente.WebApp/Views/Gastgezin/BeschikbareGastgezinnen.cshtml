@@ -231,11 +231,11 @@
                 @if (extraColumns.Count() == 0)
                 {
                     <td>
-                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
+                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" title="Aanmelding" target="_blank">@mijnGastgezin.AanmeldFormulierId</a>
                         @if (mijnGastgezin.IntakeFormulierId > 0)
                         {
                             <text>/ </text>
-                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" title="Intake" target="_blank">@mijnGastgezin.IntakeFormulierId</a>
                         }
                     </td>
                     <td>
@@ -248,7 +248,7 @@
                             <text>@mijnGastgezin.Begeleider</text>
                         }
                     </td>
-                    <td><b>v: </b>@mijnGastgezin.MaxAdults <b>k: </b>@mijnGastgezin.MaxChildren</td>
+                    <td><span title="Tot en met 2 jaar"><b>@mijnGastgezin.MaxChildren</b></span>| <span title="Vanaf 3 jaar"><b>@mijnGastgezin.MaxAdults</b></span></td>
                     <td>
                         <a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank"
                    @if (mijnGastgezin.PlaatsingTag.Contains("HOLD")){
