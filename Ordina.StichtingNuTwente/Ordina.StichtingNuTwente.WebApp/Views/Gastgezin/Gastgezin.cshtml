@@ -137,15 +137,15 @@
                     <h5 class="mt-3">Maximale Capaciteit</h5>
 
                     <div class="row mt-1 justify-content-between">
-                        <label class="col">Volwassenen:</label>
+                        <label class="col">Tot en met 2 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren" @(canEdit?"":"disabled")>
                         </div>
                     </div>
                     <div class="row mt-1 justify-content-between">
-                        <label class="col">Kinderen:</label>
+                        <label class="col">Vanaf 3 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults" @(canEdit?"":"disabled")>
                         </div>
                     </div>
                     if (canEdit)
@@ -168,7 +168,7 @@
                                     <b>Leeftijdsgroepen:</b> @Model.GastGezin.PlaatsingsInfo?.GezinsLeeftijden<br>
                                     <b>Hobby's:</b> @Model.GastGezin.PlaatsingsInfo?.Hobbys<br>
                                     <b>Talen:</b> @Model.GastGezin.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
-                                    <b>Slaapplaatsen tot 2 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen<br>
+                                    <b>Slaapplaatsen tot en met 2 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen<br>
                                     <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
                                     <b>Slaapplaatsen Opmerking</b> @Model.GastGezin.PlaatsingsInfo?.SlaapplaatsOpmerking<br>
                                     <b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo?.SlaapkamerRuimte<br>
