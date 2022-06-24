@@ -198,6 +198,20 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                 UserDetailsRepository.Update(dbUser);
                             }
                         }
+                        if ( form.Id == 2 && dbGastgezin != new Gastgezin())
+                        {
+                            if (dbGastgezin.Begeleider == null)
+                            {
+                                dbGastgezin.Begeleider = reactie.UserDetails;
+                                GastgezinRepository.Update(dbGastgezin);
+                            }
+
+                            if (dbGastgezin.Buddy == null)
+                            {
+                                dbGastgezin.Buddy = dbGastgezin.Begeleider;
+                                GastgezinRepository.Update(dbGastgezin);
+                            }
+                        }
                     }
                 }
             }
