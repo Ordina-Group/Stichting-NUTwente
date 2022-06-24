@@ -42,7 +42,8 @@
                     {
                         <span class="badge bg-info">Noodopvang</span>
                     }
-                    @if(User.HasClaims("groups", "group-superadmin")){
+                    @if (User.HasClaims("groups", "group-superadmin"))
+                    {
                         <a class="btn btn-danger float-end" href="gastgezin/maintenance?id=@Model.GastGezin.Id">Gastgezin Maintenance</a>
                     }
                 </h2>
@@ -166,36 +167,36 @@
                 <div class="card" id="DetailsCard">
                     <div class="card-body">
                         <h5 class="card-title bg-white">Details</h5>
-                                <div style="column-count: 2;">
-                                    <b>Gezinssamenstelling: </b> @Model.GastGezin.PlaatsingsInfo?.GezinsSamenstelling?.Replace(":;",": ")<br>
-                                    <b>Leeftijdsgroepen:</b> @Model.GastGezin.PlaatsingsInfo?.GezinsLeeftijden<br>
-                                    <b>Hobby's:</b> @Model.GastGezin.PlaatsingsInfo?.Hobbys<br>
-                                    <b>Talen:</b> @Model.GastGezin.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
-                                    <b>Slaapplaatsen tot en met 2 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen<br>
-                                    <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
-                                    <b>Slaapplaatsen Opmerking</b> @Model.GastGezin.PlaatsingsInfo?.SlaapplaatsOpmerking<br>
-                                    <b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo?.SlaapkamerRuimte<br>
-                                    <b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo?.Privacy<br>
-                                    <b>Eigen toegangsdeur:</b> @Model.GastGezin.PlaatsingsInfo?.EigenToegangsdeur<br>
-                                    <b>Faciliteiten:</b> @Model.GastGezin.PlaatsingsInfo?.Faciliteiten?.Replace(":;",": ")<br>
-                                    <b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo?.ZelfKoken<br>
-                                    <b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo?.KoelkastRuimte<br>
-                                    <b>Eigen Sanitair:</b> @Model.GastGezin.PlaatsingsInfo?.Sanitair?.Replace(":;",": ")<br>
-                                    <b>Toegankelijk: </b> @Model.GastGezin.PlaatsingsInfo?.Toegankelijkheid<br>
-                                    <b>Roken:</b> @Model.GastGezin.PlaatsingsInfo?.Roken<br>
-                                    <b>Veilige opbergplaats:</b> @Model.GastGezin.PlaatsingsInfo?.VeiligeOpbergruimte<br>
-                                    <b>Huisdieren aanwezig:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenAanwezig?.Replace(":;",": ")<br>
-                                    <b>Bezwaar tegen huisdieren:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenMogelijk?.Replace(":;",": ")<br>
-                                    <b>Allergieën:</b> @Model.GastGezin.PlaatsingsInfo?.Allergieen?.Replace(":;",": ")<br>
-                                    <b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo?.VluchtelingOphalen?.Replace(":;",": ")<br>
-                                    <b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo?.BasisscholenAanwezig<br>
-                                    <b>Elektra spatwaterdicht: </b> @Model.GastGezin.PlaatsingsInfo?.ElektraSpatwaterdicht<br>
-                                    <b>Daglicht verblijfsruimtes: </b> @Model.GastGezin.PlaatsingsInfo?.DaglichtVerblijfsruimte<br>
-                                    <b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer<br>
-                                    <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
-                                    <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
-                                </div>
-                            <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.GastGezin.PlaatsingsInfo?.OverigeOpmerkingen</div>
+                        <div style="column-count: 2;">
+                            <b>Gezinssamenstelling: </b> @Model.GastGezin.PlaatsingsInfo?.GezinsSamenstelling?.Replace(":;",": ")<br>
+                            <b>Leeftijdsgroepen:</b> @Model.GastGezin.PlaatsingsInfo?.GezinsLeeftijden<br>
+                            <b>Hobby's:</b> @Model.GastGezin.PlaatsingsInfo?.Hobbys<br>
+                            <b>Talen:</b> @Model.GastGezin.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
+                            <b>Slaapplaatsen tot en met 2 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.KleineKinderen<br>
+                            <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.GastGezin.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
+                            <b>Slaapplaatsen Opmerking</b> @Model.GastGezin.PlaatsingsInfo?.SlaapplaatsOpmerking<br>
+                            <b>Slaapkamer ruimte:</b> @Model.GastGezin.PlaatsingsInfo?.SlaapkamerRuimte<br>
+                            <b>Privacy:</b> @Model.GastGezin.PlaatsingsInfo?.Privacy<br>
+                            <b>Eigen toegangsdeur:</b> @Model.GastGezin.PlaatsingsInfo?.EigenToegangsdeur<br>
+                            <b>Faciliteiten:</b> @Model.GastGezin.PlaatsingsInfo?.Faciliteiten?.Replace(":;",": ")<br>
+                            <b>Zelf koken:</b> @Model.GastGezin.PlaatsingsInfo?.ZelfKoken<br>
+                            <b>Koelkast:</b> @Model.GastGezin.PlaatsingsInfo?.KoelkastRuimte<br>
+                            <b>Eigen Sanitair:</b> @Model.GastGezin.PlaatsingsInfo?.Sanitair?.Replace(":;",": ")<br>
+                            <b>Toegankelijk: </b> @Model.GastGezin.PlaatsingsInfo?.Toegankelijkheid<br>
+                            <b>Roken:</b> @Model.GastGezin.PlaatsingsInfo?.Roken<br>
+                            <b>Veilige opbergplaats:</b> @Model.GastGezin.PlaatsingsInfo?.VeiligeOpbergruimte<br>
+                            <b>Huisdieren aanwezig:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenAanwezig?.Replace(":;",": ")<br>
+                            <b>Bezwaar tegen huisdieren:</b> @Model.GastGezin.PlaatsingsInfo?.HuisdierenMogelijk?.Replace(":;",": ")<br>
+                            <b>Allergieën:</b> @Model.GastGezin.PlaatsingsInfo?.Allergieen?.Replace(":;",": ")<br>
+                            <b>Vluchteling ophalen:</b> @Model.GastGezin.PlaatsingsInfo?.VluchtelingOphalen?.Replace(":;",": ")<br>
+                            <b>Basisscholen:</b> @Model.GastGezin.PlaatsingsInfo?.BasisscholenAanwezig<br>
+                            <b>Elektra spatwaterdicht: </b> @Model.GastGezin.PlaatsingsInfo?.ElektraSpatwaterdicht<br>
+                            <b>Daglicht verblijfsruimtes: </b> @Model.GastGezin.PlaatsingsInfo?.DaglichtVerblijfsruimte<br>
+                            <b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer<br>
+                            <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
+                            <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
+                        </div>
+                        <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.GastGezin.PlaatsingsInfo?.OverigeOpmerkingen</div>
                     </div>
                 </div>
             </div>
