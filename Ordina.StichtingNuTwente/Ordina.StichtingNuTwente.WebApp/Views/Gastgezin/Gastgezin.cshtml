@@ -43,7 +43,7 @@
                         <span class="badge bg-info">Noodopvang</span>
                     }
                     @if(User.HasClaims("groups", "group-superadmin")){
-                    <a class="btn btn-danger float-end" href="gastgezin/maintenance?id=@Model.GastGezin.Id">Gastgezin Maintenance</a>
+                        <a class="btn btn-danger float-end" href="gastgezin/maintenance?id=@Model.GastGezin.Id">Gastgezin Maintenance</a>
                     }
                 </h2>
             </div>
