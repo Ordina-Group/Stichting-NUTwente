@@ -27,9 +27,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             data.Add(new Cell(cell++, "HeeftVOG"));
             data.Add(new Cell(cell++, "Notitie"));
             data.Add(new Cell(cell++, "PlaatsingsInfoId"));
-            data.Add(new Cell(cell++, "Intaker"));
+            data.Add(new Cell(cell++, "IntakerAzureId"));
             data.Add(new Cell(cell++, "BekekenDoorInaker"));
-            data.Add(new Cell(cell++, "Buddy"));
+            data.Add(new Cell(cell++, "BuddyAzureId"));
             data.Add(new Cell(cell++, "BekekenDoorBuddy"));
             data.Add(new Cell(cell++, "PlaatsingIds"));
             data.Add(new Cell(cell++, "OpmerkingIds"));
@@ -61,9 +61,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(cell++, gastgezin.HasVOG != null ? gastgezin.HasVOG.ToString() : ""));
                 data.Add(new Cell(cell++, gastgezin.Note != null ? gastgezin.Note : ""));
                 data.Add(new Cell(cell++, gastgezin.PlaatsingsInfo != null ? gastgezin.PlaatsingsInfo.Id.ToString() : ""));
-                data.Add(new Cell(cell++, gastgezin.Begeleider != null ? gastgezin.Begeleider.FirstName : ""));
+                data.Add(new Cell(cell++, gastgezin.Begeleider != null ? gastgezin.Begeleider.AADId : ""));
                 data.Add(new Cell(cell++, gastgezin.BekekenDoorIntaker.ToString()));
-                data.Add(new Cell(cell++, gastgezin.Buddy != null ? gastgezin.Buddy.FirstName : ""));
+                data.Add(new Cell(cell++, gastgezin.Buddy != null ? gastgezin.Buddy.AADId : ""));
                 data.Add(new Cell(cell++, gastgezin.BekekenDoorBuddy.ToString()));
                 if (gastgezin.Vluchtelingen != null)
                 {
@@ -138,7 +138,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             header.Add(new Cell(cell++, "LeeftijdsGroep"));
             header.Add(new Cell(cell++, "PlaatsingsType"));
             header.Add(new Cell(cell++, "Datum"));
-            header.Add(new Cell(cell++, "GeplaatstDoor"));
+            header.Add(new Cell(cell++, "GeplaatstDoorAzureId"));
             header.Add(new Cell(cell++, "Leeftijd"));
             header.Add(new Cell(cell++, "Gender"));
             header.Add(new Cell(cell++, "Actief"));
@@ -154,7 +154,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(cell++, plaatsing.AgeGroup));
                 data.Add(new Cell(cell++, plaatsing.PlacementType));
                 data.Add(new Cell(cell++, plaatsing.DateTime.ToShortDateString()));
-                data.Add(new Cell(cell++, plaatsing.Vrijwilliger.FirstName));
+                data.Add(new Cell(cell++, plaatsing.Vrijwilliger.AADId));
                 data.Add(new Cell(cell++, plaatsing.Age));
                 data.Add(new Cell(cell++, plaatsing.Gender));
                 data.Add(new Cell(cell++, plaatsing.Active));
@@ -206,7 +206,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             var cell = 1;
             header.Add(new Cell(cell++, "Id"));
             header.Add(new Cell(cell++, "Datum"));
-            header.Add(new Cell(cell++, "Contacter"));
+            header.Add(new Cell(cell++, "ContacterAzureId"));
             header.Add(new Cell(cell++, "Notities"));
             rows.Add(new Row(1, header));
             var row = 2;
@@ -216,7 +216,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 cell = 1;
                 data.Add(new Cell(cell++, contactLog.Id));
                 data.Add(new Cell(cell++, contactLog.DateTime.ToShortDateString()));
-                data.Add(new Cell(cell++, contactLog.Contacter.FirstName));
+                data.Add(new Cell(cell++, contactLog.Contacter.AADId));
                 data.Add(new Cell(cell++, contactLog.Notes));
                 
                 rows.Add(new Row(row, data));
@@ -232,7 +232,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             var cell = 1;
             header.Add(new Cell(cell++, "Id"));
             header.Add(new Cell(cell++, "Text"));
-            header.Add(new Cell(cell++, "Commenter"));
+            header.Add(new Cell(cell++, "CommenterAzureId"));
             header.Add(new Cell(cell++, "Datum"));
             header.Add(new Cell(cell++, "CommentType"));
             rows.Add(new Row(1, header));
@@ -243,7 +243,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 cell = 1;
                 data.Add(new Cell(cell++, comment.Id));
                 data.Add(new Cell(cell++, comment.Text));
-                data.Add(new Cell(cell++, comment.Commenter.FirstName));
+                data.Add(new Cell(cell++, comment.Commenter.AADId));
                 data.Add(new Cell(cell++, comment.Created.ToShortDateString()));
                 data.Add(new Cell(cell++, comment.CommentType));
 
