@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordina.StichtingNuTwente.Data;
 
@@ -11,9 +12,10 @@ using Ordina.StichtingNuTwente.Data;
 namespace Ordina.StichtingNuTwente.Data.Migrations
 {
     [DbContext(typeof(NuTwenteContext))]
-    partial class NuTwenteContextModelSnapshot : ModelSnapshot
+    [Migration("20220621153132_ExtendPlaatsingsInfoFurther")]
+    partial class ExtendPlaatsingsInfoFurther
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,13 +351,7 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<string>("DaglichtSlaapkamer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DaglichtVerblijfsruimte")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EigenToegangsdeur")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ElektraSpatwaterdicht")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Faciliteiten")
@@ -365,9 +361,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GezinsSamenstelling")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Hobbys")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HuisdierenAanwezig")
@@ -400,9 +393,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                     b.Property<string>("Roken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RookmelderAanwezig")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Sanitair")
                         .HasColumnType("nvarchar(max)");
 
@@ -410,9 +400,6 @@ namespace Ordina.StichtingNuTwente.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SlaapplaatsOpmerking")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Talen")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TelefoonnummerVanLocatie")

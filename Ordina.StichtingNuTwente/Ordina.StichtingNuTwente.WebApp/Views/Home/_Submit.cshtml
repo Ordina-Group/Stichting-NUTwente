@@ -15,7 +15,7 @@
                     if($(this).attr('type') === "checkbox"){
                         if($(this).is(':checked')){
                             if(obj.answer[id] !== undefined){
-                                obj.answer[id].Antwoord += ("," + value);
+                                obj.answer[id].Antwoord += ("; " + value);
                             } else {
                                 obj.answer[id] = {"Nummer":id,"Antwoord":value}
                             }
@@ -26,7 +26,13 @@
                             obj.answer[id] = {"Nummer":id,"Antwoord":value};
                         }
                     } else {
-                        obj.answer[id] = {"Nummer":id,"Antwoord":value};
+                           if(obj.answer[id] !== undefined){
+                               if (value != "") {
+                                   obj.answer[id].Antwoord += ("; " + value);
+                               }
+                           } else {
+                               obj.answer[id] = {"Nummer":id,"Antwoord":value}
+                           }
                     }
                 })
                 let awnsers = obj.answer;
@@ -59,6 +65,21 @@
                  }
                   //Email functionaliteit:
                   else if(@Model.FormId == 1 || @Model.FormId == 4){
+                        $.ajax({
+                            url: "/Home/SaveAndSendEmail",
+                            type: "POST",
+                            dataType: 'text',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: {"answers":JSON.stringify(obj), "gastgezinId":"@Model.GastgezinId"},
+                            success: function(){
+                                window.location = "/Bedankt";
+                            },
+                            error: function() {
+                            window.location = "/Error";
+                            }
+                        });
+                    }
+                    else if(@Model.FormId == 2){
                         $.ajax({
                             url: "/Home/SaveAndSendEmail",
                             type: "POST",

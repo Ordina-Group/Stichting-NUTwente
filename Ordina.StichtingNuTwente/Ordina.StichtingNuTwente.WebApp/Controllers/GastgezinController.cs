@@ -5,6 +5,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Models.Mappings;
+using Ordina.StichtingNuTwente.Business.Helpers;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -13,11 +14,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     {
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
+        private readonly IMailService _mailService;
+        private MailHelper mailHelper;
 
-        public GastgezinController(IGastgezinService gastgezinService, IUserService userService)
+        public GastgezinController(IGastgezinService gastgezinService, IUserService userService, IMailService mailService)
         {
             _gastgezinService = gastgezinService;
             _userService = userService;
+            _mailService = mailService;
+
+            mailHelper = new MailHelper(_mailService);
         }
 
         public IActionResult Overview()
@@ -113,6 +119,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 };
                 _gastgezinService.AddPlaatsing(plaatsing);
             }
+
+
+            //TODO: zorgen dat er niet per losse plaatsing een mail wordt verstuurd
+            //mailHelper.PlaatsingVluchteling(plaatsing);
+
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
@@ -214,20 +225,20 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.AddPlaatsing(NieuwePlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
         }
-        
+
         public IActionResult PostNote(int GastGezinId, string Note)
         {
             _gastgezinService.UpdateNote(GastGezinId, Note);
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
-        
+
         [HttpPost]
         public IActionResult PostVOG(bool HasVOG, int GastGezinId)
         {
             _gastgezinService.UpdateVOG(HasVOG, GastGezinId);
             return Ok();
         }
-        
+
         [HttpPost]
         public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxAdults, int MaxChildren)
         {
@@ -293,12 +304,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             gastgezinQuery = gastgezinQuery.Where(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
                             results = originalQuery.Count(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
-                        } else if (filterKey == "Opmerkingen")
+                        }
+                        else if (filterKey == "Opmerkingen")
                         {
                             gastgezinQuery = gastgezinQuery.Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
                             results = originalQuery.Count(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
                         }
-                        else 
+                        else
                         {
                             gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
                             results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
@@ -435,7 +447,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return null;
         }
-        
+
         [HttpPut]
         [Route("MarkNewAsSeen/{gastgezinId}")]
         public IActionResult MarkNewAsSeen(int gastgezinId)
@@ -487,7 +499,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        
+
         [HttpPut]
         [Route("RejectBuddy/{gastgezinId}")]
         public IActionResult RejectBeingBuddy(int gastgezinId, string comment)
@@ -509,7 +521,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        
+
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
@@ -589,7 +601,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("AlleGastgezinnen")]
         [HttpGet]
         [ActionName("AlleGastgezinnen")]
-        public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending")
+        public IActionResult AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string statusFilter = "")
         {
             _userService.checkIfUserExists(User);
 
@@ -606,7 +618,35 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 });
             }
             var user = GetUser();
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
+            IEnumerable<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
+
+            if (!string.IsNullOrEmpty(statusFilter))
+            {
+                switch (statusFilter)
+                {
+                    case "Beschikbaar":
+                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        break;
+                    case "Gereserveerd":
+                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        break;
+                    case "Geplaatst":
+                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        break;
+                    case "Nood":
+                        gastGezinnen = gastGezinnen.Where(g => g.NoodOpvang);
+                        break;
+                    case "On Hold":
+                        gastGezinnen = gastGezinnen.Where(g => g.OnHold);
+                        break;
+                    case "Geen Intaker":
+                        gastGezinnen = gastGezinnen.Where(g => g.Begeleider == null);
+                        break;
+                    case "Geen Buddy":
+                        gastGezinnen = gastGezinnen.Where(g => g.Buddy == null);
+                        break;
+                }
+            }
 
             foreach (var gastGezin in gastGezinnen)
             {
@@ -681,6 +721,71 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(alleGastgezinnen);
         }
 
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        [HttpPost]
+        public IActionResult IntakerOrBuddyChange(List<IntakerOrBuddyChangeModel> intakerOrBuddyChangeModels)
+        {
+            var vrijwilligers = _userService.GetAllDropdownUsers().ToList();
+            foreach (var intakerOrBuddyChange in intakerOrBuddyChangeModels)
+            {
+                int gastgezinId = 0;
+                if (int.TryParse(intakerOrBuddyChange.Id, out gastgezinId))
+                {
+                    var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                    if (gastgezin == null)
+                        return BadRequest();
+
+                    if (intakerOrBuddyChange.BuddyId != null)
+                    {
+                        if (intakerOrBuddyChange.BuddyId == "-")
+                        {
+                            gastgezin.Buddy = null;
+                        }
+                        else
+                        {
+                            int buddyId = 0;
+                            if (int.TryParse(intakerOrBuddyChange.BuddyId, out buddyId))
+                            {
+                                var buddy = vrijwilligers.FirstOrDefault(v => v.Id == buddyId);
+                                if (buddy != null && buddy.Id != gastgezin.Buddy?.Id)
+                                {
+                                    gastgezin.BekekenDoorBuddy = false;
+                                    gastgezin.Buddy = buddy;
+                                }
+                            }
+                        }
+                    }
+
+                    if (intakerOrBuddyChange.IntakerId != null)
+                    {
+                        if (intakerOrBuddyChange.IntakerId == "-")
+                        {
+                            gastgezin.Begeleider = null;
+                        }
+                        else
+                        {
+                            int intakerId = 0;
+                            if (int.TryParse(intakerOrBuddyChange.IntakerId, out intakerId))
+                            {
+                                var intaker = vrijwilligers.FirstOrDefault(v => v.Id == intakerId);
+                                if (intaker != null && intaker.Id != gastgezin.Begeleider?.Id)
+                                {
+                                    gastgezin.BekekenDoorIntaker = false;
+                                    gastgezin.Begeleider = intaker;
+                                }
+                            }
+                        }
+                    }
+
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                }
+
+            }
+
+            return Ok();
+        }
+
+        /*Old method is very slow
         [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("AlleGastgezinnen")]
         [HttpPost]
@@ -791,7 +896,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             return RedirectToAction("AlleGastgezinnen");
-        }
+        }*/
         [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult EditPlaatsing(int GastgezinId, int PlaatsingsId)
         {
@@ -818,7 +923,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return View(model);
         }
-        
+
         [HttpPost]
         public IActionResult UpdateCommentVrijwilliger(string comments, int gastgezinId)
         {
@@ -838,7 +943,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
-        
+
         [HttpPost]
         public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
         {
