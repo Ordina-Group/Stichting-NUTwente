@@ -16,7 +16,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public ICollection<Gastgezin> GetGastgezinnenForVrijwilliger(int vrijwilligerId, IEnumerable<Gastgezin>? gastgezinnen = null);
         public ICollection<Gastgezin> GetAllGastgezinnen(string includeProperties = IncludeProperties);
         public ICollection<Gastgezin> GetDeletedGastgezinnen(string includeProperties = IncludeProperties);
-        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id);
+        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int? id = null);
         public void AddPlaatsing(Plaatsing plaatsing);
         public void UpdatePlaatsing(Plaatsing plaatsing);
         public Plaatsing GetPlaatsing(int id);

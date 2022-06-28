@@ -944,6 +944,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return BadRequest();
         }
 
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        [HttpPost]
+        public IActionResult UpdateCommentCoordinator(string comments, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null)
+                {
+                    gastgezin.CoordinatorOpmerkingen = comments == null ? "" : comments;
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
+
         [HttpPost]
         public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
         {

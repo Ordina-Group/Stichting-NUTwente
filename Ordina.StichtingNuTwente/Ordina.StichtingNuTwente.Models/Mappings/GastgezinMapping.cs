@@ -125,6 +125,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Deleted = gastgezin.Deleted,
                 DeletionComment = deletionComment,
                 VrijwilligerOpmerkingen = gastgezin.VrijwilligerOpmerkingen,
+                CoordinatorOpmerkingen = gastgezin.CoordinatorOpmerkingen,
                 ContactLogs = gastgezin.ContactLogs,
                 IntakeCompletedComment = intakeCompletedComment
             };
