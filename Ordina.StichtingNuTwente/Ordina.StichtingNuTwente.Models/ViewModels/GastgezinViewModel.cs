@@ -51,12 +51,20 @@ public class GastgezinViewModel
     public int? MaxChildren { get; set; }
 
     public Comment? RejectionComment { get; set; }
+
     public Comment? IntakeCompletedComment { get; set; }
 
     public bool Deleted { get; set; }
+
     public Comment? DeletionComment { get; set; }
+
     public string VrijwilligerOpmerkingen { get; internal set; }
+
+    public string CoordinatorOpmerkingen { get; internal set; }
+
     public List<ContactLog> ContactLogs { get; internal set; }
+
     public bool OnHold { get; internal set; }
+
     public bool NoodOpvang { get; internal set; }
 }

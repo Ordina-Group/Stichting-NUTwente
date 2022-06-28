@@ -53,6 +53,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public bool Deleted { get; set; }
 
         public string VrijwilligerOpmerkingen { get; set; }
+        public string CoordinatorOpmerkingen { get; set; }
+
         public List<ContactLog> ContactLogs { get; set; }
 
         public bool OnHold { get; set; }

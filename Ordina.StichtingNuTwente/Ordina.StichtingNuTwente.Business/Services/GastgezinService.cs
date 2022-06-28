@@ -58,7 +58,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return dbModel.Id > 0;
         }
 
-        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id)
+        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int? id)
         {
             GastgezinRepository.Update(gastgezin);
             return gastgezin;
