@@ -68,7 +68,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             PlaatsingsRepository.Create(plaatsing);
             var gastgezin = plaatsing.Gastgezin;
-            var status = gastgezin.GetStatus();
+            var status = gastgezin.Status;
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -104,7 +104,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             string status = "";
             if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
-            var gastgezinStatus = gastgezin.GetStatus();
+            var gastgezinStatus = gastgezin.Status;
 
             if (gastgezin.OnHold)
             {

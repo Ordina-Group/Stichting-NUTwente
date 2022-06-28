@@ -272,13 +272,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.Status == GastgezinStatus.Bezocht);
                         break;
                     case "Gereserveerd":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.Gereserveerd);
                         break;
                     case "Geplaatst":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.Geplaatst);
                         break;
                     case "Nood":
                         gastgezinQuery = gastgezinQuery.Where(g => g.NoodOpvang);
@@ -625,13 +625,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.Status == GastgezinStatus.Bezocht);
                         break;
                     case "Gereserveerd":
-                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        gastGezinnen = gastGezinnen.Where(g => g.Status == GastgezinStatus.Gereserveerd);
                         break;
                     case "Geplaatst":
-                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        gastGezinnen = gastGezinnen.Where(g => g.Status == GastgezinStatus.Geplaatst);
                         break;
                     case "Nood":
                         gastGezinnen = gastGezinnen.Where(g => g.NoodOpvang);
@@ -970,7 +970,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [AllowAnonymous]
         public IActionResult GetGastgezinInformation()
         {
-            var amountGastgezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+            var amountGastgezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.Status == GastgezinStatus.Geplaatst);
             var amountGeplaatsteVluchtelingen = _gastgezinService.GetPlaatsingen().Where(p => p.Active && (p.PlacementType == PlacementType.GeplaatsteReservering || p.PlacementType == PlacementType.Plaatsing));
 
 
