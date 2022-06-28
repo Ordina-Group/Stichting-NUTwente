@@ -681,21 +681,51 @@
                         </div>
                     }
                     <div class="col-12">
-                        <table class="table table-striped">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Datum</th>
                                     <th scope="col">Persoon</th>
                                     <th scope="col">Notitie</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var contactLog in Model.GastGezin.ContactLogs)
                                 {
-                                    <tr>
+                                    <tr id="ContactLog-@contactLog.Id">
                                         <td>@contactLog.DateTime.ToShortDateString()</td>
                                         <td>@contactLog.Contacter?.FirstName</td>
                                         <td>@contactLog.Notes</td>
+                                        @if (contactLog.Contacter?.AADId == User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                                        {
+                                            <td scope="row">
+                                                <button type="button" id="@("deleteContactLog"+contactLog.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Contactmoment"></button>
+                                                <script>
+                                                    $("#@("deleteContactLog"+contactLog.Id)").on("click", function() {
+                                                        let contactLogId = @(contactLog.Id);
+                                                        let gastgezinId = @(Model.GastGezin.Id);
+                                                        if (confirm("Weet je zeker dat je dit contactmoment wilt verwijderen?")) {
+                                                            $.ajax({
+                                                                url: "/Gastgezin/DeleteContactLog/",
+                                                                type: "DELETE",
+                                                                dataType: 'text',
+                                                                data: { "contactLogId": contactLogId, "gastgezinId": gastgezinId },
+                                                                success: function() {
+                                                                    $("#@("deleteContactLog"+contactLog.Id)").closest('tr').fadeOut(400,function() {
+                                                                        $(this).closest('tr').remove();
+                                                                    });;
+                                                                },
+                                                            });
+                                                        }
+                                                    })
+                                                </script>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
                                     </tr>
                                 }
                             </tbody>
