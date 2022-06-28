@@ -8,7 +8,6 @@ namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class ContactLog : BaseEntity
     {
-
         public DateTime DateTime { get; set; }
         public UserDetails Contacter { get; set; }
         public string Notes { get; set; }
