@@ -979,5 +979,25 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             return messages;
         }
+
+        public List<MaintenanceMessage> DuplicateComments()
+        {
+            var messages = new List<MaintenanceMessage>();
+            var gastgezinnen = GastgezinRepo.GetAll().Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen != "");
+            foreach(var g in gastgezinnen)
+            {
+                if (g.CoordinatorOpmerkingen != g.VrijwilligerOpmerkingen)
+                {
+                    g.CoordinatorOpmerkingen = g.VrijwilligerOpmerkingen;
+                    GastgezinRepo.Update(g);
+                    messages.Add(new MaintenanceMessage($"CoordinatorOpmerking of gastgezin {g.Id} set to: '{g.CoordinatorOpmerkingen}'.", MaintenanceMessageType.Success));
+                }
+                else
+                {
+                    messages.Add(new MaintenanceMessage($"CoordinatorOpmerking of gastgezin {g.Id} already set to: '{g.CoordinatorOpmerkingen}'.", MaintenanceMessageType.Info));
+                }
+            }
+            return messages;
+        }
     }
 }
