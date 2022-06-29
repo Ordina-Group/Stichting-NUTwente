@@ -241,13 +241,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         {
                             ggId = gastgezinId ?? default(int);
                             Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
-                            
-                            if (gastgezin.Buddy == null)
-                            {
-                                gastgezin.Buddy = gastgezin.Begeleider;
-                                _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
-                            }
-
                             success = await mailHelper.IntakeUitgevoerd(gastgezin);
                         }
 

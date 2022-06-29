@@ -116,7 +116,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 BuddyId = buddyId,
                 Begeleider = begeleider,
                 BegeleiderId = begeleiderId,
-                Status = gastgezin.GetStatus(),
+                Status = gastgezin.Status,
                 OnHold = gastgezin.OnHold,
                 NoodOpvang = gastgezin.NoodOpvang,
                 MaxAdults = maxAdults,
@@ -125,6 +125,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Deleted = gastgezin.Deleted,
                 DeletionComment = deletionComment,
                 VrijwilligerOpmerkingen = gastgezin.VrijwilligerOpmerkingen,
+                CoordinatorOpmerkingen = gastgezin.CoordinatorOpmerkingen,
                 ContactLogs = gastgezin.ContactLogs,
                 IntakeCompletedComment = intakeCompletedComment
             };

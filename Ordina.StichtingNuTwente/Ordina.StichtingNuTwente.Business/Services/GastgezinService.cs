@@ -58,7 +58,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return dbModel.Id > 0;
         }
 
-        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int id)
+        public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int? id)
         {
             GastgezinRepository.Update(gastgezin);
             return gastgezin;
@@ -68,7 +68,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             PlaatsingsRepository.Create(plaatsing);
             var gastgezin = plaatsing.Gastgezin;
-            var status = gastgezin.GetStatus();
+            var status = gastgezin.Status;
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
@@ -104,7 +104,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             string status = "";
             if (gastgezin == null) gastgezin = GetGastgezin(gastgezinId);
-            var gastgezinStatus = gastgezin.GetStatus();
+            var gastgezinStatus = gastgezin.Status;
 
             if (gastgezin.OnHold)
             {
