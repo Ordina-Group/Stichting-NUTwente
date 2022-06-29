@@ -20,5 +20,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         DatabaseIntegrityModel TestDatabaseIntegrity();
         public List<MaintenanceMessage> LoadCapacityFromExcel(Stream excelStream);
         public List<MaintenanceMessage> UpdateStatus();
+        public List<MaintenanceMessage> DuplicateComments();
     }
 }

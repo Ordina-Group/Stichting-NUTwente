@@ -65,7 +65,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     gastgezin.OnHold = true;
                 }
                 GastgezinRepo.Update(gastgezin);
-                messages.Add(new MaintenanceMessage($"Status was {prevStatus} is now {gastgezin.GetStatus()}. OnHold is {gastgezin.OnHold}. Nood is {gastgezin.NoodOpvang}", MaintenanceMessageType.Success));
+                messages.Add(new MaintenanceMessage($"Status was {prevStatus} is now {gastgezin.Status}. OnHold is {gastgezin.OnHold}. Nood is {gastgezin.NoodOpvang}", MaintenanceMessageType.Success));
             }
             return messages;
         }
@@ -214,9 +214,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                 var val = cell.Value.ToString();
                                 if (val.Contains("on hold"))
                                 {
-                                    if (gastgezin.Status != GastgezinStatus.OnHold)
+                                    if (!gastgezin.OnHold)
                                     {
-                                        gastgezin.Status = GastgezinStatus.OnHold;
+                                        gastgezin.OnHold = true;
                                         _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
                                         messages.Add(new MaintenanceMessage($@"OnHold status added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                     }
@@ -539,8 +539,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
                     var gastgezin = new Gastgezin
                     {
-                        Contact = persoon,
-                        Status = GastgezinStatus.Bezocht
+                        Contact = persoon
                     };
 
                     if (intakeId.HasValue)
@@ -977,6 +976,26 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     }
                 }
                 rowNum++;
+            }
+            return messages;
+        }
+
+        public List<MaintenanceMessage> DuplicateComments()
+        {
+            var messages = new List<MaintenanceMessage>();
+            var gastgezinnen = GastgezinRepo.GetAll().Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen != "");
+            foreach(var g in gastgezinnen)
+            {
+                if (g.CoordinatorOpmerkingen != g.VrijwilligerOpmerkingen)
+                {
+                    g.CoordinatorOpmerkingen = g.VrijwilligerOpmerkingen;
+                    GastgezinRepo.Update(g);
+                    messages.Add(new MaintenanceMessage($"CoordinatorOpmerking of gastgezin {g.Id} set to: '{g.CoordinatorOpmerkingen}'.", MaintenanceMessageType.Success));
+                }
+                else
+                {
+                    messages.Add(new MaintenanceMessage($"CoordinatorOpmerking of gastgezin {g.Id} already set to: '{g.CoordinatorOpmerkingen}'.", MaintenanceMessageType.Info));
+                }
             }
             return messages;
         }

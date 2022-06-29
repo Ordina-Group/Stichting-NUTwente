@@ -40,7 +40,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     var gastgezin = GastgezinRepository.GetById(gastgezinId.Value);
                     if (gastgezin != null)
                     {
-                        if (gastgezin.GetStatus() == GastgezinStatus.Aangemeld)
+                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
                         {
                             var persoon = PersoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
                             if (persoon != null)
@@ -77,7 +77,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (gastgezin != null)
                     {
                         gastgezin.IntakeFormulier = dbmodel;
-                        if (gastgezin.GetStatus() == GastgezinStatus.Aangemeld)
+                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
                         {
                             var persoon = PersoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
                             if (persoon != null)
@@ -198,6 +198,20 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                 UserDetailsRepository.Update(dbUser);
                             }
                         }
+                        if ( form.Id == 2 && dbGastgezin != new Gastgezin())
+                        {
+                            if (dbGastgezin.Begeleider == null)
+                            {
+                                dbGastgezin.Begeleider = reactie.UserDetails;
+                                GastgezinRepository.Update(dbGastgezin);
+                            }
+
+                            if (dbGastgezin.Buddy == null)
+                            {
+                                dbGastgezin.Buddy = dbGastgezin.Begeleider;
+                                GastgezinRepository.Update(dbGastgezin);
+                            }
+                        }
                     }
                 }
             }
@@ -236,8 +250,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 var gastgezin = new Gastgezin
                 {
                     AanmeldFormulier = reactie,
-                    Contact = dbPersoon,
-                    Status = GastgezinStatus.Aangemeld,
+                    Contact = dbPersoon
                 };
 
                 dbGastgezin = GastgezinRepository.Create(gastgezin);

@@ -225,8 +225,8 @@
                 }
                 <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
                 class="show" id="@Index"
-                data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
-                    @mijnGastgezin.VrijwilligerOpmerkingen
+                data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.CoordinatorOpmerkingen">
+                    @mijnGastgezin.CoordinatorOpmerkingen
                 </td>
                 @if (extraColumns.Count() == 0)
                 {
@@ -300,7 +300,7 @@
                 }
             </tr>
 
-            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, rows, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen))
+            @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, rows, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen, mijnGastgezin.CoordinatorOpmerkingen))
         }
     </tbody>
     <tfoot>

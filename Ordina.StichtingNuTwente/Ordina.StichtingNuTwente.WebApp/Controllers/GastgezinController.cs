@@ -272,13 +272,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        gastgezinQuery = gastgezinQuery.Where(g => !g.NoodOpvang && g.Status == GastgezinStatus.Bezocht);
                         break;
                     case "Gereserveerd":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.Gereserveerd);
                         break;
                     case "Geplaatst":
-                        gastgezinQuery = gastgezinQuery.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        gastgezinQuery = gastgezinQuery.Where(g => g.Status == GastgezinStatus.Geplaatst);
                         break;
                     case "Nood":
                         gastgezinQuery = gastgezinQuery.Where(g => g.NoodOpvang);
@@ -625,13 +625,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (statusFilter)
                 {
                     case "Beschikbaar":
-                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.GetStatus() == GastgezinStatus.Bezocht);
+                        gastGezinnen = gastGezinnen.Where(g => !g.NoodOpvang && g.Status == GastgezinStatus.Bezocht);
                         break;
                     case "Gereserveerd":
-                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Gereserveerd);
+                        gastGezinnen = gastGezinnen.Where(g => g.Status == GastgezinStatus.Gereserveerd);
                         break;
                     case "Geplaatst":
-                        gastGezinnen = gastGezinnen.Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+                        gastGezinnen = gastGezinnen.Where(g => g.Status == GastgezinStatus.Geplaatst);
                         break;
                     case "Nood":
                         gastGezinnen = gastGezinnen.Where(g => g.NoodOpvang);
@@ -944,6 +944,27 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return BadRequest();
         }
 
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        [HttpPost]
+        public IActionResult UpdateCommentCoordinator(string comments, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                if (gastgezin != null)
+                {
+                    gastgezin.CoordinatorOpmerkingen = comments == null ? "" : comments;
+                    _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                    return Ok();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
+
         [HttpPost]
         public IActionResult AddContactLog(DateTime date, string note, int gastgezinId)
         {
@@ -965,12 +986,41 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return BadRequest();
         }
 
+        [HttpDelete]
+        public IActionResult DeleteContactLog(int contactLogId, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                var user = GetUser();
+                if (gastgezin != null && user != null)
+                {
+                    var contactLog = gastgezin.ContactLogs.FirstOrDefault(c => c.Id == contactLogId);
+                    if(contactLog != null && (contactLog.Contacter.AADId == GetUser().AADId) || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                    {
+                        gastgezin.ContactLogs.Remove(contactLog);
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(403);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetGastgezinInformation()
         {
-            var amountGastgezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.GetStatus() == GastgezinStatus.Geplaatst);
+            var amountGastgezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.Status == GastgezinStatus.Geplaatst);
             var amountGeplaatsteVluchtelingen = _gastgezinService.GetPlaatsingen().Where(p => p.Active && (p.PlacementType == PlacementType.GeplaatsteReservering || p.PlacementType == PlacementType.Plaatsing));
 
 

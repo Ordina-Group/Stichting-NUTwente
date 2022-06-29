@@ -18,7 +18,23 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public Persoon Contact { get; set; }
         public UserDetails? Begeleider { get; set; }
         public UserDetails? Buddy { get; set; }
-        public GastgezinStatus? Status { get; set; }
+        public GastgezinStatus? Status
+        {
+            get
+            {
+                if (OnHold)
+                    return GastgezinStatus.OnHold;
+                var plaatsingen = Plaatsingen?.Where(p => (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering) && p.Active).Sum(p => p.Amount);
+                if (plaatsingen > 0)
+                    return GastgezinStatus.Geplaatst;
+                var reserveringen = Plaatsingen?.Where(p => (p.PlacementType == PlacementType.Reservering) && p.Active).Sum(p => p.Amount);
+                if (reserveringen > 0)
+                    return GastgezinStatus.Gereserveerd;
+                if (IntakeFormulier != null)
+                    return GastgezinStatus.Bezocht;
+                return GastgezinStatus.Aangemeld;
+            }
+        }
         public Reactie? IntakeFormulier { get; set; }
         public Reactie? AanmeldFormulier { get; set; }
         public ICollection<Plaatsing>? Plaatsingen { get; set; }
@@ -37,26 +53,11 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public bool Deleted { get; set; }
 
         public string VrijwilligerOpmerkingen { get; set; }
+        public string CoordinatorOpmerkingen { get; set; }
+
         public List<ContactLog> ContactLogs { get; set; }
 
         public bool OnHold { get; set; }
         public bool NoodOpvang { get; set; }
-
-        public GastgezinStatus GetStatus()
-        {
-            if (OnHold)
-                return GastgezinStatus.OnHold;
-            var plaatsingen = Plaatsingen?.Where(p => (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering) && p.Active).Sum(p => p.Amount);
-            if(plaatsingen > 0)
-                return GastgezinStatus.Geplaatst;
-            var reserveringen = Plaatsingen?.Where(p => (p.PlacementType == PlacementType.Reservering) && p.Active).Sum(p => p.Amount);
-            if (reserveringen > 0)
-                return GastgezinStatus.Gereserveerd;
-            if (IntakeFormulier != null)
-                return GastgezinStatus.Bezocht;
-
-            return GastgezinStatus.Aangemeld;
-        }
-
     }
 }
