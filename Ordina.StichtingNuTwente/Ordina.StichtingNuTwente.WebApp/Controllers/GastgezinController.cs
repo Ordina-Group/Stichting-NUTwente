@@ -965,6 +965,35 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return BadRequest();
         }
 
+        [HttpDelete]
+        public IActionResult DeleteContactLog(int contactLogId, int gastgezinId)
+        {
+            try
+            {
+                var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
+                var user = GetUser();
+                if (gastgezin != null && user != null)
+                {
+                    var contactLog = gastgezin.ContactLogs.FirstOrDefault(c => c.Id == contactLogId);
+                    if(contactLog != null && (contactLog.Contacter.AADId == GetUser().AADId) || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                    {
+                        gastgezin.ContactLogs.Remove(contactLog);
+                        _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return StatusCode(403);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return BadRequest();
+        }
+
 
         [HttpGet]
         [AllowAnonymous]
