@@ -16,5 +16,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public int Age { get; set; }
         public Gender Gender { get; set; }
         public bool Active { get; set; }
+        public string? DepartureReason { get; set; }
+        public DepartureDestination? DepartureDestination { get; set; }
+        public string? DepartureComment { get; set; }
     }
 }
