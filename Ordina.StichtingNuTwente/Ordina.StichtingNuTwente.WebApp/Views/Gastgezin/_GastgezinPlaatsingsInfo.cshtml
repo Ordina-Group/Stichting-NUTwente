@@ -1,5 +1,9 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 @model GastgezinPlaatsingsInfoPartial
+@{
+    var canEdit = User.HasClaims("groups", "group-coordinator", "group-superadmin");
+}
 
 <tr class="hide hidden @(Model.Index%2==0?"dark-row":"")" id="@Model.Index">
     <td colspan="@Model.Columns">
@@ -7,63 +11,79 @@
             @if (Model.PlaatsingsInfo != null)
             {
                 <div style="column-count: 2;">
-                                    <b>Gezinssamenstelling: </b> @Model.PlaatsingsInfo?.GezinsSamenstelling?.Replace(":;",": ")<br>
-                                    <b>Leeftijdsgroepen:</b> @Model.PlaatsingsInfo?.GezinsLeeftijden<br>
-                                    <b>Hobby's:</b> @Model.PlaatsingsInfo?.Hobbys<br>
-                                    <b>Talen:</b> @Model.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
-                                    <b>Slaapplaatsen tot 2 jaar:</b> @Model.PlaatsingsInfo?.KleineKinderen<br>
-                                    <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
-                                    <b>Slaapplaatsen Opmerking</b> @Model.PlaatsingsInfo?.SlaapplaatsOpmerking?.Replace(":;",": ")<br>
-                                    <b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte<br>
-                                    <b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy<br>
-                                    <b>Eigen toegangsdeur:</b> @Model.PlaatsingsInfo?.EigenToegangsdeur<br>
-                                    <b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten?.Replace(":;",": ")<br>
-                                    <b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken<br>
-                                    <b>Koelkast:</b> @Model.PlaatsingsInfo?.KoelkastRuimte<br>
-                                    <b>Eigen Sanitair:</b> @Model.PlaatsingsInfo?.Sanitair?.Replace(":;",": ")<br>
-                                    <b>Toegankelijk: </b> @Model.PlaatsingsInfo?.Toegankelijkheid<br>
-                                    <b>Roken:</b> @Model.PlaatsingsInfo?.Roken<br>
-                                    <b>Veilige opbergplaats:</b> @Model.PlaatsingsInfo?.VeiligeOpbergruimte<br>
-                                    <b>Huisdieren aanwezig:</b> @Model.PlaatsingsInfo?.HuisdierenAanwezig?.Replace(":;",": ")<br>
-                                    <b>Bezwaar tegen huisdieren:</b> @Model.PlaatsingsInfo?.HuisdierenMogelijk?.Replace(":;",": ")<br>
-                                    <b>Allergieën:</b> @Model.PlaatsingsInfo?.Allergieen?.Replace(":;",": ")<br>
-                                    <b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo?.VluchtelingOphalen?.Replace(":;",": ")<br>
-                                    <b>Basisscholen:</b> @Model.PlaatsingsInfo?.BasisscholenAanwezig<br>
-                                    <b>Elektra spatwaterdicht: </b> @Model.PlaatsingsInfo?.ElektraSpatwaterdicht<br>
-                                    <b>Daglicht verblijfsruimtes: </b> @Model.PlaatsingsInfo?.DaglichtVerblijfsruimte<br>
-                                    <b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer<br>
-                                    <b>Rookmelder(s) aanwezig: </b> @Model.PlaatsingsInfo?.RookmelderAanwezig<br>
-                                    <b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
-                                </div>
-                            <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
+                    <b>Gezinssamenstelling: </b> @Model.PlaatsingsInfo?.GezinsSamenstelling?.Replace(":;",": ")<br>
+                    <b>Leeftijdsgroepen:</b> @Model.PlaatsingsInfo?.GezinsLeeftijden<br>
+                    <b>Hobby's:</b> @Model.PlaatsingsInfo?.Hobbys<br>
+                    <b>Talen:</b> @Model.PlaatsingsInfo?.Talen?.Replace(":;",": ")<br>
+                    <b>Slaapplaatsen tot 2 jaar:</b> @Model.PlaatsingsInfo?.KleineKinderen<br>
+                    <b>Slaapplaatsen vanaf 3 jaar:</b> @Model.PlaatsingsInfo?.VolwassenenGrotereKinderen<br>
+                    <b>Slaapplaatsen Opmerking</b> @Model.PlaatsingsInfo?.SlaapplaatsOpmerking?.Replace(":;",": ")<br>
+                    <b>Slaapkamer ruimte:</b> @Model.PlaatsingsInfo?.SlaapkamerRuimte<br>
+                    <b>Privacy:</b> @Model.PlaatsingsInfo?.Privacy<br>
+                    <b>Eigen toegangsdeur:</b> @Model.PlaatsingsInfo?.EigenToegangsdeur<br>
+                    <b>Faciliteiten:</b> @Model.PlaatsingsInfo?.Faciliteiten?.Replace(":;",": ")<br>
+                    <b>Zelf koken:</b> @Model.PlaatsingsInfo?.ZelfKoken<br>
+                    <b>Koelkast:</b> @Model.PlaatsingsInfo?.KoelkastRuimte<br>
+                    <b>Eigen Sanitair:</b> @Model.PlaatsingsInfo?.Sanitair?.Replace(":;",": ")<br>
+                    <b>Toegankelijk: </b> @Model.PlaatsingsInfo?.Toegankelijkheid<br>
+                    <b>Roken:</b> @Model.PlaatsingsInfo?.Roken<br>
+                    <b>Veilige opbergplaats:</b> @Model.PlaatsingsInfo?.VeiligeOpbergruimte<br>
+                    <b>Huisdieren aanwezig:</b> @Model.PlaatsingsInfo?.HuisdierenAanwezig?.Replace(":;",": ")<br>
+                    <b>Bezwaar tegen huisdieren:</b> @Model.PlaatsingsInfo?.HuisdierenMogelijk?.Replace(":;",": ")<br>
+                    <b>Allergieën:</b> @Model.PlaatsingsInfo?.Allergieen?.Replace(":;",": ")<br>
+                    <b>Vluchteling ophalen:</b> @Model.PlaatsingsInfo?.VluchtelingOphalen?.Replace(":;",": ")<br>
+                    <b>Basisscholen:</b> @Model.PlaatsingsInfo?.BasisscholenAanwezig<br>
+                    <b>Elektra spatwaterdicht: </b> @Model.PlaatsingsInfo?.ElektraSpatwaterdicht<br>
+                    <b>Daglicht verblijfsruimtes: </b> @Model.PlaatsingsInfo?.DaglichtVerblijfsruimte<br>
+                    <b>Daglicht slaapkamer:</b> @Model.PlaatsingsInfo?.DaglichtSlaapkamer<br>
+                    <b>Rookmelder(s) aanwezig: </b> @Model.PlaatsingsInfo?.RookmelderAanwezig<br>
+                    <b>Beperkingen:</b> @Model.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
+                </div>
+                <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.PlaatsingsInfo?.OverigeOpmerkingen</div>
             }
             <div class="col-12"><p><b>Notities:</b> <br /> @Model.Notities</p> </div>
             @if (Model.GastgezinId > 0)
             {
-                <div class="form-group col-12">
-                    <label for="comments-@Model.GastgezinId">Opmerkingen</label>
-                    <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3"> @Model.VrijwilligerOpmerking</textarea>
-                </div>
-                <div class="form-group col-1">
-                    <button id="comments-save-@Model.GastgezinId" class="btn btn-primary">Opslaan</button>
-                </div>
+                //Show coordinator comment on "BeschikbareGastGezinnen page"
+                //Editing disabled for secretariaat
+                @if (Accessor.HttpContext.Request.Path.Value == "/BeschikbareGastgezinnen")
+                {
+                    <div class="form-group col-12">
+                        <label for="comments-@Model.GastgezinId">Opmerkingen</label>
+                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3" @(canEdit? "":"disabled")>@Model.CoordinatorOpmerking</textarea>
+                    </div>
+                    <div class="form-group col-1">
+                        <button id="comments-save-@Model.GastgezinId" class="btn btn-primary" @(canEdit? "":"hidden")>Opslaan</button>
+                    </div>
+                }
+                //Otherwise show on vrijwilliger comment
+                else
+                {
+                    <div class="form-group col-12">
+                        <label for="comments-@Model.GastgezinId">Opmerkingen</label>
+                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3">@Model.VrijwilligerOpmerking</textarea>
+                    </div>
+                    <div class="form-group col-1">
+                        <button id="comments-save-@Model.GastgezinId" class="btn btn-primary">Opslaan</button>
+                    </div>
+                }
             }
         </div>
     </td>
 </tr>
 
 <script>
-    $("#comments-save-@Model.GastgezinId").on("click", function (){
+    $("#comments-save-@Model.GastgezinId").on("click", function() {
         let comments = $("#comments-@Model.GastgezinId").val();
-        if(!comments) comments = "";
+        if (!comments) comments = "";
         let id = @Model.GastgezinId;
         $.ajax({
-            url: "/Gastgezin/UpdateCommentVrijwilliger",
+            url: "@((Accessor.HttpContext.Request.Path.Value == "/BeschikbareGastgezinnen")? "/Gastgezin/UpdateCommentCoordinator" : "/Gastgezin/UpdateCommentVrijwilliger")",
             type: "POST",
             dataType: 'text',
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: {"comments":comments, "gastgezinId":id},
-            success: function(){
+            data: { "comments": comments, "gastgezinId": id },
+            success: function() {
                 location.reload();
             },
             error: function() {
