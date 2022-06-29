@@ -712,7 +712,7 @@
                                                                 dataType: 'text',
                                                                 data: { "contactLogId": contactLogId, "gastgezinId": gastgezinId },
                                                                 success: function() {
-                                                                    $("#@("deleteContactLog"+contactLog.Id)").closest('tr').fadeOut(400,function() {
+                                                                    $("#@("deleteContactLog"+contactLog.Id)").closest('tr').fadeOut(400, function() {
                                                                         $(this).closest('tr').remove();
                                                                     });;
                                                                 },
@@ -752,6 +752,8 @@
                             <th scope="col">Leeftijdsgroep</th>
                             <th scope="col">Leeftijd</th>
                             <th scope="col">Uitgevoerd door</th>
+@*                            <th scope="col">Reden voor vertrek</th>
+                            <th scope="col">Vertrokken naar</th>*@
                         </tr>
                     </thead>
                     <tbody>
@@ -793,6 +795,16 @@
                                     }
                                 </td>
                                 <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
+@*                                @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                {
+                                    <td></td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                    <td></td>
+                                }*@
                             </tr>
                         }
                     </tbody>
