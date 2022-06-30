@@ -23,7 +23,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
             Roken = "";
             VeiligeOpbergruimte = "";
             HuisdierenAanwezig = "";
-            HuisdierenMogelijk = "";
+            BezwaarTegenHuisdieren = "";
             Allergieen = "";
             VluchtelingOphalen = "";
             BasisscholenAanwezig = "";
@@ -58,7 +58,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public string? Roken { get; set; }
         public string? VeiligeOpbergruimte { get; set; }
         public string? HuisdierenAanwezig { get; set; }
-        public string? HuisdierenMogelijk { get; set; }
+        public string? BezwaarTegenHuisdieren { get; set; }
         public string? Allergieen { get; set; }
         public string? VluchtelingOphalen { get; set; }
         public string? BasisscholenAanwezig { get; set; }

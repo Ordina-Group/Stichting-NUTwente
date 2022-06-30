@@ -477,7 +477,7 @@
           ],
           "Required": "false",
           "Object": "PlaatsingsInfo",
-          "ParameterName": "HuisdierenMogelijk"
+          "ParameterName": "BezwaarTegenHuisdieren"
         },
         {
           "Id": "37",
