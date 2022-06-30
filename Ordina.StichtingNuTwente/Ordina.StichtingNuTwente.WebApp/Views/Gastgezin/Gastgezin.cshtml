@@ -472,11 +472,15 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label for="departureReason">Reden voor vertrek</label>
+                                            <label for="departurDate@(p.Id)">Datum van vertrek</label>
+                                            <input type="date" class="form-control" name="Date" id="departurDate@(p.Id)" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="reasonForDeparture@(p.Id)">Reden voor vertrek</label>
                                             <textarea class="form-control" id="reasonForDeparture@(p.Id)" rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <label for="departureDestination">Nieuwe Bestemming</label>
+                                            <label for="departureDestination@(p.Id)">Nieuwe Bestemming</label>
                                             <select class="form-select" id="departureDestination@(p.Id)" rows="3">
                                                 <option value="Onbekend">Onbekend</option>
                                                 <option value="Oekraine">Terugkeer naar Oekraïne</option>
@@ -485,7 +489,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="departureComment">Commentaar</label>
+                                            <label for="departureComment@(p.Id)">Commentaar</label>
                                             <textarea class="form-control" id="departureComment@(p.Id)" rows="3"></textarea>
                                         </div>
                                     </div>
@@ -500,6 +504,7 @@
                             $("#deletePlaatsing@(p.Id)").on("click", function() {
                                 console.log("verwijder");
                                 let id = @p.Id;
+                                let departureDate = $("#departurDate@(p.Id)").val();
                                 let departureReason = $("#reasonForDeparture@(p.Id)").val();
                                 let departureDestination = $("#departureDestination@(p.Id)").val();
                                 let departureComment = $("#departureComment@(p.Id)").val();
@@ -509,7 +514,7 @@
                                         url: "/DeletePlaatsing",
                                         type: "DELETE",
                                         dataType: 'text',
-                                        data: { "PlaatsingId": id, "DepartureReason": departureReason, "DepartureDestination": departureDestination, "DepartureComment": departureComment },
+                                        data: { "departureDate": departureDate, "PlaatsingId": id, "DepartureReason": departureReason, "DepartureDestination": departureDestination, "DepartureComment": departureComment },
                                         success: function() {
                                             window.location.reload();
                                         },
