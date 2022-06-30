@@ -1,5 +1,6 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
 @using Ordina.StichtingNuTwente.Models.Models
+@using System.ComponentModel.DataAnnotations;
 @model GastgezinDetailViewModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
@@ -456,27 +457,71 @@
                                     <div class=col>
                                         @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                         {
-                                            <button type="button" id="@("deletePlaatsing"+p.Id)" class="btn-close float-right" aria-label="Close" title="Verwijder Plaatsing"></button>
+                                            <button type="button" id="@("deletePlaatsingButton"+p.Id)" class="btn-close float-right" data-toggle="modal" data-target="#deletePlaatsingModal@(p.Id)" onclick="$('#deletePlaatsingModal@(p.Id)').modal('show');" aria-label="Close" title="Verwijder Plaatsing"></button>
                                         }
-                                        <script>
-                                            $("#@("deletePlaatsing"+p.Id)").on("click", function() {
-                                                let id = @p.Id;
-                                                if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
-                                                    $.ajax({
-                                                        url: "/DeletePlaatsing?PlaatsingId=@p.Id",
-                                                        type: "DELETE",
-                                                        dataType: 'text',
-                                                        success: function() {
-                                                            window.location.reload();
-                                                        },
-                                                    });
-                                                }
-                                            })
-                                        </script>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="deletePlaatsingModal@(p.Id)" tabindex="-1" role="dialog" aria-labelledby="deletePlaatsingModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deletePlaatsingModalLabel@(p.Id)">Plaatsing verwijderen</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="departurDate@(p.Id)">Datum van vertrek</label>
+                                            <input type="date" class="form-control" name="Date" id="departurDate@(p.Id)" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="reasonForDeparture@(p.Id)">Reden voor vertrek</label>
+                                            <textarea class="form-control" id="reasonForDeparture@(p.Id)" rows="3"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="departureDestination@(p.Id)">Nieuwe Bestemming</label>
+                                            <select class="form-select" id="departureDestination@(p.Id)" rows="3">
+                                                <option value="Onbekend">Onbekend</option>
+                                                <option value="Oekraine">Terugkeer naar Oekraïne</option>
+                                                <option value="BinnenNederland">Vertrek naar bestemming binnen Nederland</option>
+                                                <option value="BuitenNederland">Vertrek naar bestemming buiten Nederland (niet Oekraïne)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="departureComment@(p.Id)">Commentaar</label>
+                                            <textarea class="form-control" id="departureComment@(p.Id)" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deletePlaatsingModal@(p.Id)').modal('hide');">Annuleren</button>
+                                        <button type="button" class="btn btn-danger" id="deletePlaatsing@(p.Id)">Bevestig verwijdering</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $("#deletePlaatsing@(p.Id)").on("click", function() {
+                                console.log("verwijder");
+                                let id = @p.Id;
+                                let departureDate = $("#departurDate@(p.Id)").val();
+                                let departureReason = $("#reasonForDeparture@(p.Id)").val();
+                                let departureDestination = $("#departureDestination@(p.Id)").val();
+                                let departureComment = $("#departureComment@(p.Id)").val();
+                                console.log(id + departureReason + departureDestination + departureComment);
+                                if (confirm("Weet je zeker dat je deze plaatsing wilt verwijderen?")) {
+                                    $.ajax({
+                                        url: "/DeletePlaatsing",
+                                        type: "DELETE",
+                                        dataType: 'text',
+                                        data: { "departureDate": departureDate, "PlaatsingId": id, "DepartureReason": departureReason, "DepartureDestination": departureDestination, "DepartureComment": departureComment },
+                                        success: function() {
+                                            window.location.reload();
+                                        },
+                                    });
+                                }
+                            });
+                        </script>
                     }
                 }
             </div>
@@ -749,11 +794,11 @@
                             <th scope="col">Datum</th>
                             <th scope="col">Type</th>
                             <th scope="col">Gender</th>
-                            <th scope="col">Leeftijdsgroep</th>
                             <th scope="col">Leeftijd</th>
                             <th scope="col">Uitgevoerd door</th>
-@*                            <th scope="col">Reden voor vertrek</th>
-                            <th scope="col">Vertrokken naar</th>*@
+                            <th scope="col">Reden voor vertrek</th>
+                            <th scope="col">Vertrokken naar</th>
+                            <th scope="col">Commentaar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -783,11 +828,10 @@
                                         break;
                                 }
                                 <td>@plaatsing.Gender</td>
-                                <td>@plaatsing.AgeGroup</td>
                                 <td>
                                     @if (plaatsing.Age == -1)
                                     {
-                                        <text>Onbekend</text>
+                                        <text></text>
                                     }
                                     else
                                     {
@@ -795,16 +839,34 @@
                                     }
                                 </td>
                                 <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
-@*                                @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
                                 {
-                                    <td></td>
-                                    <td></td>
+                                    <td>@plaatsing.DepartureReason</td>
+                                    <td>
+                                        @switch (@plaatsing.DepartureDestination)
+                                        {
+                                            case DepartureDestination.Oekraine:
+                                                <text>Terugkeer naar Oekraïne</text>
+                                                break;
+                                            case DepartureDestination.BinnenNederland:
+                                                <text>Bestemming binnen Nederland</text>
+                                                break;
+                                            case DepartureDestination.BuitenNederland:
+                                                <text>Buiten Nederland (niet Oekraïne)</text>
+                                                break;
+                                            case DepartureDestination.Onbekend:
+                                                <text>Onbekend</text>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@plaatsing.DepartureComment</td>
                                 }
                                 else
                                 {
                                     <td></td>
                                     <td></td>
-                                }*@
+                                    <td></td>
+                                }
                             </tr>
                         }
                     </tbody>
