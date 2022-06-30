@@ -179,7 +179,14 @@
             {
                 @foreach (var filter in extraColumns)
                 {
+                    if(filter.Field == "HuisdierenMogelijk")
+                    {
+                        <th scope="col">Bezwaar tegen huisdieren</th>
+                    }
+                    else
+                    {
                     <th scope="col">@filter.Field</th>
+                    }
                 }
             }
             <th scope="col" style="width:32px"></th>

@@ -17,6 +17,9 @@ public class PlaatsingViewModel
         Active = plaatsing.Active;
         Id = plaatsing.Id;
         Edit = false;
+        DepartureReason = plaatsing.DepartureReason;
+        DepartureDestination = plaatsing.DepartureDestination;
+        DepartureComment = plaatsing.DepartureComment;
     }
 
     public Gastgezin Gastgezin { get; set; }
@@ -40,4 +43,10 @@ public class PlaatsingViewModel
     public int Id { get; set; }
 
     public bool Edit { get; set; }
+
+    public string? DepartureReason { get; set; }
+
+    public DepartureDestination? DepartureDestination { get; set; }
+
+    public string? DepartureComment { get; set; }
 }
