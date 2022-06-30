@@ -88,7 +88,7 @@
             <option value="Roken">Roken</option>
             <option value="VeiligeOpbergruimte">Veilige opbergruimte</option>
             <option value="HuisdierenAanwezig">Huisdieren aanwezig</option>
-            <option value="HuisdierenMogelijk">Bezwaar tegen huisdieren</option>
+            <option value="BezwaarTegenHuisdieren">Bezwaar tegen huisdieren</option>
             <option value="Allergieen">Allergieën</option>
             <option value="VluchtelingOphalen">Vluchteling ophalen</option>
             <option value="BasisscholenAanwezig">Basisscholen aanwezig</option>
@@ -179,7 +179,7 @@
             {
                 @foreach (var filter in extraColumns)
                 {
-                    if(filter.Field == "HuisdierenMogelijk")
+                    if(filter.Field == "BezwaarTegenHuisdieren")
                     {
                         <th scope="col">Bezwaar tegen huisdieren</th>
                     }
