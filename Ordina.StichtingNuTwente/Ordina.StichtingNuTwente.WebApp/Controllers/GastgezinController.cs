@@ -178,7 +178,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("DeletePlaatsing")]
-        public IActionResult DeletePlaatsing(int plaatsingId)
+        public IActionResult DeletePlaatsing(int plaatsingId, string departureReason, DepartureDestination departureDestination,  string departureComment)
         {
             var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
             plaatsing.Active = false;
@@ -198,7 +198,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 DateTime = DateTime.Now,
                 Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
                 Active = false,
-                Gender = plaatsing.Gender
+                Gender = plaatsing.Gender,
+                DepartureReason = departureReason,
+                DepartureDestination = departureDestination,
+                DepartureComment = departureComment
             };
             _gastgezinService.AddPlaatsing(deletedPlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
