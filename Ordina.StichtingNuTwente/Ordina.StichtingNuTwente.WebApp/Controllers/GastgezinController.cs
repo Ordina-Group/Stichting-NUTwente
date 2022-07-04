@@ -32,7 +32,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [Route("gastgezin")]
-        public IActionResult Gastgezin(int id, bool? EditPlaatsingen = false, bool? EditReserveringen = false)
+        public IActionResult Gastgezin(int id, bool? EditPlaatsingen = false, bool? EditReserveringen = false, bool? EditVerwijderdePlaatsingen = false)
         {
             _userService.checkIfUserExists(User);
             var gastGezin = _gastgezinService.GetGastgezin(id);
@@ -90,12 +90,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 viewModel.EditReserveringen = true;
             }
+            if (EditVerwijderdePlaatsingen == true)
+            {
+                viewModel.EditVerwijderdePlaatsingen = true;
+            }
             var u = GetUser();
             viewModel.CanDelete = false;
             if (User.HasClaims("groups", "group-coordinator"))
                 viewModel.CanDelete = true;
             return View(viewModel);
         }
+
         [Authorize(Policy = "RequireCoordinatorRole")]
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
@@ -130,48 +135,47 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
         {
-            var gastgezinId = 0;
-            List<Plaatsing> plaatsingen = new();
-            var plaatsingsId = 0;
-            Plaatsing plaatsing = new();
-            var age = 0;
-            Gender gender = new();
-            AgeGroup ageGroup = new();
-            DateTime date = new();
-
-            foreach (var key in formCollection.Keys)
+            var gastgezinId = formCollection.FirstOrDefault(k => k.Key.StartsWith("GastgezinId")).Value;
+            var plaatsingIds = formCollection.Where(k => k.Key.StartsWith("PlaatsingsId")).Select(k => k.Value);
+            foreach (var id in plaatsingIds)
             {
-                if (key.StartsWith("GastgezinId"))
-                {
-                    gastgezinId = int.Parse(formCollection[key]);
-                }
-                if (key.StartsWith("PlaatsingsId"))
-                {
-                    plaatsingsId = int.Parse(formCollection[key]);
-                    plaatsing = _gastgezinService.GetPlaatsing(plaatsingsId);
-                }
-                if (key.StartsWith("Date"))
-                {
-                    date = DateTime.Parse(formCollection[key]);
-                }
-                if (key.StartsWith("Gender"))
-                {
-                    gender = Enum.Parse<Gender>(formCollection[key]);
-                }
-                if (key.StartsWith("Age_"))
-                {
-                    age = int.Parse(formCollection[key]);
-                }
-                if (key.StartsWith("AgeGroup"))
-                {
-                    ageGroup = Enum.Parse<AgeGroup>(formCollection[key]);
+                var plaatsing = _gastgezinService.GetPlaatsing(int.Parse(id));
+                var plaatsingData = formCollection.Where(k => k.Key.EndsWith(id));
 
-                    plaatsing.DateTime = date;
-                    plaatsing.Gender = gender;
-                    plaatsing.Age = age;
-                    plaatsing.AgeGroup = ageGroup;
-                    _gastgezinService.UpdatePlaatsing(plaatsing);
+                foreach (var keyValuePair in plaatsingData)
+                {
+                    var key = keyValuePair.Key;
+                    var value = keyValuePair.Value;
+                    if (key.StartsWith("Date"))
+                    {
+                        plaatsing.DateTime = DateTime.Parse(value);
+                    }
+                    else if (key.StartsWith("Gender"))
+                    {
+                        plaatsing.Gender = Enum.Parse<Gender>(value);
+                    }
+                    else if (key.StartsWith("Age_"))
+                    {
+                        plaatsing.Age = int.Parse(value);
+                    }
+                    else if (key.StartsWith("AgeGroup"))
+                    {
+                        plaatsing.AgeGroup = Enum.Parse<AgeGroup>(value);
+                    }
+                    else if (key.StartsWith("DepartureReason"))
+                    {
+                        plaatsing.DepartureReason = value;
+                    }
+                    else if (key.StartsWith("DepartureComment"))
+                    {
+                        plaatsing.DepartureComment = value;
+                    }
+                    else if (key.StartsWith("DepartureDestination"))
+                    {
+                        plaatsing.DepartureDestination = Enum.Parse<DepartureDestination>(value);
+                    }
                 }
+                _gastgezinService.UpdatePlaatsing(plaatsing);
             }
             return Redirect("/gastgezin?id=" + gastgezinId);
         }
@@ -206,6 +210,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _gastgezinService.AddPlaatsing(deletedPlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
         }
+
         [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("PlaatsReservering")]
         public IActionResult PlaatsReservering(int plaatsingId)
@@ -502,7 +507,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-
         [HttpPut]
         [Route("RejectBuddy/{gastgezinId}")]
         public IActionResult RejectBeingBuddy(int gastgezinId, string comment)
@@ -523,7 +527,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
 
         [Route("MijnGastgezinnen")]
         [HttpGet]
@@ -558,7 +561,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             FillBaseModel(mijnGastgezinnen);
             return View(mijnGastgezinnen);
         }
-
 
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("MijnGastgezinnen/{userId}")]
@@ -1017,7 +1019,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
-
 
         [HttpGet]
         [AllowAnonymous]
