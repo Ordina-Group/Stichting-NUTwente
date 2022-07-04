@@ -135,54 +135,71 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
         {
-            var gastgezinId = formCollection.FirstOrDefault(k => k.Key.StartsWith("GastgezinId")).Value;
-            var plaatsingIds = formCollection.Where(k => k.Key.StartsWith("PlaatsingsId")).Select(k => k.Value);
-            foreach (var id in plaatsingIds)
-            {
-                var plaatsing = _gastgezinService.GetPlaatsing(int.Parse(id));
-                var plaatsingData = formCollection.Where(k => k.Key.EndsWith(id));
+            string gastgezinIdString = formCollection.FirstOrDefault(k => k.Key.StartsWith("GastgezinId")).Value;
 
-                foreach (var keyValuePair in plaatsingData)
+            if (Int32.TryParse(gastgezinIdString, out int gastgezinId))
+            {
+                var plaatsingIds = formCollection.Where(k => k.Key.StartsWith("PlaatsingsId")).Select(k => k.Value);
+
+                foreach (var id in plaatsingIds)
                 {
-                    var key = keyValuePair.Key;
-                    var value = keyValuePair.Value;
-                    if (key.StartsWith("Date"))
+                    if (int.TryParse(id, out int plaatsingId))
                     {
-                        plaatsing.DateTime = DateTime.Parse(value);
-                    }
-                    else if (key.StartsWith("Gender"))
-                    {
-                        plaatsing.Gender = Enum.Parse<Gender>(value);
-                    }
-                    else if (key.StartsWith("Age_"))
-                    {
-                        plaatsing.Age = int.Parse(value);
-                    }
-                    else if (key.StartsWith("AgeGroup"))
-                    {
-                        plaatsing.AgeGroup = Enum.Parse<AgeGroup>(value);
-                    }
-                    else if (key.StartsWith("DepartureReason"))
-                    {
-                        plaatsing.DepartureReason = value;
-                    }
-                    else if (key.StartsWith("DepartureComment"))
-                    {
-                        plaatsing.DepartureComment = value;
-                    }
-                    else if (key.StartsWith("DepartureDestination"))
-                    {
-                        plaatsing.DepartureDestination = Enum.Parse<DepartureDestination>(value);
+                        var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
+
+                        if (plaatsing != null)
+                        {
+                            var plaatsingData = formCollection.Where(k => k.Key.EndsWith(id));
+
+                            foreach (var keyValuePair in plaatsingData)
+                            {
+                                var key = keyValuePair.Key;
+                                var value = keyValuePair.Value;
+
+                                if (key.StartsWith("Date") && DateTime.TryParse(value, out DateTime dateTime))
+                                {
+                                    plaatsing.DateTime = dateTime;
+                                }
+                                else if (key.StartsWith("Gender") && Enum.TryParse(value, out Gender gender))
+                                {
+                                    plaatsing.Gender = gender;
+                                }
+                                else if (key.StartsWith("Age_") && int.TryParse(value, out int age))
+                                {
+                                    plaatsing.Age = age;
+                                }
+                                else if (key.StartsWith("AgeGroup") && Enum.TryParse(value, out AgeGroup ageGroup))
+                                {
+                                    plaatsing.AgeGroup = ageGroup;
+                                }
+                                else if (key.StartsWith("DepartureReason"))
+                                {
+                                    plaatsing.DepartureReason = value;
+                                }
+                                else if (key.StartsWith("DepartureComment"))
+                                {
+                                    plaatsing.DepartureComment = value;
+                                }
+                                else if (key.StartsWith("DepartureDestination") && Enum.TryParse(value, out DepartureDestination departureDestination))
+                                {
+                                    plaatsing.DepartureDestination = departureDestination;
+                                }
+                            }
+                            _gastgezinService.UpdatePlaatsing(plaatsing);
+                        }
                     }
                 }
-                _gastgezinService.UpdatePlaatsing(plaatsing);
+                return Redirect("/gastgezin?id=" + gastgezinId);
             }
-            return Redirect("/gastgezin?id=" + gastgezinId);
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize(Policy = "RequireCoordinatorRole")]
         [Route("DeletePlaatsing")]
-        public IActionResult DeletePlaatsing(DateTime departureDate, int plaatsingId, string departureReason, DepartureDestination departureDestination,  string departureComment)
+        public IActionResult DeletePlaatsing(DateTime departureDate, int plaatsingId, string departureReason, DepartureDestination departureDestination, string departureComment)
         {
             var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
             plaatsing.Active = false;
@@ -1001,7 +1018,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (gastgezin != null && user != null)
                 {
                     var contactLog = gastgezin.ContactLogs.FirstOrDefault(c => c.Id == contactLogId);
-                    if(contactLog != null && (contactLog.Contacter.AADId == GetUser().AADId) || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                    if (contactLog != null && (contactLog.Contacter.AADId == GetUser().AADId) || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                     {
                         gastgezin.ContactLogs.Remove(contactLog);
                         _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
