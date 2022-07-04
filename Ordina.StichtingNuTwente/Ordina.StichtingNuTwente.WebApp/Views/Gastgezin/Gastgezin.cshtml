@@ -6,10 +6,15 @@
 
 @{
     ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
-
     var canEdit = User.HasClaims("groups", "group-vrijwilliger", "group-coordinator", "group-superadmin");
 }
 
+@*
+contains:
+- Title
+- Badge
+- Maintenance button
+*@
 <div class="row">
     <div class="col" id="TitleCol">
         <div class="card border-0 bg-transparent shadow-none" id="TitleCard">
@@ -52,6 +57,7 @@
         </div>
     </div>
 </div>
+@*Deletion comment*@
 @if (Model.GastGezin.Deleted)
 {
     <div class="row">
@@ -68,7 +74,15 @@
         </div>
     </div>
 }
+@*
+contains:
+- ContactInfo
+- Details
+- Notities
+- Nieuwe plaatsingen
+*@
 <div class="row">
+    @*ContactInfo*@
     <div class="col-3" id="ContactInfoCol">
         <div class="card" id="ContactInfoCard">
             <div class="card-body">
@@ -161,8 +175,15 @@
             </div>
         </div>
     </div>
-    <div class="col-9">
 
+    @*
+    contains:
+    - Details
+    - Notities
+    - Nieuwe plaatsingen
+    *@
+    <div class="col-9">
+        @*Details*@
         <div class="row">
             <div class="col" id="DetailsCol">
                 <div class="card" id="DetailsCard">
@@ -202,7 +223,13 @@
                 </div>
             </div>
         </div>
+        @*
+        contains:
+        - Notities
+        - Nieuwe plaatsingen
+        *@
         <div class="row">
+            @*Notities*@
             <div class="col g-4" id="NotitiesCol">
                 <div class="card" id="NotitiesCard">
                     <div class="card-body">
@@ -218,9 +245,9 @@
                     </div>
                 </div>
             </div>
+            @*Nieuwe plaatsingen*@
             @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
             {
-
                 <div class="col-5 g-4" id="NieuwePlaatsingCol">
                     <div class="card" id="NieuwePlaatsingCard">
                         <div class="card-body">
@@ -313,15 +340,19 @@
         </div>
     </div>
 </div>
-<div class="row">
-</div>
-
+@*
+contains:
+- Plaatsingen
+    *Delete Plaatsing Modal
+- Reserveringen
+*@
 <div class="row" id="PlaatsingenRow">
+    @*Plaatsingen*@
     <div class="col g-4" id="PlaatsingenCol">
         <div class="card" id="PlaatsingenCard">
             <div class="card-body">
 
-
+                @*Editmode true*@
                 @if (Model.EditPlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
@@ -416,6 +447,7 @@
                         }
                     }
                 }
+                @*Editmode false*@
                 else
                 {
                     <div class="row">
@@ -464,6 +496,7 @@
                                 </div>
                             </div>
                         </div>
+                        @*DeletePlaatsing modal*@
                         <div class="modal fade" id="deletePlaatsingModal@(p.Id)" tabindex="-1" role="dialog" aria-labelledby="deletePlaatsingModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -527,6 +560,7 @@
             </div>
         </div>
     </div>
+    @*Reserveringen*@
     <div class="col g-4" id="ReserveringenCol">
         <div class="card" id="ReserveringenCard">
             <div class="card-body">
@@ -701,6 +735,7 @@
         </div>
     </div>
 </div>
+@*Contactmomenten*@
 <div class="row">
     <div class="col g-4">
         <div class="card">
@@ -781,100 +816,238 @@
         </div>
     </div>
 </div>
-
-
+@*Plaatsingsgeschiedenis*@
 <div class="row" id="plaatsingsGeschiedenisRow">
     <div class="col g-4">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Plaatsingsgeschiedenis</h5>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Datum</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Leeftijd</th>
-                            <th scope="col">Uitgevoerd door</th>
-                            <th scope="col">Reden voor vertrek</th>
-                            <th scope="col">Vertrokken naar</th>
-                            <th scope="col">Commentaar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var plaatsing in Model.PlaatsingsGeschiedenis)
-                        {
-                            <tr>
-                                <td>@plaatsing.DateTime.ToShortDateString()</td>
-                                @switch (plaatsing.PlacementType)
+                @*Editmode true*@
+                @if (Model.EditVerwijderdePlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                {
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    {
+                        <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
+                        <h5 class="card-title">
+                            Plaatsingsgeschiedenis
+                            @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                            {
+                                <input class="btn btn-primary float-right" type="submit" value="Opslaan">
+                            }
+                        </h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Datum</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">Leeftijd</th>
+                                    <th scope="col">Uitgevoerd door</th>
+                                    <th scope="col">Reden voor vertrek</th>
+                                    <th scope="col">Vertrokken naar</th>
+                                    <th scope="col">Commentaar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var plaatsing in Model.PlaatsingsGeschiedenis)
                                 {
-                                    case PlacementType.Plaatsing:
-                                        <td class="text-success">@plaatsing.PlacementType</td>
-                                        break;
-                                    case PlacementType.Reservering:
-                                        <td class="text-warning">@plaatsing.PlacementType</td>
-                                        break;
-                                    case PlacementType.GeplaatsteReservering:
-                                        <td class="text-primary">@plaatsing.PlacementType</td>
-                                        break;
-                                    case PlacementType.VerwijderdePlaatsing:
-                                        <td class="text-danger">@plaatsing.PlacementType</td>
-                                        break;
-                                    case PlacementType.VerwijderdeReservering:
-                                        <td class="text-danger">@plaatsing.PlacementType</td>
-                                        break;
-                                    default:
-                                        <td></td>
-                                        break;
+                                    <tr>
+                                        <td>
+                                            @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                            {
+                                                <input type="hidden" name="PlaatsingsId_@plaatsing.Id" value="@plaatsing.Id" />
+                                                <input type="date" class="form-control" name="Date_@plaatsing.Id" value="@plaatsing.DateTime.ToString("yyyy-MM-dd")">
+                                            }
+                                            else
+                                            {
+                                                @plaatsing.DateTime.ToShortDateString()
+                                            }
+                                        </td>
+                                        @switch (plaatsing.PlacementType)
+                                        {
+                                            case PlacementType.Plaatsing:
+                                                <td class="text-success">@plaatsing.PlacementType</td>
+                                                break;
+                                            case PlacementType.Reservering:
+                                                <td class="text-warning">@plaatsing.PlacementType</td>
+                                                break;
+                                            case PlacementType.GeplaatsteReservering:
+                                                <td class="text-primary">@plaatsing.PlacementType</td>
+                                                break;
+                                            case PlacementType.VerwijderdePlaatsing:
+                                                <td class="text-danger">@plaatsing.PlacementType</td>
+                                                break;
+                                            case PlacementType.VerwijderdeReservering:
+                                                <td class="text-danger">@plaatsing.PlacementType</td>
+                                                break;
+                                            default:
+                                                <td></td>
+                                                break;
+                                        }
+                                        <td>@plaatsing.Gender</td>
+                                        <td>
+                                            @if (plaatsing.Age == -1)
+                                            {
+                                                <text></text>
+                                            }
+                                            else
+                                            {
+                                                @plaatsing.Age
+                                            }
+                                        </td>
+                                        <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
+                                        @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                        {
+                                            <td>
+                                                <textarea class="form-control" name="DepartureReason_@plaatsing.Id" rows="3">@plaatsing.DepartureReason</textarea>
+                                            </td>
+                                            <td>
+                                                <select class="form-select" name="DepartureDestination_@plaatsing.Id">
+                                                    @switch (@plaatsing.DepartureDestination)
+                                                    {
+                                                        case DepartureDestination.Oekraine:
+                                                            <option value="Oekraine" selected>Terugkeer naar Oekraïne</option>
+                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
+                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
+                                                            <option value="Onbekend">Onbekend</option>
+                                                            break;
+                                                        case DepartureDestination.BinnenNederland:
+                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
+                                                            <option value="BinnenNederland" selected>Bestemming binnen Nederland</option>
+                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
+                                                            <option value="Onbekend">Onbekend</option>
+                                                            break;
+                                                        case DepartureDestination.BuitenNederland:
+                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
+                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
+                                                            <option value="BuitenNederland" selected>Bestemming buiten Nederland (niet Oekraïne)</option>
+                                                            <option value="Onbekend">Onbekend</option>
+                                                            break;
+                                                        case DepartureDestination.Onbekend:
+                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
+                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
+                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
+                                                            <option value="Onbekend" selected>Onbekend</option>
+                                                            break;
+                                                    }
+                                                    </select>
+                                                </td>
+                                            <td><textarea class="form-control" name="DepartureComment_@plaatsing.Id" rows="3">@plaatsing.DepartureComment</textarea></td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        }
+                                    </tr>
                                 }
-                                <td>@plaatsing.Gender</td>
-                                <td>
-                                    @if (plaatsing.Age == -1)
+                            </tbody>
+                        </table>
+                    }
+                }
+                @*Editmode false*@
+                else
+                {
+                    <h5 class="card-title">
+                        Plaatsingsgeschiedenis
+                        @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                        {
+                            <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id title="Wijzigen" asp-route-EditVerwijderdePlaatsingen="true"></a>
+                        }
+                    </h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Datum</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Leeftijd</th>
+                                <th scope="col">Uitgevoerd door</th>
+                                <th scope="col">Reden voor vertrek</th>
+                                <th scope="col">Vertrokken naar</th>
+                                <th scope="col">Commentaar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var plaatsing in Model.PlaatsingsGeschiedenis)
+                            {
+                                <tr>
+                                    <td>@plaatsing.DateTime.ToShortDateString()</td>
+                                    @switch (plaatsing.PlacementType)
                                     {
-                                        <text></text>
+                                        case PlacementType.Plaatsing:
+                                            <td class="text-success">@plaatsing.PlacementType</td>
+                                            break;
+                                        case PlacementType.Reservering:
+                                            <td class="text-warning">@plaatsing.PlacementType</td>
+                                            break;
+                                        case PlacementType.GeplaatsteReservering:
+                                            <td class="text-primary">@plaatsing.PlacementType</td>
+                                            break;
+                                        case PlacementType.VerwijderdePlaatsing:
+                                            <td class="text-danger">@plaatsing.PlacementType</td>
+                                            break;
+                                        case PlacementType.VerwijderdeReservering:
+                                            <td class="text-danger">@plaatsing.PlacementType</td>
+                                            break;
+                                        default:
+                                            <td></td>
+                                            break;
+                                    }
+                                    <td>@plaatsing.Gender</td>
+                                    <td>
+                                        @if (plaatsing.Age == -1)
+                                        {
+                                            <text></text>
+                                        }
+                                        else
+                                        {
+                                            @plaatsing.Age
+                                        }
+                                    </td>
+                                    <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
+                                    @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                    {
+                                        <td>@plaatsing.DepartureReason</td>
+                                        <td>
+                                            @switch (@plaatsing.DepartureDestination)
+                                            {
+                                                case DepartureDestination.Oekraine:
+                                                    <text>Terugkeer naar Oekraïne</text>
+                                                    break;
+                                                case DepartureDestination.BinnenNederland:
+                                                    <text>Bestemming binnen Nederland</text>
+                                                    break;
+                                                case DepartureDestination.BuitenNederland:
+                                                    <text>Bestemming buiten Nederland (niet Oekraïne)</text>
+                                                    break;
+                                                case DepartureDestination.Onbekend:
+                                                    <text>Onbekend</text>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td>@plaatsing.DepartureComment</td>
                                     }
                                     else
                                     {
-                                        @plaatsing.Age
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                     }
-                                </td>
-                                <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
-                                @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
-                                {
-                                    <td>@plaatsing.DepartureReason</td>
-                                    <td>
-                                        @switch (@plaatsing.DepartureDestination)
-                                        {
-                                            case DepartureDestination.Oekraine:
-                                                <text>Terugkeer naar Oekraïne</text>
-                                                break;
-                                            case DepartureDestination.BinnenNederland:
-                                                <text>Bestemming binnen Nederland</text>
-                                                break;
-                                            case DepartureDestination.BuitenNederland:
-                                                <text>Buiten Nederland (niet Oekraïne)</text>
-                                                break;
-                                            case DepartureDestination.Onbekend:
-                                                <text>Onbekend</text>
-                                                break;
-                                        }
-                                    </td>
-                                    <td>@plaatsing.DepartureComment</td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     </div>
 </div>
+@*
+contains:
+- Delete button
+- Restore button
+*@
 @if (Model.CanDelete)
 {
     <div class="col col-1">
@@ -892,44 +1065,61 @@
         </div>
     </div>
 }
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Gastgezin verwijderen</h5>
-            </div>
-            <div class="form-group">
-                <label for="reasonForDelete">Reden voor verwijderen</label>
-                <textarea class="form-control" id="reasonForDelete" rows="3"></textarea>
-            </div>
-            <div class="modal-body">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="deleteForms" checked>
-                    <label class="form-check-label" for="deleteForms">Bijbehorende formulieren verwijderen</label>
+@*
+contains:
+- Delete modal
+- Restore modal
+*@
+<div manifest="modals">
+    @*Delete modal*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Gastgezin verwijderen</h5>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Annuleren</button>
-                <button type="button" class="btn btn-danger" id="deleteGastgezin">Bevestig verwijdering</button>
+                <div class="form-group">
+                    <label for="reasonForDelete">Reden voor verwijderen</label>
+                    <textarea class="form-control" id="reasonForDelete" rows="3"></textarea>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="deleteForms" checked>
+                        <label class="form-check-label" for="deleteForms">Bijbehorende formulieren verwijderen</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Annuleren</button>
+                    <button type="button" class="btn btn-danger" id="deleteGastgezin">Bevestig verwijdering</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="restoreModalLabel">Gastgezin herstellen</h5>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Annuleren</button>
-                <button type="button" class="btn btn-primary" id="restoreGastgezin">Bevestig herstelling</button>
+    @*Restore modal*@
+    <div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">Gastgezin herstellen</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Annuleren</button>
+                    <button type="button" class="btn btn-primary" id="restoreGastgezin">Bevestig herstelling</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+@*
+contains:
+- Delete gastgezin
+- Restore gastgezin
+- Submit contact log
+- Scroll on reload
+*@
 <script>
+    @*Delete gastgezin*@
     $("#deleteGastgezin").on("click", function() {
         let id = @Model.GastGezin.Id;
         let reasonForDelete = $("#reasonForDelete").val();
@@ -952,9 +1142,8 @@
             });
         }
     })
-</script>
 
-<script>
+    @*Restore gastgezin*@
     $("#restoreGastgezin").on("click", function() {
         let id = @Model.GastGezin.Id;
         if (confirm("Weet je zeker dat je dit gastgezin wilt herstellen?")) {
@@ -975,9 +1164,8 @@
             });
         }
     })
-</script>
 
-<script>
+    @*Submit contact log*@
     $("#ContactLogSubmit").on("click", function() {
         let id = @Model.GastGezin.Id;
         let date = $("#ContactLogDate").val();
@@ -997,9 +1185,8 @@
             });
         }
     })
-</script>
 
-<script>
+    @*Scroll on reload*@
     document.addEventListener("DOMContentLoaded", function(event) {
         var scrollpos = sessionStorage.getItem('scrollpos');
         if (scrollpos) {
