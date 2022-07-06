@@ -12,6 +12,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public Gastgezin()
         {
             VrijwilligerOpmerkingen = "";
+            CoordinatorOpmerkingen = "";
             ContactLogs = new List<ContactLog>();
         }
         public ICollection<Persoon>? Vluchtelingen { get; set; }
