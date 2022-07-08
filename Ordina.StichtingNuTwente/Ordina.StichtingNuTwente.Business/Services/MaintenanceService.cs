@@ -18,7 +18,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class MaintenanceService : IMaintenanceService
     {
-        private readonly IFormBusiness _formBusiness;
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
         private readonly IReactionService _reactionService;
@@ -32,9 +31,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IRepository<Antwoord> AntwoordRepo;
         private readonly IRepository<PlaatsingsInfo> PlaatsingsInfoRepo;
 
-        public MaintenanceService(IFormBusiness formBusiness, IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService, IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reactionRepo, IRepository<UserDetails> userDetailRepo, IRepository<Persoon> persoonRepo, IRepository<Adres> adresRepo, IRepository<Antwoord> antwoordRepo, IRepository<PlaatsingsInfo> plaatsingsInfoRepo, IRepository<Plaatsing> plaatsingsRepo)
+        public MaintenanceService(IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService, IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reactionRepo, IRepository<UserDetails> userDetailRepo, IRepository<Persoon> persoonRepo, IRepository<Adres> adresRepo, IRepository<Antwoord> antwoordRepo, IRepository<PlaatsingsInfo> plaatsingsInfoRepo, IRepository<Plaatsing> plaatsingsRepo)
         {
-            _formBusiness = formBusiness;
             _gastgezinService = gastgezinService;
             _userService = userService;
             _reactionService = reactionService;
@@ -99,8 +97,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             worksheet.Read();
             var rows = worksheet.Rows.ToArray();
             var rowNum = 0;
-            string file = FormHelper.GetFilenameFromId(formId);
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            Form questionForm = FormHelper.GetFormFromFileId(formId);
             var colomnIndexToQuestionID = new Dictionary<int, int>();
             foreach (var row in rows)
             {
@@ -404,8 +401,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             worksheet.Read();
             var rows = worksheet.Rows.ToArray();
             var rowNum = 0;
-            string file = FormHelper.GetFilenameFromId(formId);
-            Form questionForm = _formBusiness.createFormFromJson(formId, file);
+            Form questionForm = FormHelper.GetFormFromFileId(formId);
             var colomnIndexToQuestionID = new Dictionary<int, int>();
             foreach (var row in rows)
             {

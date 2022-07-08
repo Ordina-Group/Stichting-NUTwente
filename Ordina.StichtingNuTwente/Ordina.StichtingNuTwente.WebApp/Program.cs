@@ -21,8 +21,6 @@ builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromHours(8);
 });
 
-builder.Services.AddScoped<IFormBusiness, FormBusiness>();
-
 builder.Services.AddDatabaseContext(config);
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IUserService, UserService>();

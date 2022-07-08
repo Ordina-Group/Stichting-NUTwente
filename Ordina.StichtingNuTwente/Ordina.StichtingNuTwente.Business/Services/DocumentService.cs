@@ -1,13 +1,12 @@
 ﻿using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Data;
 using Ordina.StichtingNuTwente.Models.Models;
-
-using Newtonsoft.Json;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using System.Text;
 using OfficeOpenXml;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using FastExcel;
+using System.Text.Json;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -87,7 +86,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 var postCodeFixed = postCode.Trim().Replace(" ", "");
                 var json = webClient.DownloadString("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCodeFixed);
-                var gemeente = JsonConvert.DeserializeObject<LocatieApiResult>(json);
+                var gemeente = JsonSerializer.Deserialize<LocatieApiResult>(json);
                 var response = gemeente.Response;
                 if (response != null && response.Docs.Count > 0)
                 {
