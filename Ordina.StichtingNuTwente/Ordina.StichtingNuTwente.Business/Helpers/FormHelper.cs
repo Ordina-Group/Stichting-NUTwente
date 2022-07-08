@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using Ordina.StichtingNuTwente.Models.ViewModels;
+﻿using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Ordina.StichtingNuTwente.Business.Helpers
 {
@@ -30,17 +30,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                     break;
             }
             return fileName;
-
         }
 
         public static Form GetFormFromFileId(int id)
         {
-            var fileName = GetFilenameFromId(id);
-
-            string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
-            return JObject.Parse(jsonString).ToObject<Form>();
-
-
+            string fileName = GetFilenameFromId(id);
+            string jsonString = File.ReadAllText(fileName, Encoding.UTF8);
+            Form form = JsonSerializer.Deserialize<Form>(jsonString);
+            return form;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json.Linq;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Ordina.StichtingNuTwente.Test
 {
@@ -49,8 +50,8 @@ namespace Ordina.StichtingNuTwente.Test
 
         private static Form GetForm(string fileName)
         {
-            string jsonString = Encoding.UTF8.GetString(File.ReadAllBytes(fileName));
-            var form = JObject.Parse(jsonString).ToObject<Form>();
+            string jsonString = File.ReadAllText(fileName, Encoding.UTF8);
+            Form form = JsonSerializer.Deserialize<Form>(jsonString);
             return form;
         }
 
