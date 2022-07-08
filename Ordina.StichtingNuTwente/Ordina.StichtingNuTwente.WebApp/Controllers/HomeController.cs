@@ -16,17 +16,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IFormBusiness _formBusiness;
         private readonly IReactionService _reactionService;
         private readonly IUserService _userService;
         private readonly IPersoonService _persoonService;
         private readonly IMailService _mailService;
         private readonly IGastgezinService _gastgezinService;
 
-        public HomeController(ILogger<HomeController> logger, IFormBusiness formBusiness, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService)
+        public HomeController(ILogger<HomeController> logger, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService)
         {
             _logger = logger;
-            _formBusiness = formBusiness;
             _reactionService = reactionService;
             _userService = userService;
             _persoonService = persoonService;
@@ -41,9 +39,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IndexGastgezinAanmelding()
         {
             _userService.checkIfUserExists(User);
-            string file = FormHelper.GetFilenameFromId(1);
-
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            Form questionForm = FormHelper.GetFormFromFileId(1);
             FillBaseModel(questionForm);
             return View(questionForm);
         }
@@ -55,8 +51,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IndexGastgezinIntake(int? gastgezinId)
         {
             _userService.checkIfUserExists(User);
-            string file = FormHelper.GetFilenameFromId(2);
-            Form questionForm = _formBusiness.createFormFromJson(2, file);
+            Form questionForm = FormHelper.GetFormFromFileId(2);
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllDropdown());
@@ -89,8 +84,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IndexVluchtelingIntake()
         {
             _userService.checkIfUserExists(User);
-            string file = FormHelper.GetFilenameFromId(3);
-            Form questionForm = _formBusiness.createFormFromJson(3, file);
+            Form questionForm = FormHelper.GetFormFromFileId(3);
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllDropdown());
             FillBaseModel(questionForm);
@@ -104,8 +98,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IndexVrijwilligerAanmelding()
         {
             _userService.checkIfUserExists(User);
-            string file = FormHelper.GetFilenameFromId(4);
-            Form questionForm = _formBusiness.createFormFromJson(1, file);
+            Form questionForm = FormHelper.GetFormFromFileId(4);
             FillBaseModel(questionForm);
             return View(questionForm);
         }
