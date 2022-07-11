@@ -402,108 +402,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return viewModel;
         }
 
-        public byte[] GenerateExportCSV(int? formId = null)
-        {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            byte[] retVal = null;
-            List<AnswerListModel> viewModel = new List<AnswerListModel>();
-            var dbItems = ReactieRepository.GetAll("Antwoorden").ToList();
-            if (formId != null)
-            {
-                dbItems = dbItems.Where(f => f.FormulierId == formId.Value).ToList();
-                var form = FormHelper.GetFormFromFileId(formId.Value);
-                var templateFile = new FileInfo("template.xlsx");
-                var outputFile = new FileInfo("output.xlsx");
-
-                //Create a worksheet with some rows
-                var worksheet = new Worksheet();
-                var rows = new List<Row>();
-
-                var totalRows = dbItems.Count() + 1;
-                var dbitemIndex = 0;
-                for (int rowNumber = 1; rowNumber <= totalRows; rowNumber++)
-                {
-                    List<Cell> cells = new List<Cell>();
-                    if (rowNumber == 1)
-                    {
-                        cells.Add(new Cell(1, "ReactieId"));
-                        cells.Add(new Cell(2, "Datum ingevuld"));
-                        var colum = 2;
-                        var questions = new List<Question>();
-                        foreach (var section in form.Sections)
-                        {
-                            foreach (var question in section.Questions)
-                            {
-                                questions.Add(question);
-                            }
-                        }
-                        var questionsOrderedById = questions.OrderBy(q => q.Id).ToList();
-                        for (int i = 1; i <= questionsOrderedById.MaxBy(q => q.Id).Id; i++)
-                        {
-                            var question = questionsOrderedById.FirstOrDefault(q => q.Id == i);
-                            if (question != null)
-                            {
-                                colum++;
-                                cells.Add(new Cell(colum, question.Text));
-                            }
-                            else
-                            {
-                                colum++;
-                                cells.Add(new Cell(colum, ""));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        cells.Add(new Cell(1, dbItems[dbitemIndex].Id));
-                        cells.Add(new Cell(2, (dbItems[dbitemIndex].DatumIngevuld).ToString("dd/MM/yyyy HH:mm:ss")));
-                        var colum = 2;
-                        var answersOrderedById = dbItems[dbitemIndex].Antwoorden.OrderBy(a => a.IdVanVraag).ToList();
-                        var maxQuestionId = 0;
-                        if (answersOrderedById.Count > 0)
-                        {
-                            var maxAwnser = answersOrderedById.MaxBy(a => a.IdVanVraag);
-                            if (maxAwnser != null)
-                                maxQuestionId = maxAwnser.IdVanVraag;
-                        }
-                        for (int i = 1; i <= maxQuestionId; i++)
-                        {
-                            var awnser = answersOrderedById.FirstOrDefault(a => a.IdVanVraag == i);
-                            if (awnser != null)
-                            {
-                                colum++;
-                                cells.Add(new Cell(colum, awnser.Response));
-                            }
-                            else
-                            {
-                                colum++;
-                                cells.Add(new Cell(colum, ""));
-                            }
-                        }
-                        dbitemIndex++;
-                    }
-                    rows.Add(new Row(rowNumber, cells));
-                }
-                worksheet.Rows = rows;
-
-                // Create an instance of FastExcel
-                using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(templateFile, outputFile))
-                {
-                    // Write the data
-                    fastExcel.Write(worksheet, "sheet1");
-                }
-                using (var filestream = outputFile.OpenRead())
-                {
-                    BinaryReader br = new BinaryReader(filestream);
-                    long numBytes = new FileInfo(outputFile.Name).Length;
-                    retVal = br.ReadBytes((int)numBytes);
-                }
-                outputFile.Delete();
-            }
-
-            return retVal;
-        }
-
         public bool Delete(int reactionId, string comment, UserDetails user)
         {
             var existingReaction = ReactieRepository.GetById(reactionId, "Antwoorden,Comments");
@@ -513,25 +411,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             existingReaction.Comments.Add(new Comment(comment, user, CommentType.DELETION));
 
             ReactieRepository.Update(existingReaction);
-            /* Old delete, is now soft delete
-            var awnserRepository = new Repository<Antwoord>(_context);
-            var personRepository = new Repository<Persoon>(_context);
-            var adresRepository = new Repository<Adres>(_context);*/
-
-            /*foreach (var antwoord in existingReaction.Antwoorden)
-            {
-                awnserRepository.Delete(antwoord);
-            }
-
-            var person = personRepository.GetAll("Reactie").FirstOrDefault(r => r.Reactie != null && r.Reactie.Id == reactionId);
-            if (person != null)
-            {
-                personRepository.Delete(person);
-            }
-
-            var adres = adresRepository.GetAll("Reactie").FirstOrDefault(a => a.Reactie != null && a.Reactie.Id == reactionId);
-            if (adres != null)
-                adresRepository.Delete(adres);*/
             return true;
         }
 
