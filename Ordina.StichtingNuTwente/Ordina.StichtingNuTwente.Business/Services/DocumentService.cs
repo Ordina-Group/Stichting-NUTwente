@@ -6,7 +6,7 @@ using System.Text;
 using OfficeOpenXml;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using FastExcel;
-using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -40,7 +40,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 if (gastgezin.Contact?.Adres?.Postcode != null)
                 {
                     var postcode = gastgezin.Contact.Adres.Postcode;
-                    gemeente = GemeenteFromPostcode(postcode);
+                    gemeente = GemeenteFromPostcodeAsync(postcode).Result;
                     if (gemeente == "")
                     {
                         gemeente = postcode;
@@ -96,20 +96,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return Encoding.ASCII.GetBytes(text);
         }
 
-        public string GemeenteFromPostcode(string postCode)
+        public async Task<string> GemeenteFromPostcodeAsync(string postCode)
         {
-            using (var webClient = new System.Net.WebClient())
+            using HttpClient client = new() { };
             {
                 var postCodeFixed = postCode.Trim().Replace(" ", "");
-                var json = webClient.DownloadString("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCodeFixed);
-                var gemeente = JsonSerializer.Deserialize<LocatieApiResult>(json);
+                var gemeente = await client.GetFromJsonAsync<LocatieApiResult>("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCodeFixed);
                 var response = gemeente.Response;
                 if (response != null && response.Docs.Count > 0)
                 {
                     return response.Docs[0].Gemeentenaam;
                 }
             }
-
             return "";
         }
 
