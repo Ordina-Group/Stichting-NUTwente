@@ -62,8 +62,24 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
             }
             var sorted = gastgezinnenPerGemeente.OrderBy(x => x.Key).ToList();
-            var text = $"Aantal plaatsingen gastgezinnen NuTwente d.d. {DateTime.Now.ToShortDateString()} \n";
-            foreach(var gastgezinGemeentePair in sorted)
+            var text = $"Plaatsingen bij gastgezinnen NuTwente per gemeente d.d. {DateTime.Now.ToShortDateString()}\n\n";
+            var globalTotalVluchtelingen = gastgezinnenMetVluchtelingen.SelectMany(g => g.Plaatsingen.Where(p => p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering))).Count();
+            var totalGastgezinnen = allGastgezinnen.Count;
+            text += $"Totaal: {globalTotalVluchtelingen} vluchtelingen in {gastgezinnenMetVluchtelingen.Count()} gastgezinnen. {totalGastgezinnen} gastgezinnen zijn verbonden aan NuTwente\n\n\n";
+
+            foreach (var gastgezinGemeentePair in sorted)
+            {
+                var totalVluchtelingen = 0;
+                foreach (var gastgezin in gastgezinGemeentePair.Value)
+                {
+                    var vluchtelingen = gastgezin.Plaatsingen.Count(p => p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering));
+                    totalVluchtelingen += vluchtelingen;
+                }
+                text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
+            }
+            text += $"\n--------------------------------------------------------------------------------\n";
+            text += $"\nGegevens ter verificatie:\n\n";
+            foreach (var gastgezinGemeentePair in sorted)
             {
                 var gezinnen = "";
                 var sortedGezinnen = gastgezinGemeentePair.Value.OrderBy(x=> x.IntakeFormulier?.Id);
@@ -71,11 +87,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 foreach (var gastgezin in sortedGezinnen)
                 {
                     var vluchtelingen = gastgezin.Plaatsingen.Count( p=> p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering));
-                    gezinnen += $"* {gastgezin.IntakeFormulier?.Id} - {gastgezin.Contact.Naam} - {gastgezin.Contact.Adres.Straat} {gastgezin.Contact.Adres.Woonplaats} - {vluchtelingen} p \n";
+                    gezinnen += $"* {gastgezin.IntakeFormulier?.Id} - {gastgezin.Contact.Naam} - {gastgezin.Contact.Adres.Straat} {gastgezin.Contact.Adres.Woonplaats} - {vluchtelingen} p\n";
                     totalVluchtelingen += vluchtelingen;
                 }
-                text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen} \n";
-                text += gezinnen;
+                text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
+                text += $"{gezinnen}\n";
             }
             return Encoding.ASCII.GetBytes(text);
         }
