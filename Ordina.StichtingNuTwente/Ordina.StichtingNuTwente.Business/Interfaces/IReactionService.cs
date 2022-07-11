@@ -18,7 +18,5 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 
         public List<AnswerListModel> GetAllRespones(int? form = null);
         public IEnumerable<Reactie> GetDeletedReacties();
-
-        public byte[] GenerateExportCSV(int? formId = null);
     }
 }

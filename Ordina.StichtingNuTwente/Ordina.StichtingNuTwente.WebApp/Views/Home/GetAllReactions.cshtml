@@ -40,12 +40,6 @@
                 <div class="col-md-11">
                     <h3>@form.First().FormulierNaam</h3>
                 </div>
-                @if (Accessor.HttpContext.Request.Path.Value != "/mijnReacties")
-                {
-                    <div class="col-md-1">
-                        <a class="badge badge-pill badge-info pointer float-right p-2 m-2" href="/downloadexport15filefromform?formId=@form.First().FormulierId">Export</a>
-                    </div>
-                }
             </div>
 
 
