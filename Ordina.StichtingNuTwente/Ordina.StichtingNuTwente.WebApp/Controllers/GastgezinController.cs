@@ -750,7 +750,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var vrijwilligers = _userService.GetAllDropdownUsers().ToList();
             foreach (var intakerOrBuddyChange in intakerOrBuddyChangeModels)
             {
-                if (int.TryParse(intakerOrBuddyChange.Id, out int gastgezinId))
+                int gastgezinId = 0;
+                if (int.TryParse(intakerOrBuddyChange.Id, out gastgezinId))
                 {
                     var gastgezin = _gastgezinService.GetGastgezin(gastgezinId);
                     if (gastgezin == null)
@@ -764,7 +765,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         }
                         else
                         {
-                            if (int.TryParse(intakerOrBuddyChange.BuddyId, out int buddyId))
+                            int buddyId = 0;
+                            if (int.TryParse(intakerOrBuddyChange.BuddyId, out buddyId))
                             {
                                 var buddy = vrijwilligers.FirstOrDefault(v => v.Id == buddyId);
                                 if (buddy != null && buddy.Id != gastgezin.Buddy?.Id)
@@ -784,7 +786,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         }
                         else
                         {
-                            if (int.TryParse(intakerOrBuddyChange.IntakerId, out int intakerId))
+                            int intakerId = 0;
+                            if (int.TryParse(intakerOrBuddyChange.IntakerId, out intakerId))
                             {
                                 var intaker = vrijwilligers.FirstOrDefault(v => v.Id == intakerId);
                                 if (intaker != null && intaker.Id != gastgezin.Begeleider?.Id)
@@ -795,9 +798,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                             }
                         }
                     }
+
                     _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
                 }
+
             }
+
             return Ok();
         }
 

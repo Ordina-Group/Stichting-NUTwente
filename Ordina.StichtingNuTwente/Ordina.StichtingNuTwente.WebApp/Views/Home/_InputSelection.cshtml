@@ -167,10 +167,8 @@
             {
                 @if (q.Answer != null)
                 {
-                    <p style="font-size: 0.9rem;">@q.Answer</p>
+                    <p style="font-size: 0.8rem;">Origineel antwoord: @q.Answer</p>
                 }
-                else
-                {
                 <select name="Antwoord" class="form-select question" id="question-@q.Id">
                     @foreach (UserDetails ud in Model.AllUsers)
                     {
@@ -184,9 +182,9 @@
                         }
                     }
                 </select>
-                }
                 break;
             }
+
             goto default;
         }
 
@@ -198,7 +196,7 @@
         }
     case "deleted":
         {
-            <p style="font-size: 0.9rem;">@q.Answer</p>
+            <p style="font-size: 0.8rem;">Orgineel antwoord: @q.Answer</p>
             break;
         }
 
