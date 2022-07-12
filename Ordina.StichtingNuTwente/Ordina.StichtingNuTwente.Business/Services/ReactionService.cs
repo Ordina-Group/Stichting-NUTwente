@@ -144,7 +144,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbAdres = new Adres();
             var dbUser = new UserDetails();
             var dbPlaatsingsInfo = new PlaatsingsInfo();
-            var dbGastgezin = GastgezinRepository.GetFirstOrDefault(g => (gastgezinId != null && g.Id == gastgezinId) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id), "IntakeFormulier,AanmeldFormulier,PlaatsingsInfo");
+            var dbGastgezin = GastgezinRepository.GetFirstOrDefault(g => (gastgezinId != null && g.Id == gastgezinId) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id), "IntakeFormulier,AanmeldFormulier,PlaatsingsInfo,Buddy,Begeleider");
             dbGastgezin = dbGastgezin ?? new Gastgezin();
             if (id != 0)
             {
