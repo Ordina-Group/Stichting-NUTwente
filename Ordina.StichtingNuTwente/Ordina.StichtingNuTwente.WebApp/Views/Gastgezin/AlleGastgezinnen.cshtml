@@ -117,7 +117,8 @@
                             <td>
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin") && (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.BegeleiderId <= 0))
                                 {
-                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id">
+                                    bool inDropdown = Model.Vrijwilligers.Select(v => v.Id).Contains(mijnGastgezin.BegeleiderId);
+                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.BegeleiderId == 0)? "": "outline: red solid 2px;")">
                                         @if (mijnGastgezin.BegeleiderId > 0)
                                         {
                                             <option selected="selected" value="@mijnGastgezin.BegeleiderId">@mijnGastgezin.Begeleider</option>
@@ -144,12 +145,15 @@
                             <td>
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                 {
-                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id">
+                                    bool inDropdown = Model.Vrijwilligers.Select(v => v.Id).Contains(mijnGastgezin.BuddyId);
+                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.BuddyId == 0)? "": "outline: red solid 2px;")">
                                         @if (mijnGastgezin.BuddyId > 0)
                                         {
                                             <option selected="selected" value="@mijnGastgezin.BuddyId">@mijnGastgezin.Buddy</option>
                                             <option value="-"></option>
-                                        }else{
+                                        }
+                                        else
+                                        {
                                             <option selected="selected" value="-"></option>
                                         }
                                         @foreach (var vrijwilliger in Model.Vrijwilligers)
@@ -159,7 +163,6 @@
                                                 <option value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                             }
                                         }
-                                        
                                     </select>
                                 }
                                 else
