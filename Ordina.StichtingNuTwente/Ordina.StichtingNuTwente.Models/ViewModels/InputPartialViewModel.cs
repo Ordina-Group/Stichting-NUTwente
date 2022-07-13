@@ -8,5 +8,6 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
         public Question Question { get; set; }
         public UserDetails? UserDetails { get; set; }
         public List<UserDetails> AllUsers { get; set; }
+        public Gastgezin? Gastgezin { get; set; }
     }
 }
