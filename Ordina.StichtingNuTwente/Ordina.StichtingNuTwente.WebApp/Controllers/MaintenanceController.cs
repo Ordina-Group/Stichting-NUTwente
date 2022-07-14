@@ -41,12 +41,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var vrijwilligers = _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ThenBy(e => e.LastName).ToList();
             foreach (var vrijwilliger in vrijwilligers)
             {
-                viewModel.Vrijwilligers.Add(new Vrijwilliger
-                {
-                    Id = vrijwilliger.Id,
-                    Naam = $"{vrijwilliger.FirstName} {vrijwilliger.LastName}",
-                    Email = vrijwilliger.Email
-                });
+                viewModel.Vrijwilligers.Add(new Vrijwilliger(vrijwilliger));
             }
 
             return View(viewModel);
