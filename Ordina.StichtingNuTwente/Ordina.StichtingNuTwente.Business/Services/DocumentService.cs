@@ -31,7 +31,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public byte[] GenerateGastgezinnenPerGemeente()
         {
-            var allGastgezinnen = GastgezinRepo.GetAll(IGastgezinService.IncludeProperties).Where(g => !g.Deleted).ToList();
+            var allGastgezinnen = GastgezinRepo.GetAll(IGastgezinService.IncludeProperties).Where(g => !g.Deleted && g.IntakeFormulier != null).ToList();
             var gastgezinnenMetVluchtelingen = allGastgezinnen.Where(g => g.Plaatsingen != null && g.Plaatsingen.Where(p => p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering)).Count() > 0);
             var gastgezinnenPerGemeente = new Dictionary<string, List<Gastgezin>>();
             foreach (var gastgezin in gastgezinnenMetVluchtelingen)
@@ -64,7 +64,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var sorted = gastgezinnenPerGemeente.OrderBy(x => x.Key).ToList();
             var text = $"Plaatsingen bij gastgezinnen NuTwente per gemeente d.d. {DateTime.Now.ToShortDateString()}\n\n";
             var globalTotalVluchtelingen = gastgezinnenMetVluchtelingen.SelectMany(g => g.Plaatsingen.Where(p => p.Active && (p.PlacementType == PlacementType.Plaatsing || p.PlacementType == PlacementType.GeplaatsteReservering))).Count();
-            var totalGastgezinnen = allGastgezinnen.Count;
+            var totalGastgezinnen = allGastgezinnen.Count();
             text += $"Totaal: {globalTotalVluchtelingen} vluchtelingen in {gastgezinnenMetVluchtelingen.Count()} gastgezinnen. {totalGastgezinnen} gastgezinnen zijn verbonden aan NuTwente\n\n\n";
 
             foreach (var gastgezinGemeentePair in sorted)
