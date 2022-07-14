@@ -5,7 +5,7 @@
 {
     <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm mb-3 justify-content-between">
         <div class="container">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand">
                 <img src="/favicon.ico" alt="" width="44" height="44">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,9 +13,6 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link @(Accessor.HttpContext.Request.Path.Value == "/" ? "active" : "" )" href="/">Home</a>
-                    </li>
                     @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
                         <li class="nav-item dropdown">
@@ -36,7 +33,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/BeschikbareGastgezinnen?statusFilter=Beschikbaar">Beschikbare Gastgezinnen</a>
-                                <a class="dropdown-item" href="/AlleGastgezinnen">Intakeplanning Gastgezinnen</a>
+                                <a class="dropdown-item" href="/AlleGastgezinnen">Alle Gastgezinnen</a>
                                 <a class="dropdown-item" href="/getnutwenteoverheidreacties987456list">Reacties</a>
                                 <a class="dropdown-item" href="/Vrijwilligers">Vrijwilligers Housing</a>
                             </div>
@@ -49,7 +46,6 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                             {
-                                <a class="dropdown-item" href="/VluchtelingIntake">Vluchteling Intake</a>
                                 <a class="dropdown-item" href="/GastgezinIntake">Gastgezin Intake</a>
                             }
                             <a class="dropdown-item" href="/GastgezinAanmelding">Gastgezin Aanmelding</a>
