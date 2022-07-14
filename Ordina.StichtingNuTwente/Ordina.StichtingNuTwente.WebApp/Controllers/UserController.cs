@@ -48,7 +48,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id, allGastgezinnen);
                 var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
                 var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
-                viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes});
+                viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes });
 
             }
             return View(viewModel);
@@ -59,27 +59,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult Overview()
         {
             _userService.checkIfUserExists(User);
-            if(User.HasClaim("groups", "group-coordinator"))
+            if (User.HasClaim("groups", "group-coordinator"))
             {
                 return Redirect("/BeschikbareGastgezinnen");
-            }else if(User.HasClaim("groups", "group-secretariaat"))
+            }
+            else if (User.HasClaim("groups", "group-secretariaat"))
             {
                 return Redirect("/AlleGastgezinnen");
-            }else if (User.HasClaim("groups", "group-vrijwilliger"))
+            }
+            else if (User.HasClaim("groups", "group-vrijwilliger"))
             {
                 return Redirect("/MijnGastgezinnen");
             }
             UserDetails userDetails = _userService.GetUserByAADId(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
-            if(User.HasClaim("groups", "group-coordinator"))
-            {
-                return Redirect("/BeschikbareGastgezinnen");
-            }else if(User.HasClaim("groups", "group-secretariaat"))
-            {
-                return Redirect("/AlleGastgezinnen");
-            }else if (User.HasClaim("groups", "group-vrijwilliger"))
-            {
-                return Redirect("/MijnGastgezinnen");
-            }
             return View(new UserViewModel(userDetails));
         }
 
@@ -106,7 +98,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         //[Authorize]
         [AllowAnonymous]
-       // [Route("user/MailGroup")]
+        // [Route("user/MailGroup")]
         [HttpPost]
         //[ActionName("MailGroup")]
         public IActionResult MailGroup(string onderwerp, string bericht, string emailAdressen)
