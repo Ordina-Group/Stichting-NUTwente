@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ordina.StichtingNuTwente.Models.Models;
 
 namespace Ordina.StichtingNuTwente.Models.ViewModels
 {
     public class MijnGastgezinnenModel : BaseModel
     {
-        public MijnGastgezinnenModel()
+        public MijnGastgezinnenModel(UserDetails user)
         {
             MijnGastgezinnen = new List<GastgezinViewModel>();
+            Vrijwilliger = new Vrijwilliger(user);
         }
 
         public List<GastgezinViewModel> MijnGastgezinnen { get; set; }
         public string? GastgezinnenVan {  get; set; }
+        public Vrijwilliger Vrijwilliger { get; set; }
     }
 }
