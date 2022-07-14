@@ -70,6 +70,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 return Redirect("/MijnGastgezinnen");
             }
             UserDetails userDetails = _userService.GetUserByAADId(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value);
+            if(User.HasClaim("groups", "group-coordinator"))
+            {
+                return Redirect("/BeschikbareGastgezinnen");
+            }else if(User.HasClaim("groups", "group-secretariaat"))
+            {
+                return Redirect("/AlleGastgezinnen");
+            }else if (User.HasClaim("groups", "group-vrijwilliger"))
+            {
+                return Redirect("/MijnGastgezinnen");
+            }
             return View(new UserViewModel(userDetails));
         }
 
