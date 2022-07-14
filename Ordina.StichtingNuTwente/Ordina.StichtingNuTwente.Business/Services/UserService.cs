@@ -23,22 +23,22 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
         public UserDetails? GetUserByAADId(string id)
         {
-            return UserDetailRepository.GetAll().FirstOrDefault(u => u.AADId == id);
+            return UserDetailRepository.GetAll("Address").FirstOrDefault(u => u.AADId == id);
         }
 
         public UserDetails? GetUserById(int id)
         {
-            return UserDetailRepository.GetAll().FirstOrDefault(u => u.Id == id);
+            return UserDetailRepository.GetAll("Address").FirstOrDefault(u => u.Id == id);
         }
 
         public ICollection<UserDetails> GetUsersByRole(string role)
         {
-            return UserDetailRepository.GetAll().Where(u => u.Roles.Contains(role)).ToList();
+            return UserDetailRepository.GetAll("Address").Where(u => u.Roles.Contains(role)).ToList();
         }
 
         public ICollection<UserDetails> GetAllUsers()
         {
-            return UserDetailRepository.GetAll().ToList();
+            return UserDetailRepository.GetAll("Address").ToList();
         }
 
         public List<AnswerListModel> GetMyReacties(string AADId)

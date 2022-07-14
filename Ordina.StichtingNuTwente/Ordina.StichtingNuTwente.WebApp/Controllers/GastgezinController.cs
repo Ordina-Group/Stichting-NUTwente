@@ -552,9 +552,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
 
-            var mijnGastgezinnen = new MijnGastgezinnenModel();
-
             var user = GetUser();
+            var mijnGastgezinnen = new MijnGastgezinnenModel(user);
+
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
             if (filter != null)
             {
@@ -587,9 +587,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         {
             _userService.checkIfUserExists(User);
 
-            var mijnGastgezinnen = new MijnGastgezinnenModel();
-
             var user = _userService.GetUserById(userId);
+            var mijnGastgezinnen = new MijnGastgezinnenModel(user);
+
             if (user == null)
                 return Redirect("Error");
             mijnGastgezinnen.GastgezinnenVan = user.FirstName + " " + user.LastName;
@@ -632,12 +632,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             var vrijwilligers = _userService.GetAllDropdownUsers().OrderBy(u => u.FirstName).ToList();
             foreach (var vrijwilliger in vrijwilligers.OrderBy(e => e.FirstName).ThenBy(e => e.LastName))
             {
-                alleGastgezinnen.Vrijwilligers.Add(new Vrijwilliger
-                {
-                    Id = vrijwilliger.Id,
-                    Naam = $"{vrijwilliger.FirstName}",
-                    Email = vrijwilliger.Email
-                });
+                alleGastgezinnen.Vrijwilligers.Add(new Vrijwilliger(vrijwilliger));
             }
             var user = GetUser();
             IEnumerable<Gastgezin> gastGezinnen = _gastgezinService.GetAllGastgezinnen();
