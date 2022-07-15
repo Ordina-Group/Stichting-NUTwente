@@ -545,56 +545,43 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [Route("MijnGastgezinnen")]
-        [HttpGet]
-        [ActionName("MijnGastgezinnen")]
-        public IActionResult MijnGastgezinnen(string? filter)
-        {
-            _userService.checkIfUserExists(User);
-
-            var user = GetUser();
-            var mijnGastgezinnen = new MijnGastgezinnenModel(user);
-
-            ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
-            if (filter != null)
-            {
-                if (filter == "Buddy")
-                {
-                    gastGezinnen = gastGezinnen.Where(g => g.Buddy == user).ToList();
-                }
-                if (filter == "Intaker")
-                {
-                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
-                }
-            }
-
-            foreach (var gastGezin in gastGezinnen)
-            {
-                var plaatsingTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Plaatsing, gastGezin);
-                var reserveTag = _gastgezinService.GetPlaatsingTag(gastGezin.Id, PlacementType.Reservering, gastGezin);
-                var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
-                mijnGastgezinnen.MijnGastgezinnen.Add(gastgezinViewModel);
-            }
-            FillBaseModel(mijnGastgezinnen);
-            return View(mijnGastgezinnen);
-        }
-
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("MijnGastgezinnen/{userId}")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
-        public IActionResult MijnGastgezinnen(string? filter, int userId)
+        public IActionResult MijnGastgezinnen(string? filter, int? userId, bool? editAddress)
         {
             _userService.checkIfUserExists(User);
-
-            var user = _userService.GetUserById(userId);
-            var mijnGastgezinnen = new MijnGastgezinnenModel(user);
-
+            var user = _userService.GetUserById((int)userId);
             if (user == null)
                 return Redirect("Error");
-            mijnGastgezinnen.GastgezinnenVan = user.FirstName + " " + user.LastName;
+            var mijnGastgezinnen = FillMijnGastgezinnenModel(filter, user, editAddress);
+            mijnGastgezinnen.GastgezinnenVan = mijnGastgezinnen.Vrijwilliger.Naam;
+            return View(mijnGastgezinnen);
+        }
 
+        [Authorize]
+        [Route("MijnGastgezinnen")]
+        [HttpGet]
+        [ActionName("MijnGastgezinnen")]
+        public IActionResult MijnGastgezinnen(string? filter, bool? editAddress)
+        {
+            _userService.checkIfUserExists(User);
+            var user = GetUser();
+            if (user == null)
+                return Redirect("Error");
+            var mijnGastgezinnen = FillMijnGastgezinnenModel(filter, user, editAddress);
+            FillBaseModel(mijnGastgezinnen);
+            return View(mijnGastgezinnen);
+        }
+
+        public MijnGastgezinnenModel FillMijnGastgezinnenModel(string? filter, UserDetails user, bool? editAddress)
+        {
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
+            var intakerCount = gastGezinnen.Where(g => g.Begeleider == user).Count();
+            var buddyCount = gastGezinnen.Where(g => g.Buddy == user).Count();
+            var mijnGastgezinnen = new MijnGastgezinnenModel(user, intakerCount, buddyCount);
+
             if (filter != null)
             {
                 if (filter == "Buddy")
@@ -614,9 +601,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user, plaatsingTag, reserveTag);
                 mijnGastgezinnen.MijnGastgezinnen.Add(gastgezinViewModel);
             }
+            if(editAddress!= null)
+            {
+            mijnGastgezinnen.EditAddress = (bool)editAddress;
+            }
 
             FillBaseModel(mijnGastgezinnen);
-            return View(mijnGastgezinnen);
+            return mijnGastgezinnen;
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]

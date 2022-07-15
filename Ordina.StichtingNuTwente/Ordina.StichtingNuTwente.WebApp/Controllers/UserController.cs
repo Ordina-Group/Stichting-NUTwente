@@ -109,5 +109,40 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = "RequireVrijwilligerRole")]
+        public IActionResult UpdateUserAddress(int userId, string address = "", string city = "", string postalCode = "")
+        {
+            var user = _userService.GetUserById(userId);
+            var currentUser = _userService.getUserFromClaimsPrincipal(User);
+
+            if (user.AADId == currentUser.AADId || User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+            {
+                if(user.Address == null)
+                {
+                    user.Address = new Adres()
+                    {
+                        Straat = address,
+                        Woonplaats = city,
+                        Postcode = postalCode
+                    };
+                }
+                else
+                {
+                    user.Address.Straat = address;
+                    user.Address.Woonplaats = city;
+                    user.Address.Postcode = postalCode;
+                }
+                _userService.UpdateUser(user, userId);
+                if (user.AADId == currentUser.AADId)
+                {
+                    return Redirect("/MijnGastgezinnen");
+                }
+                else
+                {
+                    return Redirect($"/MijnGastgezinnen/{userId}");
+                }
+            }
+            return Redirect("Error");
+        }
     }
 }
