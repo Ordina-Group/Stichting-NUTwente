@@ -63,13 +63,18 @@
                             </a>
                         </h5>
                         <p>
-                            @if (Model.Vrijwilliger.Postcode == null && Model.Vrijwilliger.Adres == null && Model.Vrijwilliger.Woonplaats == null)
+                            @if (String.IsNullOrEmpty(Model.Vrijwilliger.Postcode) && String.IsNullOrEmpty(Model.Vrijwilliger.Adres) && String.IsNullOrEmpty(Model.Vrijwilliger.Woonplaats))
                             {
                                 <a asp-route-EditAddress="true">Adres toevoegen</a>
                             }
-                            Postcode: @Model.Vrijwilliger.Postcode <br />
-                            Adres: @Model.Vrijwilliger.Adres <br />
-                            Plaats: @Model.Vrijwilliger.Woonplaats <br />
+                            else
+                            {
+                                <text>
+                                    Postcode: @Model.Vrijwilliger.Postcode <br />
+                                    Adres: @Model.Vrijwilliger.Adres <br />
+                                    Plaats: @Model.Vrijwilliger.Woonplaats <br />
+                                </text>
+                            }
                         </p>
                     }
                 </div>
