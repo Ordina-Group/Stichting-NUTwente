@@ -27,6 +27,10 @@
                 <div class="card-body">
                     <h5 class="card-title">
                         Contactgegevens
+                        @if(Model.GastgezinnenVan == null)
+                        {
+                        <a href="/MicrosoftIdentity/Account/EditProfile"><i class="fas fa-edit float-end"></i></a>
+                        }
                     </h5>
                     <p>
                         Naam: @Model.Vrijwilliger.Naam <br />
@@ -41,22 +45,32 @@
                 <div class="card-body">
                     @if (Model.EditAddress)
                     {
-                    <h5 class="card-title">Adres <a class="btn btn-primary" asp-route-EditAddress="false">Opslaan</a></h5>
-                    <label class="form-check-label">Adres</label>
-                    <input class="form-control" id="AdresInput">
-                    <label class="form-check-label">Woonplaats</label>
-                    <input class="form-control" id="WoonplaatsInput">
-                    <label class="form-check-label">Postcode</label>
-                    <input class="form-control" id="PostcodeInput">
+                        <form method="post" asp-controller="User" asp-action="UpdateUserAddress" asp-route-userId="@Model.Vrijwilliger.Id">
+                            <h5 class="card-title">Adres <button class="btn btn-primary float-end" type="submit" value="Submit">Opslaan</button></h5>
+                            <label class="form-check-label">Postcode</label>
+                            <input class="form-control" id="PostcodeInput" type="text" name="postalCode" value="@Model.Vrijwilliger.Postcode">
+                            <label class="form-check-label">Adres</label>
+                            <input class="form-control" id="AdresInput" type="text" name="address" value="@Model.Vrijwilliger.Adres">
+                            <label class="form-check-label">Woonplaats</label>
+                            <input class="form-control" id="WoonplaatsInput" type="text" name="city" value="@Model.Vrijwilliger.Woonplaats">
+                        </form>
                     }
                     else
                     {
-                    <h5 class="card-title">Adres <a asp-route-EditAddress="true"><i class="float-end fas fa-edit"></i></a></h5>
-                    <p>
-                        Adres: @Model.Vrijwilliger.Adres <br />
-                        Woonplaats: @Model.Vrijwilliger.Woonplaats <br />
-                        Postcode: @Model.Vrijwilliger.Postcode <br />
-                    </p>                        
+                        <h5 class="card-title">
+                            Woonadres <a asp-route-EditAddress="true">
+                                <i class="fas fa-edit float-end"></i>
+                            </a>
+                        </h5>
+                        <p>
+                            @if (Model.Vrijwilliger.Postcode == null && Model.Vrijwilliger.Adres == null && Model.Vrijwilliger.Woonplaats == null)
+                            {
+                                <a asp-route-EditAddress="true">Adres toevoegen</a>
+                            }
+                            Postcode: @Model.Vrijwilliger.Postcode <br />
+                            Adres: @Model.Vrijwilliger.Adres <br />
+                            Plaats: @Model.Vrijwilliger.Woonplaats <br />
+                        </p>
                     }
                 </div>
             </div>
