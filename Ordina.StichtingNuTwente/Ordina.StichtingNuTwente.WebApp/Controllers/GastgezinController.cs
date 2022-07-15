@@ -560,7 +560,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(mijnGastgezinnen);
         }
 
-        [Authorize]
         [Route("MijnGastgezinnen")]
         [HttpGet]
         [ActionName("MijnGastgezinnen")]
@@ -575,7 +574,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(mijnGastgezinnen);
         }
 
-        public MijnGastgezinnenModel FillMijnGastgezinnenModel(string? filter, UserDetails user, bool? editAddress)
+        private MijnGastgezinnenModel FillMijnGastgezinnenModel(string? filter, UserDetails user, bool? editAddress)
         {
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
             var intakerCount = gastGezinnen.Where(g => g.Begeleider == user).Count();
