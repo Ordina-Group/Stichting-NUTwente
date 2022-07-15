@@ -8,6 +8,9 @@ namespace Ordina.StichtingNuTwente.Models.Models
 {
     public class UserDetails : BaseEntity
     {
+        public UserDetails()
+        {
+        }
         public string AADId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

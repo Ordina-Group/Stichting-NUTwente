@@ -16,11 +16,11 @@ namespace Ordina.StichtingNuTwente.Models.Models
             Woonplaats = "";
         }
 
-        public string Straat { get; set; }
+        public string? Straat { get; set; }
 
-        public string Postcode { get; set; }   
+        public string? Postcode { get; set; }
 
-        public string Woonplaats { get; set; }
+        public string? Woonplaats { get; set; }
 
         [ForeignKey("fkReactieId")]
         public virtual Reactie? Reactie { get; set; }
