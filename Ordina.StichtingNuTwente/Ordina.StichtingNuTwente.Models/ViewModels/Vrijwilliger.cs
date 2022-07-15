@@ -6,6 +6,7 @@ public class Vrijwilliger
     public int Id { get; set; }
     public string Naam { get; set; }
     public string Email { get; set; }
+    public string Telefoonnummer { get; set; }
     public string Woonplaats { get; set; }
     public string Postcode { get; set; }
     public string Adres { get; set; }
@@ -15,6 +16,7 @@ public class Vrijwilliger
         Id = user.Id;
         Naam = $"{user.FirstName} {user.LastName}";
         Email = user.Email;
+        Telefoonnummer = user.PhoneNumber;
         if (user.Address != null)
         {
             Woonplaats = user.Address.Woonplaats;
