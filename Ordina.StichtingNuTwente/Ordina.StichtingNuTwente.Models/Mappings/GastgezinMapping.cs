@@ -83,25 +83,15 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 buddy = gastgezin.Buddy.FirstName;
             }
 
-            int? maxAdults = 0;
-            if (gastgezin.PlaatsingsInfo != null && int.TryParse(gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen, out int OlderThanTwo))
+            if (gastgezin.PlaatsingsInfo == null || !int.TryParse(gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen, out int maxOlderThanTwo))
             {
-                maxAdults = OlderThanTwo;
-            }
-            else if (gastgezin.MaxAdults != null)
-            {
-                maxAdults = gastgezin.MaxAdults;
-            }
-            int? maxChildren = 0;
-            if (gastgezin.PlaatsingsInfo != null && int.TryParse(gastgezin.PlaatsingsInfo.KleineKinderen, out int youngerThanThree))
-            {
-                maxChildren = youngerThanThree;
-            }
-            else if (gastgezin.MaxChildren != null)
-            {
-                maxChildren = gastgezin.MaxChildren;
+                maxOlderThanTwo = gastgezin.MaxOlderThanTwo.GetValueOrDefault();
             }
 
+            if (gastgezin.PlaatsingsInfo == null || !int.TryParse(gastgezin.PlaatsingsInfo.KleineKinderen, out int maxYoungerThanThree))
+            {
+                maxYoungerThanThree = gastgezin.MaxYoungerThanThree.GetValueOrDefault();
+            }
 
             var gastgezinViewModel = new GastgezinViewModel
             {
@@ -128,8 +118,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Status = gastgezin.Status,
                 OnHold = gastgezin.OnHold,
                 NoodOpvang = gastgezin.NoodOpvang,
-                MaxAdults = maxAdults,
-                MaxChildren = maxChildren,
+                MaxOlderThanTwo = maxOlderThanTwo,
+                MaxYoungerThanThree = maxYoungerThanThree,
                 Note = gastgezin.Note,
                 Deleted = gastgezin.Deleted,
                 DeletionComment = deletionComment,

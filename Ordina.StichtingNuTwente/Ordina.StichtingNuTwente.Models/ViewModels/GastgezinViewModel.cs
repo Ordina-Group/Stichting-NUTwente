@@ -46,9 +46,9 @@ public class GastgezinViewModel
 
     public bool HeeftBekeken { get; set; }
 
-    public int? MaxAdults { get; set; }
+    public int? MaxOlderThanTwo { get; set; }
 
-    public int? MaxChildren { get; set; }
+    public int? MaxYoungerThanThree { get; set; }
 
     public Comment? RejectionComment { get; set; }
 
