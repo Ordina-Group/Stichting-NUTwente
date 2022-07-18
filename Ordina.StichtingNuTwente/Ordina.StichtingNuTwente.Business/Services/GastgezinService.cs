@@ -67,8 +67,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
         public void AddPlaatsing(Plaatsing plaatsing)
         {
             PlaatsingsRepository.Create(plaatsing);
-            var gastgezin = plaatsing.Gastgezin;
-            var status = gastgezin.Status;
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
