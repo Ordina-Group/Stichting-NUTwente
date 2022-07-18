@@ -956,11 +956,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         {
                             if (index == 1)
                             {
-                                gastgezin.MaxChildren = int.Parse(cell.ToString());
+                                gastgezin.MaxYoungerThanThree = int.Parse(cell.ToString());
                             }
                             if (index == 2)
                             {
-                                gastgezin.MaxAdults = int.Parse(cell.ToString());
+                                gastgezin.MaxOlderThanTwo = int.Parse(cell.ToString());
                             }
                         }
                         index++;
@@ -968,7 +968,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     if (gastgezin != null)
                     {
                         _gastgezinService.UpdateGastgezin(gastgezin, gastgezin.Id);
-                        messages.Add(new MaintenanceMessage($@"Max capacity updated to {gastgezin.MaxAdults} adults and {gastgezin.MaxChildren} children for Gastgezin with intakeform {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
+                        messages.Add(new MaintenanceMessage($@"Max capacity updated to {gastgezin.MaxOlderThanTwo} adults and {gastgezin.MaxYoungerThanThree} children for Gastgezin with intakeform {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                     }
                 }
                 rowNum++;

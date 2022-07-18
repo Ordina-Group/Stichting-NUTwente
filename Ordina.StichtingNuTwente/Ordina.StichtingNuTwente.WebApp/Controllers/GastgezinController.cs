@@ -272,7 +272,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxAdults, int MaxChildren)
+        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxYoungerThanThree, int MaxOlderThanTwo)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
@@ -280,8 +280,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
                 gastgezin.HasVOG = HasVOG;
-                gastgezin.MaxAdults = MaxAdults;
-                gastgezin.MaxChildren = MaxChildren;
+                gastgezin.MaxOlderThanTwo = MaxOlderThanTwo;
+                gastgezin.MaxYoungerThanThree = MaxYoungerThanThree;
+                if(gastgezin.PlaatsingsInfo != null)
+                {
+                    gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen = MaxOlderThanTwo.ToString();
+                    gastgezin.PlaatsingsInfo.KleineKinderen = MaxYoungerThanThree.ToString();
+                }
                 _gastgezinService.UpdateGastgezin(gastgezin, GastGezinId);
                 return Redirect("/gastgezin?id=" + GastGezinId);
             }
@@ -416,8 +421,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             model.TotalPlaatsingTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Plaatsing);
             model.TotalResTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Reservering);
-            model.TotalMaxAdults = gastGezinnen.Sum(g => g.MaxAdults);
-            model.TotalMaxChildren = gastGezinnen.Sum(g => g.MaxChildren);
+            model.TotalMaxAdults = gastGezinnen.Sum(g => g.MaxOlderThanTwo);
+            model.TotalMaxChildren = gastGezinnen.Sum(g => g.MaxYoungerThanThree);
             FillBaseModel(model);
             return View(model);
         }
