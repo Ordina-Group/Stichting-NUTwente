@@ -109,7 +109,15 @@ contains:
                 <div class="row">
                     <label class="col">Aanmeldformulier:</label>
                     <div class="col">
-                        <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="badge bg-primary float-right">@Model.GastGezin.AanmeldFormulierId</a>
+                        <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.AanmeldFormulierId" class="badge bg-primary float-right">
+                            @Model.GastGezin.AanmeldFormulierId |
+                            <span>                                
+                            @if(Model.GastGezin.AanmeldDatum != null){  
+                                <text>@Model.GastGezin.AanmeldDatum.GetValueOrDefault().ToShortDateString()</text>
+                            }
+                        </span>
+                        </a>
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -117,7 +125,14 @@ contains:
                     <div class="col">
                         @if (Model.GastGezin.IntakeFormulierId != 0)
                         {
-                            <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="badge bg-primary float-right">@Model.GastGezin.IntakeFormulierId</a>
+                            <a href="getnutwenteoverheidreactiesdetail25685niveau?id=@Model.GastGezin.IntakeFormulierId" class="badge bg-primary float-right">
+                                @Model.GastGezin.IntakeFormulierId |
+                                <span>
+                                    @if(Model.GastGezin.IntakeDatum != null){
+                                        <text>@Model.GastGezin.IntakeDatum.GetValueOrDefault().ToShortDateString()</text>
+                                    }
+                                </span>
+                            </a>
                         }
                         else
                         {
