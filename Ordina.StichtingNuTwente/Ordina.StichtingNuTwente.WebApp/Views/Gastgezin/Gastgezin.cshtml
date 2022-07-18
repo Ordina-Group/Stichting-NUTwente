@@ -173,13 +173,13 @@ contains:
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Tot en met 2 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxChildren" value="@Model.GastGezin.MaxChildren" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxYoungerThanThree" value="@Model.GastGezin.MaxYoungerThanThree" @(canEdit?"":"disabled")>
                         </div>
                     </div>
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Vanaf 3 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxAdults" value="@Model.GastGezin.MaxAdults" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxOlderThanTwo" value="@Model.GastGezin.MaxOlderThanTwo" @(canEdit?"":"disabled")>
                         </div>
                     </div>
                     if (canEdit)
@@ -375,7 +375,7 @@ contains:
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
                         <div class="row">
                             <h5 class="card-title">
-                                Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                                Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                                 <input class="btn btn-primary float-right" type="submit" value="Opslaan">
                             </h5>
                         </div>
@@ -467,7 +467,7 @@ contains:
                 {
                     <div class="row">
                         <h5 class="card-title">
-                            Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                            Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                             @if (Model.Plaatsingen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
                                 <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditPlaatsingen="true"></a>
@@ -587,7 +587,7 @@ contains:
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
                         <div class="row">
                             <h5 class="card-title">
-                                Reserveringen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                                Reserveringen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                                 <input class="btn btn-warning float-right" type="submit" value="Opslaan">
                             </h5>
                         </div>
@@ -678,7 +678,7 @@ contains:
                 {
                     <div class="row">
                         <h5 class="card-title">
-                            Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxAdults+Model.GastGezin.MaxChildren))
+                            Reserveringen (@Model.Reserveringen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                             @if (Model.Reserveringen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
                                 <a class="btn btn-warning fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditReserveringen="true"></a>
