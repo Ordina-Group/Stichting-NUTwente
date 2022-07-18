@@ -26,11 +26,13 @@ public class GastgezinViewModel
 
     public int BuddyId { get; set; }
 
-    public DateTime? Intake { get; set; }
-
     public int AanmeldFormulierId { get; set; }
 
+    public DateTime? AanmeldDatum { get; set; }
+
     public int IntakeFormulierId { get; set; }
+
+    public DateTime? IntakeDatum { get; set; }
 
     public string? PlaatsingTag { get; set; }
 

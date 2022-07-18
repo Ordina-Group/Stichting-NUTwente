@@ -31,12 +31,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             int aanmeldFormulierId = 0;
+            DateTime? aanmeldDateTime= null;
             int intakeFormulierId = 0;
             DateTime? intakeDateTime = null;
 
             if (gastgezin.AanmeldFormulier != null)
             {
                 aanmeldFormulierId = gastgezin.AanmeldFormulier.Id;
+                aanmeldDateTime = gastgezin.AanmeldFormulier.DatumIngevuld;
             }
 
             if (gastgezin.IntakeFormulier != null)
@@ -104,8 +106,9 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Woonplaats = woonplaatsText,
                 Postcode = postcodeText,
                 AanmeldFormulierId = aanmeldFormulierId,
+                AanmeldDatum = aanmeldDateTime,
                 IntakeFormulierId = intakeFormulierId,
-                Intake = intakeDateTime,
+                IntakeDatum = intakeDateTime,
                 PlaatsingTag = plaatsingTag,
                 ReserveTag = ReserveTag,
                 PlaatsingsInfo = gastgezin.PlaatsingsInfo,
