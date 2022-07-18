@@ -84,15 +84,24 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             int? maxAdults = 0;
-            if (gastgezin.MaxAdults != null)
+            if (gastgezin.PlaatsingsInfo != null && int.TryParse(gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen, out int OlderThanTwo))
+            {
+                maxAdults = OlderThanTwo;
+            }
+            else if (gastgezin.MaxAdults != null)
             {
                 maxAdults = gastgezin.MaxAdults;
             }
             int? maxChildren = 0;
-            if (gastgezin.MaxChildren != null)
+            if (gastgezin.PlaatsingsInfo != null && int.TryParse(gastgezin.PlaatsingsInfo.KleineKinderen, out int youngerThanThree))
+            {
+                maxChildren = youngerThanThree;
+            }
+            else if (gastgezin.MaxChildren != null)
             {
                 maxChildren = gastgezin.MaxChildren;
             }
+
 
             var gastgezinViewModel = new GastgezinViewModel
             {
