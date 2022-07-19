@@ -272,13 +272,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxYoungerThanThree, int MaxOlderThanTwo)
+        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, DateTime OnHoldTill ,bool OnHold, bool HasVOG, int MaxYoungerThanThree, int MaxOlderThanTwo)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
             {
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
+                if (OnHold && OnHoldTill.ToString("yyyy-MM-dd") != DateTime.Now.ToString("yyyy-MM-dd"))
+                {
+                    gastgezin.OnHoldTill = OnHoldTill;
+                }
                 gastgezin.HasVOG = HasVOG;
                 gastgezin.MaxOlderThanTwo = MaxOlderThanTwo;
                 gastgezin.MaxYoungerThanThree = MaxYoungerThanThree;
