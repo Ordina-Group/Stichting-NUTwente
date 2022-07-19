@@ -15,6 +15,8 @@
     <PackageReference Include="BeginCollectionItem" Version="1.2.1" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.33" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="4.0.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -52,6 +54,10 @@
     <None Update="template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TimedTriggers\" />
   </ItemGroup>
 
 </Project>
