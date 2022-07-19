@@ -84,14 +84,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             int? maxAdults = 0;
-            if (gastgezin.MaxAdults != null)
+            if (gastgezin.MaxOlderThanTwo != null)
             {
-                maxAdults = gastgezin.MaxAdults;
+                maxAdults = gastgezin.MaxOlderThanTwo;
             }
             int? maxChildren = 0;
-            if (gastgezin.MaxChildren != null)
+            if (gastgezin.MaxOlderThanTwo != null)
             {
-                maxChildren = gastgezin.MaxChildren;
+                maxChildren = gastgezin.MaxOlderThanTwo;
             }
 
             var gastgezinViewModel = new GastgezinViewModel
