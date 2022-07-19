@@ -273,8 +273,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
                 gastgezin.HasVOG = HasVOG;
-                gastgezin.MaxAdults = MaxAdults;
-                gastgezin.MaxChildren = MaxChildren;
+                gastgezin.MaxOlderThanTwo = MaxAdults;
+                gastgezin.MaxYoungerThanThree = MaxChildren;
                 _gastgezinService.UpdateGastgezin(gastgezin, GastGezinId);
                 return Redirect("/gastgezin?id=" + GastGezinId);
             }
@@ -409,18 +409,18 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             model.TotalPlaatsingTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Plaatsing);
             model.TotalResTag = _gastgezinService.GetPlaatsingenTag(gastGezinnen.ToList(), PlacementType.Reservering);
-            model.TotalMaxAdults = gastGezinnen.Sum(g => g.MaxAdults);
-            model.TotalMaxChildren = gastGezinnen.Sum(g => g.MaxChildren);
+            model.TotalMaxAdults = gastGezinnen.Sum(g => g.MaxOlderThanTwo);
+            model.TotalMaxChildren = gastGezinnen.Sum(g => g.MaxYoungerThanThree);
             FillBaseModel(model);
             return View(model);
         }
 
         [Authorize(Policy = "RequireSecretariaatRole")]
         [Route("/CheckOnholdGastgezinnen")]
-        [HttpPatch]
+        [HttpGet]
         public IActionResult CheckOnholdGastgezinnen()
         {
-            var gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.OnHoldTill.Subtract(DateTime.Now).TotalHours <= 0 && g.OnHold == true && g.OnHoldTill != System.DateTime.MinValue);
+            var gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.OnHold == true && g.OnHoldTill != null && g.OnHoldTill != System.DateTime.MinValue && g.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours <= 0);
 
             foreach (var gastGezin in gastGezinnen)
             {

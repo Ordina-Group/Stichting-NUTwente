@@ -41,8 +41,8 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public ICollection<Plaatsing>? Plaatsingen { get; set; }
         public bool? HasVOG { get; set; }
         public string? Note { get; set; }
-        public int? MaxAdults { get; set; }
-        public int? MaxChildren { get; set; }
+        public int? MaxOlderThanTwo { get; set; }
+        public int? MaxYoungerThanThree { get; set; }
         [ForeignKey("fkPlaatsingsId")]
         public virtual PlaatsingsInfo? PlaatsingsInfo { get; set; }
 
@@ -58,7 +58,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         public List<ContactLog> ContactLogs { get; set; }
 
-        public DateTime OnHoldTill { get; set; }
+        public DateTime? OnHoldTill { get; set; }
         public bool OnHold { get; set; }
         public bool NoodOpvang { get; set; }
     }
