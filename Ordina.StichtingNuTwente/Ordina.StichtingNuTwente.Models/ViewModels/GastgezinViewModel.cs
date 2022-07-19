@@ -66,6 +66,8 @@ public class GastgezinViewModel
 
     public List<ContactLog> ContactLogs { get; internal set; }
 
+    public DateTime? OnHoldTill { get; internal set; }
+
     public bool OnHold { get; internal set; }
 
     public bool NoodOpvang { get; internal set; }
