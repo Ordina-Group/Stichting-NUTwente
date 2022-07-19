@@ -27,8 +27,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/User/Overview");
         }
 
-        [Authorize]
-        [Route("MicrosoftIdentity/Account/AccessDenied")]
+        [AllowAnonymous]
+        [Route("/MicrosoftIdentity/Account/AccessDenied")]
+        [Route("/AccessDenied")]
         public IActionResult AccessDeniedCatch()
         {
             _userService.checkIfUserExists(User);
@@ -56,6 +57,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
 
         [Authorize]
+        [Route("/")]
+        [Route("/MicrosoftIdentity/Account/Error")]
         public IActionResult Overview()
         {
             _userService.checkIfUserExists(User);

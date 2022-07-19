@@ -40,6 +40,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 return Redirect("Error");
             }
+
+            //verify view permissions
             if (gastGezin.Begeleider != null || gastGezin.Buddy != null)
             {
                 if (!(gastGezin.Begeleider?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
@@ -74,6 +76,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
             viewModel.PlaatsingDTO = new PlaatsingDTO();
 
+            //calculate plaatsing stats
             viewModel.PlaatsingStats = new PlaatsingStats();
             viewModel.PlaatsingStats.PlaatsVolwassen = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Volwassene && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
             viewModel.PlaatsingStats.PlaatsKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Plaatsing).Sum(p => p.Amount);
@@ -82,6 +85,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             viewModel.PlaatsingStats.ResKind = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Kind && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
             viewModel.PlaatsingStats.ResOnbekend = viewModel.PlaatsingsGeschiedenis.Where(p => p.AgeGroup == AgeGroup.Onbekend && p.PlacementType == PlacementType.Reservering).Sum(p => p.Amount);
 
+            //check for edit mode
             if (EditPlaatsingen == true)
             {
                 viewModel.EditPlaatsingen = true;
@@ -94,10 +98,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 viewModel.EditVerwijderdePlaatsingen = true;
             }
+
+            //check for delete permission
             var u = GetUser();
             viewModel.CanDelete = false;
             if (User.HasClaims("groups", "group-coordinator"))
                 viewModel.CanDelete = true;
+            
             return View(viewModel);
         }
 
@@ -265,7 +272,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxAdults, int MaxChildren)
+        public IActionResult UpdateOpties(int GastGezinId, bool NoodOpvang, bool OnHold, bool HasVOG, int MaxYoungerThanThree, int MaxOlderThanTwo)
         {
             var gastgezin = _gastgezinService.GetGastgezin(GastGezinId);
             if (gastgezin != null)
@@ -273,8 +280,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
                 gastgezin.HasVOG = HasVOG;
-                gastgezin.MaxOlderThanTwo = MaxAdults;
-                gastgezin.MaxYoungerThanThree = MaxChildren;
+                gastgezin.MaxOlderThanTwo = MaxOlderThanTwo;
+                gastgezin.MaxYoungerThanThree = MaxYoungerThanThree;
+                if(gastgezin.PlaatsingsInfo != null)
+                {
+                    gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen = MaxOlderThanTwo.ToString();
+                    gastgezin.PlaatsingsInfo.KleineKinderen = MaxYoungerThanThree.ToString();
+                }
                 _gastgezinService.UpdateGastgezin(gastgezin, GastGezinId);
                 return Redirect("/gastgezin?id=" + GastGezinId);
             }

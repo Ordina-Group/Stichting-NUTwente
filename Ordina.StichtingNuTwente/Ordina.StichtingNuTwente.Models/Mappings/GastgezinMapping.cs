@@ -31,12 +31,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
             int aanmeldFormulierId = 0;
+            DateTime? aanmeldDateTime= null;
             int intakeFormulierId = 0;
             DateTime? intakeDateTime = null;
 
             if (gastgezin.AanmeldFormulier != null)
             {
                 aanmeldFormulierId = gastgezin.AanmeldFormulier.Id;
+                aanmeldDateTime = gastgezin.AanmeldFormulier.DatumIngevuld;
             }
 
             if (gastgezin.IntakeFormulier != null)
@@ -83,15 +85,14 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 buddy = gastgezin.Buddy.FirstName;
             }
 
-            int? maxAdults = 0;
-            if (gastgezin.MaxOlderThanTwo != null)
+            if (gastgezin.PlaatsingsInfo == null || !int.TryParse(gastgezin.PlaatsingsInfo.VolwassenenGrotereKinderen, out int maxOlderThanTwo))
             {
-                maxAdults = gastgezin.MaxOlderThanTwo;
+                maxOlderThanTwo = gastgezin.MaxOlderThanTwo.GetValueOrDefault();
             }
-            int? maxChildren = 0;
-            if (gastgezin.MaxOlderThanTwo != null)
+
+            if (gastgezin.PlaatsingsInfo == null || !int.TryParse(gastgezin.PlaatsingsInfo.KleineKinderen, out int maxYoungerThanThree))
             {
-                maxChildren = gastgezin.MaxOlderThanTwo;
+                maxYoungerThanThree = gastgezin.MaxYoungerThanThree.GetValueOrDefault();
             }
 
             var gastgezinViewModel = new GastgezinViewModel
@@ -104,8 +105,9 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Woonplaats = woonplaatsText,
                 Postcode = postcodeText,
                 AanmeldFormulierId = aanmeldFormulierId,
+                AanmeldDatum = aanmeldDateTime,
                 IntakeFormulierId = intakeFormulierId,
-                Intake = intakeDateTime,
+                IntakeDatum = intakeDateTime,
                 PlaatsingTag = plaatsingTag,
                 ReserveTag = ReserveTag,
                 PlaatsingsInfo = gastgezin.PlaatsingsInfo,
@@ -119,8 +121,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Status = gastgezin.Status,
                 OnHold = gastgezin.OnHold,
                 NoodOpvang = gastgezin.NoodOpvang,
-                MaxAdults = maxAdults,
-                MaxChildren = maxChildren,
+                MaxOlderThanTwo = maxOlderThanTwo,
+                MaxYoungerThanThree = maxYoungerThanThree,
                 Note = gastgezin.Note,
                 Deleted = gastgezin.Deleted,
                 DeletionComment = deletionComment,
