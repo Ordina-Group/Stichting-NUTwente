@@ -415,6 +415,22 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "RequireSecretariaatRole")]
+        [Route("/CheckOnholdGastgezinnen")]
+        [HttpPatch]
+        public IActionResult CheckOnholdGastgezinnen()
+        {
+            var gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.OnHoldTill.Subtract(DateTime.Now).TotalHours <= 0 && g.OnHold == true && g.OnHoldTill != System.DateTime.MinValue);
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                gastGezin.OnHold = false;
+                gastGezin.OnHoldTill = System.DateTime.MinValue;
+                _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
+            }
+            return View(gastGezinnen);
+        }
+
         public void FillBaseModel(BaseModel model)
         {
             var user = _userService.getUserFromClaimsPrincipal(User);
