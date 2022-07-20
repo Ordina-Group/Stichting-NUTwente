@@ -436,12 +436,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpGet]
         public IActionResult CheckOnholdGastgezinnen()
         {
-            var gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.OnHold == true && g.OnHoldTill != null && g.OnHoldTill != System.DateTime.MinValue && g.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours <= 0);
+            var gastGezinnen = _gastgezinService.GetAllGastgezinnen().Where(g => g.OnHold == true && g.OnHoldTill != null && g.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours <= 0);
 
             foreach (var gastGezin in gastGezinnen)
             {
                 gastGezin.OnHold = false;
-                gastGezin.OnHoldTill = System.DateTime.MinValue;
+                gastGezin.OnHoldTill = null;
                 _gastgezinService.UpdateGastgezin(gastGezin, gastGezin.Id);
             }
             return View(gastGezinnen);

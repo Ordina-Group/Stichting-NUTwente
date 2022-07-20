@@ -157,7 +157,7 @@ contains:
                             {
                                 
                             }
-                            else if ((Model.GastGezin.OnHoldTill == null || Model.GastGezin.OnHoldTill == @DateTime.MinValue) && Model.GastGezin.OnHold)
+                            else if (Model.GastGezin.OnHoldTill == null && Model.GastGezin.OnHold)
                             {
                                 <div class="col">
                                     <input type="date" class="form-control" id="colFormLabelSm" name="OnHoldTill" value="@DateTime.Now.ToString("yyyy-MM-dd")">
@@ -249,7 +249,7 @@ contains:
                             <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
                             <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
 
-                            @if ((Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours >= 0) && Model.GastGezin.OnHold)
+                            @if (Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHold)
                             {
                             <b>Onhold Tot:</b> @Model.GastGezin.OnHoldTill?.ToString("yyyy-MM-dd")<br>
                             }
