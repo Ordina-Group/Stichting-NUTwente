@@ -119,6 +119,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 Begeleider = begeleider,
                 BegeleiderId = begeleiderId,
                 Status = gastgezin.Status,
+                OnHoldTill = gastgezin.OnHoldTill,
                 OnHold = gastgezin.OnHold,
                 NoodOpvang = gastgezin.NoodOpvang,
                 MaxOlderThanTwo = maxOlderThanTwo,
