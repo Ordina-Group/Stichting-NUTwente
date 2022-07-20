@@ -24,7 +24,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("Account/SignOut")]
         public IActionResult SignOutCatch()
         {
-            return Redirect("/User/Overview");
+            return Redirect("/");
         }
 
         [AllowAnonymous]
