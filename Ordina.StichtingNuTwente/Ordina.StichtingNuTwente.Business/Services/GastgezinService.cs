@@ -127,6 +127,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return tag;
         }
 
+        public void CheckOnholdGastgezinnen()
+        {
+            var gastGezinnen = GetAllGastgezinnen().Where(g => g.OnHold == true && g.OnHoldTill != null && g.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours <= 0);
+
+            foreach (var gastGezin in gastGezinnen)
+            {
+                gastGezin.OnHold = false;
+                gastGezin.OnHoldTill = null;
+                UpdateGastgezin(gastGezin, gastGezin.Id);
+            }
+        }
+
         public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType)
         {
             var plaatsingen = new List<Plaatsing>();
