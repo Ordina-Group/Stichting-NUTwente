@@ -30,6 +30,7 @@ builder.Services.AddScoped<IPersoonService, PersoonService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IPersoonService, PersoonService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IPlaatsingenService, PlaatsingenService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
