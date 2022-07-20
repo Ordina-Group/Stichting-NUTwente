@@ -1,0 +1,51 @@
+﻿@using Ordina.StichtingNuTwente.Models.Models
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div>
+    <h3>
+        Verwijderde Plaatsingen
+    </h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Gastgezin</th>
+                <th>Gender</th>
+                <th>Leeftijd</th>
+                <th>Uitgevoerd door</th>
+                <th>Reden voor vertrek</th>
+                <th>Vertrokken naar</th>
+                <th>Commentaar</th>
+            </tr>
+        </thead>
+        @foreach (Plaatsing plaatsing in Model)
+        {
+            <tr>
+                <td>@plaatsing.DateTime.ToShortDateString()</td>
+                <td><a asp-controller="Gastgezin" asp-action="gastgezin" asp-route-id="@plaatsing.Gastgezin.Id" target="_blank">@plaatsing.Gastgezin.Contact.Naam</a></td>
+                <td>@plaatsing.Gender</td>
+                <td>
+                    @if (plaatsing.Age != -1)
+                    {
+                        <text>@plaatsing.Age</text>
+                    }
+                    else if (plaatsing.AgeGroup != AgeGroup.Onbekend)
+                    {
+                        <text>@plaatsing.AgeGroup</text>
+                    }
+                    else
+                    {
+                        <text>Onbekend</text>
+                    }
+                </td>
+                <td><a href="/Mijngastgezinnen/@(plaatsing.Vrijwilliger.Id)" target="_blank">@plaatsing.Vrijwilliger.FirstName</a></td>
+                <td>@plaatsing.DepartureReason</td>
+                <td>@plaatsing.DepartureDestination</td>
+                <td>@plaatsing.DepartureComment</td>
+            </tr>
+        }
+    </table>
+</div>

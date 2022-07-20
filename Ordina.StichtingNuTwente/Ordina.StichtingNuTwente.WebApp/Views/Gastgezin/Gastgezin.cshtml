@@ -1,6 +1,6 @@
 ﻿@using Ordina.StichtingNuTwente.Models.ViewModels
 @using Ordina.StichtingNuTwente.Models.Models
-@using System.ComponentModel.DataAnnotations;
+@using System.ComponentModel.DataAnnotations
 @model GastgezinDetailViewModel
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
@@ -269,6 +269,7 @@ contains:
                             <h5 class="card-title">Nieuwe Plaatsing</h5>
                             @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
                             {
+                                @Html.AntiForgeryToken()
                                 <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
                                 @if (User.HasClaims("groups", "group-superadmin"))
                                 {
@@ -372,6 +373,7 @@ contains:
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
                     {
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
                         <div class="row">
                             <h5 class="card-title">
@@ -534,6 +536,7 @@ contains:
                                                 <option value="Oekraine">Terugkeer naar Oekraïne</option>
                                                 <option value="BinnenNederland">Vertrek naar bestemming binnen Nederland</option>
                                                 <option value="BuitenNederland">Vertrek naar bestemming buiten Nederland (niet Oekraïne)</option>
+                                                <option value="Correctie">Administratieve correctie</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -584,6 +587,7 @@ contains:
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
                     {
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
                         <div class="row">
                             <h5 class="card-title">
@@ -841,6 +845,7 @@ contains:
                 {
                     @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
                     {
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
                         <h5 class="card-title">
                             Plaatsingsgeschiedenis
@@ -917,34 +922,17 @@ contains:
                                             </td>
                                             <td>
                                                 <select class="form-select" name="DepartureDestination_@plaatsing.Id">
-                                                    @switch (@plaatsing.DepartureDestination)
+                                                    @foreach(DepartureDestination option in Enum.GetValues(typeof(DepartureDestination)))
                                                     {
-                                                        case DepartureDestination.Oekraine:
-                                                            <option value="Oekraine" selected>Terugkeer naar Oekraïne</option>
-                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
-                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
-                                                            <option value="Onbekend">Onbekend</option>
-                                                            break;
-                                                        case DepartureDestination.BinnenNederland:
-                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
-                                                            <option value="BinnenNederland" selected>Bestemming binnen Nederland</option>
-                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
-                                                            <option value="Onbekend">Onbekend</option>
-                                                            break;
-                                                        case DepartureDestination.BuitenNederland:
-                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
-                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
-                                                            <option value="BuitenNederland" selected>Bestemming buiten Nederland (niet Oekraïne)</option>
-                                                            <option value="Onbekend">Onbekend</option>
-                                                            break;
-                                                        case DepartureDestination.Onbekend:
-                                                            <option value="Oekraine">Terugkeer naar Oekraïne</option>
-                                                            <option value="BinnenNederland">Bestemming binnen Nederland</option>
-                                                            <option value="BuitenNederland">Bestemming buiten Nederland (niet Oekraïne)</option>
-                                                            <option value="Onbekend" selected>Onbekend</option>
-                                                            break;
+                                                       if(option == plaatsing.DepartureDestination){
+                                                            <option value="@option" selected>@(option.GetAttribute<DisplayAttribute>().Name)</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@option">@(option.GetAttribute<DisplayAttribute>().Name)</option>
+                                                        }
                                                     }
-                                                    </select>
+                                                </select>
                                                 </td>
                                             <td><textarea class="form-control" name="DepartureComment_@plaatsing.Id" rows="3">@plaatsing.DepartureComment</textarea></td>
                                         }
@@ -1025,20 +1013,9 @@ contains:
                                     {
                                         <td>@plaatsing.DepartureReason</td>
                                         <td>
-                                            @switch (@plaatsing.DepartureDestination)
+                                            @if(plaatsing.DepartureDestination != null)
                                             {
-                                                case DepartureDestination.Oekraine:
-                                                    <text>Terugkeer naar Oekraïne</text>
-                                                    break;
-                                                case DepartureDestination.BinnenNederland:
-                                                    <text>Bestemming binnen Nederland</text>
-                                                    break;
-                                                case DepartureDestination.BuitenNederland:
-                                                    <text>Bestemming buiten Nederland (niet Oekraïne)</text>
-                                                    break;
-                                                case DepartureDestination.Onbekend:
-                                                    <text>Onbekend</text>
-                                                    break;
+                                                @(plaatsing.DepartureDestination.GetAttribute<DisplayAttribute>().Name)
                                             }
                                         </td>
                                         <td>@plaatsing.DepartureComment</td>
