@@ -279,9 +279,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
-                if (OnHold && OnHoldTill.ToString("yyyy-MM-dd") != DateTime.Now.ToString("yyyy-MM-dd"))
+                if (OnHold && OnHoldTill.Subtract(DateTime.Now).Hours > 0)
                 {
                     gastgezin.OnHoldTill = OnHoldTill;
+                }
+                else if (!OnHold)
+                {
+                    gastgezin.OnHoldTill = null;
                 }
                 gastgezin.HasVOG = HasVOG;
                 gastgezin.MaxOlderThanTwo = MaxOlderThanTwo;
