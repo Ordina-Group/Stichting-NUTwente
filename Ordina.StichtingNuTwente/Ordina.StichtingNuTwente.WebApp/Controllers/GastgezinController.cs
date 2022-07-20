@@ -108,6 +108,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireCoordinatorRole")]
         [ActionName("PostPlaatsing")]
         [Route("GastgezinController/PostPlaatsing")]
@@ -139,6 +141,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
         {
