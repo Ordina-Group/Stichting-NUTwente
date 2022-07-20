@@ -56,11 +56,12 @@
                     {
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/VerwijderdeGastgezinnen"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/VerwijderdeGastgezinnen" || Accessor.HttpContext.Request.Path.Value == "/Plaatsingen/Verwijderd"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Archief
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/VerwijderdeGastgezinnen">Verwijderde gastgezinnen</a>
+                                <a class="dropdown-item" href="/Plaatsingen/Verwijderd">Verwijderde plaatsingen</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
