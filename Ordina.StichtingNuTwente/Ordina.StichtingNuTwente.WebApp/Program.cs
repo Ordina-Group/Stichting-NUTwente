@@ -7,6 +7,7 @@ using Ordina.StichtingNuTwente.Business.DataLayer;
 using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Business.Services;
 using Ordina.StichtingNuTwente.Data;
+using Ordina.StichtingNuTwente.WebApp.SceduleTask;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
+builder.Services.AddSingleton<IHostedService,CleanOnHoldTill>();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromHours(8);
 });
