@@ -230,11 +230,30 @@
                         }
                     </td>
                 }
-                <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
-                class="show" id="@Index"
-                data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.CoordinatorOpmerkingen">
-                    @mijnGastgezin.CoordinatorOpmerkingen
-                </td>
+                @if (@mijnGastgezin.OnHoldTill == null)
+                {
+                    <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                    class="show" id="@Index"
+                    data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.CoordinatorOpmerkingen">
+                        @mijnGastgezin.CoordinatorOpmerkingen 
+                    </td>
+                }
+                else if (@mijnGastgezin.CoordinatorOpmerkingen == "")
+                {
+                    <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                    class="show" id="@Index"
+                    data-toggle="tooltip" data-placement="bottom" title="On hold tot @mijnGastgezin.OnHoldTill?.ToString("yyyy-MM-dd")">
+                        On hold tot @mijnGastgezin.OnHoldTill?.ToString("yyyy-MM-dd") 
+                    </td>
+                }
+                else
+                {
+                    <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                    class="show" id="@Index"
+                    data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.CoordinatorOpmerkingen + On hold tot @mijnGastgezin.OnHoldTill?.ToString("yyyy-MM-dd")">
+                        @mijnGastgezin.CoordinatorOpmerkingen + On hold tot @mijnGastgezin.OnHoldTill?.ToString("yyyy-MM-dd") 
+                    </td>    
+                }
                 @if (extraColumns.Count() == 0)
                 {
                     <td>
