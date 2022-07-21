@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Ordina.StichtingNuTwente.Business": {
+      "commandName": "Executable"
+    }
+  }
+}

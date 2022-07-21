@@ -148,19 +148,64 @@ contains:
                     <div class="row mt-1">
                         <div class="col">
                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"") @(canEdit?"":"disabled")>
+                                <label class="form-check-label" for="NoodOpvang">
+                                    Noodopvang
+                                </label>
+                            </div>     
+                            <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"") @(canEdit?"":"disabled")>
                                 <label class="form-check-label" for="OnHold">
                                     On Hold
                                 </label>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="NoodOpvang" name="NoodOpvang" @(Model.GastGezin.NoodOpvang?"checked":"") @(canEdit?"":"disabled")>
-                                <label class="form-check-label" for="NoodOpvang">
-                                    Noodopvang
-                                </label>
+                            @if (@Model.GastGezin.OnHold)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" >
+                                    <label class="form-check-label" for="OnHoldTillCheckbox" id="OnHoldTillText">
+                                    On Hold tot
+                                    </label>
+                                </div>
+                                 <div class="col">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" hidden type="checkbox" id="OnHoldTillCheckbox" >
+                                    <label class="form-check-label" hidden for="OnHoldTillCheckbox" id="OnHoldTillText">
+                                    On Hold tot
+                                    </label>
+                                </div>
+                                <div class="col">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                </div> 
+                            }
+                            <script>
+                                $(function() {
+                                    $('#OnHold').click(function() {
+                                    if (($(this).is(':checked')) && ($('#OnHoldTillCheckbox').is(':checked')))
+                                        $("#OnHoldTillCheckbox, #OnHoldTill, #OnHoldTillText").removeAttr("hidden");
+
+                                    else if($(this).is(':checked'))
+                                        $("#OnHoldTillCheckbox, #OnHoldTillText").removeAttr("hidden");
+
+                                    else
+                                        $("#OnHoldTillCheckbox, #OnHoldTill, #OnHoldTillText").attr("hidden", true);
+                                    });
+
+                                    $('#OnHoldTillCheckbox').click(function() {
+                                    if ($(this).is(':checked'))
+                                        $("#OnHoldTill").removeAttr("hidden");
+                                    else
+                                        $("#OnHoldTill").attr("hidden", true).val('');
+                                    });
+                                });
+                            </script>
                             </div>
                         </div>
-                    </div>
                     <div class="row mt-1">
                         <label class="col">VOG:</label>
                         <div class="col">
@@ -232,6 +277,11 @@ contains:
                             <b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer<br>
                             <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
                             <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
+
+                            @if ((Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours >= 0) && Model.GastGezin.OnHold)
+                            {
+                            <b>On Hold tot:</b> @Model.GastGezin.OnHoldTill?.ToString("yyyy-MM-dd")<br>
+                            }
                         </div>
                         <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.GastGezin.PlaatsingsInfo?.OverigeOpmerkingen</div>
                     </div>
