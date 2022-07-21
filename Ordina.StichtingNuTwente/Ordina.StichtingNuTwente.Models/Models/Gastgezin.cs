@@ -58,6 +58,7 @@ namespace Ordina.StichtingNuTwente.Models.Models
 
         public List<ContactLog> ContactLogs { get; set; }
 
+        public DateTime? OnHoldTill { get; set; }
         public bool OnHold { get; set; }
         public bool NoodOpvang { get; set; }
     }
