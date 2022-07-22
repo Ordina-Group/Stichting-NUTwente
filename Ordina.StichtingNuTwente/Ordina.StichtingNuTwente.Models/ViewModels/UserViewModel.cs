@@ -18,6 +18,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             PhoneNumber = userDetails.PhoneNumber;
             InDropdown = userDetails.InDropdown;
             Id = userDetails.Id;
+            Deleted = userDetails.Deleted;
+            AADId = userDetails.AADId;
         }
 
         public UserViewModel()
@@ -29,8 +31,11 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
             Roles = new List<string>();
             InDropdown = false;
             Id = -1;
+            Deleted = false;
+            AADId = string.Empty;
         }
         public int Id { get; set; }
+        public string AADId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -40,6 +45,8 @@ namespace Ordina.StichtingNuTwente.Models.ViewModels
 
         public int AantalBuddies { get; set; }
         public int AantalIntakes { get; set; }
+
+        public bool Deleted { get; set; }
 
 
     }

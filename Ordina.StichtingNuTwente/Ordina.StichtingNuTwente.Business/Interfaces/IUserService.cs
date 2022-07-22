@@ -23,5 +23,24 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public UserDetails? GetUserById(int id);
         public UserDetails? UpdateUser(UserDetails user, int id);
         public ICollection<UserDetails> GetAllDropdownUsers();
+        /// <summary>
+        /// Soft deletes a "Vrijwilliger" by setting "deleted" property to true.
+        /// </summary>
+        /// <param name="id">Id of the "Vrijwilliger" to delete.</param>
+        /// <param name="user">Person who is deleting the "Vrijwilliger".</param>
+        /// <param name="comment">Reason for deletion.</param>
+        public bool Delete(int id, UserDetails user, string comment);
+
+        /// <summary>
+        /// Restores a "Vrijwilliger" by setting "deleted" property to false.
+        /// </summary>
+        /// <param name="id">id of the vrijwilliger</param>
+        public bool Restore(int id);
+
+        /// <summary>
+        /// Returns all softdeleted users
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<UserDetails> GetAllDeletedUsers();
     }
 }

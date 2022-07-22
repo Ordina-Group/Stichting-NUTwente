@@ -27,9 +27,9 @@
                 <div class="card-body">
                     <h5 class="card-title">
                         Contactgegevens
-                        @if(Model.GastgezinnenVan == null)
+                        @if (Model.GastgezinnenVan == null)
                         {
-                        <a href="/MicrosoftIdentity/Account/EditProfile"><i class="fas fa-edit float-end"></i></a>
+                            <a href="/MicrosoftIdentity/Account/EditProfile"><i class="fas fa-edit float-end"></i></a>
                         }
                     </h5>
                     <p>
@@ -181,6 +181,56 @@
             </div>
         </div>
     </div>
+    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin") && Model.GastgezinnenVan != null)
+    {
+        <div class="col col-1">
+            <div class="card border-0 bg-transparent shadow-none">
+                <div class=card-body>
+                    @if (@Model.Vrijwilliger.Deleted)
+                    {
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#restoreModal" onclick="$('#restoreModal').modal('show');">Herstellen</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="$('#deleteModal').modal('show');">Verwijderen</button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    @*Delete modal*@
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Vrijwilliger verwijderen</h5>
+                </div>
+                <div class="form-group">
+                    <label for="reasonForDelete">Reden voor verwijderen</label>
+                    <textarea class="form-control" id="reasonForDelete" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#deleteModal').modal('hide');">Annuleren</button>
+                    <button type="button" class="btn btn-danger" id="deleteVrijwilliger">Bevestig verwijdering</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*Restore modal*@
+    <div class="modal fade" id="restoreModal" tabindex="-1" role="dialog" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">Vrijwilliger herstellen</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#restoreModal').modal('hide');">Annuleren</button>
+                    <button type="button" class="btn btn-primary" id="restoreVrijwilliger">Bevestig herstelling</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -217,8 +267,7 @@
                     }
                 });
             })
-        </script>
-        <script>
+
             $("#rejectGastgezin").on("click", function() {
                 let id = $("#rejectModal").attr("gastgezin");
                 let comment = $("#rejectionComment").val();
@@ -234,6 +283,53 @@
                             location.reload();
                         },
                         error: function() {
+                        }
+                    });
+                }
+            })
+        </script>
+    }
+    else
+    {
+        <script>
+            $("#deleteVrijwilliger").on("click", function() {
+                let id = @Model.Vrijwilliger.Id;
+                let reasonForDelete = $("#reasonForDelete").val();
+                if (confirm("Weet je zeker dat je deze vrijwilliger wilt verwijderen?")) {
+                    $.ajax({
+                        url: `/User/${id}/Delete?comment=${reasonForDelete}`,
+                        type: "DELETE",
+                        dataType: 'text',
+                        success: function() {
+                            if (window.location.href != document.referrer) {
+                                window.location = document.referrer;
+                            } else {
+                                window.location = "/";
+                            }
+                        },
+                        error: function() {
+                            window.location = "/Error";
+                        }
+                    });
+                }
+            })
+
+            $("#restoreVrijwilliger").on("click", function() {
+                let id = @Model.Vrijwilliger.Id;
+                if (confirm("Weet je zeker dat je deze vrijwilliger wilt herstellen?")) {
+                    $.ajax({
+                        url: `/User/${id}/Restore`,
+                        type: "POST",
+                        dataType: 'text',
+                        success: function() {
+                            if (window.location.href != document.referrer) {
+                                window.location = document.referrer;
+                            } else {
+                                window.location = "/";
+                            }
+                        },
+                        error: function() {
+                            window.location = "/Error";
                         }
                     });
                 }

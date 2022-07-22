@@ -33,12 +33,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public ICollection<UserDetails> GetUsersByRole(string role)
         {
-            return UserDetailRepository.GetAll("Address").Where(u => u.Roles.Contains(role)).ToList();
+            return UserDetailRepository.GetAll("Address").Where(u => !u.Deleted && u.Roles.Contains(role) ).ToList();
         }
 
         public ICollection<UserDetails> GetAllUsers()
         {
-            return UserDetailRepository.GetAll("Address").ToList();
+            return UserDetailRepository.GetAll("Address").Where(u => !u.Deleted).ToList();
         }
 
         public List<AnswerListModel> GetMyReacties(string AADId)
@@ -177,7 +177,51 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public ICollection<UserDetails> GetAllDropdownUsers()
         {
-            return UserDetailRepository.GetAll().Where(u => u.InDropdown).ToList();
+            return UserDetailRepository.GetAll().Where(u => !u.Deleted && u.InDropdown).ToList();
+        }
+
+        /// <summary>
+        /// Soft deletes a "Vrijwilliger" by setting "deleted" property to true.
+        ///</summary>
+        /// <param name="id">id of the vrijwilliger</param>
+        public bool Delete(int id, UserDetails userDetails, string comment)
+        {
+            var user = UserDetailRepository.GetById(id);
+            if(user != null)
+            {
+                user.Deleted = true;
+                if(user.Comments == null)
+                    user.Comments = new List<Comment>();
+                user.Comments.Add(new Comment(comment, userDetails, CommentType.DELETION));
+                UserDetailRepository.Update(user);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Restores a "Vrijwilliger" by setting "deleted" property to false.
+        /// </summary>
+        /// <param name="id">id of the vrijwilliger</param>
+        public bool Restore(int id)
+        {
+            var user = UserDetailRepository.GetById(id);
+            if(user != null)
+            {
+                user.Deleted = false;
+                UserDetailRepository.Update(user);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns all softdeleted users
+        /// </summary>
+        /// <returns></returns>
+        public ICollection<UserDetails> GetAllDeletedUsers()
+        {
+            return UserDetailRepository.GetAll("Address").Where(u => u.Deleted == true).ToList();
         }
     }
 }
