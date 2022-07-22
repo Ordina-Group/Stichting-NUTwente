@@ -34,7 +34,7 @@
         <tbody>
             @foreach (var u in Model)
             {
-                <tr onclick="window.location='/MijnGastgezinnen/@u.Id';">
+                <tr>
                     <th scope="row"><a href="/MijnGastgezinnen/@u.Id">@u.FirstName</a></th>
                     <td>@u.LastName</td>
                     <td>@u.Email</td>

@@ -190,6 +190,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             if(user != null)
             {
                 user.Deleted = true;
+                user.InDropdown = false;
                 if(user.Comments == null)
                     user.Comments = new List<Comment>();
                 user.Comments.Add(new Comment(comment, userDetails, CommentType.DELETION));
@@ -209,6 +210,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             if(user != null)
             {
                 user.Deleted = false;
+                user.InDropdown = true;
                 UserDetailRepository.Update(user);
                 return true;
             }
