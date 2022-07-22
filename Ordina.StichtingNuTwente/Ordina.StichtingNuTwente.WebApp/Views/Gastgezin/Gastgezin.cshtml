@@ -161,7 +161,21 @@ contains:
                             </div>
                             @if (@Model.GastGezin.OnHold)
                             {
+                                @if ((Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours >= 0))
+                                {
                                 <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" >
+                                    <label class="form-check-label" for="OnHoldTillCheckbox" id="OnHoldTillText">
+                                    On Hold tot: @Model.GastGezin.OnHoldTill?.ToString("yyyy-MM-dd"), Dit aanpassen?
+                                    </label>
+                                </div>
+                                 <div class="col">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                </div>
+                                }
+                                else
+                                {
+                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" >
                                     <label class="form-check-label" for="OnHoldTillCheckbox" id="OnHoldTillText">
                                     On Hold tot
@@ -169,7 +183,8 @@ contains:
                                 </div>
                                  <div class="col">
                                     <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
-                                </div>
+                                </div>       
+                                }
                             }
                             else
                             {
@@ -277,11 +292,6 @@ contains:
                             <b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer<br>
                             <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
                             <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
-
-                            @if ((Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours >= 0) && Model.GastGezin.OnHold)
-                            {
-                            <b>On Hold tot:</b> @Model.GastGezin.OnHoldTill?.ToString("yyyy-MM-dd")<br>
-                            }
                         </div>
                         <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.GastGezin.PlaatsingsInfo?.OverigeOpmerkingen</div>
                     </div>
