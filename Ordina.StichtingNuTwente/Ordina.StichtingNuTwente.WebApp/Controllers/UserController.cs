@@ -41,7 +41,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult Users()
         {
             _userService.checkIfUserExists(User);
-            List<UserViewModel> viewModel = new List<UserViewModel>();
+            List<UserViewModel> viewModel = new();
             var users = _userService.GetAllUsers().OrderBy(u => u.FirstName);
             var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Begeleider");
             foreach (var u in users)
@@ -50,11 +50,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
                 var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
                 viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes });
-
             }
             return View(viewModel);
         }
-
 
         [Authorize]
         [Route("/")]
@@ -146,6 +144,68 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
             }
             return Redirect("Error");
+        }
+
+        [Authorize(Policy ="RequireCoordinatorRole")]
+        [Route("/User/{id}/Delete")]
+        [HttpDelete]
+        public IActionResult Delete(int id, string comment)
+        {
+            try
+            {
+                var userDetails = _userService.getUserFromClaimsPrincipal(User);
+                if (userDetails != null)
+                {
+                    var success = _userService.Delete(id, userDetails, comment == null ? "" : comment);
+                    if (success)
+                        return Ok();
+                    else
+                        return NotFound();
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        [Route("/User/{id}/Restore")]
+        [HttpPost]
+        public IActionResult Restore(int id)
+        {
+            try
+            {
+                var success = _userService.Restore(id);
+                if (success)
+                    return Ok();
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        [Route("/Archief/Vrijwilligers")]
+        [HttpGet]
+        public IActionResult DeletedUsers()
+        {
+            _userService.checkIfUserExists(User);
+            List<UserViewModel> viewModel = new();
+            var users = _userService.GetAllDeletedUsers().OrderBy(u => u.FirstName);
+            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Begeleider");
+            foreach (var u in users)
+            {
+                var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id, allGastgezinnen);
+                var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
+                var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
+                viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes });
+            }
+            return View(viewModel);
         }
     }
 }
