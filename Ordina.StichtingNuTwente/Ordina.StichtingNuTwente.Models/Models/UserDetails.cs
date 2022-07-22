@@ -20,5 +20,9 @@ namespace Ordina.StichtingNuTwente.Models.Models
         public bool InDropdown { get; set; }
         public ICollection<string> Roles { get; set; }
         public ICollection<Reactie> Reacties { get; set; }
+
+        public List<Comment>? Comments { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }
