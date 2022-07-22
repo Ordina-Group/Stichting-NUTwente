@@ -10,6 +10,7 @@ public class Vrijwilliger
     public string Woonplaats { get; set; }
     public string Postcode { get; set; }
     public string Adres { get; set; }
+    public bool Deleted { get; set; }
 
     public Vrijwilliger(UserDetails user)
     {
@@ -17,6 +18,7 @@ public class Vrijwilliger
         Naam = $"{user.FirstName} {user.LastName}";
         Email = user.Email;
         Telefoonnummer = user.PhoneNumber;
+        Deleted = user.Deleted;
         if (user.Address != null)
         {
             Woonplaats = user.Address.Woonplaats;
