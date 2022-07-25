@@ -1,4 +1,5 @@
-﻿using Ordina.StichtingNuTwente.Business.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Models.Models;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,20 @@ using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Business.Helpers
 {
+    class EmailContact
+    {
+        public string? EmailAdress { get; set; }
+        public string? ContactPerson { get; set; }
+    }
+
     public class MailHelper
     {
+        private readonly IConfiguration _configuration;
         private IMailService _mailService { get; set; }
 
-        public MailHelper(IMailService mailService)
+        public MailHelper(IMailService mailService, IConfiguration configuration)
         {
+            _configuration = configuration;
             _mailService = mailService;
         }
 
@@ -48,40 +57,66 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             return contactPersoon; 
         }
 
-        public async Task<bool> MaakIntakeMatch(Gastgezin gastgezin, Persoon persoon)
+        public async Task<bool> ToekennenIntaker(Gastgezin gastgezin, Persoon persoon) // checked
         {
             Mail mail = new Mail();
 
             //persoon.Gastgezin = gastgezin;
 
             mail.MailToName = persoon.Naam;
-            mail.MailToAdress = ""; //voor nu even hardcoded om spam en ongelukken bij het testen te voorkomen.
+            mail.MailToAdress = persoon.Email;
             mail.Subject = "Uw nieuwe intake match met " + gastgezin.Contact.Naam;
-            mail.Message = "Beste " + persoon.Naam + ", \n" + "Zojuist bent u toegewezen aan het gastgezin van: " + gastgezin.Contact.Naam + ". U kunt hem/haar bereiken via mail: " + gastgezin.Contact.Email + ", of via telefoon: " + gastgezin.Contact.Mobiel + ", om een afspraak te maken.";
+            mail.Message = $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("yyyy-MM-dd")} heeft {gastgezin.Contact.Naam}, {gastgezin.Contact.Adres.Straat} in {gastgezin.Contact.Adres.Woonplaats} zich aangemeld als potentieel gastgezin bij NuTwente. Jij bent als intaker aan dit gezin gekoppeld om het intakegesprek af te nemen. Lukt het niet om binnen een week contact op te nemen met dit gezin of kun je om andere redenen dit intakegesprek niet afnemen dan verzoeken we je dit per omgaande door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere intaker gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\n\nDit is een automatisch gegenereerd bericht.";
 
             bool succes = await(_mailService.SendMail(mail));
 
             return succes;
         }
 
-        public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin)
+        public async Task<bool> ToekennenBuddy(Gastgezin gastgezin, Persoon persoon) 
+        {
+            Mail mail = new Mail();
+
+            //persoon.Gastgezin = gastgezin;
+
+            mail.MailToName = persoon.Naam;
+            mail.MailToAdress = persoon.Email;
+            mail.Subject = "Uw nieuwe intake match met " + gastgezin.Contact.Naam;
+            mail.Message = $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("yyyy-MM-dd")} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam}, {gastgezin.Contact.Adres.Straat} in {gastgezin.Contact.Adres.Woonplaats}. Jij bent als buddy gekoppeld aan dit gastgezin. Wil of kun je geen buddy zijn van dit gezin dan verzoeken we je dit door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere buddy gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\n\nDit is een automatisch gegenereerd bericht.";
+
+            bool succes = await (_mailService.SendMail(mail));
+
+            return succes;
+        }
+
+        public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin) // checked
         {
             if(gastgezin == null)
             {
                 return false;
             }
+            EmailContact emailContact = new EmailContact();
 
-            var mail = new Mail()
             {
-                MailToAdress = gastgezin.Contact.Email,
-                MailToName = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam,
-                Subject = "Bevestiging uitvoering intake",
-                Message = $"Beste {gastgezin.Contact.Achternaam},\n\nOp {gastgezin.IntakeFormulier.DatumIngevuld.ToShortDateString()} heeft er bij u thuis een intakegesprek plaatsgevonden. Onderdeel van dit gesprek was het invullen van een vragenlijst: het intakeformulier. Dit formulier hebben wij in goede orde ontvangen. U bent vanaf heden inzetbaar als gastgezin voor de opvang van Oekraïense vluchtelingen via NuTwente. Heeft u vragen of opmerkingen of wilt u een wijziging doorgeven dan kunt u contact opnemen met uw buddy {gastgezin.Buddy.FirstName} {gastgezin.Buddy.LastName}, telefoonnummer: {gastgezin.Buddy.PhoneNumber}.\n\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht."
-            };
+                List<string> emailAdresses = new() { 
+                    gastgezin.Contact.Email,
+                    _configuration.GetSection("EmailAdressB").Value
+                };
+                string recipient = gastgezin.Contact.Naam;
+                return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\n Op {DateTime.Now.ToShortTimeString()} heeft er bij u thuis een intakegesprek plaatsgevonden. Onderdeel van dit gesprek was het invullen van een vragenlijst: het intakeformulier. Dit formulier hebben wij in goede orde ontvangen. U bent vanaf heden inzetbaar als gastgezin voor de opvang van Oekraïense vluchtelingen via NuTwente. Heeft u vragen of opmerkingen of wilt u een wijziging doorgeven dan kunt u contact opnemen met uw buddy {gastgezin.Buddy?.FirstName} {gastgezin.Buddy?.LastName}, telefoonnummer {gastgezin.Buddy?.PhoneNumber}\n\n\nDit is een automatisch gegenereerd bericht.", emailAdresses);
 
-            bool succes = await (_mailService.SendMail(mail));
+            }
 
-            return succes;
+            if (gastgezin.Contact.Email != null)
+            {
+                emailContact.EmailAdress = gastgezin.Contact.Email;
+                emailContact.ContactPerson = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
+            }
+            else
+            {
+                emailContact.EmailAdress = _configuration.GetSection("EmailAdressB").Value;
+                emailContact.ContactPerson = "Barbara";
+            }
         }
 
         public async Task<bool> Bevestiging(Persoon persoon)
@@ -117,45 +152,53 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             return succes;
         }
 
-        public async Task<bool> AanmeldingGastgezin(Persoon persoon)
+        public async Task<bool> AanmeldingGastgezin(Persoon persoon) // Checked
         {
             if (persoon == null)
             {
                 return false;
             }
+            List<string> recipients = new List<string>();
+            recipients.Add(persoon.Email);
+            //recipiants.Add(verplichte medewerkers)
 
-            var mail = new Mail()
-            {
-                MailToAdress = persoon.Email,
-                MailToName = persoon.Naam,
-                Subject = "Bevestiging van aanmelding",
-                Message = $"Beste {persoon.Naam},\n\nOp {DateTime.Now.Date.ToShortDateString()} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht"
-            };
-            bool succes = await (_mailService.SendMail(mail));
+            bool succes = await (_mailService.SendGroupMail("Bevestiging van aanmelding", $"Beste {persoon.Naam},\n\nOp {DateTime.Now.Date.ToShortDateString()} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht", recipients));
 
             return succes;
         }
 
 
-        //TODO: mail als alternatief bij missend telefoonnummer?
-        public async Task<bool> PlaatsingVluchteling(Plaatsing plaatsing)
+        public async Task<bool> PlaatsingVluchteling(Gastgezin gastgezin) // checked
         {
-            if(plaatsing == null)
+            string recipient = "";
+            if(gastgezin == null)
             {
                 return false;
             }
 
-            var mail = new Mail()
+            EmailContact emailContact = new EmailContact();
+            List<string> emailAdresses = new() {
+                    _configuration.GetSection("EmailAdressO").Value,
+                    _configuration.GetSection("EmailAdressT").Value
+                };
+
+            if (gastgezin.Buddy != null && gastgezin.Buddy.Deleted == false)
             {
-                MailToAdress = plaatsing.Gastgezin.Buddy.Email,
-                MailToName = plaatsing.Gastgezin.Buddy.FirstName,
-                Subject = "Plaatsing vluchteling",
-                Message = $"Beste buddy,\n\nBij jouw gastgezin {plaatsing.Gastgezin.Contact.Achternaam}, {plaatsing.Gastgezin.PlaatsingsInfo.AdresVanLocatie} in {plaatsing.Gastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie} is/zijn op {plaatsing.DateTime.Date.ToShortDateString()} {plaatsing.Amount} vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {plaatsing.Gastgezin.PlaatsingsInfo.TelefoonnummerVanLocatie}.\n\n\nDit is een automatisch gegenereerd bericht."
-            };
+                emailAdresses.Add(gastgezin.Buddy.Email);
+                recipient = "buddy";
+            }
+            else if (gastgezin.Begeleider != null && gastgezin.Begeleider.Deleted == false)
+            {
+                emailAdresses.Add(gastgezin.Begeleider.Email);
+                recipient = "intaker";
+            }
+            else
+            {
+                emailAdresses.Add(_configuration.GetSection("EmailAdressB").Value);
+                recipient = "'bij ontbreeking van buddy & intaker'";
 
-            bool succes = await (_mailService.SendMail(mail));
-
-            return succes;
+            }
+            return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} is/zijn nieuwe vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {gastgezin.Contact.Telefoonnummer}.\n\n\nDit is een automatisch gegenereerd bericht.", emailAdresses);
         }
 
         public async Task<List<Persoon>> SendMailToGroup(List<Persoon> personen, string onderwerp, string bericht)
@@ -205,6 +248,5 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
             return unsendList;
         }
-
     }
 }

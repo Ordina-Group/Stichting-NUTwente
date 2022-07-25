@@ -51,7 +51,10 @@ public class MailService : IMailService
         List<EmailAddress> emailAddresses = new List<EmailAddress>();
         foreach(var mail in mailAdresses)
         {
-            emailAddresses.Add(new EmailAddress(mail));
+            if (mail!="")
+            {
+                emailAddresses.Add(new EmailAddress(mail));
+            }
         }
         var client = new SendGridClient(apiKey);
 
