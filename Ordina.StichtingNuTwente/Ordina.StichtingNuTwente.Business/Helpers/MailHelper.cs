@@ -97,6 +97,16 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             EmailContact emailContact = new EmailContact();
 
+            {
+                List<string> emailAdresses = new() { 
+                    gastgezin.Contact.Email,
+                    _configuration.GetSection("EmailAdressB").Value
+                };
+                string recipient = gastgezin.Contact.Naam;
+                return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\n Op {DateTime.Now.ToShortTimeString()} heeft er bij u thuis een intakegesprek plaatsgevonden. Onderdeel van dit gesprek was het invullen van een vragenlijst: het intakeformulier. Dit formulier hebben wij in goede orde ontvangen. U bent vanaf heden inzetbaar als gastgezin voor de opvang van Oekraïense vluchtelingen via NuTwente. Heeft u vragen of opmerkingen of wilt u een wijziging doorgeven dan kunt u contact opnemen met uw buddy {gastgezin.Buddy?.FirstName} {gastgezin.Buddy?.LastName}, telefoonnummer {gastgezin.Buddy?.PhoneNumber}\n\n\nDit is een automatisch gegenereerd bericht.", emailAdresses);
+
+            }
+
             if (gastgezin.Contact.Email != null)
             {
                 emailContact.EmailAdress = gastgezin.Contact.Email;
@@ -104,20 +114,9 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             else
             {
-                emailContact.EmailAdress = "temp";
+                emailContact.EmailAdress = _configuration.GetSection("EmailAdressB").Value;
                 emailContact.ContactPerson = "Barbara";
             }
-            var mail = new Mail()
-            {
-                MailToAdress = emailContact.EmailAdress,
-                MailToName = emailContact.ContactPerson,
-                Subject = "Bevestiging uitvoering intake",
-                Message = $"Beste {emailContact.ContactPerson},\n\nOp {gastgezin.IntakeFormulier.DatumIngevuld.ToShortDateString()} heeft er bij u thuis een intakegesprek plaatsgevonden. Onderdeel van dit gesprek was het invullen van een vragenlijst: het intakeformulier. Dit formulier hebben wij in goede orde ontvangen. U bent vanaf heden inzetbaar als gastgezin voor de opvang van Oekraïense vluchtelingen via NuTwente. Heeft u vragen of opmerkingen of wilt u een wijziging doorgeven dan kunt u contact opnemen met uw buddy {gastgezin.Buddy.FirstName} {gastgezin.Buddy.LastName}, telefoonnummer: {gastgezin.Buddy.PhoneNumber}.\n\n\nVriendelijke groet,\n\nTeam Housing NuTwente\n\n\nDit is een automatisch gegenereerd bericht."
-            };
-
-            bool succes = await (_mailService.SendMail(mail));
-
-            return succes;
         }
 
         public async Task<bool> Bevestiging(Persoon persoon)
@@ -169,47 +168,38 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
         }
 
 
-        public async Task<bool> PlaatsingVluchteling(Gastgezin gastgezin, int plaatsingen ) // checked
+        public async Task<bool> PlaatsingVluchteling(Gastgezin gastgezin) // checked
         {
+            bool emailSend = false;
             string recipient = "";
-            if(gastgezin == null || plaatsingen == 0)
+            if(gastgezin == null)
             {
                 return false;
             }
 
             EmailContact emailContact = new EmailContact();
+            List<string> emailAdresses = new() {
+                    _configuration.GetSection("EmailAdressO").Value,
+                    _configuration.GetSection("EmailAdressT").Value
+                };
 
-            if (gastgezin.Buddy != null)
+            if (gastgezin.Buddy != null && gastgezin.Buddy.Deleted == false)
             {
-                emailContact.EmailAdress = gastgezin.Buddy.Email;
-                emailContact.ContactPerson = gastgezin.Buddy.FirstName;
+                emailAdresses.Add(gastgezin.Buddy.Email);
                 recipient = "buddy";
             }
             else if (gastgezin.Begeleider != null && gastgezin.Begeleider.Deleted == false)
             {
-                emailContact.EmailAdress = gastgezin.Begeleider.Email;
-                emailContact.ContactPerson = gastgezin.Begeleider.FirstName;
+                emailAdresses.Add(gastgezin.Begeleider.Email);
                 recipient = "intaker";
             }
             else
             {
-                emailContact.EmailAdress = _configuration.GetSection("EmailAdressOlga").Value;
-                emailContact.ContactPerson = "Olga";
-                recipient = "Olga";
+                emailAdresses.Add(_configuration.GetSection("EmailAdressB").Value);
+                recipient = "'bij ontbreeking van buddy & intaker'";
 
             }
-
-            var mail = new Mail()
-            {
-                MailToAdress = emailContact.EmailAdress,
-                MailToName = emailContact.ContactPerson,
-                Subject = "Plaatsing vluchteling",
-                Message = $"Beste {recipient},\n\nBij jouw gastgezin {gastgezin.Contact.Achternaam}, {gastgezin.PlaatsingsInfo.AdresVanLocatie} in {gastgezin.PlaatsingsInfo.PlaatsnaamVanLocatie} is/zijn op {DateTime.Now.ToShortDateString} {plaatsingen} vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {gastgezin.PlaatsingsInfo.TelefoonnummerVanLocatie}.\n\n\nDit is een automatisch gegenereerd bericht."
-            };
-
-            bool succes = await (_mailService.SendMail(mail));
-
-            return succes;
+            return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} is/zijn nieuwe vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {gastgezin.Contact.Telefoonnummer}.\n\n\nDit is een automatisch gegenereerd bericht.", emailAdresses);
         }
 
         public async Task<List<Persoon>> SendMailToGroup(List<Persoon> personen, string onderwerp, string bericht)
