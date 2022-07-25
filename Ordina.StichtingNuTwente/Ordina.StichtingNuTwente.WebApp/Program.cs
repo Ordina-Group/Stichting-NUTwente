@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddSingleton<IHostedService,CleanOnHoldTill>();
+builder.Services.AddSingleton<IHostedService, EmailAboutPlaatsingen>();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromHours(8);
 });
