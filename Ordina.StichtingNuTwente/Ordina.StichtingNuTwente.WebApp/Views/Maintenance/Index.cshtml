@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Ordina.StichtingNuTwente.Models.ViewModels.MaintenanceModel
-<h1>Maintenance</h1>
+
+@{
+    ViewData["Title"] = "Maintenance";
+}
+
+<h2>@ViewData["Title"]</h2>
 <br>
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
 {

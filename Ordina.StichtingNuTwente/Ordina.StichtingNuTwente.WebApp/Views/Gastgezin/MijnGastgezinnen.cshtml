@@ -4,7 +4,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor Accessor
 
 @{
-    ViewData["Title"] = "Mijn Gastgezinnen";
+    ViewData["Title"] = Model.Vrijwilliger.Naam;
     var Index = 0;
     var newGastgezinnen = Model.MijnGastgezinnen.Count(g => !g.HeeftBekeken);
 }
@@ -15,7 +15,7 @@
             <div class="card border-0 bg-transparent shadow-none" id="TitleCard">
                 <div class="card-body">
                     <h2 class="card-title">
-                        @Model.Vrijwilliger.Naam
+                        @ViewData["Title"]
                     </h2>
                 </div>
             </div>
@@ -97,7 +97,12 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title h5">
-                        Mijn Gastgezinnen @(Model.GastgezinnenVan != null?Model.GastgezinnenVan: "")
+                        @if(Model.GastgezinnenVan != null){
+                            @:Gastgezinnen van @Model.GastgezinnenVan
+                        }else
+                        {
+                            @:Mijn Gastgezinnen
+                        }
 
                         @if (newGastgezinnen > 0)
                         {
