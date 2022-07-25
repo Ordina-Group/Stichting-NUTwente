@@ -156,17 +156,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "RequireCoordinatorRole")]
-        [ActionName("IntakeGastgezinEmail")]
-        [Route("Gastgezin/IntakeGastgezinEmail")]
-        public bool IntakeGastgezinEmail(int GastGezinId)
-        {
-            mailHelper.IntakeUitgevoerd(_gastgezinService.GetGastgezin(GastGezinId));
-
-            return true;
-        }
-
-        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "RequireCoordinatorRole")]
         public IActionResult UpdatePlaatsingen(IFormCollection formCollection)
