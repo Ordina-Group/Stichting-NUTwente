@@ -170,7 +170,6 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         public async Task<bool> PlaatsingVluchteling(Gastgezin gastgezin) // checked
         {
-            bool emailSend = false;
             string recipient = "";
             if(gastgezin == null)
             {
