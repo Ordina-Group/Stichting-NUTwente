@@ -64,6 +64,9 @@ jobs:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           SENDGRID_MAILFROM_ADDRESS: ${{ secrets.SENDGRID_MAILFROM_ADDRESS }}
           SENDGRID_MAILFROM_NAME: ${{ secrets.SENDGRID_MAILFROM_NAME }}
+          EMAILADRESSB: ${{ secrets.EMAILADRESSB }}
+          EMAILADRESSO: ${{ secrets.EMAILADRESSO }}
+          EMAILADRESSR: ${{ secrets.EMAILADRESSR }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
