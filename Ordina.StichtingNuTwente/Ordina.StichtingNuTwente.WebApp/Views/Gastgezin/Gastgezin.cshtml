@@ -532,6 +532,7 @@ contains:
                             Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                             @if (Model.Plaatsingen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
+                                <button type="button" class="btn btn-primary" id="SendPlaatsingenEmail">Verstuur Email</button>
                                 <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditPlaatsingen="true"></a>
                             }
                         </h5>
@@ -1187,6 +1188,24 @@ contains:
                     } else {
                         window.location = "/";
                     }
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
+
+    @*Send Plaatsingen Email*@
+    $("#SendPlaatsingenEmail").on("click", function() {
+        let id = @Model.GastGezin.Id;
+        if (confirm("Weet je zeker dat je een e-mail wilt versturen?")) {
+            $.ajax({
+                url: `/Gastgezin/SendPlaatsingenEmail`,
+                type: "POST",
+                dataType: 'text',
+                data: {"GastGezinId": id},
+                success: function() {
                 },
                 error: function() {
                     window.location = "/Error";
