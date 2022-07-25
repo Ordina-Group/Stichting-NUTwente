@@ -21,8 +21,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IPersoonService _persoonService;
         private readonly IMailService _mailService;
         private readonly IGastgezinService _gastgezinService;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService)
+        public HomeController(ILogger<HomeController> logger, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService, IConfiguration configuration)
         {
             _logger = logger;
             _reactionService = reactionService;
@@ -30,6 +31,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _persoonService = persoonService;
             _mailService = mailService;
             _gastgezinService = gastgezinService;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -209,7 +211,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
                     var reactie = _reactionService.NewReactie(answerData, gastgezinId);
                     var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
-                    MailHelper mailHelper = new MailHelper(_mailService);
+                    MailHelper mailHelper = new MailHelper(_mailService, _configuration);
 
                     if (reactie.FormulierId == 1)
                     {
