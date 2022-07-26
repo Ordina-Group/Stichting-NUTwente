@@ -67,6 +67,7 @@ jobs:
           EMAILADRESSB: ${{ secrets.EMAILADRESSB }}
           EMAILADRESSO: ${{ secrets.EMAILADRESSO }}
           EMAILADRESSR: ${{ secrets.EMAILADRESSR }}
+          EMAILADRESST: ${{ secrets.EMAILADRESST }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
