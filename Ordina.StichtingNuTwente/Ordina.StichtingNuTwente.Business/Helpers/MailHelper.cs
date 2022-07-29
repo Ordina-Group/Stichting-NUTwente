@@ -9,12 +9,6 @@ using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Business.Helpers
 {
-    class EmailContact
-    {
-        public string? EmailAdress { get; set; }
-        public string? ContactPerson { get; set; }
-    }
-
     public class MailHelper
     {
         private readonly IConfiguration _configuration;
@@ -26,19 +20,20 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             _mailService = mailService;
         }
 
-        public async Task<bool> ToekennenIntaker(Gastgezin gastgezin, Persoon persoon) // checked
+        public async Task<bool> ToekennenIntaker(Gastgezin gastgezin, Persoon persoon)
         {
             if (persoon == null || gastgezin == null)
             {
                 return false;
             }
+            usedLocation location = UsedLocation(gastgezin);
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
                 _configuration.GetSection("EmailAdressB)").Value,
             };
 
-            return await (_mailService.SendGroupMail("Intaker koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} heeft {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.Contact.Adres?.Woonplaats} zich aangemeld als potentieel gastgezin bij NuTwente. Jij bent als intaker aan dit gezin gekoppeld om het intakegesprek af te nemen. Lukt het niet om binnen een week contact op te nemen met dit gezin of kun je om andere redenen dit intakegesprek niet afnemen dan verzoeken we je dit per omgaande door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere intaker gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
+            return await (_mailService.SendGroupMail("Intaker koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} heeft {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} zich aangemeld als potentieel gastgezin bij NuTwente. Jij bent als intaker aan dit gezin gekoppeld om het intakegesprek af te nemen. Lukt het niet om binnen een week contact op te nemen met dit gezin of kun je om andere redenen dit intakegesprek niet afnemen dan verzoeken we je dit per omgaande door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere intaker gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
         }
 
         public async Task<bool> ToekennenBuddy(Gastgezin gastgezin, Persoon persoon) 
@@ -47,13 +42,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             {
                 return false;
             }
+            usedLocation location = UsedLocation(gastgezin);
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
                 _configuration.GetSection("EmailAdressB)").Value,
             };
 
-            return await (_mailService.SendGroupMail("Buddy koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("yyyy-MM-dd")} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.Contact.Adres?.Woonplaats}. Jij bent als buddy gekoppeld aan dit gastgezin. Wil of kun je geen buddy zijn van dit gezin dan verzoeken we je dit door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere buddy gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
+            return await (_mailService.SendGroupMail("Buddy koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("yyyy-MM-dd")} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam}. Jij bent als buddy gekoppeld aan dit gastgezin. Wil of kun je geen buddy zijn van dit gezin dan verzoeken we je dit door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere buddy gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
         }
 
         public async Task<bool> VertrekVluchteling(Gastgezin gastgezin, Persoon persoon)
@@ -62,6 +58,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             {
                 return false;
             }
+            usedLocation location = UsedLocation(gastgezin);
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
@@ -69,7 +66,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 _configuration.GetSection("EmailAdressO)").Value,
             };
 
-            return await (_mailService.SendGroupMail("Vertrek vluchtelingen", $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam}, {gastgezin.Contact.Adres?.Straat} in {gastgezin.Contact.Adres?.Woonplaats} is / zijn op {DateTime.Now.ToString("yyyy-MM-dd")} vluchtelingen vertrokken. Je kunt deze mutatie terugvinden in je overzicht 'mijn gastgezinnen' in de database\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
+            return await (_mailService.SendGroupMail("Vertrek vluchtelingen", $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam},  {location.adress} in {location.plaatsnaam} is / zijn op {DateTime.Now.ToString("yyyy-MM-dd")} vluchtelingen vertrokken. Je kunt deze mutatie terugvinden in je overzicht 'mijn gastgezinnen' in de database\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
         }
 
         public async Task<bool> PlaatsingsReservering(Gastgezin gastgezin, Persoon persoon)
@@ -78,13 +75,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             {
                 return false;
             }
+            usedLocation location = UsedLocation(gastgezin);
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
                 _configuration.GetSection("EmailAdressB)").Value,
             };
 
-            return await (_mailService.SendGroupMail("Reservering bij "+ gastgezin.Contact.Naam, $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} geld een reservering voor de plaatsing van vluchtelingen. Je kunt deze reserveringen terugvinden in je overzicht 'mijn gastgezinnen' in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
+            return await (_mailService.SendGroupMail("Reservering bij "+ gastgezin.Contact.Naam, $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} geld een reservering voor de plaatsing van vluchtelingen. Je kunt deze reserveringen terugvinden in je overzicht 'mijn gastgezinnen' in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
         }
 
         public async Task<bool> AanmeldenVrijwilliger(Persoon persoon)
@@ -108,16 +106,17 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             {
                 return false;
             }
+            usedLocation location = UsedLocation(gastgezin);
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
                 _configuration.GetSection("EmailAdressB)").Value,
             };
 
-            return await (_mailService.SendGroupMail("Verwijdering gastgezin van " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} is {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} verwijderd als gastgezin uit de database van NuTwente. Dit gastgezin staat vanaf heden niet meer in jouw overzicht met gastgezinnen. Mocht je meer willen weten over bijvoorbeeld de reden van verwijdering, neem dan  contact op met de coördinator Housing.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
+            return await (_mailService.SendGroupMail("Verwijdering gastgezin van " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} is {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} verwijderd als gastgezin uit de database van NuTwente. Dit gastgezin staat vanaf heden niet meer in jouw overzicht met gastgezinnen. Mocht je meer willen weten over bijvoorbeeld de reden van verwijdering, neem dan  contact op met de coördinator Housing.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
         }
 
-        public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin) // checked
+        public async Task<bool> IntakeUitgevoerd(Gastgezin gastgezin)
         {
             if (gastgezin == null)
             {
@@ -152,7 +151,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
 
         }
 
-        public async Task<bool> AanmeldingGastgezin(Persoon persoon) // Checked
+        public async Task<bool> AanmeldingGastgezin(Persoon persoon)
         {
             if (persoon == null)
             {
@@ -175,8 +174,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             {
                 return false;
             }
-
-            EmailContact emailContact = new EmailContact();
+            usedLocation location = UsedLocation(gastgezin);
             List<string> emailAdresses = new() {
                     _configuration.GetSection("EmailAdressO").Value,
                     _configuration.GetSection("EmailAdressT").Value
@@ -193,7 +191,35 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 recipient = "'bij ontbreeking van buddy & intaker'";
 
             }
-            return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {gastgezin.PlaatsingsInfo?.AdresVanLocatie} in {gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie} is/zijn nieuwe vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {gastgezin.Contact.Telefoonnummer}.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht", emailAdresses);
+            return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} is/zijn nieuwe vluchteling(en) geplaatst. Je kunt deze plaatsing terugvinden in je overzicht ‘mijn gastgezinnen’ in de database. Wil je op korte termijn, als dit nog niet is gebeurd, contact opnemen met het gastgezin? Het telefoonnummer is {gastgezin.Contact.Telefoonnummer}.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht", emailAdresses);
         }
+        public usedLocation UsedLocation(Gastgezin gastgezin) // temp fix voor ontbreken van data
+        {
+            usedLocation location = new usedLocation();
+            if (gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie != null)
+            {
+                location.plaatsnaam = gastgezin.PlaatsingsInfo?.PlaatsnaamVanLocatie;
+            }
+            else
+            {
+                location.plaatsnaam = gastgezin.Contact.Adres?.Woonplaats;
+            }
+
+            if (gastgezin.PlaatsingsInfo?.AdresVanLocatie != null)
+            {
+                location.plaatsnaam = gastgezin.PlaatsingsInfo?.AdresVanLocatie;
+            }
+            else
+            {
+                location.plaatsnaam = gastgezin.Contact.Adres?.Straat;
+            }
+            return location;
+        }
+    }
+
+    public class usedLocation
+    {
+        public string? adress { get; set; }
+        public string? plaatsnaam { get; set; }
     }
 }
