@@ -30,7 +30,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressB)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_B)").Value,
             };
 
             return await (_mailService.SendGroupMail("Intaker koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} heeft {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} zich aangemeld als potentieel gastgezin bij NuTwente. Jij bent als intaker aan dit gezin gekoppeld om het intakegesprek af te nemen. Lukt het niet om binnen een week contact op te nemen met dit gezin of kun je om andere redenen dit intakegesprek niet afnemen dan verzoeken we je dit per omgaande door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere intaker gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -46,7 +46,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressB)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_B)").Value,
             };
 
             return await (_mailService.SendGroupMail("Buddy koppeling aan " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("yyyy-MM-dd")} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam}. Jij bent als buddy gekoppeld aan dit gastgezin. Wil of kun je geen buddy zijn van dit gezin dan verzoeken we je dit door te geven aan Audrey Esser (audrey@essercommunications.nl). Er wordt dan een andere buddy gekoppeld aan dit gezin. Je kunt de gegevens van het gastgezin terugvinden in je overzicht ‘mijn gastgezinnen’ in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -62,8 +62,8 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressT)").Value,
-                _configuration.GetSection("EmailAdressO)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_T)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_O)").Value,
             };
 
             return await (_mailService.SendGroupMail("Vertrek vluchtelingen", $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} heeft er een intakegesprek plaatsgevonden bij {gastgezin.Contact.Naam},  {location.adress} in {location.plaatsnaam} is / zijn op {DateTime.Now.ToString("yyyy-MM-dd")} vluchtelingen vertrokken. Je kunt deze mutatie terugvinden in je overzicht 'mijn gastgezinnen' in de database\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -79,7 +79,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressB)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_B)").Value,
             };
 
             return await (_mailService.SendGroupMail("Reservering bij "+ gastgezin.Contact.Naam, $"Beste buddy,\n\nBij jouw gastgezin {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} geld een reservering voor de plaatsing van vluchtelingen. Je kunt deze reserveringen terugvinden in je overzicht 'mijn gastgezinnen' in de database.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -94,7 +94,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressR)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_R)").Value,
             };
 
             return await (_mailService.SendGroupMail("Aanmelding als vrijwilliger bij NuTwente", $"Beste {persoon.Naam},\n\nBedankt dat u zich heeft aangemeld als vrijwilliger bij NuTwente. Wij trachten binnen twee weken contact met u op te nemen voor een telefonisch kennismakingsgesprek. In dit gesprek kunt u aangeven wat uw wensen en verwachtingen zijn en overleggen we over de mogelijkheden. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl t.a.v. R. Legtenberg.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -110,7 +110,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressB)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_B)").Value,
             };
 
             return await (_mailService.SendGroupMail("Verwijdering gastgezin van " + gastgezin.Contact.Naam, $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} is {gastgezin.Contact.Naam}, {location.adress} in {location.plaatsnaam} verwijderd als gastgezin uit de database van NuTwente. Dit gastgezin staat vanaf heden niet meer in jouw overzicht met gastgezinnen. Mocht je meer willen weten over bijvoorbeeld de reden van verwijdering, neem dan  contact op met de coördinator Housing.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -125,8 +125,8 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> emailAdresses = new() {
                     gastgezin.Contact.Email,
                     gastgezin.Begeleider.Email,
-                    _configuration.GetSection("EmailAdressO)").Value,
-                    _configuration.GetSection("EmailAdressB").Value};
+                    _configuration.GetSection("SENDGRID_MAILTO_O)").Value,
+                    _configuration.GetSection("SENDGRID_MAILTO_B").Value};
 
             string recipient = gastgezin.Contact.Naam;
             return await _mailService.SendGroupMail("Plaatsing vluchteling", $"Beste {recipient},\n\n Op {DateTime.Now.ToString("dd-MM-yyyy")} heeft er bij u thuis een intakegesprek plaatsgevonden. Onderdeel van dit gesprek was het invullen van een vragenlijst: het intakeformulier. Dit formulier hebben wij in goede orde ontvangen. U bent vanaf heden inzetbaar als gastgezin voor de opvang van Oekraïense vluchtelingen via NuTwente. Heeft u vragen of opmerkingen of wilt u een wijziging doorgeven dan kunt u contact opnemen met uw buddy {gastgezin.Buddy?.FirstName} {gastgezin.Buddy?.LastName}, telefoonnummer {gastgezin.Buddy?.PhoneNumber}\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", emailAdresses);
@@ -160,7 +160,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             List<string> recipients = new List<string>()
             {
                 persoon.Email,
-                _configuration.GetSection("EmailAdressB)").Value,
+                _configuration.GetSection("SENDGRID_MAILTO_B)").Value,
             };
 
             return await (_mailService.SendGroupMail("Bevestiging van aanmelding", $"Beste {persoon.Naam},\n\nOp {DateTime.Now.ToString("dd-MM-yyyy")} heeft u zich aangemeld als gastgezin voor het opvangen van Oekraïense vluchtelingen. Wij hebben uw aanmelding in goede orde ontvangen. Wij trachten binnen twee weken contact met u op te nemen voor het inplannen van een intakegesprek met één van onze intakers. Dit gesprek vindt bij u thuis plaats. Mocht u binnen twee weken geen nader bericht van ons hebben ontvangen dan verzoeken wij u een mail te sturen naar help@nutwente.nl, t.a.v. A. Esser.\n\nVriendelijke groet,\n\nTeam NuTwente\n\nDit is een automatisch gegenereerd bericht.", recipients));
@@ -176,8 +176,8 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             usedLocation location = UsedLocation(gastgezin);
             List<string> emailAdresses = new() {
-                    _configuration.GetSection("EmailAdressO").Value,
-                    _configuration.GetSection("EmailAdressT").Value
+                    _configuration.GetSection("SENDGRID_MAILTO_O").Value,
+                    _configuration.GetSection("SENDGRID_MAILTO_T").Value
                 };
 
             if (gastgezin.Buddy != null && gastgezin.Buddy.Deleted == false)
@@ -187,7 +187,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
             }
             else
             {
-                emailAdresses.Add(_configuration.GetSection("EmailAdressB").Value);
+                emailAdresses.Add(_configuration.GetSection("SENDGRID_MAILTO_B").Value);
                 recipient = "'bij ontbreeking van buddy & intaker'";
 
             }
