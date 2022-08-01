@@ -59,10 +59,10 @@ jobs:
         with:
           files: './appsettings.json'
         env:
-          EmailAdressB: ${{ secrets.SENDGRID_MAILTO_B }}
-          EmailAdressO: ${{ secrets.SENDGRID_MAILTO_O }}
-          EmailAdressR: ${{ secrets.SENDGRID_MAILTO_R }}
-          EmailAdressT: ${{ secrets.SENDGRID_MAILTO_T }}
+          SENDGRID_MAILTO_B: ${{ secrets.SENDGRID_MAILTO_B }}
+          SENDGRID_MAILTO_O: ${{ secrets.SENDGRID_MAILTO_O }}
+          SENDGRID_MAILTO_R: ${{ secrets.SENDGRID_MAILTO_R }}
+          SENDGRID_MAILTO_T: ${{ secrets.SENDGRID_MAILTO_T }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
