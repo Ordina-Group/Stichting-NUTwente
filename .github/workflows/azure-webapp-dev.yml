@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Development'
+      name: Development
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -53,6 +53,16 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: './appsettings.json'
+        env:
+          EMAILADRESSB: ${{ secrets.SENDGRID_MAILTO_B }}
+          EMAILADRESSO: ${{ secrets.SENDGRID_MAILTO_O }}
+          EMAILADRESSR: ${{ secrets.SENDGRID_MAILTO_R }}
+          EMAILADRESST: ${{ secrets.SENDGRID_MAILTO_T }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
