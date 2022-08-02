@@ -170,16 +170,9 @@
                                     <p>@mijnGastgezin.Buddy</p>
                                 }
                             </td>
-                            @if (mijnGastgezin.PlaatsingsInfo != null)
-                            {
-                                <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
+                            <td></td>                           
                         </tr>
-                        @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note))
+                        //@await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note,mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen, mijnGastgezin.CoordinatorOpmerkingen))
                     }
                 </tbody>
             </table>
