@@ -198,58 +198,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> SaveAndSendEmailAsync(string answers, int? gastgezinId)
-        {
-            try
-            {
-                if (answers != null)
-                {
-                    bool success;
-                    int ggId;
-                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    var reactie = _reactionService.NewReactie(answerData, gastgezinId);
-                    var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
-                    MailHelper mailHelper = new MailHelper(_mailService, _configuration);
-
-                    if (reactie.FormulierId == 1)
-                    {
-                        success = await mailHelper.AanmeldingGastgezin(persoon);
-                    }
-                    else if(reactie.FormulierId == 2)
-                    {
-                        if(gastgezinId != null)
-                        {
-                            ggId = gastgezinId ?? default(int);
-                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
-                            success = await mailHelper.IntakeUitgevoerd(gastgezin);
-                        }
-
-                        //TODO even kijken hoe we hier mee omgaan, op dit moment beetje cheesy manier van oplossen
-                        else
-                        {
-                            success = true;
-                        }
-                    }
-                    else if(reactie.FormulierId == 4)
-                    {
-                        success = await mailHelper.AanmeldingVrijwilliger(persoon);
-                    }
-                    else
-                    {
-                        success = false;
-                    }
-                    if (success) return Ok();
-                }
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [Authorize(Policy = "RequireVrijwilligerRole")]
         [HttpPut]
         public IActionResult Update(string answers, int id)
