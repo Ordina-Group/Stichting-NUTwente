@@ -14,5 +14,7 @@ public enum DepartureDestination
     [Display(Name = "Vertrek naar bestemming buiten Nederland (niet Oekraïne)")]
     BuitenNederland = 3,
     [Display(Name = "Administratieve Correctie")]
-    Correctie = 4
+    Correctie = 4,
+    [Display(Name = "Herplaatsing bij ander gastgezin NuTwente")]
+    Herplaatsing = 5,
 }
