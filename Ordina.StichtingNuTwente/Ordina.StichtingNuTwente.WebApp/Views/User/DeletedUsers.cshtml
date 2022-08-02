@@ -46,7 +46,7 @@
                 <td><a href="/MijnGastgezinnen/@u.Id?filter=Buddy">@u.AantalBuddies</a></td>
                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    <td><button type="button" class="btn btn-primary" id="restoreUser" value="@u.Id">Herstellen</button></td>
+                    <td><button type="button" class="btn btn-primary restoreUser" value="@u.Id">Herstellen</button></td>
                 }
             </tr>
         }
@@ -54,7 +54,7 @@
 </table>
 
 <script>
-    $("#restoreUser").on("click", function() {
+    $(".restoreUser").on("click", function() {
         let id = $(this).val();
         if (confirm("Weet je zeker dat je deze vrijwilliger wilt herstellen?")) {
             $.ajax({
