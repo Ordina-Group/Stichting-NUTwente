@@ -1,4 +1,6 @@
 ﻿@using Ordina.StichtingNuTwente.Models.Models
+@using System.ComponentModel.DataAnnotations
+@model List<Plaatsing>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -6,47 +8,97 @@
     ViewData["Title"] = "Verwijderde Plaatsingen";
 }
 <div>
-    <h3>
-        @ViewData["Title"]
-    </h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Datum</th>
-                <th>Gastgezin</th>
-                <th>Gender</th>
-                <th>Leeftijd</th>
-                <th>Uitgevoerd door</th>
-                <th>Reden voor vertrek</th>
-                <th>Vertrokken naar</th>
-                <th>Commentaar</th>
-            </tr>
-        </thead>
-        @foreach (Plaatsing plaatsing in Model)
-        {
-            <tr>
-                <td>@plaatsing.DateTime.ToShortDateString()</td>
-                <td><a asp-controller="Gastgezin" asp-action="gastgezin" asp-route-id="@plaatsing.Gastgezin.Id" target="_blank">@plaatsing.Gastgezin.Contact.Naam</a></td>
-                <td>@plaatsing.Gender</td>
-                <td>
-                    @if (plaatsing.Age != -1)
+    <div class="row">
+        <div class="col">
+            <h3>
+                @ViewData["Title"]
+
+            </h3>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary float-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStats" aria-expanded="false" aria-controls="collapseStats">
+                Statistieken
+            </button>
+        </div>
+    </div>
+
+    <div class="collapse row" id="collapseStats">
+        <div class="col">
+            <div class="card card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Bestemming</th>
+                                <th>Aantal</th>
+                            </tr>
+                        </thead>
+                        @{
+                            var destinationGroups = Model.GroupBy(p => p.DepartureDestination).ToList();
+                            foreach (var group in destinationGroups)
+                            {
+                                <tr>
+                                    <td>@(group.Key.GetAttribute<DisplayAttribute>().Name)</td>
+                                    <td>@group.Count()</td>
+                                </tr>
+                            }
+                        }
+                        <tfoot>
+                        <tr>
+                            <td>Totaal</td>
+                            <td>@Model.Count()</td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Gastgezin</th>
+                            <th>Gender</th>
+                            <th>Leeftijd</th>
+                            <th>Uitgevoerd door</th>
+                            <th>Reden voor vertrek</th>
+                            <th>Vertrokken naar</th>
+                            <th>Commentaar</th>
+                        </tr>
+                    </thead>
+                    @foreach (Plaatsing plaatsing in Model)
                     {
-                        <text>@plaatsing.Age</text>
+                        <tr>
+                            <td>@plaatsing.DateTime.ToShortDateString()</td>
+                            <td><a asp-controller="Gastgezin" asp-action="gastgezin" asp-route-id="@plaatsing.Gastgezin.Id" target="_blank">@plaatsing.Gastgezin.Contact.Naam</a></td>
+                            <td>@plaatsing.Gender</td>
+                            <td>
+                                @if (plaatsing.Age != -1)
+                                {
+                                    <text>@plaatsing.Age</text>
+                                }
+                                else if (plaatsing.AgeGroup != AgeGroup.Onbekend)
+                                {
+                                    <text>@plaatsing.AgeGroup</text>
+                                }
+                                else
+                                {
+                                    <text>Onbekend</text>
+                                }
+                            </td>
+                            <td><a href="/Mijngastgezinnen/@(plaatsing.Vrijwilliger.Id)" target="_blank">@plaatsing.Vrijwilliger.FirstName</a></td>
+                            <td>@plaatsing.DepartureReason</td>
+                            <td>@(plaatsing.DepartureDestination.GetAttribute<DisplayAttribute>().Name)</td>
+                            <td>@plaatsing.DepartureComment</td>
+                        </tr>
                     }
-                    else if (plaatsing.AgeGroup != AgeGroup.Onbekend)
-                    {
-                        <text>@plaatsing.AgeGroup</text>
-                    }
-                    else
-                    {
-                        <text>Onbekend</text>
-                    }
-                </td>
-                <td><a href="/Mijngastgezinnen/@(plaatsing.Vrijwilliger.Id)" target="_blank">@plaatsing.Vrijwilliger.FirstName</a></td>
-                <td>@plaatsing.DepartureReason</td>
-                <td>@plaatsing.DepartureDestination</td>
-                <td>@plaatsing.DepartureComment</td>
-            </tr>
-        }
-    </table>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
