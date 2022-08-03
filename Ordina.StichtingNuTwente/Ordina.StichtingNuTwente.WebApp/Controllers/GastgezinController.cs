@@ -5,7 +5,7 @@ using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ordina.StichtingNuTwente.Models.Mappings;
-using Ordina.StichtingNuTwente.Business.Helpers;
+using Ordina.StichtingNuTwente.Business.Services;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -16,16 +16,13 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IUserService _userService;
         private readonly IMailService _mailService;
         private readonly IConfiguration _configuration;
-        private MailHelper mailHelper;
 
         public GastgezinController(IGastgezinService gastgezinService, IUserService userService, IMailService mailService, IConfiguration configuration)
         {
             _gastgezinService = gastgezinService;
             _userService = userService;
-            _mailService = mailService;
             _configuration = configuration;
-
-            mailHelper = new MailHelper(_mailService, _configuration);
+            _mailService = mailService;
             _configuration = configuration;
         }
 
@@ -139,7 +136,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
 
             //TODO: zorgen dat er niet per losse plaatsing een mail wordt verstuurd
-            //mailHelper.PlaatsingVluchteling(plaatsing);
+            //MailService.PlaatsingVluchteling(plaatsing);
 
             return Redirect("/gastgezin?id=" + GastGezinId);
         }
@@ -150,7 +147,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("Gastgezin/SendPlaatsingenEmail")]
         public bool SendPlaatsingenEmail(int GastGezinId)
         {
-            mailHelper.PlaatsingVluchteling(_gastgezinService.GetGastgezin(GastGezinId));
+            _mailService.PlaatsingVluchteling(_gastgezinService.GetGastgezin(GastGezinId));
 
             return true;
         }
