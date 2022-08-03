@@ -97,9 +97,11 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-title h5">
-                        @if(Model.GastgezinnenVan != null){
+                        @if (Model.GastgezinnenVan != null)
+                        {
                             @:Gastgezinnen van @Model.GastgezinnenVan
-                        }else
+                        }
+                        else
                         {
                             @:Mijn Gastgezinnen
                         }
@@ -122,66 +124,67 @@
                     </ul>
                 </div>
                 <div class="card-body">
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
-                                {
-                                    <th scope="col"></th>
-                                }
-                                <th scope="col">Naam</th>
-                                <th scope="col">Adres</th>
-                                <th scope="col">Woonplaats</th>
-                                <th scope="col">Opmerkingen</th>
-                                <th scope="col">Aanmelding</th>
-                                <th scope="col">Intake</th>
-                                <th scope="col">Geplaatst</th>
-                                <th scope="col">Gereserveerd</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
-                            {
-                                Index++;
-                                <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
                                     @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
                                     {
-                                        <td><button class="btn btn-danger" onclick="$('#rejectModal').modal('show');$('#rejectModal').attr('gastgezin',@mijnGastgezin.Id)" title="Gastgezin Weigeren"><img width="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAuUlEQVRIieXSMQ4BQRTG8R8RkbiBgxD3UOg0GhdxBSfYswg30NM4AQ2K3cSSWbsTsw1f8pI3U3z/970Z/lE7bNs0vReVFFY2reqD6qagF/oqTZMEwTQpEwT1f4BzqV+lHOReU2cVj9yJADTVi2doRTNsMIkwbayxZ9Qr5sV93YrK9aLe23lY6vvIMEo2vnx/WeTEHxOENMC+TQD5Wk5tAmCKS6T5MQYAy0jAOhYACxxwq5l8Lf95P6YHq3yCt+kGH5YAAAAASUVORK5CYII=" /></button></td>
+                                        <th scope="col"></th>
                                     }
-                                    <td>@mijnGastgezin.Naam</td>
-                                    <td>@mijnGastgezin.Adres</td>
-                                    <td>@mijnGastgezin.Woonplaats</td>
-                                    <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
-                                    class="show" id="@Index"
-                                    data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
-                                        @mijnGastgezin.VrijwilligerOpmerkingen
-                                    </td>
-                                    <td>
-                                        @if (mijnGastgezin.AanmeldFormulierId != 0)
-                                        {
-                                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" title="Aanmeldformulier openen" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (mijnGastgezin.IntakeFormulierId > 0)
-                                        {
-                                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" title="Intakeformulier openen" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
-                                        }
-                                        else
-                                        {
-                                            <a style="color:orange" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" title="Nieuwe intake" target="_blank"><i class="fa-solid fa-file-pen centered-icon"></i></a>
-                                        }
-                                    </td>
-                                    <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)</a></td>
-                                    <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.ReserveTag.StartsWith("0")?"0":mijnGastgezin.ReserveTag)</a></td>
-                                    <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
+                                    <th scope="col">Naam</th>
+                                    <th scope="col">Adres</th>
+                                    <th scope="col">Woonplaats</th>
+                                    <th scope="col">Opmerkingen</th>
+                                    <th scope="col">Aanmelding</th>
+                                    <th scope="col">Intake</th>
+                                    <th scope="col">Geplaatst</th>
+                                    <th scope="col">Gereserveerd</th>
+                                    <th scope="col"></th>
                                 </tr>
-                                @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen, mijnGastgezin.CoordinatorOpmerkingen))
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var mijnGastgezin in Model.MijnGastgezinnen)
+                                {
+                                    Index++;
+                                    <tr class="@(Index%2==0?"dark-row":"light-row") @(mijnGastgezin.HeeftBekeken?"":"unseen")" id="@mijnGastgezin.Id">
+                                        @if (Context.Request.Query["filter"] == "Buddy" && Model.GastgezinnenVan == null)
+                                        {
+                                            <td><button class="btn btn-danger" onclick="$('#rejectModal').modal('show');$('#rejectModal').attr('gastgezin',@mijnGastgezin.Id)" title="Gastgezin Weigeren"><img width="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAuUlEQVRIieXSMQ4BQRTG8R8RkbiBgxD3UOg0GhdxBSfYswg30NM4AQ2K3cSSWbsTsw1f8pI3U3z/970Z/lE7bNs0vReVFFY2reqD6qagF/oqTZMEwTQpEwT1f4BzqV+lHOReU2cVj9yJADTVi2doRTNsMIkwbayxZ9Qr5sV93YrK9aLe23lY6vvIMEo2vnx/WeTEHxOENMC+TQD5Wk5tAmCKS6T5MQYAy0jAOhYACxxwq5l8Lf95P6YHq3yCt+kGH5YAAAAASUVORK5CYII=" /></button></td>
+                                        }
+                                        <td>@mijnGastgezin.Naam</td>
+                                        <td>@mijnGastgezin.Adres</td>
+                                        <td>@mijnGastgezin.Woonplaats</td>
+                                        <td style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 200px;"
+                                        class="show" id="@Index"
+                                        data-toggle="tooltip" data-placement="bottom" title="@mijnGastgezin.VrijwilligerOpmerkingen">
+                                            @mijnGastgezin.VrijwilligerOpmerkingen
+                                        </td>
+                                        <td>
+                                            @if (mijnGastgezin.AanmeldFormulierId != 0)
+                                            {
+                                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.AanmeldFormulierId" title="Aanmeldformulier openen" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (mijnGastgezin.IntakeFormulierId > 0)
+                                            {
+                                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@mijnGastgezin.IntakeFormulierId" title="Intakeformulier openen" target="_blank"><i class="fa-solid fa-file centered-icon"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a style="color:orange" href="/GastgezinIntake?gastgezinId=@mijnGastgezin.Id" title="Nieuwe intake" target="_blank"><i class="fa-solid fa-file-pen centered-icon"></i></a>
+                                            }
+                                        </td>
+                                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.PlaatsingTag.StartsWith("0")?"0":mijnGastgezin.PlaatsingTag)</a></td>
+                                        <td><a href="/gastgezin?id=@mijnGastgezin.Id" target="_blank">@(mijnGastgezin.ReserveTag.StartsWith("0")?"0":mijnGastgezin.ReserveTag)</a></td>
+                                        <td class="hoverable show" id="@Index"><i class="fas fa-chevron-down fa-solid"></i></td>
+                                    </tr>
+                                    @await Html.PartialAsync("_GastgezinPlaatsingsInfo.cshtml", new GastgezinPlaatsingsInfoPartial(mijnGastgezin.PlaatsingsInfo, Index, 10, mijnGastgezin.Note, mijnGastgezin.Id, mijnGastgezin.VrijwilligerOpmerkingen, mijnGastgezin.CoordinatorOpmerkingen))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

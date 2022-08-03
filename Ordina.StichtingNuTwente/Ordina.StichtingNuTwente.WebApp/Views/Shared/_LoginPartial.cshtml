@@ -3,7 +3,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <nav class="navbar navbar-dark bg-primary navbar-expand-sm navbar-toggleable-sm mb-3 justify-content-between">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-md navbar-toggleable-md mb-3 justify-content-between">
         <div class="container">
             <a class="navbar-brand">
                 <img src="/favicon.ico" alt="" width="44" height="44">
@@ -11,7 +11,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon navbar-light"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     @if (User.HasClaims("groups", "group-vrijwilliger", "group-secretariaat", "group-coordinator", "group-superadmin"))
                     {
@@ -59,21 +59,13 @@
                     {
                         @*archief*@
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/VerwijderdeGastgezinnen" || Accessor.HttpContext.Request.Path.Value == "/Plaatsingen/Verwijderd"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/VerwijderdeGastgezinnen" || Accessor.HttpContext.Request.Path.Value == "/Plaatsingen/Verwijderd" || Accessor.HttpContext.Request.Path.Value == "/Document/Index"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Archief
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/VerwijderdeGastgezinnen">Verwijderde gastgezinnen</a>
                                 <a class="dropdown-item" href="/Plaatsingen/Verwijderd">Verwijderde plaatsingen</a>
                                 <a class="dropdown-item" href="/Archief/Vrijwilligers">Verwijderde vrijwilligers</a>
-                            </div>
-                        </li>
-                        @*documenten*@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle @(Accessor.HttpContext.Request.Path.Value == "/Document/Index"? "active" : "" )" href="#" id="navbarDropdown" data-bs-toggle="dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Documenten
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/Document/Index">Downloads</a>
                             </div>
                         </li>
