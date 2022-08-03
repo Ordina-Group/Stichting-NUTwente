@@ -42,10 +42,12 @@ namespace Ordina.StichtingNuTwente.Models.Models
             ElektraSpatwaterdicht = "";
             DaglichtVerblijfsruimte = "";
             RookmelderAanwezig = "";
+            Whatsapp = "";
             Hobbys = "";
             Talen = "";
         }
 
+        public string? Whatsapp { get; set; }
         public string? KleineKinderen { get; set; }
         public string? VolwassenenGrotereKinderen { get; set; }
         public string? SlaapkamerRuimte { get; set; }
