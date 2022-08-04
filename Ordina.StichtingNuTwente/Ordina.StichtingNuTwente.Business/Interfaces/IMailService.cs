@@ -9,10 +9,22 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
     public interface IMailService
     {
-        public Task<bool> SendMail(Mail mail);
+        public Task<bool> ToekennenIntaker(Gastgezin gastgezin, Persoon persoon);
 
-        public void SetFromMail(string mailAdress);
+        public Task<bool> ToekennenBuddy(Gastgezin gastgezin, Persoon persoon);
 
-        public Task<bool> SendGroupMail(string subject, string message, List<string> mailAdresses);
+        public Task<bool> VertrekVluchteling(Gastgezin gastgezin, Persoon persoon);
+
+        public Task<bool> PlaatsingsReservering(Gastgezin gastgezin, Persoon persoon);
+
+        public Task<bool> VerwijderenGastgezin(Gastgezin gastgezin, Persoon persoon);
+
+        public Task<bool> IntakeUitgevoerd(Gastgezin gastgezin);
+
+        public Task<bool> AanmeldingVrijwilliger(Persoon vrijwilliger);
+
+        public Task<bool> AanmeldingGastgezin(Persoon contactpersoon);
+
+        public Task<bool> PlaatsingVluchteling(Gastgezin gastgezin);
     }
 }

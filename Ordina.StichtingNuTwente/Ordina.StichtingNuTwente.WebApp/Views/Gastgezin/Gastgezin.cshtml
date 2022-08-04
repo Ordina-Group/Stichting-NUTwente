@@ -292,6 +292,7 @@ contains:
                             <b>Daglicht slaapkamer:</b> @Model.GastGezin.PlaatsingsInfo?.DaglichtSlaapkamer<br>
                             <b>Rookmelder(s) aanwezig: </b> @Model.GastGezin.PlaatsingsInfo?.RookmelderAanwezig<br>
                             <b>Beperkingen:</b> @Model.GastGezin.PlaatsingsInfo?.Beperkingen?.Replace(":;",": ")<br>
+                            <b>Wil deel uitmaken van de Whatsapp groep:</b> @Model.GastGezin.PlaatsingsInfo?.Whatsapp<br>
                         </div>
                         <div class="col-12"><b>Vragen of opmerkingen: </b> @Model.GastGezin.PlaatsingsInfo?.OverigeOpmerkingen</div>
                     </div>
@@ -532,6 +533,7 @@ contains:
                             Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
                             @if (Model.Plaatsingen.Count > 0 && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
+                                <button type="button" class="btn btn-primary" id="SendPlaatsingenEmail">Verstuur Email</button>
                                 <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id asp-route-EditPlaatsingen="true"></a>
                             }
                         </h5>
@@ -592,11 +594,10 @@ contains:
                                         <div class="form-group">
                                             <label for="departureDestination@(p.Id)">Nieuwe Bestemming</label>
                                             <select class="form-select" id="departureDestination@(p.Id)" rows="3">
-                                                <option value="Onbekend">Onbekend</option>
-                                                <option value="Oekraine">Terugkeer naar Oekraïne</option>
-                                                <option value="BinnenNederland">Vertrek naar bestemming binnen Nederland</option>
-                                                <option value="BuitenNederland">Vertrek naar bestemming buiten Nederland (niet Oekraïne)</option>
-                                                <option value="Correctie">Administratieve correctie</option>
+                                                @foreach(DepartureDestination option in Enum.GetValues(typeof(DepartureDestination)))
+                                                    {
+                                                        <option value="@option">@(option.GetAttribute<DisplayAttribute>().Name)</option>
+                                                    }
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -914,7 +915,8 @@ contains:
                                 <input class="btn btn-primary float-right" type="submit" value="Opslaan">
                             }
                         </h5>
-                        <table class="table table-striped">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th scope="col">Datum</th>
@@ -1006,6 +1008,7 @@ contains:
                                 }
                             </tbody>
                         </table>
+                        </div>
                     }
                 }
                 @*Editmode false*@
@@ -1018,7 +1021,8 @@ contains:
                             <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id title="Wijzigen" asp-route-EditVerwijderdePlaatsingen="true"></a>
                         }
                     </h5>
-                    <table class="table table-striped">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Datum</th>
@@ -1090,6 +1094,7 @@ contains:
                             }
                         </tbody>
                     </table>
+                    </div>
                 }
             </div>
         </div>
@@ -1187,6 +1192,24 @@ contains:
                     } else {
                         window.location = "/";
                     }
+                },
+                error: function() {
+                    window.location = "/Error";
+                }
+            });
+        }
+    })
+
+    @*Send Plaatsingen Email*@
+    $("#SendPlaatsingenEmail").on("click", function() {
+        let id = @Model.GastGezin.Id;
+        if (confirm("Weet je zeker dat je een e-mail wilt versturen?")) {
+            $.ajax({
+                url: `/Gastgezin/SendPlaatsingenEmail`,
+                type: "POST",
+                dataType: 'text',
+                data: {"GastGezinId": id},
+                success: function() {
                 },
                 error: function() {
                     window.location = "/Error";

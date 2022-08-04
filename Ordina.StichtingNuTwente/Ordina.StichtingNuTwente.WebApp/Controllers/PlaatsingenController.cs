@@ -21,7 +21,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpGet]
         public IActionResult Verwijderd()
         {
-            var plaatsingen = _plaatsingenService.GetAllPlaatsingen(PlacementType.VerwijderdePlaatsing).Where(p => p.DepartureDestination != null && p.DepartureDestination != DepartureDestination.Correctie);
+            var plaatsingen = _plaatsingenService.GetAllPlaatsingen(PlacementType.VerwijderdePlaatsing).Where(p => p.DepartureDestination != null && p.DepartureDestination != DepartureDestination.Correctie).ToList();
             return View(plaatsingen);
         }
     }
