@@ -156,6 +156,7 @@
         window.location.href = url.toString().replaceAll("+", "%20");
     });
 </script>
+<div class="table-responsive">
 <table class="table">
     <thead>
         <tr>
@@ -348,6 +349,7 @@
         </tr>
     </tfoot>
 </table>
+</div>
 @await Html.PartialAsync("_showItem.cshtml")
 
 <script>

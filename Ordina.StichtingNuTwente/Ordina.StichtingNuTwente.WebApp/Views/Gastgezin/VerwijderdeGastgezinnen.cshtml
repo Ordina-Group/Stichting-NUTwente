@@ -13,56 +13,58 @@
     <h3>
         @ViewData["Title"]
     </h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Ids</th>
-                <th scope="col">Naam</th>
-                <th scope="col">Woonplaats</th>
-                <th scope="col">Reden</th>
-                <th scope="col">Verwijderd door</th>
-                <th scope="col">Datum</th>
-                @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
-                {
-                    <th scope="col">Herstel</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var gastgezin in Model)
-            {
-                Index++;
-                <tr class="@(Index%2==0?"dark-row":"light-row")" id="@gastgezin.Id">
-                    <td>
-                        <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.AanmeldFormulierId" target="_blank">@gastgezin.AanmeldFormulierId</a>
-                        @if (gastgezin.IntakeFormulierId > 0)
-                        {
-                            <text>/ </text>
-                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.IntakeFormulierId" target="_blank">@gastgezin.IntakeFormulierId</a>
-                        }
-                    </td>
-                    <td class="text-break"><a href="/gastgezin?id=@gastgezin.Id" target="_blank">@gastgezin.Naam</a></td>
-                    <td>@gastgezin.Woonplaats</td>
-                    @if (gastgezin.DeletionComment != null)
-                    {
-                        <td>@gastgezin.DeletionComment.Text</td>
-                        <td>@gastgezin.DeletionComment.Commenter.FirstName</td>
-                        <td>@gastgezin.DeletionComment.Created.ToShortDateString()</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    }
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Ids</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Woonplaats</th>
+                    <th scope="col">Reden</th>
+                    <th scope="col">Verwijderd door</th>
+                    <th scope="col">Datum</th>
                     @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                     {
-                        <td><button type="button" class="btn btn-primary" id="restoreGastgezin" value="@gastgezin.Id">Herstellen</button></td>
+                        <th scope="col">Herstel</th>
                     }
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var gastgezin in Model)
+                {
+                    Index++;
+                    <tr class="@(Index%2==0?"dark-row":"light-row")" id="@gastgezin.Id">
+                        <td>
+                            <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.AanmeldFormulierId" target="_blank">@gastgezin.AanmeldFormulierId</a>
+                            @if (gastgezin.IntakeFormulierId > 0)
+                            {
+                                <text>/ </text>
+                                <a href="/getnutwenteoverheidreactiesdetail25685niveau?id=@gastgezin.IntakeFormulierId" target="_blank">@gastgezin.IntakeFormulierId</a>
+                            }
+                        </td>
+                        <td class="text-break"><a href="/gastgezin?id=@gastgezin.Id" target="_blank">@gastgezin.Naam</a></td>
+                        <td>@gastgezin.Woonplaats</td>
+                        @if (gastgezin.DeletionComment != null)
+                        {
+                            <td>@gastgezin.DeletionComment.Text</td>
+                            <td>@gastgezin.DeletionComment.Commenter.FirstName</td>
+                            <td>@gastgezin.DeletionComment.Created.ToShortDateString()</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        }
+                        @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                        {
+                            <td><button type="button" class="btn btn-primary" id="restoreGastgezin" value="@gastgezin.Id">Herstellen</button></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     <hr />
 </div>
 
