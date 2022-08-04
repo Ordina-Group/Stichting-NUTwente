@@ -43,12 +43,17 @@ public class MailHelper
 
     public async Task<bool> SendGroupMail(string subject, string message, List<string> mailAdresses)
     {
-        mailAdresses = mailAdresses.Distinct().ToList();
+        List<string> AdressesToLower = new List<string>();
+        foreach (string adress in mailAdresses)
+        {
+            AdressesToLower.Add(adress.ToLower());
+        }
+        mailAdresses = AdressesToLower.Distinct().ToList();
 
         List<EmailAddress> emailAddresses = new List<EmailAddress>();
-        foreach(var mail in mailAdresses)
+        foreach (var mail in mailAdresses)
         {
-            if (mail!="")
+            if (mail != "")
             {
                 emailAddresses.Add(new EmailAddress(mail));
             }
@@ -57,7 +62,7 @@ public class MailHelper
 
         EmailAddress fromMail = new EmailAddress(mailAdressFrom, mailFromName);
 
-        var msg = SendGrid.Helpers.Mail.MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, null) ;
+        var msg = SendGrid.Helpers.Mail.MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, emailAddresses, subject, message, null);
 
         var response = await client.SendEmailAsync(msg);
 
