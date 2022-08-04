@@ -28,21 +28,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             if (plaatsing.Age != -1)
             {
-                if (plaatsing.Age > 17)
+                if (plaatsing.Age > 120)
+                {
+                    plaatsing.Age = 120;
+                }
+                else if (plaatsing.Age > 17)
                 {
                     plaatsing.AgeGroup = AgeGroup.Volwassene;
                 }
-                else if (plaatsing.Age < 18)
+                else if (plaatsing.Age < 18 && plaatsing.Age >= 0)
                 {
                     plaatsing.AgeGroup = AgeGroup.Kind;
                 }
                 else if (plaatsing.Age < -1)
                 {
                     plaatsing.Age = -1;
-                }
-                if (plaatsing.Age > 120)
-                {
-                    plaatsing.Age = 120;
                 }
             }
             return plaatsing;
