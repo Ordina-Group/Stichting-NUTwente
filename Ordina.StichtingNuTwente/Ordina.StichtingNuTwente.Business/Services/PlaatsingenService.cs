@@ -23,5 +23,29 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsingen = PlaatsingenRepository.GetAll("Gastgezin,Gastgezin.Contact,Vrijwilliger").Where(p => p.PlacementType == placementType);
             return plaatsingen.ToList();
         }
+
+        public Plaatsing CheckAge(Plaatsing plaatsing)
+        {
+            if (plaatsing.Age != -1)
+            {
+                if (plaatsing.Age > 17)
+                {
+                    plaatsing.AgeGroup = AgeGroup.Volwassene;
+                }
+                else if (plaatsing.Age < 18)
+                {
+                    plaatsing.AgeGroup = AgeGroup.Kind;
+                }
+                else if (plaatsing.Age < -1)
+                {
+                    plaatsing.Age = -1;
+                }
+                if (plaatsing.Age > 120)
+                {
+                    plaatsing.Age = 120;
+                }
+            }
+            return plaatsing;
+        }
     }
 }
