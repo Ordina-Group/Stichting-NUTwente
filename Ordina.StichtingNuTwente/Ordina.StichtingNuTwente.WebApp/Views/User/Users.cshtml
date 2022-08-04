@@ -15,7 +15,8 @@
        @* <button type="button" class="btn btn-info float-right" data-bs-toggle="modal" data-bs-target="#modalMail">Mail deze groep</button>*@
         </div>
     </div>
-    <table class="table table-striped">
+    <div class="table-responsive">
+        <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">Voornaam</th>
@@ -54,6 +55,7 @@
             }
         </tbody>
     </table>
+    </div>
 
 @*    <div class="modal fade" tabindex="-1" id="modalMail" role="dialog">
         @using (Html.BeginForm("MailGroup", "User", FormMethod.Post))
