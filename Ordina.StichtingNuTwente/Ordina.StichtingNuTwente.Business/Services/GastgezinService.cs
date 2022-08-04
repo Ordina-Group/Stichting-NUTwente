@@ -15,13 +15,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IRepository<Gastgezin> GastgezinRepository;
         private readonly IRepository<Plaatsing> PlaatsingsRepository;
         private readonly IRepository<Reactie> ReactieRepository;
+        private readonly IPlaatsingenService _plaatsingenService;
 
-        public GastgezinService(IReactionService reactionService, IRepository<Gastgezin> gastgezinRepository, IRepository<Plaatsing> plaatsingsRepository, IRepository<Reactie> reactieRepository)
+        public GastgezinService(IReactionService reactionService, IRepository<Gastgezin> gastgezinRepository, IRepository<Plaatsing> plaatsingsRepository, IRepository<Reactie> reactieRepository, IPlaatsingenService plaatsingenService)
         {
             _reactionService = reactionService;
             GastgezinRepository = gastgezinRepository;
             this.PlaatsingsRepository = plaatsingsRepository;
             ReactieRepository = reactieRepository;
+            _plaatsingenService = plaatsingenService;
         }
 
         public Gastgezin? GetGastgezin(int id, string includeProperties = IGastgezinService.IncludeProperties)
@@ -66,11 +68,11 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public void AddPlaatsing(Plaatsing plaatsing)
         {
-            PlaatsingsRepository.Create(plaatsing);
+            PlaatsingsRepository.Create(_plaatsingenService.CheckAge(plaatsing));
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
-            PlaatsingsRepository.Update(plaatsing);
+            PlaatsingsRepository.Update(_plaatsingenService.CheckAge(plaatsing));
         }
 
         public Plaatsing GetPlaatsing(int id)
