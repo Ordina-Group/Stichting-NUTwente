@@ -915,7 +915,8 @@ contains:
                                 <input class="btn btn-primary float-right" type="submit" value="Opslaan">
                             }
                         </h5>
-                        <table class="table table-striped">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th scope="col">Datum</th>
@@ -1007,6 +1008,7 @@ contains:
                                 }
                             </tbody>
                         </table>
+                        </div>
                     }
                 }
                 @*Editmode false*@
@@ -1019,7 +1021,8 @@ contains:
                             <a class="btn btn-primary fas fa-edit float-right" asp-route-id=@Model.GastGezin.Id title="Wijzigen" asp-route-EditVerwijderdePlaatsingen="true"></a>
                         }
                     </h5>
-                    <table class="table table-striped">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Datum</th>
@@ -1091,6 +1094,7 @@ contains:
                             }
                         </tbody>
                     </table>
+                    </div>
                 }
             </div>
         </div>

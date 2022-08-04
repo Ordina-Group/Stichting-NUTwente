@@ -30,6 +30,13 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public bool Save(AnswersViewModel viewModel, int? gastgezinId)
         {
+            if (NewReactie(viewModel, gastgezinId) != null)
+                return true;
+            return false;
+        }
+
+        public Reactie NewReactie(AnswersViewModel viewModel, int? gastgezinId)
+        {
             var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
             dbmodel = ReactieRepository.Create(dbmodel);
             UpdateDatabaseWithRelationalObjects(viewModel, dbmodel, gastgezinId);
@@ -55,44 +62,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         GastgezinRepository.Update(gastgezin);
                     }
                 }
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Reactie NewReactie(AnswersViewModel viewModel, int? gastgezinId)
-        {
-            var dbmodel = ReactieMapping.FromWebToDatabaseModel(viewModel);
-            dbmodel = ReactieRepository.Create(dbmodel);
-            UpdateDatabaseWithRelationalObjects(viewModel, dbmodel, gastgezinId);
-            if (dbmodel.Id > 0)
-            {
-                if (gastgezinId != null)
-                {
-                    var gastgezin = GastgezinRepository.GetById(gastgezinId.Value);
-                    if (gastgezin != null)
-                    {
-                        gastgezin.IntakeFormulier = dbmodel;
-                        if (gastgezin.Status == GastgezinStatus.Aangemeld)
-                        {
-                            var persoon = PersoonRepository.Get(x => x.Reactie != null && x.Reactie.Id == dbmodel.Id, "Reactie");
-                            if (persoon != null)
-                                gastgezin.Contact = persoon;
-                        }
-                        GastgezinRepository.Update(gastgezin);
-                    }
-                }
-
                 return dbmodel;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public void Update(AnswersViewModel viewModel, int id)
