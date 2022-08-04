@@ -35,16 +35,16 @@
                 </div>
             </div>
         </div>
-        <nav class="nav nav-tabs d-flex justify-content-between">
+        <nav class="nav nav-tabs flex-column flex-sm-row justify-content-between">
             <div class="d-flex">
-                <a class="nav-link status-filter @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "Alles" ? "active":"")" id="Alles">Alles</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Intaker"?"active":"")" id="Geen Intaker">Geen Intaker</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Buddy"?"active":"")" id="Geen Buddy">Geen Buddy</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Beschikbaar"?"active":"")" id="Beschikbaar">Beschikbaar</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Gereserveerd"?"active":"")" id="Gereserveerd">Gereserveerd</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geplaatst"?"active":"")" id="Geplaatst">Geplaatst</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "On Hold"?"active":"")" id="On Hold">On Hold</a>
-                <a class="nav-link status-filter @(Context.Request.Query["statusFilter"] == "Nood"?"active":"")" id="Nood">Nood</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "Alles" ? "active":"")" id="Alles">Alles</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Intaker"?"active":"")" id="Geen Intaker">Geen Intaker</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geen Buddy"?"active":"")" id="Geen Buddy">Geen Buddy</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Beschikbaar"?"active":"")" id="Beschikbaar">Beschikbaar</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Gereserveerd"?"active":"")" id="Gereserveerd">Gereserveerd</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Geplaatst"?"active":"")" id="Geplaatst">Geplaatst</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "On Hold"?"active":"")" id="On Hold">On Hold</a>
+                <a class="flex-sm-fill text-sm-center nav-link status-filter @(Context.Request.Query["statusFilter"] == "Nood"?"active":"")" id="Nood">Nood</a>
             </div>
         </nav>
         <script>
@@ -58,6 +58,7 @@
         </script>
         <!-- Twee lijsten: Met intake en zonder intake -->
         <form method="post" id="gastgezinForm">
+            <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -176,6 +177,7 @@
                     }
                 </tbody>
             </table>
+            </div>
             <hr />
         </form>
     </div>
