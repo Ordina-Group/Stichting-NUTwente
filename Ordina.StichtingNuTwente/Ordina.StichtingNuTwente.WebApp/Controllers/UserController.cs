@@ -13,11 +13,11 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IGastgezinService _gastgezinService { get; }
         public IMailService _mailService { get; }
 
-        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService mailService)
+        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService MailService)
         {
             _userService = userService;
             _gastgezinService = gastgezinService;
-            _mailService = mailService;
+            _mailService = MailService;
         }
 
         [AllowAnonymous]
@@ -96,19 +96,19 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
+        
+        ////[Authorize]
+        //[AllowAnonymous]
+        //// [Route("user/MailGroup")]
+        //[HttpPost]
+        ////[ActionName("MailGroup")]
+        //public IActionResult MailGroup(string onderwerp, string bericht, string emailAdressen)
+        //{
 
-        //[Authorize]
-        [AllowAnonymous]
-        // [Route("user/MailGroup")]
-        [HttpPost]
-        //[ActionName("MailGroup")]
-        public IActionResult MailGroup(string onderwerp, string bericht, string emailAdressen)
-        {
-
-            List<string> mailAdressen = emailAdressen.Split(',').ToList();
-            _mailService.SendGroupMail(onderwerp, bericht, mailAdressen);
-            return Ok();
-        }
+        //    List<string> mailAdressen = emailAdressen.Split(',').ToList();
+        //    MailHelper(onderwerp, bericht, mailAdressen);
+        //    return Ok();
+        //}
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
         public IActionResult UpdateUserAddress(int userId, string address = "", string city = "", string postalCode = "")

@@ -10,5 +10,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
     public interface IPlaatsingenService
     {
         public ICollection<Plaatsing> GetAllPlaatsingen(PlacementType? placementType);
+        public Plaatsing CheckAge(Plaatsing plaatsing);
     }
 }

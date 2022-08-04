@@ -11,50 +11,52 @@
         <h3>@ViewData["Title"]</h3>
     </div>
 </div>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Voornaam</th>
-            <th scope="col">Achternaam</th>
-            <th scope="col">E-mailadres</th>
-            <th scope="col">Telefoonnummer</th>
-            <th scope="col">Rollen</th>
-            <th scope="col">In vrijwilliger lijst?</th>
-            <th scope="col">Aantal intakes</th>
-            <th scope="col">Aantal buddies</th>
-            @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
-            {
-                <th scope="col">Herstel</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var u in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <th scope="row"><a href="/MijnGastgezinnen/@u.Id">@u.FirstName</a></th>
-                <td>@u.LastName</td>
-                <td>@u.Email</td>
-                <td>@u.PhoneNumber</td>
-                <td>@string.Join( "; ", @u.Roles.ToArray())</td>
-                <td>
-                    <div class="form-check">
-                        <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"") disabled="true")>
-                    </div>
-                </td>
-                <td><a href="/MijnGastgezinnen/@u.Id?filter=Intaker">@u.AantalIntakes</a></td>
-                <td><a href="/MijnGastgezinnen/@u.Id?filter=Buddy">@u.AantalBuddies</a></td>
+                <th scope="col">Voornaam</th>
+                <th scope="col">Achternaam</th>
+                <th scope="col">E-mailadres</th>
+                <th scope="col">Telefoonnummer</th>
+                <th scope="col">Rollen</th>
+                <th scope="col">In vrijwilliger lijst?</th>
+                <th scope="col">Aantal intakes</th>
+                <th scope="col">Aantal buddies</th>
                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    <td><button type="button" class="btn btn-primary" id="restoreUser" value="@u.Id">Herstellen</button></td>
+                    <th scope="col">Herstel</th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <th scope="row"><a href="/MijnGastgezinnen/@u.Id">@u.FirstName</a></th>
+                    <td>@u.LastName</td>
+                    <td>@u.Email</td>
+                    <td>@u.PhoneNumber</td>
+                    <td>@string.Join( "; ", @u.Roles.ToArray())</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input dropdown-checkbox" type="checkbox" value="" id="@u.Id" @(u.InDropdown?"checked":"") disabled="true")>
+                        </div>
+                    </td>
+                    <td><a href="/MijnGastgezinnen/@u.Id?filter=Intaker">@u.AantalIntakes</a></td>
+                    <td><a href="/MijnGastgezinnen/@u.Id?filter=Buddy">@u.AantalBuddies</a></td>
+                    @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
+                    {
+                        <td><button type="button" class="btn btn-primary restoreUser" value="@u.Id">Herstellen</button></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <script>
-    $("#restoreUser").on("click", function() {
+    $(".restoreUser").on("click", function() {
         let id = $(this).val();
         if (confirm("Weet je zeker dat je deze vrijwilliger wilt herstellen?")) {
             $.ajax({

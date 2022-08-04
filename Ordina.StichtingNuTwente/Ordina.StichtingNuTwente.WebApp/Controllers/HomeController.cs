@@ -21,8 +21,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private readonly IPersoonService _persoonService;
         private readonly IMailService _mailService;
         private readonly IGastgezinService _gastgezinService;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService)
+        public HomeController(ILogger<HomeController> logger, IReactionService reactionService, IUserService userService, IPersoonService persoonService, IMailService mailService, IGastgezinService gastgezinService, IConfiguration configuration)
         {
             _logger = logger;
             _reactionService = reactionService;
@@ -30,6 +31,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _persoonService = persoonService;
             _mailService = mailService;
             _gastgezinService = gastgezinService;
+            _configuration = configuration;
         }
 
         [AllowAnonymous]
@@ -55,9 +57,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             questionForm.GastgezinId = gastgezinId;
             questionForm.UserDetails = GetUser();
             questionForm.AllUsers.AddRange(GetAllDropdown());
-            if(gastgezinId != null)
+            if (gastgezinId != null)
             {
-            Gastgezin gastgezin = _gastgezinService.GetGastgezin((int)gastgezinId);
+                Gastgezin gastgezin = _gastgezinService.GetGastgezin((int)gastgezinId);
                 var personaliaQuestions = questionForm.Sections[0].Questions;
                 personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Naam").Answer = gastgezin.Contact.Naam + " " + gastgezin.Contact.Achternaam;
                 personaliaQuestions.FirstOrDefault(q => q.ParameterName == "Straat").Answer = gastgezin.Contact.Adres.Straat;
@@ -180,72 +182,43 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [HttpPost]
         public IActionResult Save(string answers, int? gastgezinId)
         {
-            try
+            if (answers != null)
             {
-                if (answers != null)
+                Persoon persoon = new();
+                Reactie reaction = new();
+                try
                 {
                     var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    _reactionService.Save(answerData, gastgezinId);
-                    return Ok();
+                    reaction = _reactionService.NewReactie(answerData, gastgezinId);
+                    persoon = _persoonService.GetPersoonByReactieId(reaction.Id);
                 }
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> SaveAndSendEmailAsync(string answers, int? gastgezinId)
-        {
-            try
-            {
-                if (answers != null)
+                catch (Exception ex)
                 {
-                    bool success;
-                    int ggId;
-                    var answerData = JsonSerializer.Deserialize<AnswersViewModel>(answers);
-                    var reactie = _reactionService.NewReactie(answerData, gastgezinId);
-                    var persoon = _persoonService.GetPersoonByReactieId(reactie.Id);
-                    MailHelper mailHelper = new MailHelper(_mailService);
-
-                    if (reactie.FormulierId == 1)
-                    {
-                        success = await mailHelper.AanmeldingGastgezin(persoon);
-                    }
-                    else if(reactie.FormulierId == 2)
-                    {
-                        if(gastgezinId != null)
-                        {
-                            ggId = gastgezinId ?? default(int);
-                            Gastgezin gastgezin = _gastgezinService.GetGastgezin(ggId);
-                            success = await mailHelper.IntakeUitgevoerd(gastgezin);
-                        }
-
-                        //TODO even kijken hoe we hier mee omgaan, op dit moment beetje cheesy manier van oplossen
-                        else
-                        {
-                            success = true;
-                        }
-                    }
-                    else if(reactie.FormulierId == 4)
-                    {
-                        success = await mailHelper.AanmeldingVrijwilliger(persoon);
-                    }
-                    else
-                    {
-                        success = false;
-                    }
-                    if (success) return Ok();
+                    return StatusCode(StatusCodes.Status500InternalServerError);
                 }
-                return BadRequest();
+                switch (reaction.FormulierId)
+                {
+                    //FormulierId = "GastgezinAanmelding.json";
+                    case 1:
+                        _mailService.AanmeldingGastgezin(persoon);
+                        break;
+
+                    //FormulierId = "GastgezinIntake.json";
+                    case 2:
+                        if (gastgezinId != null)
+                        {    
+                            _mailService.IntakeUitgevoerd(_gastgezinService.GetGastgezin((int)gastgezinId));
+                        }
+                        break;
+
+                    //fileName = "VrijwilligerAanmelding.json";
+                    case 4:
+                        _mailService.AanmeldingVrijwilliger(persoon);
+                        break;
+                }
+                return Ok();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return BadRequest();
         }
 
         [Authorize(Policy = "RequireVrijwilligerRole")]

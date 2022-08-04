@@ -81,11 +81,10 @@
           "Text": "Wilt u deelnemen aan een WhatsApp groep?",
           "Description": "Hiervoor gebruiken wij het eerstgenoemde genoemde telefoonnummer.",
           "InputType": "radiobutton",
-          "InputOptions": [
-            "Ja",
-            "Nee"
-          ],
-          "Required": false
+          "InputOptions": [ "Ja", "Nee" ],
+          "Required": false,
+          "Object": "PlaatsingsInfo",
+          "ParameterName": "Whatsapp"
         },
         {
           "Id": 9,
