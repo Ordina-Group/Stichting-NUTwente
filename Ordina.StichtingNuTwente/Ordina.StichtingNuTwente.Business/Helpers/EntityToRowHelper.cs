@@ -61,7 +61,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 data.Add(new Cell(cell++, gastgezin.HasVOG != null ? gastgezin.HasVOG.ToString() : ""));
                 data.Add(new Cell(cell++, gastgezin.Note != null ? gastgezin.Note : ""));
                 data.Add(new Cell(cell++, gastgezin.PlaatsingsInfo != null ? gastgezin.PlaatsingsInfo.Id.ToString() : ""));
-                data.Add(new Cell(cell++, gastgezin.Begeleider != null ? gastgezin.Begeleider.AADId : ""));
+                data.Add(new Cell(cell++, gastgezin.Intaker != null ? gastgezin.Intaker.AADId : ""));
                 data.Add(new Cell(cell++, gastgezin.BekekenDoorIntaker.ToString()));
                 data.Add(new Cell(cell++, gastgezin.Buddy != null ? gastgezin.Buddy.AADId : ""));
                 data.Add(new Cell(cell++, gastgezin.BekekenDoorBuddy.ToString()));
@@ -118,8 +118,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 var antwoorden = reactie.Antwoorden.OrderBy(x => x.IdVanVraag).ToList();
                 foreach (var awnser in antwoorden)
                 {
-                    data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Response));
-
+                    if (formId == 2 && awnser.IdVanVraag == 10)
+                    {
+                        data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Reactie.UserDetails?.AADId));
+                    }
+                    else
+                    {
+                        data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Response));
+                    }
                 }
                 rows.Add(new Row(row, data));
                 row++;
