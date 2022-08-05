@@ -102,7 +102,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             //check for delete permission
             var u = GetUser();
             viewModel.CanDelete = false;
-            if (User.HasClaims("groups", "group-coordinator"))
+            if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 viewModel.CanDelete = true;
             
             return View(viewModel);
