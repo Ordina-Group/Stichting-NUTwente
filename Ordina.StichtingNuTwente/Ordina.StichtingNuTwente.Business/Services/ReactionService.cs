@@ -55,8 +55,8 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
                             if (gastgezin.Comments == null)
                                 gastgezin.Comments = new List<Comment>();
-                            if (gastgezin.Begeleider != null)
-                                gastgezin.Comments.Add(new Comment("Intake uitgevoerd", gastgezin.Begeleider, CommentType.INTAKE_COMPLETED));
+                            if (gastgezin.Intaker != null)
+                                gastgezin.Comments.Add(new Comment("Intake uitgevoerd", gastgezin.Intaker, CommentType.INTAKE_COMPLETED));
                         }
                         gastgezin.IntakeFormulier = dbmodel;
                         GastgezinRepository.Update(gastgezin);
@@ -116,7 +116,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var dbAdres = new Adres();
             var dbUser = new UserDetails();
             var dbPlaatsingsInfo = new PlaatsingsInfo();
-            var dbGastgezin = GastgezinRepository.GetFirstOrDefault(g => (gastgezinId != null && g.Id == gastgezinId) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id), "IntakeFormulier,AanmeldFormulier,PlaatsingsInfo,Buddy,Begeleider");
+            var dbGastgezin = GastgezinRepository.GetFirstOrDefault(g => (gastgezinId != null && g.Id == gastgezinId) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id) || (g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id), "IntakeFormulier,AanmeldFormulier,PlaatsingsInfo,Buddy,Intaker");
             dbGastgezin = dbGastgezin ?? new Gastgezin();
             if (id != 0)
             {
@@ -172,15 +172,15 @@ namespace Ordina.StichtingNuTwente.Business.Services
                         }
                         if ( form.Id == 2 && dbGastgezin != new Gastgezin())
                         {
-                            if (dbGastgezin.Begeleider == null)
+                            if (dbGastgezin.Intaker == null)
                             {
-                                dbGastgezin.Begeleider = reactie.UserDetails;
+                                dbGastgezin.Intaker = reactie.UserDetails;
                                 GastgezinRepository.Update(dbGastgezin);
                             }
 
                             if (dbGastgezin.Buddy == null)
                             {
-                                dbGastgezin.Buddy = dbGastgezin.Begeleider;
+                                dbGastgezin.Buddy = dbGastgezin.Intaker;
                                 GastgezinRepository.Update(dbGastgezin);
                             }
                         }

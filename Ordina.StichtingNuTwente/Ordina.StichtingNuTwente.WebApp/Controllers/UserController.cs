@@ -43,12 +43,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new();
             var users = _userService.GetAllUsers().OrderBy(u => u.FirstName);
-            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Begeleider");
+            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Intaker");
             foreach (var u in users)
             {
                 var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id, allGastgezinnen);
                 var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
-                var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
+                var aantalIntakes = gastgezinnen.Count(g => g.Intaker?.Id == u.Id);
                 viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes });
             }
             return View(viewModel);
@@ -197,12 +197,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService.checkIfUserExists(User);
             List<UserViewModel> viewModel = new();
             var users = _userService.GetAllDeletedUsers().OrderBy(u => u.FirstName);
-            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Begeleider");
+            var allGastgezinnen = _gastgezinService.GetAllGastgezinnen("Buddy,Intaker");
             foreach (var u in users)
             {
                 var gastgezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(u.Id, allGastgezinnen);
                 var aantalBuddies = gastgezinnen.Count(g => g.Buddy?.Id == u.Id);
-                var aantalIntakes = gastgezinnen.Count(g => g.Begeleider?.Id == u.Id);
+                var aantalIntakes = gastgezinnen.Count(g => g.Intaker?.Id == u.Id);
                 viewModel.Add(new UserViewModel(u) { AantalBuddies = aantalBuddies, AantalIntakes = aantalIntakes });
             }
             return View(viewModel);
