@@ -37,7 +37,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             {
                 gastgezinnen = GetAllGastgezinnen();
             }
-            var gastgezinnenForVrijwilliger = gastgezinnen.Where(g => !g.Deleted && (g.Begeleider != null && g.Begeleider.Id == vrijwilligerId) || (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
+            var gastgezinnenForVrijwilliger = gastgezinnen.Where(g => !g.Deleted && (g.Intaker != null && g.Intaker.Id == vrijwilligerId) || (g.Buddy != null && g.Buddy.Id == vrijwilligerId));
             return gastgezinnenForVrijwilliger.ToList();
         }
 

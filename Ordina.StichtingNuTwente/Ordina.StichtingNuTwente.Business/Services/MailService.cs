@@ -109,7 +109,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             List<string> emailAdresses = new() {
                     gastgezin.Contact.Email,
-                    gastgezin.Begeleider.Email,
+                    gastgezin.Intaker.Email,
                     _configuration.GetSection("SENDGRID_MAILTO_O").Value,
                     _configuration.GetSection("SENDGRID_MAILTO_B").Value};
 

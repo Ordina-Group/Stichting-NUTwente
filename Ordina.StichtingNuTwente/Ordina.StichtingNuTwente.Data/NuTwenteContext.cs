@@ -23,7 +23,7 @@ namespace Ordina.StichtingNuTwente.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Gastgezin>().HasMany(x => x.Vluchtelingen).WithOne(x => x.Gastgezin);
-            modelBuilder.Entity<Gastgezin>().HasOne(g => g.Begeleider);
+            modelBuilder.Entity<Gastgezin>().HasOne(g => g.Intaker);
             modelBuilder.Entity<Gastgezin>().HasOne(g => g.Contact);
             modelBuilder.Entity<Gastgezin>().HasOne(g => g.PlaatsingsInfo);
             modelBuilder.Entity<UserDetails>().Property(u => u.Roles).HasConversion(
