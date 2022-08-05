@@ -9,7 +9,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
 {
     public interface IGastgezinService
     {
-        public const string IncludeProperties = "Contact,Contact.Adres,Contact.Reactie,Vluchtelingen,Begeleider,Buddy,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Plaatsingen.Vrijwilliger,Comments,ContactLogs";
+        public const string IncludeProperties = "Contact,Contact.Adres,Contact.Reactie,Vluchtelingen,Intaker,Buddy,PlaatsingsInfo,AanmeldFormulier,IntakeFormulier,Plaatsingen,Plaatsingen.Vrijwilliger,Comments,ContactLogs";
 
         public bool Save(Gastgezin gastgezin);
         public Gastgezin? GetGastgezin(int id, string includeProperties = IncludeProperties);

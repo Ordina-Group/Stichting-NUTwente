@@ -68,16 +68,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return messages;
         }
 
-        public List<MaintenanceMessage> LinkBegeleiderToGastgezin()
+        public List<MaintenanceMessage> LinkIntakerToGastgezin()
         {
             var messages = new List<MaintenanceMessage>();
-            var gastgezinnen = GastgezinRepo.GetAll("IntakeFormulier.UserDetails,Begeleider");
+            var gastgezinnen = GastgezinRepo.GetAll("IntakeFormulier.UserDetails,Intaker");
             foreach (var gastgezin in gastgezinnen)
             {
-                if (gastgezin.IntakeFormulier != null && gastgezin.IntakeFormulier.UserDetails != null && gastgezin.Begeleider == null)
+                if (gastgezin.IntakeFormulier != null && gastgezin.IntakeFormulier.UserDetails != null && gastgezin.Intaker == null)
                 {
                     var userDetails = gastgezin.IntakeFormulier.UserDetails;
-                    gastgezin.Begeleider = userDetails;
+                    gastgezin.Intaker = userDetails;
                     GastgezinRepo.Update(gastgezin);
                     messages.Add(new MaintenanceMessage($@"Gastgezin with id {gastgezin.Id} got linked with {userDetails.FirstName} {userDetails.LastName}", MaintenanceMessageType.Success));
                 }
