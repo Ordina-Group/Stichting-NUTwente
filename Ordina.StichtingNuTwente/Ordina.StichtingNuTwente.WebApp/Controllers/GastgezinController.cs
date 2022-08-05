@@ -42,9 +42,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
 
             //verify view permissions
-            if (gastGezin.Begeleider != null || gastGezin.Buddy != null)
+            if (gastGezin.Intaker != null || gastGezin.Buddy != null)
             {
-                if (!(gastGezin.Begeleider?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
+                if (!(gastGezin.Intaker?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || gastGezin.Buddy?.AADId == _userService.getUserFromClaimsPrincipal(User).AADId || User.HasClaims("groups", "group-secretariaat", "group-coordinator", "group-superadmin")))
                 {
                     return Redirect("MicrosoftIdentity/Account/AccessDenied");
                 }
@@ -538,7 +538,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 if (gastgezin != null)
                 {
                     var user = GetUser();
-                    if (!gastgezin.BekekenDoorIntaker && user?.Id == gastgezin.Begeleider?.Id)
+                    if (!gastgezin.BekekenDoorIntaker && user?.Id == gastgezin.Intaker?.Id)
                     {
                         gastgezin.BekekenDoorIntaker = true;
                         _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
@@ -612,7 +612,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         private MijnGastgezinnenModel FillMijnGastgezinnenModel(string? filter, UserDetails user, bool? editAddress)
         {
             ICollection<Gastgezin> gastGezinnen = _gastgezinService.GetGastgezinnenForVrijwilliger(user.Id);
-            var intakerCount = gastGezinnen.Where(g => g.Begeleider == user).Count();
+            var intakerCount = gastGezinnen.Where(g => g.Intaker == user).Count();
             var buddyCount = gastGezinnen.Where(g => g.Buddy == user).Count();
             var mijnGastgezinnen = new MijnGastgezinnenModel(user, intakerCount, buddyCount);
 
@@ -624,7 +624,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 }
                 if (filter == "Intaker")
                 {
-                    gastGezinnen = gastGezinnen.Where(g => g.Begeleider == user).ToList();
+                    gastGezinnen = gastGezinnen.Where(g => g.Intaker == user).ToList();
                 }
             }
 
@@ -682,7 +682,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         gastGezinnen = gastGezinnen.Where(g => g.OnHold);
                         break;
                     case "Geen Intaker":
-                        gastGezinnen = gastGezinnen.Where(g => g.Begeleider == null);
+                        gastGezinnen = gastGezinnen.Where(g => g.Intaker == null);
                         break;
                     case "Geen Buddy":
                         gastGezinnen = gastGezinnen.Where(g => g.Buddy == null);
@@ -719,7 +719,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         alleGastgezinnen.SortDropdownText = "Telefoonnummer";
                         break;
                     case "Intaker":
-                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderBy(g => g.Intaker).ThenBy(g => g.Woonplaats).ToList();
                         alleGastgezinnen.SortDropdownText = "Intaker (laag-hoog)";
                         break;
                     case "Buddy":
@@ -741,7 +741,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 switch (sortBy)
                 {
                     case "Intaker":
-                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Begeleider).ThenBy(g => g.Woonplaats).ToList();
+                        alleGastgezinnen.Gastgezinnen = alleGastgezinnen.Gastgezinnen.OrderByDescending(g => g.Intaker).ThenBy(g => g.Woonplaats).ToList();
                         alleGastgezinnen.SortDropdownText = "Intaker (hoog-laag)";
                         break;
                     case "Buddy":
@@ -800,17 +800,17 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     {
                         if (intakerOrBuddyChange.IntakerId == "-")
                         {
-                            gastgezin.Begeleider = null;
+                            gastgezin.Intaker = null;
                         }
                         else
                         {
                             if (int.TryParse(intakerOrBuddyChange.IntakerId, out int intakerId))
                             {
                                 var intaker = vrijwilligers.FirstOrDefault(v => v.Id == intakerId);
-                                if (intaker != null && intaker.Id != gastgezin.Begeleider?.Id)
+                                if (intaker != null && intaker.Id != gastgezin.Intaker?.Id)
                                 {
                                     gastgezin.BekekenDoorIntaker = false;
-                                    gastgezin.Begeleider = intaker;
+                                    gastgezin.Intaker = intaker;
                                 }
                             }
                         }
@@ -855,23 +855,23 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         assignVrijwilliger = vrijwilligers.FirstOrDefault(e => e.Id == vrijwilligerId);
                     }
 
-                    if (assignVrijwilliger == null && gastgezinItem.Begeleider != null)
+                    if (assignVrijwilliger == null && gastgezinItem.Intaker != null)
                     {
-                        gastgezinItem.Begeleider = null;
+                        gastgezinItem.Intaker = null;
                         gastgezinItem.BekekenDoorIntaker = false;
                         _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                     }
                     else
                     {
-                        if (gastgezinItem.Begeleider != null && gastgezinItem.Begeleider.Id != assignVrijwilliger.Id)
+                        if (gastgezinItem.Intaker != null && gastgezinItem.Intaker.Id != assignVrijwilliger.Id)
                         {
-                            gastgezinItem.Begeleider = assignVrijwilliger;
+                            gastgezinItem.Intaker = assignVrijwilliger;
                             gastgezinItem.BekekenDoorIntaker = false;
                             _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                         }
-                        else if (gastgezinItem.Begeleider == null)
+                        else if (gastgezinItem.Intaker == null)
                         {
-                            gastgezinItem.Begeleider = assignVrijwilliger;
+                            gastgezinItem.Intaker = assignVrijwilliger;
                             gastgezinItem.BekekenDoorIntaker = false;
                             _gastgezinService.UpdateGastgezin(gastgezinItem, gastgezinId);
                         }

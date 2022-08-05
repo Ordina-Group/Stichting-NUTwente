@@ -119,7 +119,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var outputFile = new FileInfo("output.xlsx");
             var template = new FileInfo("DataDumpTemplate.xlsx");
             byte[] returnValue = new byte[0];
-            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Begeleider,Plaatsingen,PlaatsingsInfo,Comments").ToList();
+            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier,IntakeFormulier,Buddy,Intaker,Plaatsingen,PlaatsingsInfo,Comments").ToList();
             var aanmeldFormulieren = ReationRepo.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 1).ToList();
             var intakeFormulieren = ReationRepo.GetAll("Antwoorden,Comments").Where(r => r.FormulierId == 2).ToList();
             var plaatsingen = PlaatsingsRepo.GetAll("Vrijwilliger,Gastgezin").ToList();
