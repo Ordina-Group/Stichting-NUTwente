@@ -50,7 +50,7 @@
                         <select class="width-100 form-select" name="Intaker" id="Intaker">
                             @foreach (var vrijwilliger in Model.Vrijwilligers)
                             {
-                                if (vrijwilliger.Id == Model.Gastgezin.BegeleiderId)
+                                if (vrijwilliger.Id == Model.Gastgezin.IntakerId)
                                 {
                                     <option selected="selected" value="@vrijwilliger.Id">@vrijwilliger.Naam</option>
                                 }

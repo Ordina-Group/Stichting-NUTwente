@@ -53,12 +53,12 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return View(new MaintenanceModel());
         }
         [Authorize(Policy = "RequireSuperAdminRole")]
-        public IActionResult LinkBegeleiderToGastgezin()
+        public IActionResult LinkIntakerToGastgezin()
         {
             try
             {
                 var model = new MaintenanceModel();
-                var messages = maintenanceService.LinkBegeleiderToGastgezin();
+                var messages = maintenanceService.LinkIntakerToGastgezin();
                 model.Messages.AddRange(messages.Select(x => new MaintenanceMessage
                 {
                     Message = x.Message,
@@ -354,7 +354,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             if (Intaker > 0 && gastgezin != null)
             {
                 var intaker = _userService.GetUserById(Intaker);
-                gastgezin.Begeleider = intaker;
+                gastgezin.Intaker = intaker;
                 _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
                 return Redirect($"/gastgezin/maintenance?id={gastgezinId}");
             }

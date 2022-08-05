@@ -52,7 +52,7 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 heeftBekeken = gastgezin.BekekenDoorBuddy;
             }
 
-            if (user.Id == gastgezin.Begeleider?.Id)
+            if (user.Id == gastgezin.Intaker?.Id)
             {
                 heeftBekeken = gastgezin.BekekenDoorIntaker;
             }
@@ -69,12 +69,12 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
             }
 
 
-            var begeleiderId = 0;
-            var begeleider = "";
-            if (gastgezin.Begeleider != null)
+            var intakerId = 0;
+            var intaker = "";
+            if (gastgezin.Intaker != null)
             {
-                begeleiderId = gastgezin.Begeleider.Id;
-                begeleider = gastgezin.Begeleider.FirstName;
+                intakerId = gastgezin.Intaker.Id;
+                intaker = gastgezin.Intaker.FirstName;
             }
 
             var buddyId = 0;
@@ -116,8 +116,8 @@ namespace Ordina.StichtingNuTwente.Models.Mappings
                 RejectionComment = rejectionComment,
                 Buddy = buddy,
                 BuddyId = buddyId,
-                Begeleider = begeleider,
-                BegeleiderId = begeleiderId,
+                Intaker = intaker,
+                IntakerId = intakerId,
                 Status = gastgezin.Status,
                 OnHoldTill = gastgezin.OnHoldTill,
                 OnHold = gastgezin.OnHold,

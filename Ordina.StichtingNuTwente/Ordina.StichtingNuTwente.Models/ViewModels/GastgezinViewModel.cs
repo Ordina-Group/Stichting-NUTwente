@@ -18,9 +18,9 @@ public class GastgezinViewModel
 
     public string Email { get; set; }
 
-    public string Begeleider { get; set; }
+    public string Intaker { get; set; }
 
-    public int BegeleiderId { get; set; }
+    public int IntakerId { get; set; }
 
     public string Buddy { get; set; }
 
