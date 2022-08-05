@@ -118,8 +118,14 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
                 var antwoorden = reactie.Antwoorden.OrderBy(x => x.IdVanVraag).ToList();
                 foreach (var awnser in antwoorden)
                 {
-                    data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Response));
-
+                    if (formId == 2 && awnser.IdVanVraag == 10)
+                    {
+                        data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Reactie.UserDetails?.AADId));
+                    }
+                    else
+                    {
+                        data.Add(new Cell(awnser.IdVanVraag + offset, awnser.Response));
+                    }
                 }
                 rows.Add(new Row(row, data));
                 row++;
