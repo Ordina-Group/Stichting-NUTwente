@@ -79,9 +79,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
                 text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
             }
+
             text += $"\n--------------------------------------------------------------------------------\n";
-            text += $"\nVertrokken vluchtelingen:\n\n";
             var vertrokkenVluchtelingen = PlaatsingsRepo.GetAll().Where(p => p.PlacementType == PlacementType.VerwijderdePlaatsing && p.DepartureDestination != null && p.DepartureDestination != DepartureDestination.Correctie);
+            text += $"\nTotaal: {vertrokkenVluchtelingen.Count()} vertrokken vluchtelingen.\n\n";
+            
+            text += $"Per bestemming:\n\n";
             var destinationGroups = vertrokkenVluchtelingen.GroupBy(p => p.DepartureDestination).ToList();
             foreach (var group in destinationGroups)
             {
