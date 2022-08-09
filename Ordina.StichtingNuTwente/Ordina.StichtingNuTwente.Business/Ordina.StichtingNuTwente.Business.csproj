@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Data\Ordina.StichtingNuTwente.Data.csproj" />
+    <ProjectReference Include="..\Ordina.StichtingNuTwente.Extensions\Ordina.StichtingNuTwente.Extensions.csproj" />
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Models\Ordina.StichtingNuTwente.Models.csproj" />
   </ItemGroup>
 
