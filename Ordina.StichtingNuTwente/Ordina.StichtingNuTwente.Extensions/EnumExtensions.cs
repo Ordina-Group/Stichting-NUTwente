@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-namespace Ordina.StichtingNuTwente.WebApp
+namespace Ordina.StichtingNuTwente.Extensions
 {
-    public static class Extensions
+    public static class EnumExtensions
     {
         /// <summary>
         ///     A generic extension method that aids in reflecting 
