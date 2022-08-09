@@ -107,7 +107,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
                 text += $"{gezinnen}\n";
             }
-            return Encoding.ASCII.GetBytes(text);
+            return Encoding.UTF8.GetBytes(text);
         }
 
         public async Task<string> GemeenteFromPostcodeAsync(string postCode)
