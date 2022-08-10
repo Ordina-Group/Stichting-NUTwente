@@ -19,6 +19,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int? id = null);
         public void AddPlaatsing(Plaatsing plaatsing);
         public void UpdatePlaatsing(Plaatsing plaatsing);
+        public void RemoveReserveringPlaatsingen(int gastgezinId);
         public Plaatsing GetPlaatsing(int id);
         public void CheckOnholdGastgezinnen();
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null);
