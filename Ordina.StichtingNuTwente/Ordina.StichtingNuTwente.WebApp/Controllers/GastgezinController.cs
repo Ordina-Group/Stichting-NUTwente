@@ -361,20 +361,24 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                         var filterKey = split[0];
                         var filterValue = split[1].ToLower();
                         var results = 0;
-                        if (filterKey == "Notitie")
+                        switch (filterKey)
                         {
-                            gastgezinQuery = gastgezinQuery.Where(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
-                            results = originalQuery.Count(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
-                        }
-                        else if (filterKey == "Opmerkingen")
-                        {
-                            gastgezinQuery = gastgezinQuery.Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
-                            results = originalQuery.Count(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
-                        }
-                        else
-                        {
-                            gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
-                            results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                            case "Notitie":
+                                gastgezinQuery = gastgezinQuery.Where(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
+                                results = originalQuery.Count(g => g.Note != null && g.Note.ToLower().Contains(filterValue));
+                                break;
+                            case "Opmerkingen":
+                                gastgezinQuery = gastgezinQuery.Where(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
+                                results = originalQuery.Count(g => g.VrijwilligerOpmerkingen != null && g.VrijwilligerOpmerkingen.ToLower().Contains(filterValue));
+                                break;
+                            case "Buddy":
+                                gastgezinQuery = gastgezinQuery.Where(g => g.Buddy != null && (g.Buddy.FirstName.Contains(filterValue,StringComparison.CurrentCultureIgnoreCase)));
+                                results = originalQuery.Count(g => g.Buddy != null && (g.Buddy.FirstName.Contains(filterValue, StringComparison.CurrentCultureIgnoreCase)));
+                                break;
+                            default:
+                                gastgezinQuery = gastgezinQuery.Where(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                                results = originalQuery.Count(g => g.PlaatsingsInfo?.GetValueByFieldString(filterKey)?.ToLower().Contains(filterValue) == true);
+                                break;
                         }
                         model.SearchQueries.Add(new SearchQueryViewModel() { OriginalQuery = filterParameter, Field = filterKey, SearchQuery = filterValue, Results = results });
                     }
