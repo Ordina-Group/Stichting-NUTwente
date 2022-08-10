@@ -80,6 +80,14 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsing = PlaatsingsRepository.GetById(id, "Gastgezin");
             return plaatsing;
         }
+        public void RemoveReserveringPlaatsingen(int gastgezinId)
+        {
+            var reserveringen = GetPlaatsingen(gastgezinId, PlacementType.Reservering);
+            foreach (var reservering in reserveringen)
+            {
+                PlaatsingsRepository.Delete(reservering);
+            }
+        }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
         {

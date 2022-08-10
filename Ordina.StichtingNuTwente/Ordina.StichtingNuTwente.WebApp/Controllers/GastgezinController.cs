@@ -295,6 +295,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
+                if (OnHold)
+                {
+                    _gastgezinService.RemoveReserveringPlaatsingen(GastGezinId);
+                }
                 if (OnHold && OnHoldTill.Subtract(DateTime.Now).Hours > 0)
                 {
                     gastgezin.OnHoldTill = OnHoldTill;
