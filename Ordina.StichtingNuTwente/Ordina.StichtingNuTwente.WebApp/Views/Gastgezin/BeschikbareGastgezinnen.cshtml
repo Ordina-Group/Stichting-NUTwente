@@ -71,6 +71,7 @@
 <div class="row">
     <div class="col-12 col-sm-3 text-center">
         <select class="form-select" id="zoekterm-toevoegen-select" aria-label="Default select example">
+            <option value="Buddy">Buddy</option>
             <option value="Opmerkingen">Opmerkingen</option>
             <option value="OverigeOpmerkingen">Vragen of opmerkingen</option>
             <option value="Notitie">Notities</option>
@@ -314,6 +315,10 @@
                         @if (filter.Field == "Notitie")
                         {
                             <td scope="col">@mijnGastgezin.Note</td>
+                        }
+                        else if(filter.Field == "Buddy")
+                        {
+                            <td scope="col">@mijnGastgezin.Buddy</td>
                         }
                         else
                         {

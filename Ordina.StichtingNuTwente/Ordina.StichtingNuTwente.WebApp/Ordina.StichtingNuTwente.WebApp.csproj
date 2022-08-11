@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ordina.StichtingNuTwente.Business\Ordina.StichtingNuTwente.Business.csproj" />
+    <ProjectReference Include="..\Ordina.StichtingNuTwente.Extensions\Ordina.StichtingNuTwente.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
