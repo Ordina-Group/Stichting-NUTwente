@@ -761,24 +761,52 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return result;
         }
 
+        //private DatabaseIntegrityTest TestMissingGastgezin()
+        //{
+        //    var result = new DatabaseIntegrityTest
+        //    {
+        //        Title = "Missing Gastgezin for Aanmeld Formulier",
+        //        Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
+        //    };
+
+        //    var gastgezinnen = GastgezinRepo.GetAll("Contact,AanmeldFormulier");
+        //    var personen = PersoonRepo.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
+
+        //    int totalProblems = 0;
+        //    foreach (var persoon in personen)
+        //    {
+        //        if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
+
+        //        totalProblems++;
+        //        result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
+        //    }
+
+        //    if (totalProblems == 0)
+        //    {
+        //        result.AddMessage($@"No Gastgezin found without a Persoon", DatabaseIntegrityLevel.Success);
+        //    }
+
+        //    return result;
+        //}
+
         private DatabaseIntegrityTest TestMissingGastgezin()
         {
             var result = new DatabaseIntegrityTest
             {
                 Title = "Missing Gastgezin for Aanmeld Formulier",
-                Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
+                Description = "Checking id of all reactions of type 'AanmeldFormulier' for a matching id in Gastgezin.AanmeldFormulier"
             };
 
-            var gastgezinnen = GastgezinRepo.GetAll("Contact,AanmeldFormulier");
-            var personen = PersoonRepo.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
+            var gastgezinnen = GastgezinRepo.GetAll("AanmeldFormulier");
+            var aanmeldFormulieren = ReactionRepo.GetAll().Where(r => r.FormulierId == 1);
 
             int totalProblems = 0;
-            foreach (var persoon in personen)
+            foreach (var form in aanmeldFormulieren)
             {
-                if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
+                if (gastgezinnen.Any(e => e.AanmeldFormulier.Id == form.Id)) continue;
 
                 totalProblems++;
-                result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
+                result.AddMessage($@"Gastgezin missing for: AanmeldformulierId {form.Id}", DatabaseIntegrityLevel.Error);
             }
 
             if (totalProblems == 0)

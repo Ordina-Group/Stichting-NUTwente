@@ -7,6 +7,8 @@ using OfficeOpenXml;
 using Ordina.StichtingNuTwente.Business.Helpers;
 using FastExcel;
 using System.Net.Http.Json;
+using System.ComponentModel.DataAnnotations;
+using Ordina.StichtingNuTwente.Extensions;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
@@ -77,6 +79,21 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 }
                 text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
             }
+
+            text += $"\n--------------------------------------------------------------------------------\n";
+            var vertrokkenVluchtelingen = PlaatsingsRepo.GetAll().Where(p => p.PlacementType == PlacementType.VerwijderdePlaatsing && p.DepartureDestination != null && p.DepartureDestination != DepartureDestination.Correctie);
+            text += $"\nTotaal: {vertrokkenVluchtelingen.Count()} vertrokken vluchtelingen.\n\n";
+            
+            text += $"Per bestemming:\n\n";
+            var destinationGroups = vertrokkenVluchtelingen.GroupBy(p => p.DepartureDestination).ToList();
+            foreach (var group in destinationGroups)
+            {
+                var destinationGroupName = group.Key.GetAttribute<DisplayAttribute>().Name;
+                var destinationGroupCount = group.Count();
+                if(destinationGroupCount > 0)
+                    text += $"{destinationGroupName}: {destinationGroupCount}\n";
+            }
+
             text += $"\n--------------------------------------------------------------------------------\n";
             text += $"\nGegevens ter verificatie:\n\n";
             foreach (var gastgezinGemeentePair in sorted)
@@ -93,7 +110,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                 text += $"{gastgezinGemeentePair.Key}: {totalVluchtelingen}\n";
                 text += $"{gezinnen}\n";
             }
-            return Encoding.ASCII.GetBytes(text);
+            return Encoding.UTF8.GetBytes(text);
         }
 
         public async Task<string> GemeenteFromPostcodeAsync(string postCode)

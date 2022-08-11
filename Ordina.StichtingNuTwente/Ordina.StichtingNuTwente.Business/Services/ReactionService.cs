@@ -129,92 +129,17 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Adres")))
             {
-                dbAdres = CreateDbObjectFromFormFilledWithAnswers<Adres>(form, viewModel, dbAdres);
-                if (dbAdres != null)
-                {
-                    if (dbAdres.Id == 0)
-                    {
-                        dbAdres.Reactie = reactie;
-                        AdresRepository.Create(dbAdres);
-                    }
-                    else
-                    {
-                        AdresRepository.Update(dbAdres);
-                    }
-                }
+                DbObjectAdress(form,viewModel,dbAdres,reactie);
             }
             //attach user
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "UserDetails")))
             {
-                var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
-                if (viewModel.answer.Any())
-                {
-                    var awnser = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
-                    if (awnser != null)
-                    {
-                        var userNameAndEmail = awnser.Antwoord;
-                        if (userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
-                        {
-                            var email = userNameAndEmail.Split("(")[1].Split(")")[0];
-                            dbUser = UserDetailsRepository.GetFirstOrDefault(u => u.Email.Contains(email) && u.InDropdown == true);
-                            if (dbUser != null)
-                            {
-                                if (dbUser.Reacties != null)
-                                {
-                                    dbUser.Reacties.Add(reactie);
-                                }
-                                else
-                                {
-                                    dbUser.Reacties = new List<Reactie>() { reactie };
-                                }
-                                UserDetailsRepository.Update(dbUser);
-                            }
-                        }
-                        if ( form.Id == 2 && dbGastgezin != new Gastgezin())
-                        {
-                            if (dbGastgezin.Intaker == null)
-                            {
-                                dbGastgezin.Intaker = reactie.UserDetails;
-                                GastgezinRepository.Update(dbGastgezin);
-                            }
-
-                            if (dbGastgezin.Buddy == null)
-                            {
-                                dbGastgezin.Buddy = dbGastgezin.Intaker;
-                                GastgezinRepository.Update(dbGastgezin);
-                            }
-                        }
-                    }
-                }
+                DbObjectAttachUser(form, viewModel, dbUser, reactie, dbGastgezin);
             }
+            //attach persoon
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "Persoon")))
             {
-                dbPersoon = CreateDbObjectFromFormFilledWithAnswers<Persoon>(form, viewModel, dbPersoon);
-                if (dbPersoon != null)
-                {
-                    if (dbPersoon.Id == 0)
-                    {
-                        if (dbAdres != null)
-                        {
-                            dbPersoon.Adres = dbAdres;
-                        }
-                        dbPersoon.Reactie = reactie;
-                        PersoonRepository.Create(dbPersoon);
-                    }
-                    else
-                    {
-                        PersoonRepository.Update(dbPersoon);
-                        if (form.Id == 2)
-                        {
-                            var gastgezin = GastgezinRepository.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
-                            if (gastgezin != null)
-                            {
-                                gastgezin.Contact = dbPersoon;
-                                GastgezinRepository.Update(gastgezin);
-                            }
-                        }
-                    }
-                }
+                DbObjectPersoon(form, viewModel, dbPersoon, dbAdres, reactie);
             }
             //Formulier: Gastgezin aanmelden
             if (form.Id == 1 && id == 0)
@@ -224,39 +149,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
                     AanmeldFormulier = reactie,
                     Contact = dbPersoon
                 };
-
                 dbGastgezin = GastgezinRepository.Create(gastgezin);
             }
-
+            //attach plaatsingsinfo
             if (form.Sections.Any(s => s.Questions.Any(q => q.Object == "PlaatsingsInfo")))
             {
-                dbPlaatsingsInfo = CreateDbObjectFromFormFilledWithAnswers<PlaatsingsInfo>(form, viewModel, dbPlaatsingsInfo);
-                if (dbPlaatsingsInfo != null)
-                {
-                    if (dbPlaatsingsInfo.Id == 0)
-                    {
-                        if (dbGastgezin != null && dbGastgezin.Id > 0)
-                        {
-                            dbPlaatsingsInfo.Reactie = reactie;
-                            dbPlaatsingsInfo = PlaatsingsInfoRepository.Create(dbPlaatsingsInfo);
-                            dbGastgezin = GastgezinRepository.GetById(dbGastgezin.Id);
-                            if (dbPlaatsingsInfo.Id != 0)
-                            {
-                                dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
-                                GastgezinRepository.Update(dbGastgezin);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        PlaatsingsInfoRepository.Update(dbPlaatsingsInfo);
-                        if (dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
-                        {
-                            dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
-                            GastgezinRepository.Update(dbGastgezin);
-                        }
-                    }
-                }
+                DbObjectPlaatsingsInfo(form, viewModel, dbPlaatsingsInfo, dbGastgezin, reactie);
             }
         }
 
@@ -399,6 +297,125 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             var reacties = ReactieRepository.GetAll("Comments").Where(r => r.Deleted);
             return reacties;
+        }
+        private void DbObjectAdress(Form form, AnswersViewModel viewModel, Adres dbAdres, Reactie reactie) 
+        { 
+                dbAdres = CreateDbObjectFromFormFilledWithAnswers<Adres>(form, viewModel, dbAdres);
+            if (dbAdres != null)
+            {
+                if (dbAdres.Id == 0)
+                {
+                    dbAdres.Reactie = reactie;
+                    AdresRepository.Create(dbAdres);
+                }
+                else
+                {
+                    AdresRepository.Update(dbAdres);
+                }
+            }
+        }
+
+        private void DbObjectAttachUser(Form form, AnswersViewModel viewModel, UserDetails dbUser, Reactie reactie, Gastgezin dbGastgezin)
+        {
+            var questionId = form.Sections.FirstOrDefault(s => s.Questions.Any(q => q.Object == "UserDetails")).Questions.FirstOrDefault(q => q.Object == "UserDetails").Id;
+            if (viewModel.answer.Any())
+            {
+                var awnser = viewModel.answer.FirstOrDefault(a => a.Nummer.Trim() == questionId.ToString());
+                if (awnser != null)
+                {
+                    var userNameAndEmail = awnser.Antwoord;
+                    if (userNameAndEmail.Contains("(") && userNameAndEmail.Contains(")"))
+                    {
+                        var email = userNameAndEmail.Split("(")[1].Split(")")[0];
+                        dbUser = UserDetailsRepository.GetFirstOrDefault(u => u.Email.Contains(email) && u.InDropdown == true);
+                        if (dbUser != null)
+                        {
+                            if (dbUser.Reacties != null)
+                            {
+                                dbUser.Reacties.Add(reactie);
+                            }
+                            else
+                            {
+                                dbUser.Reacties = new List<Reactie>() { reactie };
+                            }
+                            UserDetailsRepository.Update(dbUser);
+                        }
+                    }
+                    if (form.Id == 2 && dbGastgezin != new Gastgezin())
+                    {
+                        if (dbGastgezin.Intaker == null)
+                        {
+                            dbGastgezin.Intaker = reactie.UserDetails;
+                            GastgezinRepository.Update(dbGastgezin);
+                        }
+
+                        if (dbGastgezin.Buddy == null)
+                        {
+                            dbGastgezin.Buddy = dbGastgezin.Intaker;
+                            GastgezinRepository.Update(dbGastgezin);
+                        }
+                    }
+                }
+            }
+        }
+        private void DbObjectPersoon(Form form, AnswersViewModel viewModel, Persoon dbPersoon, Adres dbAdres, Reactie reactie)
+        {
+            dbPersoon = CreateDbObjectFromFormFilledWithAnswers<Persoon>(form, viewModel, dbPersoon);
+            if (dbPersoon != null)
+            {
+                if (dbPersoon.Id == 0)
+                {
+                    if (dbAdres != null)
+                    {
+                        dbPersoon.Adres = dbAdres;
+                    }
+                    dbPersoon.Reactie = reactie;
+                    PersoonRepository.Create(dbPersoon);
+                }
+                else
+                {
+                    PersoonRepository.Update(dbPersoon);
+                    if (form.Id == 2)
+                    {
+                        var gastgezin = GastgezinRepository.GetFirstOrDefault(g => g.IntakeFormulier != null && g.IntakeFormulier.Id == reactie.Id, "IntakeFormulier");
+                        if (gastgezin != null)
+                        {
+                            gastgezin.Contact = dbPersoon;
+                            GastgezinRepository.Update(gastgezin);
+                        }
+                    }
+                }
+            }
+        }
+        private void DbObjectPlaatsingsInfo(Form form, AnswersViewModel viewModel, PlaatsingsInfo dbPlaatsingsInfo, Gastgezin dbGastgezin, Reactie reactie)
+        {
+            dbPlaatsingsInfo = CreateDbObjectFromFormFilledWithAnswers<PlaatsingsInfo>(form, viewModel, dbPlaatsingsInfo);
+            if (dbPlaatsingsInfo != null)
+            {
+                if (dbPlaatsingsInfo.Id == 0)
+                {
+                    if (dbGastgezin != null && dbGastgezin.Id > 0)
+                    {
+                        dbPlaatsingsInfo.Reactie = reactie;
+                        dbPlaatsingsInfo = PlaatsingsInfoRepository.Create(dbPlaatsingsInfo);
+                        dbGastgezin = GastgezinRepository.GetById(dbGastgezin.Id);
+                        if (dbPlaatsingsInfo.Id != 0)
+                        {
+                            dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                            GastgezinRepository.Update(dbGastgezin);
+                        }
+                    }
+                }
+                else
+                {
+                    PlaatsingsInfoRepository.Update(dbPlaatsingsInfo);
+                    if (dbGastgezin != null && dbGastgezin.PlaatsingsInfo == null)
+                    {
+                        dbGastgezin.PlaatsingsInfo = dbPlaatsingsInfo;
+                        GastgezinRepository.Update(dbGastgezin);
+                    }
+                }
+            }
         }
     }
 }
