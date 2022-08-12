@@ -80,14 +80,44 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsing = PlaatsingsRepository.GetById(id, "Gastgezin");
             return plaatsing;
         }
-        public void RemoveReserveringPlaatsingen(int gastgezinId)
+        public void RemoveReserveringPlaatsingen(DateTime departureDate, int plaatsingId, string departureReason, UserDetails user, DepartureDestination? departureDestination = null, string? departureComment = null)
         {
-            var reserveringen = GetPlaatsingen(gastgezinId, PlacementType.Reservering);
-            foreach (var reservering in reserveringen)
+            var plaatsing = GetPlaatsing(plaatsingId);
+            plaatsing.Active = false;
+            UpdatePlaatsing(plaatsing);
+            var placementType = PlacementType.VerwijderdePlaatsing;
+            if (plaatsing.PlacementType == PlacementType.Reservering)
             {
-                reservering.PlacementType = PlacementType.VerwijderdeReservering;
-                reservering.DepartureReason = "verwijdert door onhold zetten";
-                PlaatsingsRepository.Update(reservering);
+                placementType = PlacementType.VerwijderdeReservering;
+            }
+            var deletedPlaatsing = new Plaatsing()
+            {
+                Gastgezin = plaatsing.Gastgezin,
+                Amount = plaatsing.Amount,
+                Age = plaatsing.Age,
+                AgeGroup = plaatsing.AgeGroup,
+                PlacementType = placementType,
+                DateTime = departureDate,
+                Vrijwilliger = user,
+                Active = false,
+                Gender = plaatsing.Gender,
+                DepartureReason = departureReason,
+                DepartureDestination = departureDestination,
+                DepartureComment = departureComment
+            };
+            AddPlaatsing(deletedPlaatsing);
+        }
+
+        public void RemoveReserveringOnHold(int gastgezinId,UserDetails user)
+        {
+            var gastgezin = GetGastgezin(gastgezinId);
+            var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active && p.PlacementType == PlacementType.Reservering).ToList();
+            foreach (var plaatsing in plaatsingen)
+            {
+                if (plaatsing.Active && plaatsing.PlacementType == PlacementType.Reservering)
+                {
+                    RemoveReserveringPlaatsingen(DateTime.Now, plaatsing.Id, "Gastgezin on hold gezet",user);
+                }
             }
         }
 

@@ -19,7 +19,7 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public Gastgezin UpdateGastgezin(Gastgezin gastgezin, int? id = null);
         public void AddPlaatsing(Plaatsing plaatsing);
         public void UpdatePlaatsing(Plaatsing plaatsing);
-        public void RemoveReserveringPlaatsingen(int gastgezinId);
+        public void RemoveReserveringPlaatsingen(DateTime departureDate, int plaatsingId, string departureReason, UserDetails user,DepartureDestination? departureDestination = null, string? departureComment = null);
         public Plaatsing GetPlaatsing(int id);
         public void CheckOnholdGastgezinnen();
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null);
@@ -31,5 +31,6 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void Delete(int gastgezinId, bool deleteForms, UserDetails user, string comment);
         public string GetPlaatsingenTag(List<Gastgezin> gastgezinnen, PlacementType placementType);
         public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails);
+        public void RemoveReserveringOnHold(int gastgezinId, UserDetails user);
     }
 }
