@@ -85,7 +85,9 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var reserveringen = GetPlaatsingen(gastgezinId, PlacementType.Reservering);
             foreach (var reservering in reserveringen)
             {
-                PlaatsingsRepository.Delete(reservering);
+                reservering.PlacementType = PlacementType.VerwijderdeReservering;
+                reservering.DepartureReason = "verwijdert door onhold zetten";
+                PlaatsingsRepository.Update(reservering);
             }
         }
 
