@@ -8,12 +8,14 @@ using Ordina.StichtingNuTwente.Business.Interfaces;
 using Ordina.StichtingNuTwente.Business.Services;
 using Ordina.StichtingNuTwente.Data;
 using Ordina.StichtingNuTwente.WebApp.SceduleTask;
+using Microsoft.Graph;
+using Azure.Identity;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false)
     .Build();
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -35,10 +37,19 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IPlaatsingenService, PlaatsingenService>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-
-
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureB2C"));
+        .AddMicrosoftIdentityWebApp(builder.Configuration, "AzureB2C")
+        .EnableTokenAcquisitionToCallDownstreamApi()
+        .AddMicrosoftGraphAppOnly(
+            graphServiceClient => new GraphServiceClient(
+                new ClientSecretCredential(
+                    builder.Configuration.GetSection("Graph").GetValue<string>("TenantId"),
+                    builder.Configuration.GetSection("AzureB2C").GetValue<string>("ClientId"),
+                    builder.Configuration.GetSection("Graph").GetValue<string>("ClientSecret")
+                    )
+                )
+            )
+        .AddInMemoryTokenCaches();
 
 builder.Services.AddAuthorization(options =>
 {
