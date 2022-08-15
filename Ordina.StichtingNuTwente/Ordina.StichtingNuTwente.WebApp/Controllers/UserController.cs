@@ -5,6 +5,9 @@ using Ordina.StichtingNuTwente.Models.Models;
 using Ordina.StichtingNuTwente.Models.ViewModels;
 using Ordina.StichtingNuTwente.Extensions;
 using System.Diagnostics;
+using Microsoft.Graph;
+using Microsoft.Identity.Web;
+using Azure.Identity;
 
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
@@ -13,12 +16,14 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IUserService _userService { get; }
         public IGastgezinService _gastgezinService { get; }
         public IMailService _mailService { get; }
+        private readonly GraphServiceClient _graphServiceClient;
 
-        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService MailService)
+        public UserController(IUserService userService, IGastgezinService gastgezinService, IMailService MailService, GraphServiceClient graphServiceClient)
         {
             _userService = userService;
             _gastgezinService = gastgezinService;
             _mailService = MailService;
+            _graphServiceClient = graphServiceClient;
         }
 
         [AllowAnonymous]
@@ -112,7 +117,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         //}
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
-        public IActionResult UpdateUserAddress(int userId, string address = "", string city = "", string postalCode = "")
+        public async Task<IActionResult> UpdateUserAddressAsync(int userId, string address = "", string city = "", string postalCode = "")
         {
             var user = _userService.GetUserById(userId);
             var currentUser = _userService.getUserFromClaimsPrincipal(User);
@@ -135,6 +140,16 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                     user.Address.Postcode = postalCode;
                 }
                 _userService.UpdateUser(user, userId);
+
+                //Example of how to use Microsoft Graph
+                var aadUser = new User
+                {
+                    PostalCode = postalCode,
+                    City = city,
+                    StreetAddress = address,
+                };
+                await _graphServiceClient.Users[user.AADId].Request().UpdateAsync(aadUser);
+
                 if (user.AADId == currentUser.AADId)
                 {
                     return Redirect("/MijnGastgezinnen");
@@ -208,5 +223,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return View(viewModel);
         }
+
     }
 }

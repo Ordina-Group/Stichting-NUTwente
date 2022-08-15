@@ -61,6 +61,8 @@ jobs:
           files: './appsettings.json'
         env:
           Connectionstrings.NuTwente: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          AzureB2C.ClientId: ${{ secrets.AZURE_AAD_CLIENTID}}
+          Graph.ClientSecret: ${{ secrets.AZURE_AAD_CLIENTSECRET}}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           SENDGRID_MAILFROM_ADDRESS: ${{ secrets.SENDGRID_MAILFROM_ADDRESS }}
           SENDGRID_MAILFROM_NAME: ${{ secrets.SENDGRID_MAILFROM_NAME }}
