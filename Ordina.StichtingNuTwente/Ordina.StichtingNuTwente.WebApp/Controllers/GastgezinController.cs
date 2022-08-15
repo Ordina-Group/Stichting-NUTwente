@@ -224,31 +224,8 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         [Route("DeletePlaatsing")]
         public IActionResult DeletePlaatsing(DateTime departureDate, int plaatsingId, string departureReason, DepartureDestination departureDestination, string departureComment)
         {
-            var plaatsing = _gastgezinService.GetPlaatsing(plaatsingId);
-            plaatsing.Active = false;
-            _gastgezinService.UpdatePlaatsing(plaatsing);
-            var placementType = PlacementType.VerwijderdePlaatsing;
-            if (plaatsing.PlacementType == PlacementType.Reservering)
-            {
-                placementType = PlacementType.VerwijderdeReservering;
-            }
-            var deletedPlaatsing = new Plaatsing()
-            {
-                Gastgezin = plaatsing.Gastgezin,
-                Amount = plaatsing.Amount,
-                Age = plaatsing.Age,
-                AgeGroup = plaatsing.AgeGroup,
-                PlacementType = placementType,
-                DateTime = departureDate,
-                Vrijwilliger = _userService.getUserFromClaimsPrincipal(User),
-                Active = false,
-                Gender = plaatsing.Gender,
-                DepartureReason = departureReason,
-                DepartureDestination = departureDestination,
-                DepartureComment = departureComment
-            };
-            _gastgezinService.AddPlaatsing(deletedPlaatsing);
-            return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
+            _gastgezinService.RemoveReserveringPlaatsingen(departureDate, plaatsingId, departureReason, _userService.getUserFromClaimsPrincipal(User), departureDestination, departureComment);
+            return Redirect("/gastgezin?id=" + _gastgezinService.GetPlaatsing(plaatsingId).Gastgezin.Id);
         }
 
         [Authorize(Policy = "RequireCoordinatorRole")]
@@ -295,6 +272,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             {
                 gastgezin.NoodOpvang = NoodOpvang;
                 gastgezin.OnHold = OnHold;
+                if (OnHold)
+                {
+                    _gastgezinService.RemoveReserveringOnHold(GastGezinId, _userService.getUserFromClaimsPrincipal(User));
+                }
                 if (OnHold && OnHoldTill.Subtract(DateTime.Now).Hours > 0)
                 {
                     gastgezin.OnHoldTill = OnHoldTill;

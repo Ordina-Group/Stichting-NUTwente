@@ -80,6 +80,46 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var plaatsing = PlaatsingsRepository.GetById(id, "Gastgezin");
             return plaatsing;
         }
+        public void RemoveReserveringPlaatsingen(DateTime departureDate, int plaatsingId, string departureReason, UserDetails user, DepartureDestination? departureDestination = null, string? departureComment = null)
+        {
+            var plaatsing = GetPlaatsing(plaatsingId);
+            plaatsing.Active = false;
+            UpdatePlaatsing(plaatsing);
+            var placementType = PlacementType.VerwijderdePlaatsing;
+            if (plaatsing.PlacementType == PlacementType.Reservering)
+            {
+                placementType = PlacementType.VerwijderdeReservering;
+            }
+            var deletedPlaatsing = new Plaatsing()
+            {
+                Gastgezin = plaatsing.Gastgezin,
+                Amount = plaatsing.Amount,
+                Age = plaatsing.Age,
+                AgeGroup = plaatsing.AgeGroup,
+                PlacementType = placementType,
+                DateTime = departureDate,
+                Vrijwilliger = user,
+                Active = false,
+                Gender = plaatsing.Gender,
+                DepartureReason = departureReason,
+                DepartureDestination = departureDestination,
+                DepartureComment = departureComment
+            };
+            AddPlaatsing(deletedPlaatsing);
+        }
+
+        public void RemoveReserveringOnHold(int gastgezinId,UserDetails user)
+        {
+            var gastgezin = GetGastgezin(gastgezinId);
+            var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active && p.PlacementType == PlacementType.Reservering).ToList();
+            foreach (var plaatsing in plaatsingen)
+            {
+                if (plaatsing.Active && plaatsing.PlacementType == PlacementType.Reservering)
+                {
+                    RemoveReserveringPlaatsingen(DateTime.Now, plaatsing.Id, "Gastgezin on hold gezet",user);
+                }
+            }
+        }
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
         {
