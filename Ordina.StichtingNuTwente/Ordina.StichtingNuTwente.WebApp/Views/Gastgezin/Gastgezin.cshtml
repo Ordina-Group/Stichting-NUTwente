@@ -1074,7 +1074,7 @@ contains:
                                         }
                                     </td>
                                     <td>@plaatsing.Vrijwilliger.FirstName @plaatsing.Vrijwilliger.LastName (@plaatsing.Vrijwilliger.Email)</td>
-                                    @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing)
+                                    @if (plaatsing.PlacementType == PlacementType.VerwijderdePlaatsing || plaatsing.PlacementType == PlacementType.VerwijderdeReservering)
                                     {
                                         <td>@plaatsing.DepartureReason</td>
                                         <td>
