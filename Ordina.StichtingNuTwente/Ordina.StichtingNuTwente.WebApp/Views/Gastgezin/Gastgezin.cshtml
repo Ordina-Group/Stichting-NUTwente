@@ -329,7 +329,7 @@ contains:
                     <div class="card" id="NieuwePlaatsingCard">
                         <div class="card-body">
                             <h5 class="card-title">Nieuwe Plaatsing</h5>
-                            @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
+                            @using (Html.BeginForm("PostPlaatsing", "Plaatsingen", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
@@ -433,7 +433,7 @@ contains:
                 @*Editmode true*@
                 @if (Model.EditPlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -647,7 +647,7 @@ contains:
 
                 @if (Model.EditReserveringen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -905,7 +905,7 @@ contains:
                 @*Editmode true*@
                 @if (Model.EditVerwijderdePlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -1206,7 +1206,7 @@ contains:
         let id = @Model.GastGezin.Id;
         if (confirm("Weet je zeker dat je een e-mail wilt versturen?")) {
             $.ajax({
-                url: `/Gastgezin/SendPlaatsingenEmail`,
+                url: `/Plaatsingen/SendPlaatsingenEmail`,
                 type: "POST",
                 dataType: 'text',
                 data: {"GastGezinId": id},

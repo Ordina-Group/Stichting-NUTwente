@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Ordina.StichtingNuTwente.Business.Helpers
 {
+    /// <summary>
+    /// Zet DB data om naar excel
+    /// </summary>
     public class EntityToRowHelper
     {
 
@@ -41,7 +44,7 @@ namespace Ordina.StichtingNuTwente.Business.Helpers
         }
 
 
-        public static ICollection<Row> GastgezinToDataRow(List<Gastgezin> gastgezinnen)
+        public static ICollection<Row> GastgezinToDataRows(List<Gastgezin> gastgezinnen)
         {
             var rows = new List<Row>();
             rows.Add(new Row(1, GastgezinHeader()));
