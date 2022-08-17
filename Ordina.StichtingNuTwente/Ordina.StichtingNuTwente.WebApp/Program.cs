@@ -43,9 +43,9 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
         .AddMicrosoftGraphAppOnly(
             graphServiceClient => new GraphServiceClient(
                 new ClientSecretCredential(
-                    builder.Configuration.GetSection("Graph").GetValue<string>("TenantId"),
+                    builder.Configuration.GetSection("AzureB2C").GetValue<string>("TenantId"),
                     builder.Configuration.GetSection("AzureB2C").GetValue<string>("ClientId"),
-                    builder.Configuration.GetSection("Graph").GetValue<string>("ClientSecret")
+                    builder.Configuration.GetSection("AzureB2C").GetValue<string>("ClientSecret")
                     )
                 )
             )
