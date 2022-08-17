@@ -59,7 +59,7 @@ jobs:
         with:
           files: './appsettings.json'
         env:
-          Graph.ClientSecret: ${{ secrets.AZURE_AAD_CLIENTSECRET}}
+          AzureB2C.ClientSecret: ${{ secrets.AZURE_AAD_CLIENTSECRET}}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           SENDGRID_MAILTO_B: ${{ secrets.SENDGRID_MAILTO_B }}
           SENDGRID_MAILTO_O: ${{ secrets.SENDGRID_MAILTO_O }}
