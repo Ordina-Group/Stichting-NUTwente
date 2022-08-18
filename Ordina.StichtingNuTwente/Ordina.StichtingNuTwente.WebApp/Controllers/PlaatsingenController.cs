@@ -7,7 +7,7 @@ using Ordina.StichtingNuTwente.Models.Models;
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
     [Authorize(Policy = "RequireSecretariaatRole")]
-    [Route("Plaatsingen")]
+    //[Route("Plaatsingen")]
     public class PlaatsingenController : Controller
     {
         private readonly IPlaatsingenService _plaatsingenService;
@@ -23,7 +23,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             _userService = userService;
         }
 
-        [Route("Verwijderd")]
+        [Route("Plaatsingen/Verwijderd")]
         [HttpGet]
         public IActionResult Verwijderd()
         {
@@ -66,7 +66,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
 
         [HttpPost]
         [Authorize(Policy = "RequireCoordinatorRole")]
-        [ActionName("SendPlaatsingenEmail")]
         [Route("Plaatsingen/SendPlaatsingenEmail")]
         public bool SendPlaatsingenEmail(int GastGezinId)
         {
@@ -150,8 +149,10 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             return Redirect("/gastgezin?id=" + _plaatsingenService.GetPlaatsing(plaatsingId).Gastgezin.Id);
         }
 
+        [HttpPost]
         [Authorize(Policy = "RequireCoordinatorRole")]
-        [Route("PlaatsReservering")]
+        //[ActionName("PlaatsReservering")]
+        [Route("/Plaatsingen/PlaatsReservering")]
         public IActionResult PlaatsReservering(int plaatsingId)
         {
             var plaatsing = _plaatsingenService.GetPlaatsing(plaatsingId);
@@ -171,6 +172,15 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             };
             _plaatsingenService.AddPlaatsing(NieuwePlaatsing);
             return Redirect("/gastgezin?id=" + plaatsing.Gastgezin.Id);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "RequireCoordinatorRole")]
+        //[ActionName("PlaatsReservering")]
+        [Route("Test")]
+        public IActionResult Test()
+        {
+            return Redirect("/gastgezin?id=" + 1);
         }
     }
 }
