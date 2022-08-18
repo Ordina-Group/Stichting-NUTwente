@@ -759,11 +759,28 @@ contains:
                                     @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                     {
                                         <div class="col col-1">
-                                            <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
+                                            @*<a type="button" href="/Plaatsingen/PlaatsReservering?plaatsingId=@p.Id" title="Plaats reservering">
+                                                <i class="fa-solid fa-angle-left fa-lg"></i>
+                                            </a>*@
+                                            <a type="button" id="@("plaatsReservering"+p.Id)" title="Plaats reservering">
                                                 <i class="fa-solid fa-angle-left fa-lg"></i>
                                             </a>
                                         </div>
                                     }
+                                        <script>
+                                            $("#@("plaatsReservering"+p.Id)").on("click", function() {
+                                                let id = @p.Id;
+                                                    $.ajax({
+                                                        url: "/Plaatsingen/PlaatsReservering",
+                                                        type: "POST",
+                                                        dataType: 'text',
+                                                        data: { "plaatsingId" : id },
+                                                        success: function() {
+                                                            window.location.reload();
+                                                        },
+                                                    });
+                                            })
+                                        </script>
                                     <div class=col>
                                         <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
                                     </div>
