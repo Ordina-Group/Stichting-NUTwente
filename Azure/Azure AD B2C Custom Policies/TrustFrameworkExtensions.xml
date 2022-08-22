@@ -1,10 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--For production: 
+uncomment lines with "production" label above them.
+don't forget to scroll down to "Local Account SignIn".
+-->
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-TenantId="nutwenteb2c.onmicrosoft.com"
 PolicyId="B2C_1A_Roles_TrustFrameworkExtensions"
-PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkExtensions">
+TenantId="nutwenteb2cdev.onmicrosoft.com"
+PublicPolicyUri="http://nutwenteb2cdev.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkExtensions">
+<!--production: 
+TenantId="nutwenteb2c.onmicrosoft.com"
+PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkExtensions">-->
+	
 	<BasePolicy>
-		<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>
+		<!--development: -->
+		<TenantId>nutwenteb2cdev.onmicrosoft.com</TenantId>
+		<!--prodction: -->
+		<!--<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>-->
 		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
 	</BasePolicy>
 	<BuildingBlocks>
@@ -24,20 +35,6 @@ PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkE
 				<DisplayName>isForgotPassword</DisplayName>
 				<DataType>boolean</DataType>
 				<AdminHelpText>Whether the user has selected Forgot your Password</AdminHelpText>
-			</ClaimType>
-			<ClaimType Id="phoneNumber">
-				<DisplayName>Phone Number</DisplayName>
-				<DataType>string</DataType>
-				<UserHelpText>Enter Phone Number</UserHelpText>
-				<UserInputType>TextBox</UserInputType>
-				<PredicateValidationReference Id="internationalOrNationalPhoneNumber" />
-			</ClaimType>
-			<ClaimType Id="nationalNumber">
-				<DisplayName>Phone Number</DisplayName>
-				<DataType>string</DataType>
-				<UserHelpText>Enter National Phone Number</UserHelpText>
-				<UserInputType>TextBox</UserInputType>
-				<PredicateValidationReference Id="nationalNumber" />
 			</ClaimType>
 		</ClaimsSchema>
 
@@ -93,12 +90,20 @@ PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkE
 			<TechnicalProfiles>
 				<TechnicalProfile Id="login-NonInteractive">
 					<Metadata>
-						<Item Key="client_id">fea985fe-c4ce-4b68-a21b-84dc7255b58d</Item>
-						<Item Key="IdTokenAudience">da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a</Item>
+						<!--development:-->
+						<Item Key="client_id">c215fa02-ca71-48f1-9d54-f31df3d430c9</Item>					<!--ProxyIdentityExperienceFramework client id -->
+						<Item Key="IdTokenAudience">2020a3f3-5c0b-46be-89ae-6d13101ee7fb</Item>				<!--IdentityExperienceFramework client id -->
+						<!--production:-->
+						<!--<Item Key="client_id">fea985fe-c4ce-4b68-a21b-84dc7255b58d</Item>-->			<!--ProxyIdentityExperienceFramework client id -->
+						<!--<Item Key="IdTokenAudience">da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a</Item>-->		<!--IdentityExperienceFramework client id -->
 					</Metadata>
 					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="fea985fe-c4ce-4b68-a21b-84dc7255b58d" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a" />
+						<!--development:-->
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="c215fa02-ca71-48f1-9d54-f31df3d430c9" />											<!--ProxyIdentityExperienceFramework client id -->
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="2020a3f3-5c0b-46be-89ae-6d13101ee7fb" />			<!--IdentityExperienceFramework client id -->
+						<!--production:-->
+						<!--<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="fea985fe-c4ce-4b68-a21b-84dc7255b58d" />-->									<!--ProxyIdentityExperienceFramework client id -->
+						<!--<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="da716a6f-ea59-4e4d-a1ab-2bcaf6f3427a" />-->	<!--IdentityExperienceFramework client id -->
 					</InputClaims>
 				</TechnicalProfile>
 			</TechnicalProfiles>
@@ -118,7 +123,10 @@ PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkE
 						<Item Key="scope">openid profile email</Item>
 						<Item Key="HttpBinding">POST</Item>
 						<Item Key="UsePolicyInRedirectUri">false</Item>
-						<Item Key="client_id">87b4b102-312f-4a4c-ba69-814ed13f1df5</Item>
+						<!--development-->
+						<Item Key="client_id">b51a4866-8ac8-458d-a828-3c7bab4adb79</Item>			<!--application Client Id-->
+						<!--production:-->
+						<!--<Item Key="client_id">87b4b102-312f-4a4c-ba69-814ed13f1df5</Item>-->	<!--application Client Id-->
 					</Metadata>
 					<CryptographicKeys>
 						<Key Id="client_secret" StorageReferenceId="B2C_1A_MSASecret" />
@@ -152,7 +160,10 @@ PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkE
 					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 					<Metadata>
 						<!-- TODO: change this -->
-						<Item Key="ServiceUrl">https://nutwenteb2cgroups.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?code=***REMOVED***</Item>
+						<!--development-->
+						<Item Key="ServiceUrl">https://nutwenteb2cgroups-dev.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph-dev?code=***REMOVED***</Item>	<!--Azure function url-->
+						<!--production:-->
+						<!--<Item Key="ServiceUrl">https://nutwenteb2cgroups.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?code=***REMOVED***</Item>-->		<!--Azure function url-->
 						<Item Key="AuthenticationType">None</Item>
 						<Item Key="SendClaimsIn">Body</Item>
 						<Item Key="AllowInsecureAuthInProduction">true</Item>

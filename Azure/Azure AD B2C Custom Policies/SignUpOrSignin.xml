@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-TenantId="nutwenteb2c.onmicrosoft.com" 
 PolicyId="B2C_1A_FT_signup_signin" 
-PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_FT_signup_signin">
-  <BasePolicy>
-    <TenantId>nutwenteb2c.onmicrosoft.com</TenantId>
+TenantId="nutwenteb2cdev.onmicrosoft.com" 
+PublicPolicyUri="http://nutwenteb2cdev.onmicrosoft.com/B2C_1A_FT_signup_signin"
+TenantObjectId="22eda50f-ec98-45d3-b689-282277d4f1f0">				  
+	<!--production:
+	TenantId="nutwenteb2c.onmicrosoft.com"
+	PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_FT_signup_signin"
+	TenantObjectId="b1eb9986-8a9e-4dfa-822b-2548b69e2cd0">-->
+	
+	<BasePolicy>
+    <TenantId>nutwenteb2cdev.onmicrosoft.com</TenantId>
+	<!--production:
+	<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>-->
     <PolicyId>B2C_1A_Roles_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
