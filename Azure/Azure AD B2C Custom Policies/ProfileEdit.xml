@@ -4,12 +4,18 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="nutwenteb2c.onmicrosoft.com"
   PolicyId="B2C_1A_ProfileEdit"
-  PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_ProfileEdit">
+  TenantId="nutwenteb2cdev.onmicrosoft.com"
+  PublicPolicyUri="http://nutwenteb2cdev.onmicrosoft.com/B2C_1A_ProfileEdit">
+	<!--production:
+	TenantId="nutwenteb2c.onmicrosoft.com"
+	PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_ProfileEdit">-->
 
 	<BasePolicy>
-		<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>
+		<!--development:-->
+		<TenantId>nutwenteb2cdev.onmicrosoft.com</TenantId>
+		<!--production:
+		<TenantId>nutwenteb2c.onmicrosoft.com</TenantId>-->
 		<PolicyId>B2C_1A_Roles_TrustFrameworkExtensions</PolicyId>
 	</BasePolicy>
 
