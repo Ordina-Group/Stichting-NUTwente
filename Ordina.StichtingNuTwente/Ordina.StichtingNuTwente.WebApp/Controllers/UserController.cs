@@ -104,7 +104,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
-        public async Task<IActionResult> UpdateUserAddressAsync(int userId, string address = "", string city = "", string postalCode = "")
+        public async Task<IActionResult> UpdateUserAddressAsync(int userId, string address = "", string city = "", string postalCode = "") // NIET GEBRUIKT
         {
             var user = _userService.GetUserById(userId);
             var currentUser = _userService.getUserFromClaimsPrincipal(User);
