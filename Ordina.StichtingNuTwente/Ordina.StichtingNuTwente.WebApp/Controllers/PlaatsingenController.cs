@@ -7,7 +7,6 @@ using Ordina.StichtingNuTwente.Models.Models;
 namespace Ordina.StichtingNuTwente.WebApp.Controllers
 {
     [Authorize(Policy = "RequireSecretariaatRole")]
-    //[Route("Plaatsingen")]
     public class PlaatsingenController : Controller
     {
         private readonly IPlaatsingenService _plaatsingenService;

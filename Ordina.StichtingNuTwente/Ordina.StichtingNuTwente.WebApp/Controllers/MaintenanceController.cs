@@ -396,7 +396,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         [Authorize(Policy = "RequireSuperAdminRole")]
-        public IActionResult FixStatus()
+        public IActionResult FixStatus() // NIET GEBRUIKT
         {
             var model = new MaintenanceModel();
             var messages = maintenanceService.UpdateStatus();
