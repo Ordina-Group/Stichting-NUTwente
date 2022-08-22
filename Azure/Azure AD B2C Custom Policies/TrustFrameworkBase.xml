@@ -4,10 +4,14 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="nutwenteb2c.onmicrosoft.com"
   PolicyId="B2C_1A_TrustFrameworkBase"
-  PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
-
+  TenantId="nutwenteb2cdev.onmicrosoft.com"
+  PublicPolicyUri="http://nutwenteb2cdev.onmicrosoft.com/B2C_1A_TrustFrameworkBase"
+  >
+	<!-- Production:
+	TenantId="nutwenteb2c.onmicrosoft.com"
+	PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_TrustFrameworkBase"-->
+	
 	<BuildingBlocks>
 		<ClaimsSchema>
 			<!-- The ClaimsSchema is divided into three sections:
@@ -537,7 +541,10 @@
 						<Item Key="scope">openid profile email</Item>
 						<Item Key="HttpBinding">POST</Item>
 						<Item Key="UsePolicyInRedirectUri">false</Item>
-						<Item Key="client_id">87b4b102-312f-4a4c-ba69-814ed13f1df5</Item>
+						<!--development-->
+						<Item Key="client_id">b51a4866-8ac8-458d-a828-3c7bab4adb79</Item>			<!--application Client Id-->
+						<!--production:-->
+						<!--<Item Key="client_id">87b4b102-312f-4a4c-ba69-814ed13f1df5</Item>-->	<!--application Client Id-->
 					</Metadata>
 					<CryptographicKeys>
 						<Key Id="client_secret" StorageReferenceId="B2C_1A_MSASecret" />
