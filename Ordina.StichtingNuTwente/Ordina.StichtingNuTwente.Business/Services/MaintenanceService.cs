@@ -763,34 +763,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return result;
         }
 
-        //private DatabaseIntegrityTest TestMissingGastgezin()
-        //{
-        //    var result = new DatabaseIntegrityTest
-        //    {
-        //        Title = "Missing Gastgezin for Aanmeld Formulier",
-        //        Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
-        //    };
-
-        //    var gastgezinnen = GastgezinRepo.GetAll("Contact,AanmeldFormulier");
-        //    var personen = PersoonRepo.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
-
-        //    int totalProblems = 0;
-        //    foreach (var persoon in personen)
-        //    {
-        //        if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
-
-        //        totalProblems++;
-        //        result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
-        //    }
-
-        //    if (totalProblems == 0)
-        //    {
-        //        result.AddMessage($@"No Gastgezin found without a Persoon", DatabaseIntegrityLevel.Success);
-        //    }
-
-        //    return result;
-        //}
-
         private DatabaseIntegrityTest TestMissingGastgezin()
         {
             var result = new DatabaseIntegrityTest

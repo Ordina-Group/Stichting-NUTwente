@@ -358,17 +358,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 _gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
                 return Redirect($"/gastgezin/maintenance?id={gastgezinId}");
             }
-            //if (gastgezin == null)
-            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden");
-            //var aanmeld = _reactionService.GetReactieFromId(aanmeldId);
-            //var intake = _reactionService.GetReactieFromId(intakeId);
-            //if (aanmeld == null || aanmeld.FormulierId != 1)
-            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Aanmeld%20geen%20aanmeld%20formulier");
-            //if (intake != null && intake.FormulierId != 2)
-            //    return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Intake%20geen%20intake%20formulier");
-            //
-            //gastgezin.AanmeldFormulier = aanmeld;
-            //_gastgezinService.UpdateGastgezin(gastgezin, gastgezinId);
             return Redirect($"/gastgezin/maintenance?id={gastgezinId}&message=Gastgezin%20niet%20gevonden%20of%20intaker%20incorrect");
         }
 

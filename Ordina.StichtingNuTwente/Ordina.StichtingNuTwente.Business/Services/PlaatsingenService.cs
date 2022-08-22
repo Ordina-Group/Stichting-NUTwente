@@ -28,19 +28,19 @@ namespace Ordina.StichtingNuTwente.Business.Services
         {
             if (plaatsing.Age != -1)
             {
-                if (plaatsing.Age > 120)
+                if (plaatsing.Age > 120) // Te oud
                 {
                     plaatsing.Age = 120;
                 }
-                else if (plaatsing.Age > 17)
+                else if (plaatsing.Age > 17) // Volwassen
                 {
                     plaatsing.AgeGroup = AgeGroup.Volwassene;
                 }
-                else if (plaatsing.Age < 18 && plaatsing.Age >= 0)
+                else if (plaatsing.Age < 18 && plaatsing.Age >= 0) // Kind
                 {
                     plaatsing.AgeGroup = AgeGroup.Kind;
                 }
-                else if (plaatsing.Age < -1)
+                else if (plaatsing.Age < -1) // Onbekend
                 {
                     plaatsing.Age = -1;
                 }
@@ -120,18 +120,18 @@ namespace Ordina.StichtingNuTwente.Business.Services
             return plaatsingen.ToList();
         }
 
-        public string GetPlaatsingTag(PlacementType placementType, Gastgezin gastgezin)
+        public string GetPlaatsingTag(PlacementType placementType, Gastgezin gastgezin)// Spatie er achter voor het nummer in de front-end
         {
             string status = "";
             var gastgezinStatus = gastgezin.Status;
 
             if (gastgezin.OnHold)
             {
-                status = "ON HOLD ";
+                status = "ON HOLD";
             }
             else if (gastgezin.NoodOpvang)
             {
-                status = "NOOD ";
+                status = "NOOD";
             }
             var plaatsingen = gastgezin.Plaatsingen.Where(p => p.Active == true);
             int? total = plaatsingen.Where(p => p.PlacementType == placementType).Sum(p => p.Amount);
@@ -143,7 +143,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             }
             else
             {
-                tag = status + total;
+                tag = status + " " + total;
             }
             return tag;
         }

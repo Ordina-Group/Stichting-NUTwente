@@ -1,4 +1,5 @@
 ﻿using Ordina.StichtingNuTwente.Models.Models;
+using Ordina.StichtingNuTwente.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,9 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public void Restore(int gastgezinId);
         public void Delete(int gastgezinId, bool deleteForms, UserDetails user, string comment);
         public void RejectBeingBuddy(Gastgezin gastgezin, string reason, UserDetails userDetails);
+        public bool IntakerOrBuddyChange(List<IntakerOrBuddyChangeModel> intakerOrBuddyChangeModels, List<UserDetails> vrijwilligers);
+        public void FillBaseModel(BaseModel model, UserDetails user);
+        public BeschikbareGastgezinnenModel BeschikBeschikbareGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string[]? filters = null, string statusFilter = "", UserDetails? user = null);
+        public AlleGastgezinnenModel AlleGastgezinnen(string? sortBy = "Woonplaats", string? sortOrder = "Ascending", string statusFilter = "", UserDetails? user = null, List<UserDetails> vrijwilligers = null);
     }
 }
