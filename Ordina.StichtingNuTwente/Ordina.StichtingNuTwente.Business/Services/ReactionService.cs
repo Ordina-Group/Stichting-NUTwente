@@ -18,6 +18,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IRepository<Adres> AdresRepository;
         private readonly IRepository<PlaatsingsInfo> PlaatsingsInfoRepository;
         private readonly IRepository<UserDetails> UserDetailsRepository;
+
+        /// <summary>
+        /// Converts the awnsers from the aanmeldings & intake formulieren into data. 
+        /// </summary>
+        /// <param name="reactieRepository"></param>
+        /// <param name="gastgezinRepository"></param>
+        /// <param name="persoonRepository"></param>
+        /// <param name="adresRepository"></param>
+        /// <param name="plaatsingsInfoRepository"></param>
+        /// <param name="userDetailsRepository"></param>
         public ReactionService(IRepository<Reactie> reactieRepository, IRepository<Gastgezin> gastgezinRepository, IRepository<Persoon> persoonRepository, IRepository<Adres> adresRepository, IRepository<PlaatsingsInfo> plaatsingsInfoRepository, IRepository<UserDetails> userDetailsRepository)
         {
             ReactieRepository = reactieRepository;
@@ -55,6 +65,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
                             if (gastgezin.Comments == null)
                                 gastgezin.Comments = new List<Comment>();
+
                             if (gastgezin.Intaker != null)
                                 gastgezin.Comments.Add(new Comment("Intake uitgevoerd", gastgezin.Intaker, CommentType.INTAKE_COMPLETED));
                         }
