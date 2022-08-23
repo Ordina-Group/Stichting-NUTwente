@@ -103,7 +103,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
         public List<Plaatsing> GetPlaatsingen(int? gastGezinId = null, PlacementType? type = null, AgeGroup? ageGroup = null)
         {
-            var plaatsingen = GastgezinRepository.GetAll("Gastgezin");
+            var plaatsingen = PlaatsingenRepository.GetAll("Gastgezin");
             if (gastGezinId != null)
             {
                 plaatsingen = plaatsingen.Where(p => p.Gastgezin.Id == gastGezinId);
