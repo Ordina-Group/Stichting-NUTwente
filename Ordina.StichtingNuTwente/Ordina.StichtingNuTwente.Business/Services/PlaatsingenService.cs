@@ -11,16 +11,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
 {
     public class PlaatsingenService : IPlaatsingenService
     {
-        private readonly IRepository<Plaatsing> GastgezinRepository;
+        private readonly IRepository<Plaatsing> PlaatsingenRepository;
 
         public PlaatsingenService(IRepository<Plaatsing> plaatsingenRepository)
         {
-            GastgezinRepository = plaatsingenRepository;
+            PlaatsingenRepository = plaatsingenRepository;
         }
 
         public ICollection<Plaatsing> GetAllPlaatsingen(PlacementType? placementType)
         {
-            var plaatsingen = GastgezinRepository.GetAll("Gastgezin,Gastgezin.Contact,Vrijwilliger").Where(p => p.PlacementType == placementType);
+            var plaatsingen = PlaatsingenRepository.GetAll("Gastgezin,Gastgezin.Contact,Vrijwilliger").Where(p => p.PlacementType == placementType);
             return plaatsingen.ToList();
         }
 
@@ -49,16 +49,16 @@ namespace Ordina.StichtingNuTwente.Business.Services
         }
         public void AddPlaatsing(Plaatsing plaatsing)
         {
-            GastgezinRepository.Create(CheckAge(plaatsing));
+            PlaatsingenRepository.Create(CheckAge(plaatsing));
         }
         public void UpdatePlaatsing(Plaatsing plaatsing)
         {
-            GastgezinRepository.Update(CheckAge(plaatsing));
+            PlaatsingenRepository.Update(CheckAge(plaatsing));
         }
 
         public Plaatsing GetPlaatsing(int id)
         {
-            var plaatsing = GastgezinRepository.GetById(id, "Gastgezin");
+            var plaatsing = PlaatsingenRepository.GetById(id, "Gastgezin");
             return plaatsing;
         }
         public void RemoveReserveringPlaatsingen(DateTime departureDate, int plaatsingId, string departureReason, UserDetails user, DepartureDestination? departureDestination = null, string? departureComment = null)
