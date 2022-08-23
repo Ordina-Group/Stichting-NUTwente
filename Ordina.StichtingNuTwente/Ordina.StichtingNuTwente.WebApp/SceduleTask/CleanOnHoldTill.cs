@@ -28,8 +28,6 @@ namespace Ordina.StichtingNuTwente.WebApp.SceduleTask
             Console.WriteLine("SampleTask1 : " + DateTime.Now.ToString());
 
             // return Task.CompletedTask;
-
-
             await Task.Run(() => {
                 return Task.CompletedTask;
             });
