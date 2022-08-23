@@ -20,7 +20,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IRepository<UserDetails> UserDetailsRepository;
 
         /// <summary>
-        /// Converts the awnsers from the aanmeldingsformulieren into data. 
+        /// Converts the awnsers from the aanmeldings & intake formulieren into data. 
         /// </summary>
         /// <param name="reactieRepository"></param>
         /// <param name="gastgezinRepository"></param>
