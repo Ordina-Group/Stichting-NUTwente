@@ -360,7 +360,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         public IActionResult IntakerOrBuddyChange(List<IntakerOrBuddyChangeModel> intakerOrBuddyChangeModels)
         {
             bool succes = _gastgezinService.IntakerOrBuddyChange(intakerOrBuddyChangeModels, _userService.GetAllDropdownUsers().ToList());
-            if (succes)
+            if (!succes)
                 return BadRequest();
             return Ok();
         }
