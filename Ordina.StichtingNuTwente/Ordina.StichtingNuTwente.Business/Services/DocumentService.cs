@@ -12,6 +12,9 @@ using Ordina.StichtingNuTwente.Extensions;
 
 namespace Ordina.StichtingNuTwente.Business.Services
 {
+    /// <summary>
+    /// Verwerkt Documenten en Excel files
+    /// </summary>
     public class DocumentService : IDocumentService
     {
         private readonly IRepository<Gastgezin> GastgezinRepo;
@@ -145,7 +148,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             var comments = CommentRepo.GetAll("Commenter").ToList();
             using (FastExcel.FastExcel fastExcel = new FastExcel.FastExcel(template, outputFile))
             {
-                AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRow(gastgezinnen), fastExcel);
+                AddExcelTab("Gastgezinnen", EntityToRowHelper.GastgezinToDataRows(gastgezinnen), fastExcel);
                 AddExcelTab("AanmeldFormulier", EntityToRowHelper.ReactiesToDataRows(aanmeldFormulieren, 1), fastExcel);
                 AddExcelTab("IntakeFormulier", EntityToRowHelper.ReactiesToDataRows(intakeFormulieren, 2), fastExcel);
                 AddExcelTab("Plaatsingen", EntityToRowHelper.PlaatsingenToDataRows(plaatsingen), fastExcel);

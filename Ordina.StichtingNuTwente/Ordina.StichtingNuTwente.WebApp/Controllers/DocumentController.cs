@@ -15,8 +15,7 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
         }
 
         public IActionResult Index()
-        {
-            
+        {       
             return View();
         }
         public IActionResult GetGastgezinnnenPerGemeente()
