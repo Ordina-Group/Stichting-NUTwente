@@ -21,7 +21,6 @@ public class MailHelper
 
     public async Task<bool> SendMail(Mail mail)
     {
-        //TODO: checks invoeren om te kijken of het correcte mailadressen zijn.
         if (mail.MailFromName == null || mail.MailFromName == "")
         {
             mail.MailFromName = mailFromName;

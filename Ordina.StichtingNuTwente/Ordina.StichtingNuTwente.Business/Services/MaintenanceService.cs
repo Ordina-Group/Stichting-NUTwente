@@ -21,6 +21,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IGastgezinService _gastgezinService;
         private readonly IUserService _userService;
         private readonly IReactionService _reactionService;
+        private readonly IPlaatsingenService _plaatsingenService;
 
         private readonly IRepository<Gastgezin> GastgezinRepo;
         private readonly IRepository<Reactie> ReactionRepo;
@@ -31,11 +32,12 @@ namespace Ordina.StichtingNuTwente.Business.Services
         private readonly IRepository<Antwoord> AntwoordRepo;
         private readonly IRepository<PlaatsingsInfo> PlaatsingsInfoRepo;
 
-        public MaintenanceService(IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService, IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reactionRepo, IRepository<UserDetails> userDetailRepo, IRepository<Persoon> persoonRepo, IRepository<Adres> adresRepo, IRepository<Antwoord> antwoordRepo, IRepository<PlaatsingsInfo> plaatsingsInfoRepo, IRepository<Plaatsing> plaatsingsRepo)
+        public MaintenanceService(IGastgezinService gastgezinService, IUserService userService, IReactionService reactionService,IPlaatsingenService plaatsingenService, IRepository<Gastgezin> gastgezinRepo, IRepository<Reactie> reactionRepo, IRepository<UserDetails> userDetailRepo, IRepository<Persoon> persoonRepo, IRepository<Adres> adresRepo, IRepository<Antwoord> antwoordRepo, IRepository<PlaatsingsInfo> plaatsingsInfoRepo, IRepository<Plaatsing> plaatsingsRepo)
         {
             _gastgezinService = gastgezinService;
             _userService = userService;
             _reactionService = reactionService;
+            _plaatsingenService = plaatsingenService;
             GastgezinRepo = gastgezinRepo;
             ReactionRepo = reactionRepo;
             UserDetailRepo = userDetailRepo;
@@ -266,7 +268,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
 
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -287,7 +289,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Reservering,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -308,7 +310,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Reservering,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -332,7 +334,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Plaatsing,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -353,7 +355,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Plaatsing,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -374,7 +376,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
                                                     PlacementType = PlacementType.Plaatsing,
                                                     Vrijwilliger = _userService.getUserFromClaimsPrincipal(User)
                                                 };
-                                                _gastgezinService.AddPlaatsing(plaatsing);
+                                                _plaatsingenService.AddPlaatsing(plaatsing);
                                                 messages.Add(new MaintenanceMessage($@"{plaatsing.PlacementType} for {plaatsing.Amount} {plaatsing.AgeGroup} on {plaatsing.DateTime} added to Gastgezin with IntakeFormId {gastgezin.IntakeFormulier.Id}", MaintenanceMessageType.Success));
                                             }
                                         }
@@ -760,34 +762,6 @@ namespace Ordina.StichtingNuTwente.Business.Services
 
             return result;
         }
-
-        //private DatabaseIntegrityTest TestMissingGastgezin()
-        //{
-        //    var result = new DatabaseIntegrityTest
-        //    {
-        //        Title = "Missing Gastgezin for Aanmeld Formulier",
-        //        Description = "Checking all Gastgezin records missing for Persoon->Reacties where Reactie is AanmeldFormulier"
-        //    };
-
-        //    var gastgezinnen = GastgezinRepo.GetAll("Contact,AanmeldFormulier");
-        //    var personen = PersoonRepo.GetMany(e => e.Reactie != null && e.Reactie.FormulierId == 1, "Reactie");
-
-        //    int totalProblems = 0;
-        //    foreach (var persoon in personen)
-        //    {
-        //        if (gastgezinnen.Any(e => e.Contact.Id == persoon.Id)) continue;
-
-        //        totalProblems++;
-        //        result.AddMessage($@"Gastgezin missing for: PersoonId {persoon.Id} ReactieId {persoon.Reactie.Id}", DatabaseIntegrityLevel.Error);
-        //    }
-
-        //    if (totalProblems == 0)
-        //    {
-        //        result.AddMessage($@"No Gastgezin found without a Persoon", DatabaseIntegrityLevel.Success);
-        //    }
-
-        //    return result;
-        //}
 
         private DatabaseIntegrityTest TestMissingGastgezin()
         {

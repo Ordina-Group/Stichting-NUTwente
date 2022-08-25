@@ -329,7 +329,7 @@ contains:
                     <div class="card" id="NieuwePlaatsingCard">
                         <div class="card-body">
                             <h5 class="card-title">Nieuwe Plaatsing</h5>
-                            @using (Html.BeginForm("PostPlaatsing", "Gastgezin", FormMethod.Post))
+                            @using (Html.BeginForm("PostPlaatsing", "Plaatsingen", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
@@ -433,7 +433,7 @@ contains:
                 @*Editmode true*@
                 @if (Model.EditPlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -647,7 +647,7 @@ contains:
 
                 @if (Model.EditReserveringen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -759,11 +759,28 @@ contains:
                                     @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                     {
                                         <div class="col col-1">
-                                            <a type="button" href="/PlaatsReservering?PlaatsingId=@p.Id" title="Plaats reservering">
+                                            @*<a type="button" href="/Plaatsingen/PlaatsReservering?plaatsingId=@p.Id" title="Plaats reservering">
+                                                <i class="fa-solid fa-angle-left fa-lg"></i>
+                                            </a>*@
+                                            <a type="button" id="@("plaatsReservering"+p.Id)" title="Plaats reservering">
                                                 <i class="fa-solid fa-angle-left fa-lg"></i>
                                             </a>
                                         </div>
                                     }
+                                        <script>
+                                            $("#@("plaatsReservering"+p.Id)").on("click", function() {
+                                                let id = @p.Id;
+                                                    $.ajax({
+                                                        url: "/Plaatsingen/PlaatsReservering",
+                                                        type: "POST",
+                                                        dataType: 'text',
+                                                        data: { "plaatsingId" : id },
+                                                        success: function() {
+                                                            window.location.reload();
+                                                        },
+                                                    });
+                                            })
+                                        </script>
                                     <div class=col>
                                         <p><span class="text-warning">Datum</span><br />@p.DateTime.ToShortDateString()</p>
                                     </div>
@@ -905,7 +922,7 @@ contains:
                 @*Editmode true*@
                 @if (Model.EditVerwijderdePlaatsingen == true && User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                 {
-                    @using (Html.BeginForm("UpdatePlaatsingen", "Gastgezin", FormMethod.Post))
+                    @using (Html.BeginForm("UpdatePlaatsingen", "Plaatsingen", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="GastgezinId" value="@Model.GastGezin.Id">
@@ -1206,7 +1223,7 @@ contains:
         let id = @Model.GastGezin.Id;
         if (confirm("Weet je zeker dat je een e-mail wilt versturen?")) {
             $.ajax({
-                url: `/Gastgezin/SendPlaatsingenEmail`,
+                url: `/Plaatsingen/SendPlaatsingenEmail`,
                 type: "POST",
                 dataType: 'text',
                 data: {"GastGezinId": id},

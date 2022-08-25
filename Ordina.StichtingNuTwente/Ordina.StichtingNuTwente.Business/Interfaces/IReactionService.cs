@@ -11,11 +11,8 @@ namespace Ordina.StichtingNuTwente.Business.Interfaces
         public bool Restore(int reactionId);
         public void Update(AnswersViewModel viewModel, int id);
         public void UpdateAll(int? form = null);
-
         public Reactie GetReactieFromId(int Id);
-
         public Form GetAnwersFromId(int Id);
-
         public List<AnswerListModel> GetAllRespones(int? form = null);
         public IEnumerable<Reactie> GetDeletedReacties();
     }

@@ -102,19 +102,6 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
             }
             return BadRequest();
         }
-        
-        ////[Authorize]
-        //[AllowAnonymous]
-        //// [Route("user/MailGroup")]
-        //[HttpPost]
-        ////[ActionName("MailGroup")]
-        //public IActionResult MailGroup(string onderwerp, string bericht, string emailAdressen)
-        //{
-
-        //    List<string> mailAdressen = emailAdressen.Split(',').ToList();
-        //    MailHelper(onderwerp, bericht, mailAdressen);
-        //    return Ok();
-        //}
 
         [Authorize(Policy = "RequireVrijwilligerRole")]
         public async Task<IActionResult> UpdateUserAddressAsync(int userId, string address = "", string city = "", string postalCode = "")
