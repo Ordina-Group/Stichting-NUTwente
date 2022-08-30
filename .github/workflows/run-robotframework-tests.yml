@@ -5,9 +5,11 @@ name: Run Robotframework tests
 # Controls when the workflow will run
 on:
   push:
-    branches: [ development ]
+    branches:
+      - development
   pull_request:
-    branches: [ development ]
+    branches: 
+      - development
 
 jobs:
     test:
