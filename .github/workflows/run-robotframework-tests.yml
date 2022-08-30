@@ -19,6 +19,11 @@ jobs:
           with:
             robot_tests_dir: 'Testing/RobotFramework'
             robot_reports_dir: 'Testing/RobotFramework/Results'
+          env:
+            PASSWORD_1: ${{ secrets.PASSWORD_1 }}
+            PASSWORD_2: ${{ secrets.PASSWORD_2 }}
+            PASSWORD_3: ${{ secrets.PASSWORD_3 }}
+            PASSWORD_4: ${{ secrets.PASSWORD_4 }}
         - name: Upload test results
           uses: actions/upload-artifact@v1
           if: always()
