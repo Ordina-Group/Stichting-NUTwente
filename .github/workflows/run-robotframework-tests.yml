@@ -6,10 +6,10 @@ name: Run Robotframework tests
 on:
   push:
     branches:
-      - development
+      - Development
   pull_request:
     branches: 
-      - development
+      - Development
 
 jobs:
     test:
