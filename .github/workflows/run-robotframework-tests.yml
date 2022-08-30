@@ -9,6 +9,7 @@ on:
       - Development
   pull_request:
     branches: 
+      - main
       - Development
 
 jobs:
@@ -38,6 +39,7 @@ jobs:
           uses: actions/download-artifact@v1
           with:
             name: reports
+            path: Testing/RobotFramework/Results
         - name: Send report to commit
           uses: joonvena/robotframework-reporter-action@v2.1
           with:
