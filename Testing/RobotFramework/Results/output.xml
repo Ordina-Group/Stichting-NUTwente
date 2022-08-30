@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.10.5 on win32)" generated="20220812 10:38:31.657" rpa="false" schemaversion="3">
+<suite id="s1" name="Live" source="C:\development\robot-scripts\NuTwenteRobotframework\tests\Live">
+<suite id="s1-s1" name="NuTwenteLive" source="C:\development\robot-scripts\NuTwenteRobotframework\tests\Live\NuTwenteLive.robot">
+<test id="s1-s1-t1" name="Should be able to acces login page" line="14">
+<kw name="Begin web test" library="Common" type="SETUP">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${START_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220812 10:38:31.941" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<status status="PASS" starttime="20220812 10:38:31.941" endtime="20220812 10:38:33.168"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220812 10:38:33.169" endtime="20220812 10:38:33.302"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:34.316" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220812 10:38:33.302" endtime="20220812 10:38:34.316"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:31.941" endtime="20220812 10:38:34.316"/>
+</kw>
+<kw name="Should be able to acces Login page" library="NuTwenteApp">
+<kw name="GoToLandingPage" library="NuTwente.LoginPage">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${LOGIN_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20220812 10:38:34.316" level="INFO">Opening url 'https://nutwente.azurewebsites.net'</msg>
+<status status="PASS" starttime="20220812 10:38:34.316" endtime="20220812 10:38:35.396"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:34.316" endtime="20220812 10:38:35.396"/>
+</kw>
+<kw name="VerifyLandingPageLoaded" library="NuTwente.LoginPage">
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Sign in with your email address</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:38:35.398" endtime="20220812 10:38:35.661"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Login page vertification test</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220812 10:38:35.661" level="INFO">Login page vertification test</msg>
+<status status="PASS" starttime="20220812 10:38:35.661" endtime="20220812 10:38:35.661"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:35.397" endtime="20220812 10:38:35.661"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:34.316" endtime="20220812 10:38:35.661"/>
+</kw>
+<kw name="End web test" library="Common" type="TEARDOWN">
+<kw name="Close All Browsers" library="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20220812 10:38:35.661" endtime="20220812 10:38:37.803"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:35.661" endtime="20220812 10:38:37.803"/>
+</kw>
+<doc>vertify login page is loading</doc>
+<tag>Smoke</tag>
+<status status="PASS" starttime="20220812 10:38:31.941" endtime="20220812 10:38:37.803"/>
+</test>
+<test id="s1-s1-t2" name="Login to existing account 1" line="19">
+<kw name="Begin web test" library="Common" type="SETUP">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${START_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220812 10:38:37.810" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<status status="PASS" starttime="20220812 10:38:37.810" endtime="20220812 10:38:39.037"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220812 10:38:39.037" endtime="20220812 10:38:39.161"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:40.163" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220812 10:38:39.161" endtime="20220812 10:38:40.163"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:37.810" endtime="20220812 10:38:40.163"/>
+</kw>
+<kw name="Should be able to acces Login page" library="NuTwenteApp">
+<kw name="GoToLandingPage" library="NuTwente.LoginPage">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${LOGIN_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20220812 10:38:40.163" level="INFO">Opening url 'https://nutwente.azurewebsites.net'</msg>
+<status status="PASS" starttime="20220812 10:38:40.163" endtime="20220812 10:38:40.787"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:40.163" endtime="20220812 10:38:40.788"/>
+</kw>
+<kw name="VerifyLandingPageLoaded" library="NuTwente.LoginPage">
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Sign in with your email address</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:38:40.788" endtime="20220812 10:38:41.034"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Login page vertification test</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220812 10:38:41.034" level="INFO">Login page vertification test</msg>
+<status status="PASS" starttime="20220812 10:38:41.034" endtime="20220812 10:38:41.034"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:40.788" endtime="20220812 10:38:41.034"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:40.163" endtime="20220812 10:38:41.034"/>
+</kw>
+<kw name="Should be able to login" library="NuTwenteApp">
+<arg>&amp;{USER_1}</arg>
+<kw name="Login" library="NuTwente.LoginPage">
+<arg>&amp;{USER}</arg>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=signInName</arg>
+<arg>${USER.ID}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:41.034" level="INFO">Typing text 'NuTwente1@gmail.com' into text field 'id=signInName'.</msg>
+<status status="PASS" starttime="20220812 10:38:41.034" endtime="20220812 10:38:41.194"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>${USER.password}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:41.194" level="INFO">Typing text '^qyCswV07!z!' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20220812 10:38:41.194" endtime="20220812 10:38:41.312"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>id=next</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:41.312" level="INFO">Clicking button 'id=next'.</msg>
+<status status="PASS" starttime="20220812 10:38:41.312" endtime="20220812 10:38:41.418"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>5</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:46.429" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20220812 10:38:41.418" endtime="20220812 10:38:46.429"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Mijn Overzichten</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:38:46.429" endtime="20220812 10:38:46.451"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:48.459" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20220812 10:38:46.451" endtime="20220812 10:38:48.459"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:41.034" endtime="20220812 10:38:48.459"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:41.034" endtime="20220812 10:38:48.459"/>
+</kw>
+<kw name="End web test" library="Common" type="TEARDOWN">
+<kw name="Close All Browsers" library="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20220812 10:38:48.459" endtime="20220812 10:38:50.550"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:48.459" endtime="20220812 10:38:50.550"/>
+</kw>
+<doc>vertify loggin into accout 1 is working</doc>
+<tag>Functional</tag>
+<status status="PASS" starttime="20220812 10:38:37.803" endtime="20220812 10:38:50.550"/>
+</test>
+<test id="s1-s1-t3" name="Login to existing account 2" line="25">
+<kw name="Begin web test" library="Common" type="SETUP">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${START_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220812 10:38:50.550" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<status status="PASS" starttime="20220812 10:38:50.550" endtime="20220812 10:38:51.765"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220812 10:38:51.765" endtime="20220812 10:38:51.894"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:52.902" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220812 10:38:51.894" endtime="20220812 10:38:52.902"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:50.550" endtime="20220812 10:38:52.902"/>
+</kw>
+<kw name="Should be able to acces Login page" library="NuTwenteApp">
+<kw name="GoToLandingPage" library="NuTwente.LoginPage">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${LOGIN_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20220812 10:38:52.902" level="INFO">Opening url 'https://nutwente.azurewebsites.net'</msg>
+<status status="PASS" starttime="20220812 10:38:52.902" endtime="20220812 10:38:53.513"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:52.902" endtime="20220812 10:38:53.514"/>
+</kw>
+<kw name="VerifyLandingPageLoaded" library="NuTwente.LoginPage">
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Sign in with your email address</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:38:53.515" endtime="20220812 10:38:53.784"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Login page vertification test</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220812 10:38:53.784" level="INFO">Login page vertification test</msg>
+<status status="PASS" starttime="20220812 10:38:53.784" endtime="20220812 10:38:53.784"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:53.514" endtime="20220812 10:38:53.784"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:52.902" endtime="20220812 10:38:53.784"/>
+</kw>
+<kw name="Should be able to login" library="NuTwenteApp">
+<arg>&amp;{USER_2}</arg>
+<kw name="Login" library="NuTwente.LoginPage">
+<arg>&amp;{USER}</arg>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=signInName</arg>
+<arg>${USER.ID}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:53.784" level="INFO">Typing text 'NuTwente2@gmail.com' into text field 'id=signInName'.</msg>
+<status status="PASS" starttime="20220812 10:38:53.784" endtime="20220812 10:38:53.960"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>${USER.password}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:53.960" level="INFO">Typing text '$V7sTprFp1I5' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20220812 10:38:53.960" endtime="20220812 10:38:54.047"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>id=next</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20220812 10:38:54.049" level="INFO">Clicking button 'id=next'.</msg>
+<status status="PASS" starttime="20220812 10:38:54.047" endtime="20220812 10:38:54.229"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>5</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:38:59.238" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20220812 10:38:54.229" endtime="20220812 10:38:59.239"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Mijn Overzichten</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:38:59.239" endtime="20220812 10:38:59.265"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:01.272" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20220812 10:38:59.265" endtime="20220812 10:39:01.272"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:53.784" endtime="20220812 10:39:01.272"/>
+</kw>
+<status status="PASS" starttime="20220812 10:38:53.784" endtime="20220812 10:39:01.272"/>
+</kw>
+<kw name="End web test" library="Common" type="TEARDOWN">
+<kw name="Close All Browsers" library="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20220812 10:39:01.272" endtime="20220812 10:39:03.381"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:01.272" endtime="20220812 10:39:03.381"/>
+</kw>
+<doc>vertify loggin into accout 2 is working</doc>
+<tag>Functional</tag>
+<status status="PASS" starttime="20220812 10:38:50.550" endtime="20220812 10:39:03.381"/>
+</test>
+<test id="s1-s1-t4" name="Login to existing account 3" line="31">
+<kw name="Begin web test" library="Common" type="SETUP">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${START_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220812 10:39:03.381" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<status status="PASS" starttime="20220812 10:39:03.381" endtime="20220812 10:39:04.565"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220812 10:39:04.565" endtime="20220812 10:39:04.684"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:05.688" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220812 10:39:04.684" endtime="20220812 10:39:05.688"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:03.381" endtime="20220812 10:39:05.688"/>
+</kw>
+<kw name="Should be able to acces Login page" library="NuTwenteApp">
+<kw name="GoToLandingPage" library="NuTwente.LoginPage">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${LOGIN_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20220812 10:39:05.691" level="INFO">Opening url 'https://nutwente.azurewebsites.net'</msg>
+<status status="PASS" starttime="20220812 10:39:05.691" endtime="20220812 10:39:07.510"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:05.690" endtime="20220812 10:39:07.510"/>
+</kw>
+<kw name="VerifyLandingPageLoaded" library="NuTwente.LoginPage">
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Sign in with your email address</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:39:07.512" endtime="20220812 10:39:07.776"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Login page vertification test</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220812 10:39:07.777" level="INFO">Login page vertification test</msg>
+<status status="PASS" starttime="20220812 10:39:07.776" endtime="20220812 10:39:07.777"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:07.511" endtime="20220812 10:39:07.778"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:05.690" endtime="20220812 10:39:07.778"/>
+</kw>
+<kw name="Should be able to login" library="NuTwenteApp">
+<arg>&amp;{USER_3}</arg>
+<kw name="Login" library="NuTwente.LoginPage">
+<arg>&amp;{USER}</arg>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=signInName</arg>
+<arg>${USER.ID}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:07.783" level="INFO">Typing text 'NuTwente3@gmail.com' into text field 'id=signInName'.</msg>
+<status status="PASS" starttime="20220812 10:39:07.781" endtime="20220812 10:39:07.924"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>${USER.password}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:07.924" level="INFO">Typing text '4z6he5a&amp;$Jg5' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20220812 10:39:07.924" endtime="20220812 10:39:08.055"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>id=next</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:08.055" level="INFO">Clicking button 'id=next'.</msg>
+<status status="PASS" starttime="20220812 10:39:08.055" endtime="20220812 10:39:08.146"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>5</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:13.152" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20220812 10:39:08.146" endtime="20220812 10:39:13.152"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Mijn Overzichten</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:39:13.153" endtime="20220812 10:39:13.367"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:15.382" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20220812 10:39:13.368" endtime="20220812 10:39:15.382"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:07.780" endtime="20220812 10:39:15.382"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:07.779" endtime="20220812 10:39:15.382"/>
+</kw>
+<kw name="End web test" library="Common" type="TEARDOWN">
+<kw name="Close All Browsers" library="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20220812 10:39:15.382" endtime="20220812 10:39:17.527"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:15.382" endtime="20220812 10:39:17.527"/>
+</kw>
+<doc>vertify loggin into accout 3 is working</doc>
+<tag>Functional</tag>
+<status status="PASS" starttime="20220812 10:39:03.381" endtime="20220812 10:39:17.527"/>
+</test>
+<test id="s1-s1-t5" name="Login to existing account 4" line="37">
+<kw name="Begin web test" library="Common" type="SETUP">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${START_URL}</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20220812 10:39:17.527" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<status status="PASS" starttime="20220812 10:39:17.527" endtime="20220812 10:39:18.719"/>
+</kw>
+<kw name="Maximize Browser Window" library="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" starttime="20220812 10:39:18.719" endtime="20220812 10:39:18.833"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:19.841" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20220812 10:39:18.833" endtime="20220812 10:39:19.841"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:17.527" endtime="20220812 10:39:19.841"/>
+</kw>
+<kw name="Should be able to acces Login page" library="NuTwenteApp">
+<kw name="GoToLandingPage" library="NuTwente.LoginPage">
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${LOGIN_URL}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20220812 10:39:19.841" level="INFO">Opening url 'https://nutwente.azurewebsites.net'</msg>
+<status status="PASS" starttime="20220812 10:39:19.841" endtime="20220812 10:39:20.545"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:19.841" endtime="20220812 10:39:20.545"/>
+</kw>
+<kw name="VerifyLandingPageLoaded" library="NuTwente.LoginPage">
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Sign in with your email address</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:39:20.546" endtime="20220812 10:39:20.787"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Login page vertification test</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220812 10:39:20.787" level="INFO">Login page vertification test</msg>
+<status status="PASS" starttime="20220812 10:39:20.787" endtime="20220812 10:39:20.787"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:20.545" endtime="20220812 10:39:20.787"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:19.841" endtime="20220812 10:39:20.787"/>
+</kw>
+<kw name="Should be able to login" library="NuTwenteApp">
+<arg>&amp;{USER_4}</arg>
+<kw name="Login" library="NuTwente.LoginPage">
+<arg>&amp;{USER}</arg>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=signInName</arg>
+<arg>${USER.ID}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:20.787" level="INFO">Typing text 'NuTwente4@gmail.com' into text field 'id=signInName'.</msg>
+<status status="PASS" starttime="20220812 10:39:20.787" endtime="20220812 10:39:20.930"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>${USER.password}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:20.930" level="INFO">Typing text '^iG9RP4%gqp0' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20220812 10:39:20.930" endtime="20220812 10:39:21.035"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>id=next</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20220812 10:39:21.035" level="INFO">Clicking button 'id=next'.</msg>
+<status status="PASS" starttime="20220812 10:39:21.035" endtime="20220812 10:39:21.110"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>5</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:26.127" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20220812 10:39:21.110" endtime="20220812 10:39:26.127"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>Mijn Overzichten</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="PASS" starttime="20220812 10:39:26.127" endtime="20220812 10:39:26.164"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>2</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20220812 10:39:28.175" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20220812 10:39:26.164" endtime="20220812 10:39:28.175"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:20.787" endtime="20220812 10:39:28.175"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:20.787" endtime="20220812 10:39:28.175"/>
+</kw>
+<kw name="End web test" library="Common" type="TEARDOWN">
+<kw name="Close All Browsers" library="SeleniumLibrary">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20220812 10:39:28.175" endtime="20220812 10:39:30.294"/>
+</kw>
+<status status="PASS" starttime="20220812 10:39:28.175" endtime="20220812 10:39:30.294"/>
+</kw>
+<doc>vertify loggin into accout 4 is working</doc>
+<tag>Functional</tag>
+<status status="PASS" starttime="20220812 10:39:17.527" endtime="20220812 10:39:30.294"/>
+</test>
+<doc>Testing NuTwenteWeb</doc>
+<status status="PASS" starttime="20220812 10:38:31.672" endtime="20220812 10:39:30.300"/>
+</suite>
+<status status="PASS" starttime="20220812 10:38:31.657" endtime="20220812 10:39:30.300"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="4" fail="0" skip="0">Functional</stat>
+<stat pass="1" fail="0" skip="0">Smoke</stat>
+</tag>
+<suite>
+<stat pass="5" fail="0" skip="0" id="s1" name="Live">Live</stat>
+<stat pass="5" fail="0" skip="0" id="s1-s1" name="NuTwenteLive">Live.NuTwenteLive</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
