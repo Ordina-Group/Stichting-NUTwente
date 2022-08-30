@@ -1,13 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Run Robotframework tests
+name: 🤖 Run Robotframework tests
 
 # Controls when the workflow will run
 on:
   push:
-    branches: [ development ]
+    branches:
+      - Development
   pull_request:
-    branches: [ development ]
+    branches: 
+      - Development
 
 jobs:
     test:
@@ -29,7 +31,7 @@ jobs:
           if: always()
           with:
             name: reports
-            path: reports
+            path: Testing/RobotFramework/Results
     
     generate_report:
         if: always()
