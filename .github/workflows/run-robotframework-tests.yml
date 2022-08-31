@@ -26,7 +26,7 @@ jobs:
           uses: actions/upload-artifact@v1
           if: always()
           with:
-            name: reports
+            name: results
             path: Testing/RobotFramework/Results
     
     generate_report:
@@ -37,8 +37,10 @@ jobs:
         - name: Download reports
           uses: actions/download-artifact@v1
           with:
-            name: reports
+            name: results
+            path: Testing/RobotFramework/Results
         - name: Send report to commit
           uses: joonvena/robotframework-reporter-action@v2.1
           with:
             gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+            reports_path: Testing/RobotFramework/Results
