@@ -21,7 +21,7 @@ jobs:
           with:
             robot_tests_dir: 'Testing/RobotFramework'
             robot_reports_dir: 'Testing/RobotFramework/Results'
-            robot_options: '--variable PASSWORD_1:${{ secrets.PASSWORD_1 }} --variable PASSWORD_2:${{ secrets.PASSWORD_2 }} --variable PASSWORD_3:${{ secrets.PASSWORD_3 }} --variable PASSWORD_4:${{ secrets.PASSWORD_4 }}'
+            robot_options: '--loglevel DEBUG --variable PASSWORD_1:${{ secrets.PASSWORD_1 }} --variable PASSWORD_2:${{ secrets.PASSWORD_2 }} --variable PASSWORD_3:${{ secrets.PASSWORD_3 }} --variable PASSWORD_4:${{ secrets.PASSWORD_4 }}'
         - name: Upload test results
           uses: actions/upload-artifact@v1
           if: always()
