@@ -9,7 +9,6 @@
     ViewData["Title"] = "Gastgezin " + Model.GastGezin.Naam;
     var canEdit = User.HasClaims("groups", "group-vrijwilliger", "group-coordinator", "group-superadmin");
 }
-
 @*
 contains:
 - Title
@@ -155,7 +154,7 @@ contains:
                                 </label>
                             </div>     
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"") @(canEdit?"":"disabled")>
+                                <input class="form-check-input" type="checkbox" value="true" id="OnHold" name="OnHold" @(Model.GastGezin.OnHold?"checked":"") @(canEdit?"":"disabled") onchange="hasPendingChanges()">
                                 <label class="form-check-label" for="OnHold">
                                     On Hold
                                 </label>
@@ -165,38 +164,38 @@ contains:
                                 @if ((Model.GastGezin.OnHoldTill != null && Model.GastGezin.OnHoldTill.Value.Subtract(DateTime.Now).TotalHours >= 0))
                                 {
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" >
+                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" onchange="hasPendingChanges()">
                                     <label class="form-check-label" for="OnHoldTillCheckbox" id="OnHoldTillText">
                                     On Hold tot: @Model.GastGezin.OnHoldTill?.ToString("yyyy-MM-dd"), Dit aanpassen?
                                     </label>
                                 </div>
                                  <div class="col">
-                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="" onchange="hasPendingChanges()">
                                 </div>
                                 }
                                 else
                                 {
                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" >
+                                    <input class="form-check-input" type="checkbox" id="OnHoldTillCheckbox" value="" onchange="hasPendingChanges()">
                                     <label class="form-check-label" for="OnHoldTillCheckbox" id="OnHoldTillText">
                                     On Hold tot
                                     </label>
                                 </div>
                                  <div class="col">
-                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="" onchange="hasPendingChanges()">
                                 </div>       
                                 }
                             }
                             else
                             {
                                 <div class="form-check">
-                                    <input class="form-check-input" hidden type="checkbox" id="OnHoldTillCheckbox" >
+                                    <input class="form-check-input" hidden type="checkbox" id="OnHoldTillCheckbox" onchange="hasPendingChanges()">
                                     <label class="form-check-label" hidden for="OnHoldTillCheckbox" id="OnHoldTillText">
                                     On Hold tot
                                     </label>
                                 </div>
                                 <div class="col">
-                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="">
+                                    <input type="date" hidden class="form-control" id="OnHoldTill" name="OnHoldTill" value="" onchange="hasPendingChanges()">
                                 </div> 
                             }
                             <script>
@@ -225,7 +224,7 @@ contains:
                     <div class="row mt-1">
                         <label class="col">VOG:</label>
                         <div class="col">
-                            <input type="checkbox" class="form-check-input float-right" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"") @(canEdit?"":"disabled")>
+                            <input type="checkbox" class="form-check-input float-right" id="HasVOG" name="HasVOG" value="true" @((Model.GastGezin.HasVOG != null && Model.GastGezin.HasVOG == true)?"checked":"") @(canEdit?"":"disabled") onchange="hasPendingChanges()">
                         </div>
                     </div>
 
@@ -234,18 +233,18 @@ contains:
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Tot en met 2 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxYoungerThanThree" value="@Model.GastGezin.MaxYoungerThanThree" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxYoungerThanThree" value="@Model.GastGezin.MaxYoungerThanThree" @(canEdit?"":"disabled") onchange="hasPendingChanges()">
                         </div>
                     </div>
                     <div class="row mt-1 justify-content-between">
                         <label class="col">Vanaf 3 jaar:</label>
                         <div class="col">
-                            <input type="number" class="form-control" name="MaxOlderThanTwo" value="@Model.GastGezin.MaxOlderThanTwo" @(canEdit?"":"disabled")>
+                            <input type="number" class="form-control" name="MaxOlderThanTwo" value="@Model.GastGezin.MaxOlderThanTwo" @(canEdit?"":"disabled") onchange="hasPendingChanges()">
                         </div>
                     </div>
                     if (canEdit)
                     {
-                        <input type="submit" class="btn btn-primary mt-3" value=Opslaan>
+                        <input type="submit" class="btn btn-primary mt-3" value=Opslaan onclick="onSubmitClientClick()">
                     }
                 }
             </div>
@@ -313,11 +312,11 @@ contains:
                         <h5 class="card-title">Notities</h5>
                         @using (Html.BeginForm("PostNote", "Gastgezin", FormMethod.Post))
                         {
-                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id">
+                            <input type="hidden" name="GastGezinId" value="@Model.GastGezin.Id" onchange="hasPendingChanges()">
                             <div class="grow-wrap">
-                                <textarea id="Id" rows="3" @(canEdit?"":"disabled") class="form-control question" name="Note" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
+                                <textarea id="Id" rows="3" @(canEdit?"":"disabled") class="form-control question" name="Note" oninput="hasPendingChanges()" onInput="this.parentNode.dataset.replicatedValue = this.value" onclick="this.parentNode.dataset.replicatedValue = this.value">@Model.GastGezin.Note</textarea>
                             </div>
-                            <input type="submit" @(canEdit?"":"hidden") class="btn btn-primary mt-3" value="Opslaan">
+                            <input type="submit" @(canEdit?"":"hidden") class="btn btn-primary mt-3" value="Opslaan" onclick="onSubmitClientClick()">
                         }
                     </div>
                 </div>
@@ -338,14 +337,14 @@ contains:
                                     <div class="row justify-content-sm-left">
                                         <label for="colFormLabelSm" class="col col-form-label">Aantal</label>
                                         <div class="col">
-                                            <input type="number" class="form-control" id="colFormLabelSm" name="Amount" value="1">
+                                            <input type="number" class="form-control" id="colFormLabelSm" name="Amount" value="1" onchange="hasPendingChanges()">
                                         </div>
                                     </div>
                                 }
                                 <div class="row justify-content-sm-left">
                                     <label for="colFormLabelSm" class="col col-form-label">Type</label>
                                     <div class="col">
-                                        <select name="PlacementType" id="PlacementType" class="form-select">
+                                        <select name="PlacementType" id="PlacementType" class="form-select" onchange="hasPendingChanges()"> 
                                             <option value="@PlacementType.Reservering">@PlacementType.Reservering</option>
                                             <option value="@PlacementType.Plaatsing">@PlacementType.Plaatsing</option>
                                         </select>
@@ -355,7 +354,7 @@ contains:
                                 <div class="row justify-content-sm-left">
                                     <label for="colFormLabelSm" class="col col-form-label">Leeftijd</label>
                                     <div class="col">
-                                        <input type="number" class="form-control" id="Age" name="Age">
+                                        <input type="number" class="form-control" id="Age" name="Age" onchange="hasPendingChanges()">
                                     </div>
                                 </div>
 
@@ -380,7 +379,7 @@ contains:
                                 <div class="row justify-content-sm-left">
                                     <label for="colFormLabelSm" class="col col-form-label">Leeftijdsgroep</label>
                                     <div class="col">
-                                        <select name="AgeGroup" id="AgeGroup" class="form-select">
+                                        <select name="AgeGroup" id="AgeGroup" class="form-select" onchange="hasPendingChanges()">
                                             <option value="@AgeGroup.Onbekend">@AgeGroup.Onbekend</option>
                                             <option value="@AgeGroup.Volwassene">@AgeGroup.Volwassene</option>
                                             <option value="@AgeGroup.Kind">@AgeGroup.Kind</option>
@@ -391,7 +390,7 @@ contains:
                                 <div class="row justify-content-sm-left">
                                     <label for="colFormLabelSm" class="col col-form-label">Gender</label>
                                     <div class="col">
-                                        <select name="Gender" id="Gender" class="form-select">
+                                        <select name="Gender" id="Gender" class="form-select" onchange="hasPendingChanges()">
                                             @foreach (var option in Enum.GetValues(typeof(Gender)))
                                             {
                                                 <option value="@option">@option</option>
@@ -403,12 +402,12 @@ contains:
                                 <div class="row justify-content-sm-left">
                                     <label for="colFormLabelSm" class="col col-form-label">Datum</label>
                                     <div class="col">
-                                        <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        <input type="date" class="form-control" id="colFormLabelSm" name="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" onchange="hasPendingChanges()">
                                     </div>
                                 </div>
 
                                 <div class="card-buttons mt-3">
-                                    <input type="submit" value="Plaats" class="btn btn-primary">
+                                    <input type="submit" value="Plaats" class="btn btn-primary" onclick="onSubmitClientClick()">
                                 </div>
                             }
                         </div>
@@ -440,7 +439,7 @@ contains:
                         <div class="row">
                             <h5 class="card-title">
                                 Plaatsingen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
-                                <input class="btn btn-primary float-right" type="submit" value="Opslaan">
+                                <input class="btn btn-primary float-right" type="submit" value="Opslaan" onclick="onSubmitClientClick()">
                             </h5>
                         </div>
                         @foreach (var p in Model.Plaatsingen)
@@ -654,7 +653,7 @@ contains:
                         <div class="row">
                             <h5 class="card-title">
                                 Reserveringen (@Model.Plaatsingen.Count/@(Model.GastGezin.MaxOlderThanTwo+Model.GastGezin.MaxYoungerThanThree))
-                                <input class="btn btn-warning float-right" type="submit" value="Opslaan">
+                                <input class="btn btn-warning float-right" type="submit" value="Opslaan" onclick="onSubmitClientClick()">
                             </h5>
                         </div>
                         @foreach (var p in Model.Reserveringen)
@@ -845,17 +844,17 @@ contains:
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="ContactLogDate">Datum</label>
-                                <input type="date" class="form-control" id="ContactLogDate" name="ContactLogDate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                <input type="date" class="form-control" id="ContactLogDate" name="ContactLogDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" onchange="hasPendingChanges()">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="ContactLogDate">Notitie</label>
-                                <textarea class="form-control" id="ContactLogText" rows="3"></textarea>
+                                <textarea class="form-control" id="ContactLogText" rows="3" oninput="hasPendingChanges()"></textarea>
                             </div>
                         </div>
                         <div class="col-2">
-                            <button style="position:relative;bottom:-70px;" class="btn btn-primary" id="ContactLogSubmit">Opslaan</button>
+                            <button style="position:relative;bottom:-70px;" class="btn btn-primary" id="ContactLogSubmit" onclick="onSubmitClientClick()">Opslaan</button>
                         </div>
                     }
                     <div class="col-12">
@@ -930,7 +929,7 @@ contains:
                             Plaatsingsgeschiedenis
                             @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                             {
-                                <input class="btn btn-primary float-right" type="submit" value="Opslaan">
+                                <input class="btn btn-primary float-right" type="submit" value="Opslaan" onclick=" onSubmitClientClick()">
                             }
                         </h5>
                         <div class="table-responsive">
