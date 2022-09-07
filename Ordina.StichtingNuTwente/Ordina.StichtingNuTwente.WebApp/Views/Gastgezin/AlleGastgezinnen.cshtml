@@ -118,7 +118,7 @@
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin") && (mijnGastgezin.IntakeFormulierId <= 0 || mijnGastgezin.IntakerId <= 0))
                                 {
                                     bool inDropdown = Model.Vrijwilligers.Select(v => v.Id).Contains(mijnGastgezin.IntakerId);
-                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.IntakerId == 0)? "": "outline: red solid 2px;")">
+                                    <select class="width-100 form-select" name="vrijwilliger_@mijnGastgezin.Id" id="vrijwilliger_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.IntakerId == 0)? "": "outline: red solid 2px;")" onchange="hasPendingChanges()">
                                         @if (mijnGastgezin.IntakerId > 0)
                                         {
                                             <option selected="selected" value="@mijnGastgezin.IntakerId">@mijnGastgezin.Intaker</option>
@@ -146,7 +146,7 @@
                                 @if (User.HasClaims("groups", "group-coordinator", "group-superadmin"))
                                 {
                                     bool inDropdown = Model.Vrijwilligers.Select(v => v.Id).Contains(mijnGastgezin.BuddyId);
-                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.BuddyId == 0)? "": "outline: red solid 2px;")">
+                                    <select class="width-100 form-select" name="buddy_@mijnGastgezin.Id" id="buddy_@mijnGastgezin.Id" style="@((inDropdown || mijnGastgezin.BuddyId == 0)? "": "outline: red solid 2px;")" onchange="hasPendingChanges()">
                                         @if (mijnGastgezin.BuddyId > 0)
                                         {
                                             <option selected="selected" value="@mijnGastgezin.BuddyId">@mijnGastgezin.Buddy</option>
@@ -185,7 +185,7 @@
     {
         <nav class="navbar fixed-bottom navbar-expand navbar-light bg-light">
             <div class="col-12" style="text-align: center">
-                <button type="submit" id="gastgezinSubmit" class="btn btn-primary">Opslaan</button>
+                <button type="submit" id="gastgezinSubmit" class="btn btn-primary" onclick="onSubmitClientClick()">Opslaan</button>
                 <span id="gastgezinSpinner" style="display: none;">
                     &nbsp;Bezig met opslaan...
                 </span>
@@ -234,4 +234,20 @@
         })
 
     </script>
+        <script type="text/javascript">
+        var changesSaved = true
+        function onSubmitClientClick()
+        { 
+            changesSaved = true
+        }
+        function hasPendingChanges() 
+        {
+            changesSaved = false
+        }
+
+        window.onbeforeunload = function() { 
+        if(!changesSaved)
+            return "Niet alles is opgeslagen"
+        }
+     </script>
 </body>
