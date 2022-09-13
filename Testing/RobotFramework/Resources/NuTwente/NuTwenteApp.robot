@@ -17,18 +17,3 @@ Should be able to change profile data
     [Arguments]     &{Profiel}
     topnav.gotoprofielveranderenpagina
     ProfielWijzigen.ShouldBeAbleToChangeProfileData     &{Profiel}
-
-Should be able to change profile data
-    [Arguments]     &{Profiel}
-    topnav.gotoprofielveranderenpagina
-    ProfielWijzigen.ShouldBeAbleToChangeProfileData     &{Profiel}
-
-Should be able to change profile data
-    [Arguments]     &{Profiel}
-    topnav.gotoprofielveranderenpagina
-    ProfielWijzigen.ShouldBeAbleToChangeProfileData     &{Profiel}
-
-Should be able to change profile data
-    [Arguments]     &{Profiel}
-    topnav.gotoprofielveranderenpagina
-    ProfielWijzigen.ShouldBeAbleToChangeProfileData     &{Profiel}
