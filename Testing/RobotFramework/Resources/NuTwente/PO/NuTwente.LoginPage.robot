@@ -20,9 +20,9 @@ Login
    #BuiltIn.sleep    2
    Input Text   id=password     ${USER.password}
 
-   #BuiltIn.sleep    2
+   BuiltIn.sleep    4
    click button    id=next
-   BuiltIn.sleep    5
+   BuiltIn.sleep    2
 
    wait until page contains    Mijn Overzichten
-   BuiltIn.sleep    2
+   #BuiltIn.sleep    2
