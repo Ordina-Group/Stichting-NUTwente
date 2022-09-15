@@ -17,10 +17,10 @@
                 {
                     <div class="form-group col-12">
                         <label for="comments-@Model.GastgezinId">Opmerkingen</label>
-                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3" @(canEdit? "":"disabled")>@Model.CoordinatorOpmerking</textarea>
+                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3" oninput="hasPendingChanges()" @(canEdit? "":"disabled")>@Model.CoordinatorOpmerking</textarea>
                     </div>
                     <div class="form-group col-1">
-                        <button id="comments-save-@Model.GastgezinId" class="btn btn-primary" @(canEdit? "":"hidden")>Opslaan</button>
+                        <button id="comments-save-@Model.GastgezinId" onclick="onSubmitClientClick()" class="btn btn-primary" @(canEdit? "":"hidden")>Opslaan</button>
                     </div>
                 }
                 //Otherwise show on vrijwilliger comment
@@ -28,10 +28,10 @@
                 {
                     <div class="form-group col-12">
                         <label for="comments-@Model.GastgezinId">Opmerkingen</label>
-                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3">@Model.VrijwilligerOpmerking</textarea>
+                        <textarea class="form-control" id="comments-@Model.GastgezinId" rows="3" oninput="hasPendingChanges()">@Model.VrijwilligerOpmerking</textarea>
                     </div>
                     <div class="form-group col-1">
-                        <button id="comments-save-@Model.GastgezinId" class="btn btn-primary">Opslaan</button>
+                        <button id="comments-save-@Model.GastgezinId" class="btn btn-primary" onclick="onSubmitClientClick()">Opslaan</button>
                     </div>
                 }
             }
@@ -58,3 +58,19 @@
         });
     })
 </script>
+    <script type="text/javascript">
+        var changesSaved = true
+        function onSubmitClientClick()
+        { 
+            changesSaved = true
+        }
+        function hasPendingChanges() 
+        {
+            changesSaved = false
+        }
+
+        window.onbeforeunload = function() { 
+        if(!changesSaved)
+            return "Niet alles is opgeslagen"
+        }
+     </script>
