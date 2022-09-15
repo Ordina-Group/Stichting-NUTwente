@@ -9,6 +9,7 @@ GoToLandingPage
     go to   ${LOGIN_URL}
 
 VerifyLandingPageLoaded
+    BuiltIn.sleep    4
     wait until page contains    Sign in with your email address
     log    Login page vertification test
 
@@ -22,7 +23,7 @@ Login
 
    BuiltIn.sleep    4
    click button    id=next
-   BuiltIn.sleep    2
 
+   BuiltIn.sleep    4
    wait until page contains    Mijn Overzichten
    #BuiltIn.sleep    2
