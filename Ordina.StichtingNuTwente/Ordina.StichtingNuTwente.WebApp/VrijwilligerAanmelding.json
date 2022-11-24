@@ -80,7 +80,7 @@
         {
           "Id": 8,
           "Number": 8,
-          "Text": "Wilt op de vorige vraag (7) nog iets toelichten?<br>Would you like to elaborate on the previous question (7)?",
+          "Text": "Wilt op de vorige vraag (5) nog iets toelichten?<br>Would you like to elaborate on the previous question (5)?",
           "Description": "",
           "InputType": "text",
           "InputOptions": [],
@@ -148,7 +148,7 @@
         {
           "Id": 13,
           "Number": 13,
-          "Text": "Wilt op de vorige vraag (12) nog iets toelichten?<br>Would you like to elaborate on the previous question (12)?",
+          "Text": "Wilt op de vorige vraag (11) nog iets toelichten?<br>Would you like to elaborate on the previous question (11)?",
           "Description": "",
           "InputType": "text",
           "InputOptions": [],
@@ -186,15 +186,6 @@
           "Text": "Heeft u nog vragen aan Nutwente.nl (Noaberschap Ukraine Twente)?<br>Do you have any questions for Nutwente.nl",
           "Description": "",
           "InputType": "textArea",
-          "InputOptions": [],
-          "Required": false
-        },
-        {
-          "Id": 17,
-          "Number": 16,
-          "Text": "Bent u al bij een briefing voor vrijwilligers van Nutwente.nl aanwezig geweest? (plaats en datum invullen a.u.b)<br>Have you already attended a briefing for volunteers of NuTwente.nl? (please fill out location and date)",
-          "Description": "",
-          "InputType": "text",
           "InputOptions": [],
           "Required": false
         }
