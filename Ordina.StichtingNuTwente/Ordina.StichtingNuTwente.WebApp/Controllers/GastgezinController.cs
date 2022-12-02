@@ -383,6 +383,9 @@ namespace Ordina.StichtingNuTwente.WebApp.Controllers
                 var gastgezinViewModel = GastgezinMapping.FromDatabaseToWebModel(gastGezin, user);
                 model.Add(gastgezinViewModel);
             }
+
+            model = model.OrderBy(x => x.DeletionComment.Created).ToList();
+
             return View(model);
         }
 
