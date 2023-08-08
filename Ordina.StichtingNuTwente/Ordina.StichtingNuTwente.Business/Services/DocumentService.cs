@@ -121,7 +121,7 @@ namespace Ordina.StichtingNuTwente.Business.Services
             using HttpClient client = new() { };
             {
                 var postCodeFixed = postCode.Trim().Replace(" ", "");
-                var gemeente = await client.GetFromJsonAsync<LocatieApiResult>("https://geodata.nationaalgeoregister.nl/locatieserver/v3/free?q=postcode:" + postCodeFixed);
+                var gemeente = await client.GetFromJsonAsync<LocatieApiResult>("https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=postcode:" + postCodeFixed);
                 var response = gemeente.Response;
                 if (response != null && response.Docs.Count > 0)
                 {
