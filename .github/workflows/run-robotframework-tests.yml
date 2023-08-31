@@ -1,0 +1,50 @@
+# This is a basic workflow to help you get started with Actions
+
+name: 🤖 Robotframework tests
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - Development
+  pull_request:
+    branches: 
+      - main
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '* */2 * * *'
+  workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - name: Execute tests
+          uses: joonvena/robotframework-docker-action@v1.0
+          with:
+            robot_tests_dir: 'Testing/RobotFramework'
+            robot_reports_dir: 'Testing/RobotFramework/Results'
+            robot_options: '--loglevel DEBUG --variable PASSWORD_1:${{ secrets.PASSWORD_1 }} --variable PASSWORD_2:${{ secrets.PASSWORD_2 }} --variable PASSWORD_3:${{ secrets.PASSWORD_3 }} --variable PASSWORD_4:${{ secrets.PASSWORD_4 }}'
+        - name: Upload test results
+          uses: actions/upload-artifact@v1
+          if: always()
+          with:
+            name: results
+            path: Testing/RobotFramework/Results
+    
+    generate_report:
+        if: always()
+        needs: [test] 
+        runs-on: ubuntu-latest
+        steps:
+        - name: Download reports
+          uses: actions/download-artifact@v1
+          with:
+            name: results
+            path: Testing/RobotFramework/Results
+        - name: Send report to commit
+          uses: joonvena/robotframework-reporter-action@v2.1
+          with:
+            gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+            report_path: Testing/RobotFramework/Results

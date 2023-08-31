@@ -161,9 +161,9 @@ PublicPolicyUri="http://nutwenteb2c.onmicrosoft.com/B2C_1A_Roles_TrustFrameworkE
 					<Metadata>
 						<!-- TODO: change this -->
 						<!--development-->
-						<Item Key="ServiceUrl">https://nutwenteb2cgroups-dev.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph-dev?code=***REMOVED***</Item>	<!--Azure function url-->
+						<Item Key="ServiceUrl">https://nutwenteb2cgroups-dev.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph-dev?code=8HtB-z9xXJdtHm9qK9Wdkbgno3koDZXIT6qZJ-5q0_ujAzFuif8GDg==</Item>	<!--Azure function url-->
 						<!--production:-->
-						<!--<Item Key="ServiceUrl">https://nutwenteb2cgroups.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?code=***REMOVED***</Item>-->		<!--Azure function url-->
+						<!--<Item Key="ServiceUrl">https://nutwenteb2cgroups.azurewebsites.net/api/GetAppRoleAssignmentsMSGraph?code=J4L8wcZ2U4wWuFks1g5gxqt0P7tzh2x/IoiOyv6Qh0yyJ4QAfYTe6Q==</Item>-->		<!--Azure function url-->
 						<Item Key="AuthenticationType">None</Item>
 						<Item Key="SendClaimsIn">Body</Item>
 						<Item Key="AllowInsecureAuthInProduction">true</Item>
